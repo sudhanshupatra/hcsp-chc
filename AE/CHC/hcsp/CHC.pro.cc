@@ -15,7 +15,8 @@ skeleton CHC
 // SetUpParams -----------------------------------------------------------
 
 	SetUpParams::SetUpParams (Operator_Pool& pool)
-	: _independent_runs(0),
+	: _seed(0),
+	  _independent_runs(0),
 	  _nb_evolution_steps(0),
 	  _population_size(0),
 	  _select_parents(6),		// Selection of parents: Select all individuals. (fixed)
@@ -62,9 +63,16 @@ skeleton CHC
 				case 0: switch (nb_param)
 					{
 						case 0: setup.independent_runs(op); break;
-				 	 	case 1: setup.nb_evolution_steps(op); break;
+						case 1: setup.nb_evolution_steps(op); break;
 						case 2: setup.population_size(op); break;
 						case 3: setup.display_state(op); break;
+						case 4: setup.seed(op); break;
+
+						/*case 0: setup.seed(op); break;
+						case 1: setup.independent_runs(op); break;
+				 	 	case 2: setup.nb_evolution_steps(op); break;
+						case 3: setup.population_size(op); break;
+						case 4: setup.display_state(op); break;*/
 					}
 					nb_param++;
 					break;
@@ -167,6 +175,16 @@ skeleton CHC
 	const bool  SetUpParams::display_state() const
 	{
 		return _display_state;
+	}
+
+	void SetUpParams::seed(const unsigned long val)
+	{
+		_seed=val;
+	}
+
+	const unsigned long SetUpParams::seed() const
+	{
+		return _seed;
 	}
 
 	void SetUpParams::independent_runs(const unsigned int val)
@@ -2243,7 +2261,8 @@ skeleton CHC
 	Solver_Seq::Solver_Seq (const Problem& pbm, const SetUpParams& setup)
 	: Solver(pbm,setup)
 	{
-		random_seed(time(0));
+		//random_seed(time(0));
+		random_seed(setup.seed());
 		_end_trial=true;
 	}
 

@@ -1,7 +1,7 @@
 /*********************************************************************************************************
 ***												       												   ***
 ***				      					CHC Skeleton v1.5	 			       						   ***
-***				     		   Developed by: Gabriel Jesús Luque Polo			    				   ***
+***				     		   Developed by: Gabriel Jesï¿½s Luque Polo			    				   ***
 ***												       												   ***
 ***									  Last Update: 30-01-2004										   ***
 ***												       												   ***
@@ -57,11 +57,18 @@ skeleton CHC
 		bool operator!= (const Problem& pbm) const;
 
 		Direction direction () const;
+
+		// =================================
+		// Especificos del problema.
+		// =================================
+		int taskCount() const;
+		int machineCount() const;
+		float expectedTimeToCompute(int task, int machine) const;
 		int dimension() const;
-
 	private:
-
-		int _dimension;
+		int _taskCount;
+		int _machineCount;
+		float **_expectedTimeToCompute;
   };
 
 //Solution ----------------------------------------------------------------------------
@@ -97,13 +104,19 @@ skeleton CHC
 		void swap(const int index, Solution &s);
 		void invalid();
 
+		// =================================
+		// Especificos del problema.
+		// =================================
 		int& var(const int index);
 		Rarray<int>& array_var();
 
+		Rlist<int> getMachineTasks(const int machine);
+		Rarray<Rlist<int> > getMachines();
 	private:
-		Rarray<int> _var;
 		const Problem& _pbm;
 
+		Rarray<Rlist<int> > _machines;
+		Rarray<int> _var;
   };
 
 // UserStatistics ----------------------------------------------------------------------------
@@ -215,6 +228,7 @@ skeleton CHC
   };
 
 // StopCondition -----------------------------------------------------------------------------------
+
   provides class StopCondition
   {
 	public:
@@ -224,6 +238,7 @@ skeleton CHC
   };
 
 // StopCondition_1 -----------------------------------------------------------------------------------
+
   requires class StopCondition_1 : public StopCondition
   {
 	public:
@@ -255,6 +270,7 @@ skeleton CHC
 		Rlist<unsigned int> _inter_operators;
 
 		Operator_Pool& _pool;
+		unsigned long _seed;
 
 	public:
 		SetUpParams (Operator_Pool& pool);
@@ -295,6 +311,9 @@ skeleton CHC
 
 		void RefreshState(const StateCenter& _sc) const;
 		void UpdateFromState(const StateCenter& _sc) const;
+
+		const unsigned long seed() const;
+		void seed(const unsigned long val);
 
 		~SetUpParams();
   };
