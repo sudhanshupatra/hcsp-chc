@@ -21,4 +21,4 @@ WAN:
 	$(RUN)  -v  -p4pg pgfileWan MainWan
 
 SEQ:
-	./MainSeq CHC.cfg ../../../ProblemInstances/ONEMAX-instances/onemax10.txt res/om10.chc.seq.txt
+	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/1024x32/A.u_c_hihi res/solucion.txt

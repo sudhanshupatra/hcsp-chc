@@ -3,30 +3,71 @@
 #include "CHC.hh"
 #include <math.h>
 
+using namespace std;
+
 skeleton CHC
 {
 
 	// Problem ---------------------------------------------------------------
 
-	Problem::Problem ():_dimension(0)
+	Problem::Problem ():_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL)
 	{}
 
-	ostream& operator<< (ostream& os, const Problem& pbm)
+	// ===================================
+	// Serialización del problema.
+	// ===================================
+	ostream& operator<< (ostream& output, const Problem& pbm)
 	{
-		os << endl << endl << "Number of Variables " << pbm._dimension
-		   << endl;
-		return os;
+		output << endl << endl
+			<< "Number of tasks: " << pbm._taskCount << endl
+			<< "Number of machines: " << pbm._machineCount << endl
+			<< endl;
+		return output;
 	}
 
-	istream& operator>> (istream& is, Problem& pbm)
+	// ===================================
+	// Deserialización del problema.
+	// ===================================
+	istream& operator>> (istream& input, Problem& pbm)
 	{
 		char buffer[MAX_BUFFER];
-		int i;
 
-		is.getline(buffer,MAX_BUFFER,'\n');
-		sscanf(buffer,"%d",&pbm._dimension);
+		input.getline(buffer, MAX_BUFFER, '\n');
+		sscanf(buffer, "%d %d", &pbm._taskCount, &pbm._machineCount);
 
-		return is;
+		cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
+		cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
+
+		// Inicializo toda la matriz de ETC.
+		pbm._expectedTimeToCompute = new float*[pbm._taskCount];
+		if (pbm._expectedTimeToCompute == NULL) {
+			cout << "[ERROR] no se pudo reservar memoria para la matriz" << endl;
+			show_message(7);
+		}
+
+		// Inicializo cada tarea del problema.
+		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
+			// Por cada tarea creo una lista de maquinas.
+			pbm._expectedTimeToCompute[taskPos] = new float[pbm._machineCount];
+
+			if (pbm._expectedTimeToCompute[taskPos] == NULL) {
+				cout << "[ERROR] no se pudo reservar memoria para las máquinas de la tarea " << taskPos << endl;
+				show_message(7);
+			}
+
+			// Cargo el ETC de cada tarea en cada una de las máquinas.
+			for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
+				input.getline(buffer, MAX_BUFFER, '\n');
+				sscanf(buffer, "%f", &pbm._expectedTimeToCompute[taskPos][machinePos]);
+
+				/*
+				cout << "[DEBUG] Task: " << taskPos << ", Machine: " << machinePos
+					<< ", ETC: " << pbm._expectedTimeToCompute[taskPos][machinePos] << endl;
+				*/
+			}
+		}
+
+		return input;
 	}
 
 	Problem& Problem::operator=  (const Problem& pbm)
@@ -36,7 +77,7 @@ skeleton CHC
 
 	bool Problem::operator== (const Problem& pbm) const
 	{
-		if (_dimension!=pbm.dimension()) return false;	
+		if (dimension() != pbm.dimension()) return false;
 		return true;
 	}
 
@@ -47,13 +88,25 @@ skeleton CHC
 
 	Direction Problem::direction() const
 	{
-		return maximize;
-		//return minimize;
+		//return maximize;
+		return minimize;
 	}
 
 	int Problem::dimension() const
 	{
-		return _dimension;
+		return _taskCount;
+	}
+
+	int Problem::taskCount() const {
+		return _taskCount;
+	}
+
+	int Problem::machineCount() const {
+		return _machineCount;
+	}
+
+	float Problem::expectedTimeToCompute(int task, int machine) const {
+		return _expectedTimeToCompute[task][machine];
 	}
 
 	Problem::~Problem()
@@ -61,9 +114,14 @@ skeleton CHC
 
 	// Solution --------------------------------------------------------------
 
-	Solution::Solution (const Problem& pbm):_pbm(pbm),_var(pbm.dimension())
-	{}
+	Solution::Solution (const Problem& pbm):_pbm(pbm), _var(0)
+	{
+		this->_machines = Rarray<Rlist<int> >(_pbm.dimension());
 
+		for (int machinePos = 0; machinePos < this->_machines.size(); machinePos++) {
+			this->_machines[machinePos] = Rlist<int>();
+		}
+	}
 
 	const Problem& Solution::pbm() const
 	{
@@ -75,7 +133,9 @@ skeleton CHC
 		*this=sol;
 	}
 
-
+	// ===================================
+	// Deserialización de la solución.
+	// ===================================
 	istream& operator>> (istream& is, Solution& sol)
 	{
 		for (int i=0;i<sol.pbm().dimension();i++)
@@ -84,21 +144,9 @@ skeleton CHC
 		return is;
 	}
 
-	ostream& operator<< (ostream& os, const Solution& sol)
-	{
-		for (int i=0;i<sol.pbm().dimension();i++)
-			os << " " << sol._var[i];
-		return os;
-	}
-
-	NetStream& operator << (NetStream& ns, const Solution& sol)
-	{
-		for (int i=0;i<sol._var.size();i++)
-			ns << sol._var[i];
-		return ns;
-	}
-
-
+	// ===================================
+	// Deserialización de la solución.
+	// ===================================
 	NetStream& operator >> (NetStream& ns, Solution& sol)
 	{
 		for (int i=0;i<sol._var.size();i++)
@@ -106,13 +154,32 @@ skeleton CHC
 		return ns;
 	}
 
+	// ===================================
+	// Serialización de la solución.
+	// ===================================
+	ostream& operator<< (ostream& os, const Solution& sol)
+	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+			os << " " << sol._var[i];
+		return os;
+	}
+
+	// ===================================
+	// Serialización de la solución.
+	// ===================================
+	NetStream& operator << (NetStream& ns, const Solution& sol)
+	{
+		for (int i=0;i<sol._var.size();i++)
+			ns << sol._var[i];
+		return ns;
+	}
 
  	Solution& Solution::operator= (const Solution &sol)
 	{
 		_var=sol._var;
+
 		return *this;
 	}
-
 
 	bool Solution::operator== (const Solution& sol) const
 	{
@@ -125,13 +192,31 @@ skeleton CHC
 		return !(*this == sol);
 	}
 
+	// ===================================
+	// Inicializo la solución.
+	// ===================================
 	void Solution::initialize()
 	{
-		for (int i=0;i<_pbm.dimension();i++)
-			_var[i]=rand_int(0,1);
+		int startTask = rand_int(0, _pbm.dimension()-1);
+		int direction = rand_int(0, 1);
+		if (direction == 0) direction = -1;
+
+		int currentTask;
+		for (int taskOffset = 0; taskOffset < _pbm.dimension(); taskOffset++) {
+			currentTask = startTask + (direction * taskOffset);
+			if (currentTask < 0) currentTask = _pbm.dimension() + currentTask;
+
+			currentTask = currentTask % (_pbm.dimension()+1);
+
+			int currentMachine;
+			currentMachine = rand_int(0, _pbm.machineCount()-1);
+			this->_machines[currentMachine].append(currentTask);
+		}
 	}
 
-
+	// ===================================
+	// Fitness de la solución.
+	// ===================================
 	double Solution::fitness () const
 	{
         double fitness = 0.0;
@@ -308,7 +393,7 @@ skeleton CHC
 	StopCondition_1::StopCondition_1():StopCondition()
 	{}
 
-	bool StopCondition_1::EvaluateCondition(const Problem& pbm,const Solver& solver,const SetUpParams& setup)
+	bool StopCondition_1::EvaluateCondition(const Problem& pbm,const Solver& solver, const SetUpParams& setup)
 	{
 		return ((int)solver.best_cost_trial() == pbm.dimension());
 	}
