@@ -63,11 +63,13 @@ skeleton CHC
 		// =================================
 		int taskCount() const;
 		int machineCount() const;
-		float expectedTimeToCompute(int task, int machine) const;
+		int tasksPriorities(const int task) const;
+		float expectedTimeToCompute(const int task, const int machine) const;
 		int dimension() const;
 	private:
 		int _taskCount;
 		int _machineCount;
+		int *_tasksPriorities;
 		float **_expectedTimeToCompute;
   };
 

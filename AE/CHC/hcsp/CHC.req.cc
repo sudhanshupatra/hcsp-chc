@@ -5,12 +5,15 @@
 
 using namespace std;
 
+#define DEBUG true
+
 skeleton CHC
 {
 
 	// Problem ---------------------------------------------------------------
 
-	Problem::Problem ():_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL)
+	Problem::Problem ():_taskCount(0), _machineCount(0),
+			_expectedTimeToCompute(NULL), _tasksPriorities(NULL)
 	{}
 
 	// ===================================
@@ -38,6 +41,15 @@ skeleton CHC
 		cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
 		cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
 
+		// Inicializo las prioridades de las tareas.
+		pbm._tasksPriorities = new int[pbm.taskCount()];
+		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
+			input.getline(buffer, MAX_BUFFER, '\n');
+			sscanf(buffer, "%d", &pbm._tasksPriorities[taskPos]);
+
+			if (DEBUG) cout << "[DEBUG] Task: " << taskPos << " => Priority: " << pbm._tasksPriorities[taskPos] << endl;
+		}
+
 		// Inicializo toda la matriz de ETC.
 		pbm._expectedTimeToCompute = new float*[pbm._taskCount];
 		if (pbm._expectedTimeToCompute == NULL) {
@@ -60,10 +72,8 @@ skeleton CHC
 				input.getline(buffer, MAX_BUFFER, '\n');
 				sscanf(buffer, "%f", &pbm._expectedTimeToCompute[taskPos][machinePos]);
 
-				/*
-				cout << "[DEBUG] Task: " << taskPos << ", Machine: " << machinePos
+				if (DEBUG) cout << "[DEBUG] Task: " << taskPos << ", Machine: " << machinePos
 					<< ", ETC: " << pbm._expectedTimeToCompute[taskPos][machinePos] << endl;
-				*/
 			}
 		}
 
@@ -105,8 +115,12 @@ skeleton CHC
 		return _machineCount;
 	}
 
-	float Problem::expectedTimeToCompute(int task, int machine) const {
+	float Problem::expectedTimeToCompute(const int task, const int machine) const {
 		return _expectedTimeToCompute[task][machine];
+	}
+
+	int Problem::tasksPriorities(const int task) const {
+		return _tasksPriorities[task];
 	}
 
 	Problem::~Problem()
@@ -116,7 +130,7 @@ skeleton CHC
 
 	Solution::Solution (const Problem& pbm):_pbm(pbm), _var(0)
 	{
-		this->_machines = Rarray<Rlist<int> >(_pbm.dimension());
+		this->_machines = Rarray<Rlist<int> >(_pbm.machineCount());
 
 		for (int machinePos = 0; machinePos < this->_machines.size(); machinePos++) {
 			this->_machines[machinePos] = Rlist<int>();
@@ -201,15 +215,26 @@ skeleton CHC
 		int direction = rand_int(0, 1);
 		if (direction == 0) direction = -1;
 
+		if (DEBUG) {
+			cout << "[DEBUG] Initialize()" << endl;
+			cout << "[DEBUG] startTask: " << startTask << endl;
+			cout << "[DEBUG] direction: " << direction << endl;
+		}
+
 		int currentTask;
 		for (int taskOffset = 0; taskOffset < _pbm.dimension(); taskOffset++) {
 			currentTask = startTask + (direction * taskOffset);
 			if (currentTask < 0) currentTask = _pbm.dimension() + currentTask;
-
 			currentTask = currentTask % (_pbm.dimension()+1);
 
 			int currentMachine;
 			currentMachine = rand_int(0, _pbm.machineCount()-1);
+
+			if (DEBUG) {
+				cout << "[DEBUG] currentTask: " << currentTask << endl;
+				cout << "[DEBUG] currentMachine: " << currentMachine << endl;
+			}
+
 			this->_machines[currentMachine].append(currentTask);
 		}
 	}
@@ -219,25 +244,46 @@ skeleton CHC
 	// ===================================
 	double Solution::fitness () const
 	{
-        double fitness = 0.0;
+		double fitness = 0.0;
 
-		if(_var[0] == 2) return 0.0;
-			
-		for (int i=0;i<_var.size();i++)
-			fitness += _var[i];
+		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+			int machineComputeCost;
+			machineComputeCost = 0;
 
+			for (int taskPos = 0; taskPos < _machines[machineId].size(); taskPos++) {
+				int taskId;
+				taskId = _machines[machineId][taskPos];
+
+				double computeCost;
+				computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
+
+				double priorityCost;
+				priorityCost = 0.0;
+
+				if (taskPos > 0) {
+					priorityCost += machineComputeCost / _pbm.tasksPriorities(taskId);
+				}
+
+				machineComputeCost += computeCost;
+				fitness += (computeCost + priorityCost);
+			}
+		}
+
+		if (DEBUG) cout << "Solution fitness: " << fitness;
 		return fitness;
 	}
 
 
 	char *Solution::to_String() const
 	{
+		//TODO: modificar!
 		return (char *)_var.get_first();
 	}
 
 
 	void Solution::to_Solution(char *_string_)
 	{
+		//TODO: modificar!
 		int *ptr=(int *)_string_;
 		for (int i=0;i<_pbm.dimension();i++)
 		{
@@ -248,11 +294,13 @@ skeleton CHC
 
 	unsigned int Solution::size() const
 	{
+		//TODO: modificar!
 		return (_pbm.dimension() * sizeof(int));
 	}
 
 	int Solution::lengthInBits() const
 	{
+		//TODO: modificar!
 		return _pbm.dimension();
 	}
 
@@ -261,7 +309,7 @@ skeleton CHC
 			_var[index] = 1 - _var[index]; 
 	}
 
-	bool Solution::equalb(const int index,Solution &s)
+	bool Solution::equalb(const int index, Solution &s)
 	{
 		return _var[index] == s._var[index];
 	}

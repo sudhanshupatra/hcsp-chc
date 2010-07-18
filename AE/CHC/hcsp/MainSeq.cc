@@ -35,7 +35,7 @@ int main (int argc, char** argv)
 		ofstream fexit(argv[3]);
 		if(!fexit) show_message(13);
 		fexit << solver.userstatistics();
-
 	}
+
 	return(0);
 }
