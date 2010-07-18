@@ -1,0 +1,52 @@
+./MainSeq CHC.cfg ../../ProblemInstances/HCSP/prioridades/simple res/solucion.txt
+[H[2J[INFO] TaskCount: 4
+[INFO] MachineCount: 2
+[DEBUG] Task: 0 => Priority: 1
+[DEBUG] Task: 1 => Priority: 2
+[DEBUG] Task: 2 => Priority: 3
+[DEBUG] Task: 3 => Priority: 4
+[DEBUG] Task: 0, Machine: 0, ETC: 132190
+[DEBUG] Task: 0, Machine: 1, ETC: 154988
+[DEBUG] Task: 1, Machine: 0, ETC: 179199
+[DEBUG] Task: 1, Machine: 1, ETC: 226202
+[DEBUG] Task: 2, Machine: 0, ETC: 256879
+[DEBUG] Task: 2, Machine: 1, ETC: 367321
+[DEBUG] Task: 3, Machine: 0, ETC: 727841
+[DEBUG] Task: 3, Machine: 1, ETC: 851478
+[DEBUG] Initialize()
+[DEBUG] startTask: 3
+[DEBUG] direction: -1
+[DEBUG] currentTask: 3
+[DEBUG] currentMachine: 1
+[DEBUG] currentTask: 2
+[DEBUG] currentMachine: 1
+[DEBUG] currentTask: 1
+[DEBUG] currentMachine: 1
+[DEBUG] currentTask: 0
+[DEBUG] currentMachine: 1
+Solution fitness: 1.54988e+06
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 0
+Current evaluations: 1
+Current best cost: 1.54988e+06
+Current worst cost: 1.54988e+06
+Current Average cost: 1.54988e+06
+Current Standard Deviation: -nan
+
+Trial: 
+Best cost trial: 1.54988e+06
+Worst cost trial: 1.54988e+06
+Iteration best found in trial: 0
+Time best found trial: 0
+Time spent in trial: 0
+
+Global: 
+Global best cost: 1.54988e+06
+Global worst cost: 1.54988e+06
+Trial best found: 1
+Iteration best found: 0
+Time best found: 0
+
+Current time spent (so far): 0
