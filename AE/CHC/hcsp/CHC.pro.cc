@@ -1301,7 +1301,9 @@ skeleton CHC
 		return os;
 	}
 
-    void Selection_Parents::prepare(Rarray<struct individual>& fitness_values,const bool remplace) // const
+    void Selection_Parents::prepare(
+    		Rarray<struct individual>& fitness_values,
+    		const bool remplace) // const
 	{
 		selection_position = 0;
 		int limit1,limit2;
@@ -1319,7 +1321,12 @@ skeleton CHC
 		}
 	}
 
-	struct individual Selection_Parents::select_one(const Rarray<Solution*>& to_select_1,const Rarray<Solution*>& to_select_2,const Rarray<struct individual>& fitness_values,const unsigned int param,const bool remplace) const
+	struct individual Selection_Parents::select_one(
+			const Rarray<Solution*>& to_select_1,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
+			const unsigned int param,
+			const bool remplace) const
 	{
 		int index = selection_position;
 		selection_position++;

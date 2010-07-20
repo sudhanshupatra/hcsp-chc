@@ -4,6 +4,8 @@
 #include <math.h>
 
 using namespace std;
+//using std::cout;
+//using std::vector;
 
 #define DEBUG true
 
@@ -47,7 +49,8 @@ skeleton CHC
 			input.getline(buffer, MAX_BUFFER, '\n');
 			sscanf(buffer, "%d", &pbm._tasksPriorities[taskPos]);
 
-			if (DEBUG) cout << "[DEBUG] Task: " << taskPos << " => Priority: " << pbm._tasksPriorities[taskPos] << endl;
+			if (DEBUG) cout << "[DEBUG] Task: " << taskPos
+					<< " => Priority: " << pbm._tasksPriorities[taskPos] << endl;
 		}
 
 		// Inicializo toda la matriz de ETC.
@@ -87,7 +90,7 @@ skeleton CHC
 
 	bool Problem::operator== (const Problem& pbm) const
 	{
-		if (dimension() != pbm.dimension()) return false;
+		if (taskCount() != pbm.taskCount()) return false;
 		return true;
 	}
 
@@ -102,11 +105,6 @@ skeleton CHC
 		return minimize;
 	}
 
-	int Problem::dimension() const
-	{
-		return _taskCount;
-	}
-
 	int Problem::taskCount() const {
 		return _taskCount;
 	}
@@ -115,11 +113,11 @@ skeleton CHC
 		return _machineCount;
 	}
 
-	float Problem::expectedTimeToCompute(const int task, const int machine) const {
+	float Problem::expectedTimeToCompute(int task, int machine) {
 		return _expectedTimeToCompute[task][machine];
 	}
 
-	int Problem::tasksPriorities(const int task) const {
+	int Problem::tasksPriorities(int task) {
 		return _tasksPriorities[task];
 	}
 
@@ -128,13 +126,19 @@ skeleton CHC
 
 	// Solution --------------------------------------------------------------
 
-	Solution::Solution (const Problem& pbm):_pbm(pbm), _var(0)
-	{
-		this->_machines = Rarray<Rlist<int> >(_pbm.machineCount());
+	solutionMachine::solutionMachine(): _tasks() {
 
-		for (int machinePos = 0; machinePos < this->_machines.size(); machinePos++) {
-			this->_machines[machinePos] = Rlist<int>();
-		}
+	}
+
+	solutionMachine::~solutionMachine() {
+	}
+
+	Rlist<int>& solutionMachine::tasks() {
+		return _tasks;
+	}
+
+	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines(pbm.machineCount())
+	{
 	}
 
 	const Problem& Solution::pbm() const
@@ -152,8 +156,8 @@ skeleton CHC
 	// ===================================
 	istream& operator>> (istream& is, Solution& sol)
 	{
-		for (int i=0;i<sol.pbm().dimension();i++)
-			is >> sol._var[i];
+		//for (int i=0;i<sol.pbm().dimension();i++)
+		//	is >> sol._var[i];
 		
 		return is;
 	}
@@ -163,8 +167,9 @@ skeleton CHC
 	// ===================================
 	NetStream& operator >> (NetStream& ns, Solution& sol)
 	{
-		for (int i=0;i<sol._var.size();i++)
-			ns >> sol._var[i];
+		//for (int i=0;i<sol._var.size();i++)
+		//	ns >> sol._var[i];
+
 		return ns;
 	}
 
@@ -173,8 +178,9 @@ skeleton CHC
 	// ===================================
 	ostream& operator<< (ostream& os, const Solution& sol)
 	{
-		for (int i=0;i<sol.pbm().dimension();i++)
-			os << " " << sol._var[i];
+		//for (int i=0;i<sol.pbm().dimension();i++)
+		//	os << " " << sol._var[i];
+
 		return os;
 	}
 
@@ -183,14 +189,15 @@ skeleton CHC
 	// ===================================
 	NetStream& operator << (NetStream& ns, const Solution& sol)
 	{
-		for (int i=0;i<sol._var.size();i++)
-			ns << sol._var[i];
+		//for (int i=0;i<sol._var.size();i++)
+		//	ns << sol._var[i];
+
 		return ns;
 	}
 
  	Solution& Solution::operator= (const Solution &sol)
 	{
-		_var=sol._var;
+		//_var=sol._var;
 
 		return *this;
 	}
@@ -211,7 +218,7 @@ skeleton CHC
 	// ===================================
 	void Solution::initialize()
 	{
-		int startTask = rand_int(0, _pbm.dimension()-1);
+		int startTask = rand_int(0, _pbm.taskCount()-1);
 		int direction = rand_int(0, 1);
 		if (direction == 0) direction = -1;
 
@@ -222,10 +229,10 @@ skeleton CHC
 		}
 
 		int currentTask;
-		for (int taskOffset = 0; taskOffset < _pbm.dimension(); taskOffset++) {
+		for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
 			currentTask = startTask + (direction * taskOffset);
-			if (currentTask < 0) currentTask = _pbm.dimension() + currentTask;
-			currentTask = currentTask % (_pbm.dimension()+1);
+			if (currentTask < 0) currentTask = _pbm.taskCount() + currentTask;
+			currentTask = currentTask % (_pbm.taskCount()+1);
 
 			int currentMachine;
 			currentMachine = rand_int(0, _pbm.machineCount()-1);
@@ -235,7 +242,7 @@ skeleton CHC
 				cout << "[DEBUG] currentMachine: " << currentMachine << endl;
 			}
 
-			this->_machines[currentMachine].append(currentTask);
+			//_machines[currentMachine].tasks().append(currentTask);
 		}
 	}
 
@@ -246,7 +253,7 @@ skeleton CHC
 	{
 		double fitness = 0.0;
 
-		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		/*for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 			int machineComputeCost;
 			machineComputeCost = 0;
 
@@ -267,7 +274,7 @@ skeleton CHC
 				machineComputeCost += computeCost;
 				fitness += (computeCost + priorityCost);
 			}
-		}
+		}*/
 
 		if (DEBUG) cout << "Solution fitness: " << fitness;
 		return fitness;
@@ -277,64 +284,60 @@ skeleton CHC
 	char *Solution::to_String() const
 	{
 		//TODO: modificar!
-		return (char *)_var.get_first();
+		//return (char *)_var.get_first();
+		return "";
 	}
 
 
 	void Solution::to_Solution(char *_string_)
 	{
 		//TODO: modificar!
-		int *ptr=(int *)_string_;
+		/*int *ptr=(int *)_string_;
 		for (int i=0;i<_pbm.dimension();i++)
 		{
 			_var[i]=*ptr;
 			ptr++;
-		}
+		}*/
 	}
 
 	unsigned int Solution::size() const
 	{
 		//TODO: modificar!
-		return (_pbm.dimension() * sizeof(int));
+		//return (_pbm.dimension() * sizeof(int));
+		return 0;
 	}
 
 	int Solution::lengthInBits() const
 	{
 		//TODO: modificar!
-		return _pbm.dimension();
+		//return _pbm.dimension();
+		return 0;
 	}
 
 	void Solution::flip(const int index)
 	{
-			_var[index] = 1 - _var[index]; 
+		//TODO: modificar!
+		//_var[index] = 1 - _var[index];
 	}
 
 	bool Solution::equalb(const int index, Solution &s)
 	{
-		return _var[index] == s._var[index];
+		//TODO: modificar!
+		//return _var[index] == s._var[index];
 	}
 
 	void Solution::swap(const int index, Solution &s)
 	{
-		int aux = s._var[index];
+		//TODO: modificar!
+		/*int aux = s._var[index];
 		s._var[index] = _var[index];
-		_var[index] = aux;		
+		_var[index] = aux;*/
 	}
 
 	void Solution::invalid()
 	{
-			_var[0] = 2;
-	}
-
-	int& Solution::var(const int index)
-	{
-		return _var[index];
-	}
-
-
-	Rarray<int>& Solution::array_var()
-	{
-		return _var;
+		//TODO: modificar!
+		//_var[0] = 2;
 	}
 
 	Solution::~Solution()
@@ -443,7 +446,8 @@ skeleton CHC
 
 	bool StopCondition_1::EvaluateCondition(const Problem& pbm,const Solver& solver, const SetUpParams& setup)
 	{
-		return ((int)solver.best_cost_trial() == pbm.dimension());
+		//return ((int)solver.best_cost_trial() == pbm.dimension());
+		return false;
 	}
 
 	StopCondition_1::~StopCondition_1()
@@ -457,8 +461,10 @@ skeleton CHC
 	bool terminateQ (const Problem& pbm, const Solver& solver,
 			 const SetUpParams& setup)
 	{
-		StopCondition_1 stop;
-		return stop.EvaluateCondition(pbm,solver,setup);
+		/*StopCondition_1 stop;
+		return stop.EvaluateCondition(pbm,solver,setup);*/
+
+		return false;
 	}
 }
 #endif
