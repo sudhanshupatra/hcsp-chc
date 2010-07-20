@@ -1,6 +1,6 @@
 #include "CHC.hh"
 
-using namespace std;
+using std::cout;
 
 skeleton CHC
 {
