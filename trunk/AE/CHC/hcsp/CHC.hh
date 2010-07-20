@@ -78,13 +78,11 @@ skeleton CHC
 //Solution ----------------------------------------------------------------------------
 
   struct solutionMachine {
-  private:
-	  Rlist<int> _tasks;
   public:
 	  solutionMachine();
 	  ~solutionMachine();
 
-	  Rlist<int>& tasks();
+	  vector<int> tasks;
   };
 
   requires class Solution
@@ -122,12 +120,12 @@ skeleton CHC
 		// =================================
 		// Especificos del problema.
 		// =================================
-		Rlist<int>& getMachineTasks(int machine);
-		Rarray<solutionMachine>& getMachines();
+		const vector<int>& getMachineTasks(const int& machineId) const;
+		const vector<solutionMachine>& machines() const;
 	private:
 		const Problem& _pbm;
 
-		Rarray<solutionMachine> _machines;
+		vector<solutionMachine> _machines;
   };
 
 // UserStatistics ----------------------------------------------------------------------------
