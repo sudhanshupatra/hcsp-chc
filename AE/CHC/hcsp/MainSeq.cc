@@ -4,7 +4,7 @@ int main (int argc, char** argv)
 {
 	using skeleton CHC;
 
-	system("clear");
+	int clear = system("clear");
 
 	if(argc < 4)
 		show_message(1);
