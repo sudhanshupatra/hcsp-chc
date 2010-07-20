@@ -63,9 +63,8 @@ skeleton CHC
 		// =================================
 		int taskCount() const;
 		int machineCount() const;
-		int tasksPriorities(const int task) const;
-		float expectedTimeToCompute(const int task, const int machine) const;
-		int dimension() const;
+		int tasksPriorities(int task);
+		float expectedTimeToCompute(int task, int machine);
 	private:
 		int _taskCount;
 		int _machineCount;
@@ -74,6 +73,16 @@ skeleton CHC
   };
 
 //Solution ----------------------------------------------------------------------------
+
+  struct solutionMachine {
+  private:
+	  Rlist<int> _tasks;
+  public:
+	  solutionMachine();
+	  ~solutionMachine();
+
+	  Rlist<int>& tasks();
+  };
 
   requires class Solution
   {
@@ -100,6 +109,7 @@ skeleton CHC
 		double fitness () const;
 		unsigned int size() const;
 
+		//TODO: modificar!
 		int lengthInBits() const;
 		void flip(const int index);
 		bool equalb(const int index,Solution &s);
@@ -109,16 +119,12 @@ skeleton CHC
 		// =================================
 		// Especificos del problema.
 		// =================================
-		int& var(const int index);
-		Rarray<int>& array_var();
-
-		Rlist<int> getMachineTasks(const int machine);
-		Rarray<Rlist<int> > getMachines();
+		Rlist<int>& getMachineTasks(int machine);
+		Rarray<solutionMachine>& getMachines();
 	private:
 		const Problem& _pbm;
 
-		Rarray<Rlist<int> > _machines;
-		Rarray<int> _var;
+		Rarray<solutionMachine> _machines;
   };
 
 // UserStatistics ----------------------------------------------------------------------------
