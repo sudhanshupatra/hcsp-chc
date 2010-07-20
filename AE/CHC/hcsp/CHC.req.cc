@@ -42,6 +42,8 @@ skeleton CHC
 		cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
 
 		// Inicializo las prioridades de las tareas.
+		pbm._tasksPriorities.reserve(pbm._taskCount);
+
 		int taskPriority;
 		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
 			input.getline(buffer, MAX_BUFFER, '\n');
@@ -126,19 +128,19 @@ skeleton CHC
 
 	// Solution --------------------------------------------------------------
 
-	solutionMachine::solutionMachine(): _tasks() {
-
+	solutionMachine::solutionMachine(): tasks() {
 	}
 
 	solutionMachine::~solutionMachine() {
 	}
 
-	Rlist<int>& solutionMachine::tasks() {
-		return _tasks;
-	}
-
-	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines(pbm.machineCount())
+	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines()
 	{
+		_machines.reserve(pbm.machineCount());
+
+		for (int machineId = 0; machineId < pbm.machineCount(); machineId++) {
+			_machines.push_back(*(new solutionMachine()));
+		}
 	}
 
 	const Problem& Solution::pbm() const
@@ -238,11 +240,10 @@ skeleton CHC
 			currentMachine = rand_int(0, _pbm.machineCount()-1);
 
 			if (DEBUG) {
-				cout << "[DEBUG] currentTask: " << currentTask << endl;
-				cout << "[DEBUG] currentMachine: " << currentMachine << endl;
+				cout << "[DEBUG] Task: " << currentTask << " sent to Machine: " << currentMachine << endl;
 			}
 
-			//_machines[currentMachine].tasks().append(currentTask);
+			_machines[currentMachine].tasks.push_back(currentTask);
 		}
 	}
 
@@ -253,13 +254,13 @@ skeleton CHC
 	{
 		double fitness = 0.0;
 
-		/*for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 			int machineComputeCost;
 			machineComputeCost = 0;
 
-			for (int taskPos = 0; taskPos < _machines[machineId].size(); taskPos++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].tasks.size(); taskPos++) {
 				int taskId;
-				taskId = _machines[machineId][taskPos];
+				taskId = _machines[machineId].tasks[taskPos];
 
 				double computeCost;
 				computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
@@ -274,9 +275,9 @@ skeleton CHC
 				machineComputeCost += computeCost;
 				fitness += (computeCost + priorityCost);
 			}
-		}*/
+		}
 
-		if (DEBUG) cout << "Solution fitness: " << fitness;
+		if (DEBUG) cout << "Solution fitness: " << fitness << endl;
 		return fitness;
 	}
 
@@ -338,6 +339,14 @@ skeleton CHC
 	{
 		//TODO: modificar!
 		//_var[0] = 2;
+	}
+
+	const vector<int>& Solution::getMachineTasks(const int& machineId) const {
+		return _machines[machineId].tasks;
+	}
+
+	const vector<solutionMachine>& Solution::machines() const {
+		return _machines;
 	}
 
 	Solution::~Solution()
