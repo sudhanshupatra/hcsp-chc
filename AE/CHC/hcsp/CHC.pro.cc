@@ -67,12 +67,6 @@ skeleton CHC
 						case 2: setup.population_size(op); break;
 						case 3: setup.display_state(op); break;
 						case 4: setup.seed(op); break;
-
-						/*case 0: setup.seed(op); break;
-						case 1: setup.independent_runs(op); break;
-				 	 	case 2: setup.nb_evolution_steps(op); break;
-						case 3: setup.population_size(op); break;
-						case 4: setup.display_state(op); break;*/
 					}
 					nb_param++;
 					break;
@@ -662,8 +656,10 @@ skeleton CHC
 		probability[0] = -1.0;
 	}
 
-	void Crossover::cross(Solution& sol1,Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
+	void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 	{
+		//TODO: implementar cruzamiento
+		/*
 		int dh = 0;
 
 		if(probability[0] <= 0.0)
@@ -687,6 +683,7 @@ skeleton CHC
 			sol1.invalid();
 			sol2.invalid();
 		}
+		*/
 	}
 
 	void Crossover::execute(Rarray<Solution*>& sols) const
@@ -729,16 +726,17 @@ skeleton CHC
 		probability = new float[1];
 	}
 
-	void Diverge::diverge(Solution& sol) const
+	/*void Diverge::diverge(Solution& sol) const
 	{
 		for(int i = 0; i < sol.lengthInBits(); i++)
 			if(rand01() < probability[0]) sol.flip(i);
-	}
+	}*/
 
 	void Diverge::execute(Rarray<Solution*>& sols) const
   	{
-		for (int i=0;i<sols.size();i++)
-			diverge(*sols[i]);
+		//TODO: implementar mutación catalísmica
+		/*for (int i=0;i<sols.size();i++)
+			diverge(*sols[i]);*/
 	}
 
 	ostream& operator<< (ostream& os, const Diverge& diverge)
@@ -1367,8 +1365,17 @@ skeleton CHC
 			fitness_values.sort(lessF);	
 	}
 
-	struct individual Selection_New_Population::select_one(const Rarray<Solution*>& to_select_1,const Rarray<Solution*>& to_select_2,const Rarray<struct individual>& fitness_values,const unsigned int param,const bool remplace) const
+	struct individual Selection_New_Population::select_one(
+			const Rarray<Solution*>& to_select_1,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
+			const unsigned int param,
+			const bool remplace) const
 	{
+		//TODO: implementar seleccion de hijos.
+		return fitness_values[0];
+
+		/*
 		bool change = false;
 		if(d == -1) d = to_select_1[0]->lengthInBits() / 4;
 
@@ -1410,6 +1417,7 @@ skeleton CHC
 			selection_position++;
 			return fitness_values[index];
 		}
+		*/
 	}
 
 	void Selection_New_Population::setup(char line[MAX_BUFFER])
@@ -1930,7 +1938,8 @@ skeleton CHC
 
 	void Solver::current_best_solution(const Solution& sol)
 	{
-		_current_best_solution.set_contents(sol.to_String(),1,sol.size());
+		//TODO: implementar current_best_solution
+		//_current_best_solution.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::current_best_cost(const double value)
@@ -1960,7 +1969,8 @@ skeleton CHC
 
 	void Solver::best_solution_trial(const Solution& sol)
 	{
-		_best_solution_trial.set_contents(sol.to_String(),1,sol.size());
+		//TODO: implementar best_solution_trial
+		//_best_solution_trial.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::best_cost_trial(const double value)
@@ -2010,7 +2020,8 @@ skeleton CHC
 
 	void Solver::global_best_solution(const Solution& sol)
 	{
-		_global_best_solution.set_contents(sol.to_String(),1,sol.size());
+		//TODO: implementar global_best_solution
+		//_global_best_solution.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::global_best_cost(const double value)
@@ -2268,8 +2279,12 @@ skeleton CHC
 	Solver_Seq::Solver_Seq (const Problem& pbm, const SetUpParams& setup)
 	: Solver(pbm,setup)
 	{
-		//random_seed(time(0));
-		random_seed(setup.seed());
+		if (setup.seed() >= 0) {
+			random_seed(setup.seed());
+		} else {
+			random_seed(time(0));
+		}
+
 		_end_trial=true;
 	}
 

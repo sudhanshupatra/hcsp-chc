@@ -284,7 +284,7 @@ skeleton CHC
 
 	char *Solution::to_String() const
 	{
-		//TODO: modificar!
+		//TODO: implementar solución a string
 		//return (char *)_var.get_first();
 		return "";
 	}
@@ -292,7 +292,7 @@ skeleton CHC
 
 	void Solution::to_Solution(char *_string_)
 	{
-		//TODO: modificar!
+		//TODO: implementar string a soluctión
 		/*int *ptr=(int *)_string_;
 		for (int i=0;i<_pbm.dimension();i++)
 		{
@@ -301,51 +301,43 @@ skeleton CHC
 		}*/
 	}
 
-	unsigned int Solution::size() const
-	{
-		//TODO: modificar!
-		//return (_pbm.dimension() * sizeof(int));
-		return 0;
-	}
+//	unsigned int Solution::size() const
+//	{
+//		return (_pbm.dimension() * sizeof(int));
+//	}
 
-	int Solution::lengthInBits() const
-	{
-		//TODO: modificar!
-		//return _pbm.dimension();
-		return 0;
-	}
+//	int Solution::lengthInBits() const
+//	{
+//		return _pbm.dimension();
+//	}
 
-	void Solution::flip(const int index)
-	{
-		//TODO: modificar!
-		//_var[index] = 1 - _var[index];
-	}
+//	void Solution::flip(const int index)
+//	{
+//		_var[index] = 1 - _var[index];
+//	}
 
-	bool Solution::equalb(const int index, Solution &s)
-	{
-		//TODO: modificar!
-		//return _var[index] == s._var[index];
-	}
+//	bool Solution::equalb(const int index, Solution &s)
+//	{
+//		return _var[index] == s._var[index];
+//	}
 
-	void Solution::swap(const int index, Solution &s)
-	{
-		//TODO: modificar!
-		/*int aux = s._var[index];
-		s._var[index] = _var[index];
-		_var[index] = aux;*/
-	}
+//	void Solution::swap(const int index, Solution &s)
+//	{
+//		int aux = s._var[index];
+//		s._var[index] = _var[index];
+//		_var[index] = aux;
+//	}
 
-	void Solution::invalid()
-	{
-		//TODO: modificar!
-		//_var[0] = 2;
-	}
+//	void Solution::invalid()
+//	{
+//		_var[0] = 2;
+//	}
 
 	const vector<int>& Solution::getMachineTasks(const int& machineId) const {
 		return _machines[machineId].tasks;
 	}
 
-	const vector<solutionMachine>& Solution::machines() const {
+	const vector<struct solutionMachine>& Solution::machines() const {
 		return _machines;
 	}
 

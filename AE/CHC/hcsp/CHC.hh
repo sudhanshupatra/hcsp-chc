@@ -110,22 +110,15 @@ skeleton CHC
 		double fitness () const;
 		unsigned int size() const;
 
-		//TODO: modificar!
-		int lengthInBits() const;
-		void flip(const int index);
-		bool equalb(const int index,Solution &s);
-		void swap(const int index, Solution &s);
-		void invalid();
-
 		// =================================
 		// Especificos del problema.
 		// =================================
 		const vector<int>& getMachineTasks(const int& machineId) const;
-		const vector<solutionMachine>& machines() const;
+		const vector<struct solutionMachine>& machines() const;
 	private:
 		const Problem& _pbm;
 
-		vector<solutionMachine> _machines;
+		vector<struct solutionMachine> _machines;
   };
 
 // UserStatistics ----------------------------------------------------------------------------
