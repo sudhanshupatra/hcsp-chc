@@ -3,11 +3,9 @@
 #include "CHC.hh"
 #include <math.h>
 
-using namespace std;
-//using std::cout;
-//using std::vector;
+using std::cout;
 
-#define DEBUG true
+
 
 skeleton CHC
 {
@@ -15,7 +13,7 @@ skeleton CHC
 	// Problem ---------------------------------------------------------------
 
 	Problem::Problem ():_taskCount(0), _machineCount(0),
-			_expectedTimeToCompute(NULL), _tasksPriorities(NULL)
+			_expectedTimeToCompute(NULL), _tasksPriorities()
 	{}
 
 	// ===================================
@@ -44,10 +42,12 @@ skeleton CHC
 		cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
 
 		// Inicializo las prioridades de las tareas.
-		pbm._tasksPriorities = new int[pbm.taskCount()];
+		int taskPriority;
 		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
 			input.getline(buffer, MAX_BUFFER, '\n');
-			sscanf(buffer, "%d", &pbm._tasksPriorities[taskPos]);
+			sscanf(buffer, "%d", &taskPriority);
+
+			pbm._tasksPriorities.push_back(taskPriority);
 
 			if (DEBUG) cout << "[DEBUG] Task: " << taskPos
 					<< " => Priority: " << pbm._tasksPriorities[taskPos] << endl;
@@ -113,11 +113,11 @@ skeleton CHC
 		return _machineCount;
 	}
 
-	float Problem::expectedTimeToCompute(int task, int machine) {
+	float Problem::expectedTimeToCompute(const int& task, const int& machine) const {
 		return _expectedTimeToCompute[task][machine];
 	}
 
-	int Problem::tasksPriorities(int task) {
+	int Problem::tasksPriorities(const int& task) const {
 		return _tasksPriorities[task];
 	}
 

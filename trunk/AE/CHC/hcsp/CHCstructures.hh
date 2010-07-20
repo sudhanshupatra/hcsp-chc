@@ -22,7 +22,7 @@
 #define inherits typedef
 #define as
 
-using namespace std;
+#define DEBUG true
 
 struct individual // index of a individual in the population and its fitness
 {

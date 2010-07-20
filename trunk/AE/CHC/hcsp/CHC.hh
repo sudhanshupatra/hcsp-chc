@@ -11,6 +11,9 @@
 #define INC_CHC
 #include "CHCstructures.hh"
 
+#include <vector>
+using std::vector;
+
 skeleton CHC
 {
 #define MAX_USER_OP 5
@@ -63,12 +66,12 @@ skeleton CHC
 		// =================================
 		int taskCount() const;
 		int machineCount() const;
-		int tasksPriorities(int task);
-		float expectedTimeToCompute(int task, int machine);
+		int tasksPriorities(const int& task) const;
+		float expectedTimeToCompute(const int& task, const int& machine) const;
 	private:
 		int _taskCount;
 		int _machineCount;
-		int *_tasksPriorities;
+		vector<int> _tasksPriorities;
 		float **_expectedTimeToCompute;
   };
 
