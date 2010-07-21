@@ -658,32 +658,22 @@ skeleton CHC
 
 	void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 	{
-		//TODO: implementar cruzamiento
-		/*
-		int dh = 0;
-
 		if(probability[0] <= 0.0)
 		{
-			probability[0] = sol1.lengthInBits()/4;
+			probability[0] = sol1.length()/4;
 		}
 
-		for(int i = 0; i < sol1.lengthInBits();i++)
-			if(!sol1.equalb(i,sol2)) dh++;
+		int dh = sol1.distanceTo(sol2);
 
 		if((dh/2) > probability[0])
 		{
-			for(int i = 0; i < sol1.lengthInBits();i++)
-				if((!sol1.equalb(i,sol2)) && (0.5 <= rand01()))
+			for(int i = 0; i < sol1.length();i++) {
+				if((!sol1.equalTasks(sol2, i)) && (0.5 <= rand01()))
 				{
-					sol1.swap(i,sol2);
+					sol1.swapTasks(sol2, i);
 				}
+			}
 		}
-		else
-		{
-			sol1.invalid();
-			sol2.invalid();
-		}
-		*/
 	}
 
 	void Crossover::execute(Rarray<Solution*>& sols) const
@@ -726,17 +716,22 @@ skeleton CHC
 		probability = new float[1];
 	}
 
-	/*void Diverge::diverge(Solution& sol) const
+	void Diverge::diverge(Solution& sol) const
 	{
-		for(int i = 0; i < sol.lengthInBits(); i++)
-			if(rand01() < probability[0]) sol.flip(i);
-	}*/
+		//TODO: implementar mutación de una solución independiente.
+
+		/*for(int i = 0; i < sol.lengthInBits(); i++)
+			if(rand01() < probability[0]) sol.flip(i);*/
+	}
 
 	void Diverge::execute(Rarray<Solution*>& sols) const
   	{
-		//TODO: implementar mutación catalísmica
-		/*for (int i=0;i<sols.size();i++)
-			diverge(*sols[i]);*/
+		//TODO: implementar mutación cataclísmica.
+
+		for (int i=0;i<sols.size();i++)
+			diverge(*sols[i]);
+
+		//TODO: implementar búsqueda local.
 	}
 
 	ostream& operator<< (ostream& os, const Diverge& diverge)
@@ -1365,6 +1360,13 @@ skeleton CHC
 			fitness_values.sort(lessF);	
 	}
 
+	// Selecciona un hijo para apareamiento.
+	//
+	// @to_select_1: parents solutions
+	// @to_select_2: offsprings solutions
+	// @fitness_values: parents+offsprings fitnesses
+	// @fitness_values: 0
+	// @fitness_values: false
 	struct individual Selection_New_Population::select_one(
 			const Rarray<Solution*>& to_select_1,
 			const Rarray<Solution*>& to_select_2,
@@ -1372,20 +1374,18 @@ skeleton CHC
 			const unsigned int param,
 			const bool remplace) const
 	{
-		//TODO: implementar seleccion de hijos.
-		return fitness_values[0];
-
-		/*
 		bool change = false;
-		if(d == -1) d = to_select_1[0]->lengthInBits() / 4;
 
 		if(selection_position == 0)
 		{
 			for(int i= 0; i < to_select_1.size(); i++)
 				if(fitness_values[i].index > (to_select_1.size()-1)) change = true;
+
 			if(change) selection_position++;
 			else selection_position--;
 		}
+
+		if(d == -1) d = to_select_1[0]->length() / 4;
 
 		if(selection_position == -1)
 		{
@@ -1393,7 +1393,7 @@ skeleton CHC
 			if(d < 0)
 			{
 				selection_position--;
-				d = (int) (r * (1.0-r) * to_select_1[0]->lengthInBits());
+				d = (int) (r * (1.0-r) * to_select_1[0]->length());
 			}
 			else selection_position = 1;
 		}
@@ -1417,7 +1417,6 @@ skeleton CHC
 			selection_position++;
 			return fitness_values[index];
 		}
-		*/
 	}
 
 	void Selection_New_Population::setup(char line[MAX_BUFFER])
