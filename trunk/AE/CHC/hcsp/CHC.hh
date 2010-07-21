@@ -77,12 +77,20 @@ skeleton CHC
 
 //Solution ----------------------------------------------------------------------------
 
-  struct solutionMachine {
+  struct SolutionMachine {
+  private:
+	  vector<int> _tasks;
+	  int _machineId;
   public:
-	  solutionMachine();
-	  ~solutionMachine();
+	  SolutionMachine(int machineId);
+	  ~SolutionMachine();
 
-	  vector<int> tasks;
+	  void addTask(const int taskId);
+	  void setTask(const int taskId, const int taskPos);
+	  int getTask(const int taskPos) const;
+	  int countTasks() const;
+
+	  int machineId() const;
   };
 
   requires class Solution
@@ -110,15 +118,22 @@ skeleton CHC
 		double fitness () const;
 		unsigned int size() const;
 
+		int length() const;
+		int distanceTo(const Solution& solution) const;
+
+		void swapTasks(Solution& solution, const int taskId);
+		bool equalTasks(Solution& solution, const int taskId) const;
+		int findTask(const int taskId, const SolutionMachine* foundMachine, const int* foundTaskPos) const;
+		void executeTaskAt(const int taskId, const int machineId, const int taskPos);
+
 		// =================================
 		// Especificos del problema.
 		// =================================
-		const vector<int>& getMachineTasks(const int& machineId) const;
-		const vector<struct solutionMachine>& machines() const;
+		const vector<struct SolutionMachine>& machines() const;
 	private:
 		const Problem& _pbm;
 
-		vector<struct solutionMachine> _machines;
+		vector<struct SolutionMachine> _machines;
   };
 
 // UserStatistics ----------------------------------------------------------------------------

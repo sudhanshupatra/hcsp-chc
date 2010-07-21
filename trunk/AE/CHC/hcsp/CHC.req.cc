@@ -128,10 +128,34 @@ skeleton CHC
 
 	// Solution --------------------------------------------------------------
 
-	solutionMachine::solutionMachine(): tasks() {
+	SolutionMachine::SolutionMachine(int machineId): _tasks(), _machineId(machineId) {
 	}
 
-	solutionMachine::~solutionMachine() {
+	SolutionMachine::~SolutionMachine() {
+	}
+
+	int SolutionMachine::machineId() const {
+		return _machineId;
+	}
+
+	void SolutionMachine::addTask(const int taskId) {
+		_tasks.push_back(taskId);
+	}
+
+	void SolutionMachine::setTask(const int taskId, const int taskPos) {
+		_tasks.at(taskPos) = taskId;
+	}
+
+	int SolutionMachine::getTask(const int taskPos) const {
+		if (taskPos <= _tasks.size() -1) {
+			return _tasks[taskPos];
+		} else {
+			return -1;
+		}
+	}
+
+	int SolutionMachine::countTasks() const {
+		return _tasks.size();
 	}
 
 	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines()
@@ -139,7 +163,7 @@ skeleton CHC
 		_machines.reserve(pbm.machineCount());
 
 		for (int machineId = 0; machineId < pbm.machineCount(); machineId++) {
-			_machines.push_back(*(new solutionMachine()));
+			_machines.push_back(*(new SolutionMachine(machineId)));
 		}
 	}
 
@@ -243,7 +267,7 @@ skeleton CHC
 				cout << "[DEBUG] Task: " << currentTask << " sent to Machine: " << currentMachine << endl;
 			}
 
-			_machines[currentMachine].tasks.push_back(currentTask);
+			_machines[currentMachine].addTask(currentTask);
 		}
 	}
 
@@ -258,9 +282,9 @@ skeleton CHC
 			int machineComputeCost;
 			machineComputeCost = 0;
 
-			for (int taskPos = 0; taskPos < _machines[machineId].tasks.size(); taskPos++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 				int taskId;
-				taskId = _machines[machineId].tasks[taskPos];
+				taskId = _machines[machineId].getTask(taskPos);
 
 				double computeCost;
 				computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
@@ -281,6 +305,79 @@ skeleton CHC
 		return fitness;
 	}
 
+	int Solution::length() const {
+		return _pbm.taskCount();
+	}
+
+	int Solution::distanceTo(const Solution& solution) const {
+		int distance = 0;
+
+		for (int machineId = 0; machineId < _machines.size(); machineId++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				int taskId;
+				taskId = _machines[machineId].getTask(taskPos);
+
+				if (solution._machines[machineId].countTasks() >= taskPos) {
+					if (solution._machines[machineId].getTask(taskPos) == taskId) {
+						// La tarea actual es ejecutada en la misma máquina y en la misma
+						// posición en ambas soluciones.
+					} else {
+						distance++;
+					}
+				} else {
+					distance++;
+				}
+			}
+		}
+
+		return distance;
+	}
+
+	int Solution::findTask(const int taskId, const SolutionMachine* foundMachine, const int* foundTaskPos) const {
+		foundMachine = NULL;
+		foundTaskPos = NULL;
+
+		for (int machineId = 0; machineId < _machines.size(); machineId++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				if (_machines[machineId].getTask(taskPos) == taskId) {
+					foundMachine = &_machines[machineId];
+					foundTaskPos = &taskPos;
+					return 1;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	void Solution::executeTaskAt(const int taskId, const int machineId, const int taskPos) {
+		_machines[machineId].setTask(taskId, taskPos);
+	}
+
+	void Solution::swapTasks(Solution& solution, const int taskId) {
+		SolutionMachine* machine1;
+		SolutionMachine* machine2;
+		int* taskPos1;
+		int* taskPos2;
+
+		findTask(taskId, machine1, taskPos1);
+		solution.findTask(taskId, machine2, taskPos2);
+
+		executeTaskAt(taskId, machine2->machineId(), *taskPos2);
+		solution.executeTaskAt(taskId, machine1->machineId(), *taskPos1);
+	}
+
+	bool Solution::equalTasks(Solution& solution, const int taskId) const {
+		SolutionMachine* machine1;
+		SolutionMachine* machine2;
+		int* taskPos1;
+		int* taskPos2;
+
+		findTask(taskId, machine1, taskPos1);
+		solution.findTask(taskId, machine2, taskPos2);
+
+		return (machine1->machineId() == machine2->machineId()) && ((*taskPos1)==(*taskPos2));
+	}
 
 	char *Solution::to_String() const
 	{
@@ -301,43 +398,7 @@ skeleton CHC
 		}*/
 	}
 
-//	unsigned int Solution::size() const
-//	{
-//		return (_pbm.dimension() * sizeof(int));
-//	}
-
-//	int Solution::lengthInBits() const
-//	{
-//		return _pbm.dimension();
-//	}
-
-//	void Solution::flip(const int index)
-//	{
-//		_var[index] = 1 - _var[index];
-//	}
-
-//	bool Solution::equalb(const int index, Solution &s)
-//	{
-//		return _var[index] == s._var[index];
-//	}
-
-//	void Solution::swap(const int index, Solution &s)
-//	{
-//		int aux = s._var[index];
-//		s._var[index] = _var[index];
-//		_var[index] = aux;
-//	}
-
-//	void Solution::invalid()
-//	{
-//		_var[0] = 2;
-//	}
-
-	const vector<int>& Solution::getMachineTasks(const int& machineId) const {
-		return _machines[machineId].tasks;
-	}
-
-	const vector<struct solutionMachine>& Solution::machines() const {
+	const vector<struct SolutionMachine>& Solution::machines() const {
 		return _machines;
 	}
 
