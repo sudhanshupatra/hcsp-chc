@@ -401,6 +401,7 @@ skeleton CHC
 			_fitness_values[i].change = true;
 		}
 		evaluate_parents();
+
 	}
 
 	void Population::evaluate_parents()
@@ -658,6 +659,8 @@ skeleton CHC
 
 	void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 	{
+		if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
+
 		if(probability[0] <= 0.0)
 		{
 			probability[0] = sol1.length()/4;
@@ -718,20 +721,29 @@ skeleton CHC
 
 	void Diverge::diverge(Solution& sol) const
 	{
-		//TODO: implementar mutación de una solución independiente.
+		//TODO: implementar mutación de una solución.
 
 		/*for(int i = 0; i < sol.lengthInBits(); i++)
 			if(rand01() < probability[0]) sol.flip(i);*/
 	}
 
-	void Diverge::execute(Rarray<Solution*>& sols) const
+	void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex, float mutationProbability) const
   	{
-		//TODO: implementar mutación cataclísmica.
+		if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
-		for (int i=0;i<sols.size();i++)
-			diverge(*sols[i]);
+		for(int i = 0; i < sols.size(); i++)
+		{
+			if (i != bestSolutionIndex) {
+				if(rand01() < mutationProbability) diverge(*sols[i]);
+			}
+		}
 
 		//TODO: implementar búsqueda local.
+	}
+
+	void Diverge::execute(Rarray<Solution*>& sols) const
+  	{
+		diverge(sols, -1, 1.0);
 	}
 
 	ostream& operator<< (ostream& os, const Diverge& diverge)
@@ -1400,11 +1412,10 @@ skeleton CHC
 
 		if(selection_position == -2)
 		{
+			//TODO: implementar mutación cataclísmica.
 			assert(diverge != NULL);
-			for(int i = 1; i < to_select_1.size(); i++)
-			{
-				if(rand01() < r) ((Diverge *)diverge)->diverge(*to_select_1[i]);
-			}
+			((Diverge *)diverge)->diverge(to_select_1, 0, (float)1.0);
+
 			for(int i= 0; i < fitness_values.size(); i++)
 				if(fitness_values[i].index < (to_select_1.size()-1)) fitness_values[i].change = true;
 
@@ -2299,6 +2310,7 @@ skeleton CHC
 
 	void Solver_Seq::StartUp(const Population& pop)
 	{
+		cout << endl << "[INFO] Solver_Seq::StartUp" << endl;
 		start_trial=_used_time();
 		start_global=total_time_spent;
 
@@ -2335,13 +2347,14 @@ skeleton CHC
 		_stat.update(*this);
 		_userstat.update(*this);
 
-		if (display_state())
+		if (display_state()) {
 			show_state();
+		}
 	}
 
 	void Solver_Seq::DoStep()
 	{
-
+		cout << endl << "[INFO] Solver_Seq::DoStep" << endl;
 		current_iteration(current_iteration()+1);
 		current_population.evolution();
 		current_evaluations(current_population.evaluations());
@@ -2367,8 +2380,9 @@ skeleton CHC
 		_stat.update(*this);
 		_userstat.update(*this);
 
-		if (display_state())
+		if (display_state()) {
 			show_state();
+		}
 	}
 
 	void Solver_Seq::run ()

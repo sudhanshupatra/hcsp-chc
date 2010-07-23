@@ -77,7 +77,7 @@ skeleton CHC
 
 //Solution ----------------------------------------------------------------------------
 
-  struct SolutionMachine {
+  class SolutionMachine {
   private:
 	  vector<int> _tasks;
 	  int _machineId;
@@ -123,7 +123,7 @@ skeleton CHC
 
 		void swapTasks(Solution& solution, const int taskId);
 		bool equalTasks(Solution& solution, const int taskId) const;
-		int findTask(const int taskId, const SolutionMachine* foundMachine, const int* foundTaskPos) const;
+		int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
 		void executeTaskAt(const int taskId, const int machineId, const int taskPos);
 
 		// =================================
@@ -132,6 +132,7 @@ skeleton CHC
 		const vector<struct SolutionMachine>& machines() const;
 	private:
 		const Problem& _pbm;
+		bool _initialized;
 
 		vector<struct SolutionMachine> _machines;
   };
@@ -217,6 +218,8 @@ skeleton CHC
 		friend ostream& operator<< (ostream& os, const Diverge&  diverge);
 
 		void diverge(Solution& s) const;
+		void diverge(const Rarray<Solution*>& sols, int bestSolutionIndex, float mutationProbability) const;
+
 		// applies mutation over all solutions in array sols
 		virtual void execute(Rarray<Solution*>& sols) const;
 		virtual void setup(char line[MAX_BUFFER]);

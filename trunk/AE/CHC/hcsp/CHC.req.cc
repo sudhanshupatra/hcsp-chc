@@ -147,7 +147,7 @@ skeleton CHC
 	}
 
 	int SolutionMachine::getTask(const int taskPos) const {
-		if (taskPos <= _tasks.size() -1) {
+		if (taskPos < _tasks.size()) {
 			return _tasks[taskPos];
 		} else {
 			return -1;
@@ -158,7 +158,7 @@ skeleton CHC
 		return _tasks.size();
 	}
 
-	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines()
+	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines(), _initialized(false)
 	{
 		_machines.reserve(pbm.machineCount());
 
@@ -224,6 +224,11 @@ skeleton CHC
  	Solution& Solution::operator= (const Solution &sol)
 	{
 		//_var=sol._var;
+ 		_machines = sol._machines;
+ 		_initialized = sol._initialized;
+
+// 		if (DEBUG) cout << endl << "[DEBUG] Solution::operator= this fitness: " << fitness() << endl;
+// 		if (DEBUG) cout << "[DEBUG] Solution::operator= sol fitness: " << sol.fitness() << endl;
 
 		return *this;
 	}
@@ -244,14 +249,16 @@ skeleton CHC
 	// ===================================
 	void Solution::initialize()
 	{
+		_initialized = true;
+
 		int startTask = rand_int(0, _pbm.taskCount()-1);
 		int direction = rand_int(0, 1);
 		if (direction == 0) direction = -1;
 
 		if (DEBUG) {
-			cout << "[DEBUG] Initialize()" << endl;
-			cout << "[DEBUG] startTask: " << startTask << endl;
-			cout << "[DEBUG] direction: " << direction << endl;
+//			cout << "[DEBUG] Initialize()" << endl;
+//			cout << "[DEBUG] startTask: " << startTask << endl;
+//			cout << "[DEBUG] direction: " << direction << endl;
 		}
 
 		int currentTask;
@@ -263,9 +270,9 @@ skeleton CHC
 			int currentMachine;
 			currentMachine = rand_int(0, _pbm.machineCount()-1);
 
-			if (DEBUG) {
-				cout << "[DEBUG] Task: " << currentTask << " sent to Machine: " << currentMachine << endl;
-			}
+//			if (DEBUG) {
+//				cout << "[DEBUG] Task: " << currentTask << " sent to Machine: " << currentMachine << endl;
+//			}
 
 			_machines[currentMachine].addTask(currentTask);
 		}
@@ -276,18 +283,31 @@ skeleton CHC
 	// ===================================
 	double Solution::fitness () const
 	{
+		if (!_initialized) {
+			//if (DEBUG) cout << endl << "[DEBUG] Solution fitness: infinity" << endl;
+			return infinity();
+		}
+
 		double fitness = 0.0;
 
 		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 			int machineComputeCost;
 			machineComputeCost = 0;
 
+			//if (DEBUG) cout << "[DEBUG] Solution::fitness machineId: " << machineId << endl;
+
 			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 				int taskId;
 				taskId = _machines[machineId].getTask(taskPos);
 
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
+
 				double computeCost;
 				computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
+
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness computeCost: " << computeCost << endl;
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPriority: " << _pbm.tasksPriorities(taskId) << endl;
 
 				double priorityCost;
 				priorityCost = 0.0;
@@ -296,12 +316,15 @@ skeleton CHC
 					priorityCost += machineComputeCost / _pbm.tasksPriorities(taskId);
 				}
 
+				//if (DEBUG) cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost << endl;
+
 				machineComputeCost += computeCost;
 				fitness += (computeCost + priorityCost);
+				//if (DEBUG) cout << "[DEBUG] Solution::fitness partial fitness: " << fitness << endl;
 			}
 		}
 
-		if (DEBUG) cout << "Solution fitness: " << fitness << endl;
+		//if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;
 		return fitness;
 	}
 
@@ -330,18 +353,19 @@ skeleton CHC
 			}
 		}
 
+		if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo: " << distance << endl;
 		return distance;
 	}
 
-	int Solution::findTask(const int taskId, const SolutionMachine* foundMachine, const int* foundTaskPos) const {
-		foundMachine = NULL;
-		foundTaskPos = NULL;
+	int Solution::findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const {
+		foundMachineId = -1;
+		foundTaskPos = -1;
 
 		for (int machineId = 0; machineId < _machines.size(); machineId++) {
 			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 				if (_machines[machineId].getTask(taskPos) == taskId) {
-					foundMachine = &_machines[machineId];
-					foundTaskPos = &taskPos;
+					foundMachineId = machineId;
+					foundTaskPos = taskPos;
 					return 1;
 				}
 			}
@@ -355,35 +379,41 @@ skeleton CHC
 	}
 
 	void Solution::swapTasks(Solution& solution, const int taskId) {
-		SolutionMachine* machine1;
-		SolutionMachine* machine2;
-		int* taskPos1;
-		int* taskPos2;
+		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks" << endl;
+
+		int machine1, machine2, taskPos1, taskPos2;
 
 		findTask(taskId, machine1, taskPos1);
 		solution.findTask(taskId, machine2, taskPos2);
 
-		executeTaskAt(taskId, machine2->machineId(), *taskPos2);
-		solution.executeTaskAt(taskId, machine1->machineId(), *taskPos1);
+		executeTaskAt(taskId, machine2, taskPos2);
+		solution.executeTaskAt(taskId, machine1, taskPos1);
 	}
 
 	bool Solution::equalTasks(Solution& solution, const int taskId) const {
-		SolutionMachine* machine1;
-		SolutionMachine* machine2;
-		int* taskPos1;
-		int* taskPos2;
+		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks taskId " << taskId << endl;
 
-		findTask(taskId, machine1, taskPos1);
-		solution.findTask(taskId, machine2, taskPos2);
+		int machine1, machine2, taskPos1, taskPos2;
 
-		return (machine1->machineId() == machine2->machineId()) && ((*taskPos1)==(*taskPos2));
+		if (findTask(taskId, machine1, taskPos1) && solution.findTask(taskId, machine2, taskPos2)) {
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks encontrados" << endl;
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
+
+			bool equal = (machine1 == machine2) && (taskPos1==taskPos2);
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks equals " << equal << endl;
+			return equal;
+		} else {
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks no encontré la tarea?" << endl;
+			return true;
+		}
 	}
 
 	char *Solution::to_String() const
 	{
 		//TODO: implementar solución a string
 		//return (char *)_var.get_first();
-		return "";
+		return "[INFO] Solution...\n";
 	}
 
 
