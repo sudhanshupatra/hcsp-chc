@@ -87,6 +87,8 @@ skeleton CHC
 
 	  void addTask(const int taskId);
 	  void setTask(const int taskId, const int taskPos);
+	  void insertTask(const int taskId, const int taskPos);
+	  void removeTask(const int taskPos);
 	  int getTask(const int taskPos) const;
 	  int countTasks() const;
 
@@ -125,6 +127,9 @@ skeleton CHC
 		bool equalTasks(Solution& solution, const int taskId) const;
 		int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
 		void executeTaskAt(const int taskId, const int machineId, const int taskPos);
+		void removeTaskAt(const int machineId, const int taskPos);
+
+		void show() const;
 
 		// =================================
 		// Especificos del problema.

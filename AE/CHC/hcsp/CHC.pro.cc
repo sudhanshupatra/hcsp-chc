@@ -455,6 +455,8 @@ skeleton CHC
 
 	void Population::evolution()
 	{
+		//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
+
 		select_parents();  // selects individuals to apply operators
 
 		// apply selected operators
@@ -464,6 +466,8 @@ skeleton CHC
 		evaluate_offsprings();
 		select_offsprings(); // selects new individuals
 		evaluate_parents(); // calculates fitness of new individuals
+
+		//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
 	}
 
 	void Population::interchange(const unsigned long current_generation, NetStream& channel)
