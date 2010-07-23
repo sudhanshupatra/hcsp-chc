@@ -129,8 +129,6 @@ skeleton CHC
 		void executeTaskAt(const int taskId, const int machineId, const int taskPos);
 		void removeTaskAt(const int machineId, const int taskPos);
 
-		void show() const;
-
 		// =================================
 		// Especificos del problema.
 		// =================================

@@ -212,8 +212,13 @@ skeleton CHC
 	// ===================================
 	ostream& operator<< (ostream& os, const Solution& sol)
 	{
-		//for (int i=0;i<sol.pbm().dimension();i++)
-		//	os << " " << sol._var[i];
+		os << endl;
+		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+			os << "> machineId: " << machineId << endl;
+			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
+				os << "  taskPos: " << i << " taskId: " << sol.machines()[machineId].getTask(i) << endl;
+			}
+		}
 
 		return os;
 	}
@@ -457,16 +462,6 @@ skeleton CHC
 		}
 	}
 
-	void Solution::show() const {
-		cout << endl << "[DEBUG] Solution::show()" << endl;
-		for (int machineId = 0; machineId < _machines.size(); machineId++) {
-			cout << "        machineId: " << machineId << endl;
-			for (int i = 0; i < _machines[machineId].countTasks(); i++) {
-				cout << "        taskPos: " << i << " taskId: " << _machines[machineId].getTask(i) << endl;
-			}
-		}
-	}
-
 	char *Solution::to_String() const
 	{
 //		if (DEBUG) cout << endl << "[DEBUG] Solution::to_String()" << endl;
@@ -504,6 +499,8 @@ skeleton CHC
 
 	void Solution::to_Solution(char *_string_)
 	{
+		_initialized = true;
+
 		int machineSeparator = -1;
 		int endMark = -2;
 
