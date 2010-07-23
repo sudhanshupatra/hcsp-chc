@@ -158,6 +158,14 @@ skeleton CHC
 		return _tasks.size();
 	}
 
+	void SolutionMachine::insertTask(const int taskId, const int taskPos) {
+		_tasks.insert(_tasks.begin()+taskPos, taskId);
+	}
+
+	void SolutionMachine::removeTask(const int taskPos) {
+		_tasks.erase(_tasks.begin()+taskPos);
+	}
+
 	Solution::Solution (const Problem& pbm):_pbm(pbm), _machines(), _initialized(false)
 	{
 		_machines.reserve(pbm.machineCount());
@@ -353,7 +361,9 @@ skeleton CHC
 			}
 		}
 
-		if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo: " << distance << endl;
+//		if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo: " << distance << endl;
+//		if (DEBUG) this->show();
+//		if (DEBUG) solution.show();
 		return distance;
 	}
 
@@ -375,37 +385,81 @@ skeleton CHC
 	}
 
 	void Solution::executeTaskAt(const int taskId, const int machineId, const int taskPos) {
-		_machines[machineId].setTask(taskId, taskPos);
+		_machines[machineId].insertTask(taskId, taskPos);
+	}
+
+	void Solution::removeTaskAt(const int machineId, const int taskPos) {
+		_machines[machineId].removeTask(taskPos);
 	}
 
 	void Solution::swapTasks(Solution& solution, const int taskId) {
-		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks" << endl;
+//		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks taskId: " << taskId << endl;
 
+		Solution& sol1 = *this;
+		Solution& sol2 = solution;
 		int machine1, machine2, taskPos1, taskPos2;
 
-		findTask(taskId, machine1, taskPos1);
-		solution.findTask(taskId, machine2, taskPos2);
+//		if (DEBUG) sol1.show();
+//		if (DEBUG) sol2.show();
 
-		executeTaskAt(taskId, machine2, taskPos2);
-		solution.executeTaskAt(taskId, machine1, taskPos1);
+		if (sol1.findTask(taskId, machine1, taskPos1) && sol2.findTask(taskId, machine2, taskPos2)) {
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
+
+			// Modifico la solución 1.
+			// Borro la tarea de la ubicación original.
+			sol1.removeTaskAt(machine1, taskPos1);
+
+			// Inserto la tarea en la nueva ubicación.
+			if (taskPos2 < sol1._machines[machine2].countTasks()) {
+				sol1.executeTaskAt(taskId, machine2, taskPos2);
+			} else {
+				sol1._machines[machine2].addTask(taskId);
+			}
+
+			// Modifico la solución 2.
+			// Borro la tarea de la ubicación original.
+			sol2.removeTaskAt(machine2, taskPos2);
+
+			// Inserto la tarea en la nueva ubicación.
+			if (taskPos1 < sol2._machines[machine1].countTasks()) {
+				sol2.executeTaskAt(taskId, machine1, taskPos1);
+			} else {
+				sol2._machines[machine1].addTask(taskId);
+			}
+		} else {
+			if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks ¡¿no encontré la tarea?!" << endl;
+		}
+
+//		sol1.show();
+//		sol2.show();
 	}
 
 	bool Solution::equalTasks(Solution& solution, const int taskId) const {
-		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks taskId " << taskId << endl;
+//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks taskId " << taskId << endl;
 
 		int machine1, machine2, taskPos1, taskPos2;
 
 		if (findTask(taskId, machine1, taskPos1) && solution.findTask(taskId, machine2, taskPos2)) {
-			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks encontrados" << endl;
-			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
-			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
 
-			bool equal = (machine1 == machine2) && (taskPos1==taskPos2);
-			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks equals " << equal << endl;
+			bool equal = (machine1 == machine2) && (taskPos1 == taskPos2);
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks equals " << equal << endl;
 			return equal;
 		} else {
-			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks no encontré la tarea?" << endl;
+			if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks ¡¿no encontré la tarea?!" << endl;
 			return true;
+		}
+	}
+
+	void Solution::show() const {
+		cout << endl << "[DEBUG] Solution::show()" << endl;
+		for (int machineId = 0; machineId < _machines.size(); machineId++) {
+			cout << "        machineId: " << machineId << endl;
+			for (int i = 0; i < _machines[machineId].countTasks(); i++) {
+				cout << "        taskPos: " << i << " taskId: " << _machines[machineId].getTask(i) << endl;
+			}
 		}
 	}
 
