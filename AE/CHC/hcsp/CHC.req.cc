@@ -340,6 +340,10 @@ skeleton CHC
 		return _pbm.taskCount();
 	}
 
+	unsigned int Solution::size() const {
+		return _pbm.taskCount() * sizeof(int) + _pbm.machineCount() * sizeof(int) + sizeof(int);
+	}
+
 	int Solution::distanceTo(const Solution& solution) const {
 		int distance = 0;
 
@@ -465,21 +469,58 @@ skeleton CHC
 
 	char *Solution::to_String() const
 	{
-		//TODO: implementar solución a string
-		//return (char *)_var.get_first();
-		return "[INFO] Solution...\n";
+//		if (DEBUG) cout << endl << "[DEBUG] Solution::to_String()" << endl;
+//		if (DEBUG) this->show();
+
+		int machineSeparator = -1;
+		int endMark = -2;
+
+		int rawPos = 0;
+		char *raw = new char[this->size()];
+
+		for (int machineId = 0; machineId < _machines.size(); machineId++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				int taskId;
+				taskId =_machines[machineId].getTask(taskPos);
+
+				memcpy(&raw[rawPos],&taskId, sizeof(int));
+				rawPos += sizeof(int);
+			}
+			memcpy(&raw[rawPos],&machineSeparator, sizeof(int));
+			rawPos += sizeof(int);
+		}
+		memcpy(&raw[rawPos],&endMark, sizeof(int));
+
+//		if (DEBUG) {
+//			if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution()" << endl;
+//			Solution aux(_pbm);
+//			aux.to_Solution(raw);
+//			aux.show();
+//		}
+
+		return raw;
 	}
 
 
 	void Solution::to_Solution(char *_string_)
 	{
-		//TODO: implementar string a soluctión
-		/*int *ptr=(int *)_string_;
-		for (int i=0;i<_pbm.dimension();i++)
-		{
-			_var[i]=*ptr;
-			ptr++;
-		}*/
+		int machineSeparator = -1;
+		int endMark = -2;
+
+		bool endFound = false;
+
+		int currentMachine = 0;
+		for (int pos = 0; pos < this->size() && !endFound; pos = pos + sizeof(int)) {
+			int currentValue;
+			currentValue = (int)_string_[pos];
+
+			if (currentValue == endMark)
+				endFound = true;
+			else if (currentValue == machineSeparator)
+				currentMachine++;
+			else
+				_machines[currentMachine].addTask(currentValue);
+		}
 	}
 
 	const vector<struct SolutionMachine>& Solution::machines() const {
