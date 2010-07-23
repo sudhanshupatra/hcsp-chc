@@ -1952,8 +1952,7 @@ skeleton CHC
 
 	void Solver::current_best_solution(const Solution& sol)
 	{
-		//TODO: implementar current_best_solution
-		//_current_best_solution.set_contents(sol.to_String(),1,sol.size());
+		_current_best_solution.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::current_best_cost(const double value)
@@ -1983,8 +1982,7 @@ skeleton CHC
 
 	void Solver::best_solution_trial(const Solution& sol)
 	{
-		//TODO: implementar best_solution_trial
-		//_best_solution_trial.set_contents(sol.to_String(),1,sol.size());
+		_best_solution_trial.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::best_cost_trial(const double value)
@@ -2034,8 +2032,7 @@ skeleton CHC
 
 	void Solver::global_best_solution(const Solution& sol)
 	{
-		//TODO: implementar global_best_solution
-		//_global_best_solution.set_contents(sol.to_String(),1,sol.size());
+		_global_best_solution.set_contents(sol.to_String(),1,sol.size());
 	}
 
 	void Solver::global_best_cost(const double value)
