@@ -754,36 +754,61 @@ skeleton CHC
 		double previous = 0.0;
     	for (int machineId = 0; machineId < machineCount; machineId++)
 		{
-    		/*
-    		if (DEBUG) cout << " * machineId: " <<  machineId << endl;
-    		if (DEBUG) cout << " (selParameterByMachine[machineId] / overall_fitness) + previous" << endl;
-    		if (DEBUG) cout << " (" << selParameterByMachine[machineId] << " / " << overall_fitness << ") + " << previous << endl;
+    		if (DEBUG) cout << " * machineId: " <<  machineId << " (selParameterByMachine[machineId] / overall_fitness) + previous" << " (" << selParameterByMachine[machineId] << " / " << overall_fitness << ") + " << previous << endl;
 
     		selParameterByMachine[machineId] = (selParameterByMachine[machineId] / overall_fitness) + previous;
-			previous = selParameterByMachine[machineId];
-    		*/
-
-    		if (DEBUG) cout << " * machineId: " <<  machineId << endl;
-    		if (DEBUG) cout << " (selParameterByMachine[machineId] / overall_fitness)" << endl;
-    		if (DEBUG) cout << " (" << selParameterByMachine[machineId] << " / " << overall_fitness << ")" << endl;
-
-    		selParameterByMachine[machineId] = (selParameterByMachine[machineId] / overall_fitness);
+    		previous = selParameterByMachine[machineId];
 
     		if (DEBUG) cout << " selParameterByMachine[machineId]: " << selParameterByMachine[machineId] << endl;
 		}
 
-		double random_selected = rand01();
-		int i=0;
+		double random_selected;
+		vector<int> selectedMachinesId;
 
-		while (random_selected > selParameterByMachine[i])
-			i++;
+		for (int i = 0; i < MUT_MAQ; i++) {
+			int selectedMachineId;
+			selectedMachineId = 0;
 
-		if (DEBUG) cout << endl << endl;
-		if (DEBUG) cout << ">> selected machineId: " << i << endl;
-		//return fitness_values[i];
+			random_selected = rand01();
 
-		/*for(int i = 0; i < sol.lengthInBits(); i++)
-			if(rand01() < probability[0]) sol.flip(i);*/
+			if (DEBUG) cout << endl << ">> random_selected: " << random_selected << endl;
+
+			while ((random_selected > selParameterByMachine[selectedMachineId])
+					&& (selectedMachineId < machineCount))
+
+				selectedMachineId++;
+
+			if (DEBUG) cout << ">> selected machineId: " << selectedMachineId << endl;
+
+			selectedMachinesId.push_back(selectedMachineId);
+		}
+
+		for (int machineId = 0; machineId < selectedMachinesId.size(); machineId++) {
+			bool modificado;
+			modificado = false;
+
+			while (!modificado) {
+				if (rand01() >= 0.5) {
+					// Se selecciona una tarea T según rueda de ruleta según su COSTO y se
+					// intercambia con la tarea de menor costo de la máquina con menor makespan.
+					modificado = true;
+				}
+
+				if (rand01() >= 0.5) {
+					// Se selecciona una tarea T según rueda de ruleta según su COSTO y se
+					// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+					// más eficientemente en la máquina actual.
+					modificado = true;
+				}
+
+				if (rand01() >= 0.5) {
+					// Se selecciona una tarea T según rueda de ruleta según el inverso de su
+					// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
+					// de la máquina.
+					modificado = true;
+				}
+			}
+		}
 	}
 
 	void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex, float mutationProbability) const
