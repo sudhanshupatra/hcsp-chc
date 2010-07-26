@@ -797,7 +797,7 @@ void Diverge::diverge(Solution& sol) const {
 				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de menor costo de la máquina con menor makespan.
 				int tasksCount;
-				tasksCount = sol.machines()[machineId].tasksCount();
+				tasksCount = sol.machines()[machineId].countTasks();
 
 				vector<double> costsByTaskPos;
 
@@ -815,17 +815,13 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
-				int minMachineFitness = fitnessByMachine[0];
-				int minMachineFitnessId = 0;
+				int minCostMachineId;
+				minCostMachineId = sol.getMinCostMachineId();
 
-				int machineId;
-				for (machineId = 1; machineId < fitnessByMachine.size(); machineId++) {
-					if (minMachineFitness > fitnessByMachine[machineId]) {
-						minFitnessMachineId = machineId;
-						minFitnessMachine = fitnessByMachine[machineId];
-					}
-				}
+				int minCostTaskPosOnMachine;
+				minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(minCostMachineId);
 
+				sol.swapTasks(machineId, taskPos, minCostMachineId, minCostTaskPosOnMachine);
 				modificado = true;
 			}
 

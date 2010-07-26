@@ -122,13 +122,18 @@ public:
 	int length() const;
 	int distanceTo(const Solution& solution) const;
 
+	void swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2);
 	void swapTasks(Solution& solution, const int taskId);
 	bool equalTasks(Solution& solution, const int taskId) const;
 	int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
-	void
-			executeTaskAt(const int taskId, const int machineId,
-					const int taskPos);
+	void executeTaskAt(const int taskId, const int machineId, const int taskPos);
 	void removeTaskAt(const int machineId, const int taskPos);
+
+	int getBestFitnessMachineId() const;
+	int getMinCostMachineId() const;
+	int getMostUrgentTaskPosByMachine(int machineId) const;
+	int getMinCostTaskPosByMachine(int machineId) const;
+	int getMinDestinationCostTaskPosByMachine(int machineId, int destinationMachineId) const;
 
 	// =================================
 	// Especificos del problema.
