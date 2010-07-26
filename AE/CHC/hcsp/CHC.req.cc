@@ -530,6 +530,30 @@ skeleton CHC
 		return _machines;
 	}
 
+	int Solution::getBestFitnessMachineId() const {
+
+	}
+
+	int Solution::getMinCostMachineId() const {
+
+	}
+
+	int Solution::getMostUrgentTaskPosByMachine(int machineId) const {
+
+	}
+
+	int Solution::getMinCostTaskPosByMachine(int machineId) const {
+
+	}
+
+	int Solution::getMinDestinationCostTaskPosByMachine(int machineId, int destinationMachineId) const {
+
+	}
+
+	void Solution::swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2) {
+
+	}
+
 	Solution::~Solution()
 	{}
 
