@@ -689,27 +689,29 @@ Crossover::~Crossover() {
 //  Diverge: Sub_operator -------------------------------------------------------------
 
 
-RouletteWheel::RouletteWheel(const vector<double> values, bool maximize) :
-	_values(), _selectionValues(), _size(values.size()), _maximize(maximize),
-			_overallValue(0) {
+RouletteWheel::RouletteWheel(const vector<double> values,
+		bool maximizeDirection) :
+	_values(), _minSelectionValues(), _maxSelectionValues(), _size(
+			values.size()), _maximize(maximizeDirection), _overallValue(0) {
 
 	_values.reserve(_size + 1);
-	_selectionValues.reserve(_size + 1);
+	_minSelectionValues.reserve(_size + 1);
+	_maxSelectionValues.reserve(_size + 1);
 
 	for (int i = 0; i < _size; i++) {
 		_values.push_back(values[i]);
 
 		if (_maximize) {
-			_selectionValues.push_back(values[i]);
+			_maxSelectionValues.push_back(values[i]);
 		} else {
-			_selectionValues.push_back(1 / values[i]);
+			_maxSelectionValues.push_back(1 / values[i]);
 		}
 
-		_overallValue += _selectionValues[i];
+		_overallValue += _maxSelectionValues[i];
 
 		if (DEBUG)
 			cout << " * index: " << i << " value: " << _values[i]
-					<< " selectionValue: " << _selectionValues[i] << endl;
+					<< " selectionValue: " << _maxSelectionValues[i] << endl;
 	}
 
 	if (_overallValue > MAXDOUBLE)
@@ -722,15 +724,19 @@ RouletteWheel::RouletteWheel(const vector<double> values, bool maximize) :
 	for (int i = 0; i < _size; i++) {
 		if (DEBUG)
 			cout << " * index: " << i
-					<< " (selectionValue[machineId] / overallValue) + previous"
-					<< " (" << _selectionValues[i] << " / " << _overallValue
+					<< " (_maxSelectionValues[machineId] / overallValue) + previous"
+					<< " (" << _maxSelectionValues[i] << " / " << _overallValue
 					<< ") + " << previous << endl;
 
-		_selectionValues[i] = (_selectionValues[i] / _overallValue) + previous;
-		previous = _selectionValues[i];
+		_minSelectionValues[i] = previous;
+		_maxSelectionValues[i] = (_maxSelectionValues[i] / _overallValue)
+				+ previous;
+		previous = _maxSelectionValues[i];
 
 		if (DEBUG)
-			cout << " _selectionValues[i]: " << _selectionValues[i] << endl;
+			cout << " _minSelectionValues[i]: " << _minSelectionValues[i]
+					<< " _maxSelectionValues[i]: " << _maxSelectionValues[i]
+					<< endl;
 	}
 }
 
@@ -747,7 +753,8 @@ int RouletteWheel::drawOneByIndex() const {
 	if (DEBUG)
 		cout << endl << ">> random_selected: " << random_selected << endl;
 
-	while ((random_selected > _selectionValues[selectedValueIndex])
+	while (!((random_selected >= _minSelectionValues[selectedValueIndex])
+			&& (random_selected < _maxSelectionValues[selectedValueIndex]))
 			&& (selectedValueIndex < _size))
 
 		selectedValueIndex++;
@@ -769,90 +776,19 @@ void Diverge::diverge(Solution& sol) const {
 		cout << endl << "Diverge::diverge" << endl;
 	int MUT_MAQ = 1;
 
-	/*
-	int machineCount = sol.machines().size();
-	vector<double> selParameterByMachine;
-	vector<double> fitnessByMachine;
-	double overall_fitness = 0.0;
-
-	for (int machineId = 0; machineId < machineCount; machineId++) {
-		double machineFitness;
-		machineFitness = sol.fitnessByMachine(machineId);
-
-		fitnessByMachine.push_back(machineFitness);
-		selParameterByMachine.push_back(1 / fitnessByMachine[machineId]);
-		overall_fitness += selParameterByMachine[machineId];
-
-		if (DEBUG)
-			cout << " * machineId: " << machineId << " fitness: "
-					<< fitnessByMachine[machineId] << " selParameter: "
-					<< selParameterByMachine[machineId] << endl;
-	}
-
-	if (overall_fitness > MAXDOUBLE)
-		overall_fitness = MAXDOUBLE;
-
-	if (DEBUG)
-		cout << endl << " overall fitness: " << overall_fitness << endl << endl;
-
-	double previous = 0.0;
-	for (int machineId = 0; machineId < machineCount; machineId++) {
-		if (DEBUG)
-			cout << " * machineId: " << machineId
-					<< " (selParameterByMachine[machineId] / overall_fitness) + previous"
-					<< " (" << selParameterByMachine[machineId] << " / "
-					<< overall_fitness << ") + " << previous << endl;
-
-		selParameterByMachine[machineId] = (selParameterByMachine[machineId]
-				/ overall_fitness) + previous;
-		previous = selParameterByMachine[machineId];
-
-		if (DEBUG)
-			cout << " selParameterByMachine[machineId]: "
-					<< selParameterByMachine[machineId] << endl;
-	}
-
-	double random_selected;
-	vector<int> selectedMachinesId;
-
-	for (int i = 0; i < MUT_MAQ; i++) {
-		int selectedMachineId;
-		selectedMachineId = 0;
-
-		random_selected = rand01();
-
-		if (DEBUG)
-			cout << endl << ">> random_selected: " << random_selected << endl;
-
-		while ((random_selected > selParameterByMachine[selectedMachineId])
-				&& (selectedMachineId < machineCount))
-
-			selectedMachineId++;
-
-		if (DEBUG)
-			cout << ">> selected machineId: " << selectedMachineId << endl;
-
-		selectedMachinesId.push_back(selectedMachineId);
-	}*/
-
 	int machineCount = sol.machines().size();
 	vector<double> fitnessByMachine;
 
 	for (int machineId = 0; machineId < machineCount; machineId++) {
-		double machineFitness;
-		machineFitness = sol.fitnessByMachine(machineId);
-
-		fitnessByMachine.push_back(machineFitness);
+		fitnessByMachine.push_back(sol.fitnessByMachine(machineId));
 	}
 
 	RouletteWheel roulette(fitnessByMachine, false);
 
-	vector<int> selectedMachinesId;
 	for (int i = 0; i < MUT_MAQ; i++) {
-		selectedMachinesId.push_back(roulette.drawOneByIndex());
-	}
+		int machineId;
+		machineId = roulette.drawOneByIndex();
 
-	for (int machineId = 0; machineId < selectedMachinesId.size(); machineId++) {
 		bool modificado;
 		modificado = false;
 
@@ -882,17 +818,23 @@ void Diverge::diverge(Solution& sol) const {
 
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
+
+	bool KEEP_BEST = true;
+
 	if (DEBUG)
 		cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (i != bestSolutionIndex) {
+		if ((i != bestSolutionIndex) || (!KEEP_BEST)) {
 			if (rand01() < mutationProbability)
 				diverge(*sols[i]);
 		}
 	}
 
 	//TODO: implementar búsqueda local.
+	if (KEEP_BEST) {
+
+	}
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {
