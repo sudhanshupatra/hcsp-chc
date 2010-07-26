@@ -794,20 +794,50 @@ void Diverge::diverge(Solution& sol) const {
 
 		while (!modificado) {
 			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta según su COSTO y se
+				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de menor costo de la máquina con menor makespan.
+				int tasksCount;
+				tasksCount = sol.machines()[machineId].tasksCount();
+
+				vector<double> costsByTaskPos;
+
+				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
+					int taskId;
+					taskId = sol.machines()[machineId].getTask(taskPos);
+
+					int taskCost;
+					taskCost = sol.pbm().expectedTimeToCompute(taskId, machineId);
+
+					costsByTaskPos.push_back(taskCost);
+				}
+
+				RouletteWheel roulette(costsByTaskPos, true);
+				int taskPos;
+				taskPos = roulette.drawOneByIndex();
+
+				int minMachineFitness = fitnessByMachine[0];
+				int minMachineFitnessId = 0;
+
+				int machineId;
+				for (machineId = 1; machineId < fitnessByMachine.size(); machineId++) {
+					if (minMachineFitness > fitnessByMachine[machineId]) {
+						minFitnessMachineId = machineId;
+						minFitnessMachine = fitnessByMachine[machineId];
+					}
+				}
+
 				modificado = true;
 			}
 
 			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta según su COSTO y se
+				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
 				// más eficientemente en la máquina actual.
 				modificado = true;
 			}
 
 			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta según el inverso de su
+				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
 				// de la máquina.
 				modificado = true;
