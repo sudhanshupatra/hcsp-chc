@@ -118,6 +118,7 @@ skeleton CHC
 
 		void initialize();
 		double fitness () const;
+		double fitnessByMachine(const int machineId) const;
 		unsigned int size() const;
 
 		int length() const;

@@ -291,6 +291,42 @@ skeleton CHC
 		}
 	}
 
+	double Solution::fitnessByMachine(const int machineId) const {
+		double fitness = 0.0;
+		int machineComputeCost = 0;
+
+		//if (DEBUG) cout << "[DEBUG] Solution::fitness machineId: " << machineId << endl;
+
+		for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+			int taskId;
+			taskId = _machines[machineId].getTask(taskPos);
+
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
+
+			double computeCost;
+			computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
+
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness computeCost: " << computeCost << endl;
+//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPriority: " << _pbm.tasksPriorities(taskId) << endl;
+
+			double priorityCost;
+			priorityCost = 0.0;
+
+			if (taskPos > 0) {
+				priorityCost += machineComputeCost / _pbm.tasksPriorities(taskId);
+			}
+
+			//if (DEBUG) cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost << endl;
+
+			machineComputeCost += computeCost;
+			fitness += (computeCost + priorityCost);
+			//if (DEBUG) cout << "[DEBUG] Solution::fitness partial fitness: " << fitness << endl;
+		}
+
+		return fitness;
+	}
+
 	// ===================================
 	// Fitness de la solución.
 	// ===================================
@@ -304,37 +340,7 @@ skeleton CHC
 		double fitness = 0.0;
 
 		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-			int machineComputeCost;
-			machineComputeCost = 0;
-
-			//if (DEBUG) cout << "[DEBUG] Solution::fitness machineId: " << machineId << endl;
-
-			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				int taskId;
-				taskId = _machines[machineId].getTask(taskPos);
-
-//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
-//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
-
-				double computeCost;
-				computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
-
-//				if (DEBUG) cout << "[DEBUG] Solution::fitness computeCost: " << computeCost << endl;
-//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPriority: " << _pbm.tasksPriorities(taskId) << endl;
-
-				double priorityCost;
-				priorityCost = 0.0;
-
-				if (taskPos > 0) {
-					priorityCost += machineComputeCost / _pbm.tasksPriorities(taskId);
-				}
-
-				//if (DEBUG) cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost << endl;
-
-				machineComputeCost += computeCost;
-				fitness += (computeCost + priorityCost);
-				//if (DEBUG) cout << "[DEBUG] Solution::fitness partial fitness: " << fitness << endl;
-			}
+			fitness += fitnessByMachine(machineId);
 		}
 
 		//if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;

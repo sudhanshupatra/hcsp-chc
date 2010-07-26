@@ -726,6 +726,61 @@ skeleton CHC
 	void Diverge::diverge(Solution& sol) const
 	{
 		//TODO: implementar mutación de una solución.
+		if (DEBUG) cout << endl << "Diverge::diverge" << endl;
+		int MUT_MAQ = 1;
+
+		int machineCount = sol.machines().size();
+		vector<double> selParameterByMachine;
+		vector<double> fitnessByMachine;
+		double overall_fitness = 0.0;
+
+		for (int machineId = 0; machineId < machineCount; machineId++) {
+			double machineFitness;
+			machineFitness = sol.fitnessByMachine(machineId);
+
+			fitnessByMachine.push_back(machineFitness);
+			selParameterByMachine.push_back(1 / fitnessByMachine[machineId]);
+			overall_fitness += selParameterByMachine[machineId];
+
+			if (DEBUG) cout << " * machineId: " << machineId
+					<< " fitness: " << fitnessByMachine[machineId]
+					<< " selParameter: " << selParameterByMachine[machineId] << endl;
+		}
+
+		if (overall_fitness > MAXDOUBLE) overall_fitness = MAXDOUBLE;
+
+		if (DEBUG) cout << endl << " overall fitness: " << overall_fitness << endl << endl;
+
+		double previous = 0.0;
+    	for (int machineId = 0; machineId < machineCount; machineId++)
+		{
+    		/*
+    		if (DEBUG) cout << " * machineId: " <<  machineId << endl;
+    		if (DEBUG) cout << " (selParameterByMachine[machineId] / overall_fitness) + previous" << endl;
+    		if (DEBUG) cout << " (" << selParameterByMachine[machineId] << " / " << overall_fitness << ") + " << previous << endl;
+
+    		selParameterByMachine[machineId] = (selParameterByMachine[machineId] / overall_fitness) + previous;
+			previous = selParameterByMachine[machineId];
+    		*/
+
+    		if (DEBUG) cout << " * machineId: " <<  machineId << endl;
+    		if (DEBUG) cout << " (selParameterByMachine[machineId] / overall_fitness)" << endl;
+    		if (DEBUG) cout << " (" << selParameterByMachine[machineId] << " / " << overall_fitness << ")" << endl;
+
+    		selParameterByMachine[machineId] = (selParameterByMachine[machineId] / overall_fitness);
+
+    		if (DEBUG) cout << " selParameterByMachine[machineId]: " << selParameterByMachine[machineId] << endl;
+		}
+
+		double random_selected = rand01();
+		int i=0;
+
+		while (random_selected > selParameterByMachine[i])
+			i++;
+
+		if (DEBUG) cout << endl << endl;
+		if (DEBUG) cout << ">> selected machineId: " << i << endl;
+		//return fitness_values[i];
 
 		/*for(int i = 0; i < sol.lengthInBits(); i++)
 			if(rand01() < probability[0]) sol.flip(i);*/
