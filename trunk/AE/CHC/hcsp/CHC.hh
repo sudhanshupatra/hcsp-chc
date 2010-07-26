@@ -211,14 +211,15 @@ public:
 
 class RouletteWheel {
 public:
-	RouletteWheel(const vector<double> values, bool maximize);
+	RouletteWheel(const vector<double> values, bool maximizeDirection);
 	~RouletteWheel();
 
 	int drawOneByIndex() const;
 private:
 	int _size;
 	vector<double> _values;
-	vector<double> _selectionValues;
+	vector<double> _minSelectionValues;
+	vector<double> _maxSelectionValues;
 	bool _maximize;
 	double _overallValue;
 };
