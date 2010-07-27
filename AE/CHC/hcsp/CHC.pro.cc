@@ -441,6 +441,10 @@ void Population::evaluate_offsprings() {
 }
 
 void Population::evolution() {
+	if (DEBUG) {
+		cout << endl << "Population::evolution()" << endl;
+		cout << endl << *this << endl;
+	}
 	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
 
 	select_parents(); // selects individuals to apply operators
@@ -455,6 +459,7 @@ void Population::evolution() {
 	evaluate_parents(); // calculates fitness of new individuals
 
 	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
+	if (DEBUG) cout << endl << *this << endl;
 }
 
 void Population::interchange(const unsigned long current_generation,
@@ -694,6 +699,9 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 	_values(), _minSelectionValues(), _maxSelectionValues(), _size(
 			values.size()), _maximize(maximizeDirection), _overallValue(0) {
 
+	if (DEBUG)
+		cout << endl << "RouletteWheel::RouletteWheel" << endl;
+
 	_values.reserve(_size + 1);
 	_minSelectionValues.reserve(_size + 1);
 	_maxSelectionValues.reserve(_size + 1);
@@ -709,34 +717,34 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 
 		_overallValue += _maxSelectionValues[i];
 
-//		if (DEBUG)
-//			cout << " * index: " << i << " value: " << _values[i]
-//					<< " selectionValue: " << _maxSelectionValues[i] << endl;
+		//		if (DEBUG)
+		//			cout << " * index: " << i << " value: " << _values[i]
+		//					<< " selectionValue: " << _maxSelectionValues[i] << endl;
 	}
 
 	if (_overallValue > MAXDOUBLE)
 		_overallValue = MAXDOUBLE;
 
-//	if (DEBUG)
-//		cout << endl << " overallValue: " << _overallValue << endl << endl;
+	//	if (DEBUG)
+	//		cout << endl << " overallValue: " << _overallValue << endl << endl;
 
 	double previous = 0.0;
 	for (int i = 0; i < _size; i++) {
-//		if (DEBUG)
-//			cout << " * index: " << i
-//					<< " (_maxSelectionValues[machineId] / overallValue) + previous"
-//					<< " (" << _maxSelectionValues[i] << " / " << _overallValue
-//					<< ") + " << previous << endl;
+		//		if (DEBUG)
+		//			cout << " * index: " << i
+		//					<< " (_maxSelectionValues[machineId] / overallValue) + previous"
+		//					<< " (" << _maxSelectionValues[i] << " / " << _overallValue
+		//					<< ") + " << previous << endl;
 
 		_minSelectionValues[i] = previous;
 		_maxSelectionValues[i] = (_maxSelectionValues[i] / _overallValue)
 				+ previous;
 		previous = _maxSelectionValues[i];
 
-//		if (DEBUG)
-//			cout << " _minSelectionValues[i]: " << _minSelectionValues[i]
-//					<< " _maxSelectionValues[i]: " << _maxSelectionValues[i]
-//					<< endl;
+		if (DEBUG)
+			cout << " * index: " << i << " _minSelectionValues[i]: "
+					<< _minSelectionValues[i] << " _maxSelectionValues[i]: "
+					<< _maxSelectionValues[i] << endl;
 	}
 }
 
@@ -750,8 +758,8 @@ int RouletteWheel::drawOneByIndex() const {
 
 	random_selected = rand01();
 
-//	if (DEBUG)
-//		cout << endl << ">> random_selected: " << random_selected << endl;
+	//	if (DEBUG)
+	//		cout << endl << ">> random_selected: " << random_selected << endl;
 
 	while (!((random_selected >= _minSelectionValues[selectedValueIndex])
 			&& (random_selected < _maxSelectionValues[selectedValueIndex]))
@@ -759,8 +767,8 @@ int RouletteWheel::drawOneByIndex() const {
 
 		selectedValueIndex++;
 
-//	if (DEBUG)
-//		cout << ">> selected machineId: " << selectedValueIndex << endl;
+	//	if (DEBUG)
+	//		cout << ">> selected machineId: " << selectedValueIndex << endl;
 
 	return selectedValueIndex;
 }
@@ -783,7 +791,7 @@ void Diverge::diverge(Solution& sol) const {
 		fitnessByMachine.push_back(sol.fitnessByMachine(machineId));
 	}
 
-	RouletteWheel roulette(fitnessByMachine, false);
+	RouletteWheel roulette(fitnessByMachine, true);
 
 	for (int i = 0; i < MUT_MAQ; i++) {
 		if (DEBUG)
@@ -800,7 +808,8 @@ void Diverge::diverge(Solution& sol) const {
 		}
 
 		if (DEBUG) {
-			cout << endl << " la máquina seleccionada es " << machineId << " con " << tasksCount << " trabajos." << endl;
+			cout << endl << " la máquina seleccionada es " << machineId
+					<< " con " << tasksCount << " trabajos." << endl;
 			cout << endl << sol << endl;
 		}
 
@@ -836,6 +845,8 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
+				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
 				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
 				minCostMachineId = sol.getMinCostMachineId();
@@ -861,7 +872,8 @@ void Diverge::diverge(Solution& sol) const {
 				}
 
 				modificado = true;
-				if (DEBUG) cout << endl << sol << endl;
+				if (DEBUG)
+					cout << endl << sol << endl;
 			}
 
 			if (rand01() >= 0.5) {
@@ -893,6 +905,8 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
+				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
 				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
 				minCostMachineId = sol.getMinCostMachineId();
@@ -919,7 +933,8 @@ void Diverge::diverge(Solution& sol) const {
 				}
 
 				modificado = true;
-				if (DEBUG) cout << endl << sol << endl;
+				if (DEBUG)
+					cout << endl << sol << endl;
 			}
 
 			if (rand01() >= 0.5) {
@@ -949,12 +964,15 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
+				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
 				if (taskPos > 0) {
 					sol.swapTasks(machineId, taskPos, machineId, 0);
 				}
 
 				modificado = true;
-				if (DEBUG) cout << endl << sol << endl;
+				if (DEBUG)
+					cout << endl << sol << endl;
 			}
 		}
 	}

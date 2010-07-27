@@ -212,10 +212,15 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 		os << "> machineId: " << machineId << " fitness: "
 				<< sol.fitnessByMachine(machineId) << endl;
 		for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
-			os << "  taskPos: " << i << " taskId: "
-					<< sol.machines()[machineId].getTask(i) << endl;
+			os << "  taskPos: " << i
+					<< " taskId: " << sol.machines()[machineId].getTask(i)
+					<< " ETC: " << sol.pbm().expectedTimeToCompute(sol.machines()[machineId].getTask(i), machineId)
+					<< " priority: " << sol.pbm().taskPriority(sol.machines()[machineId].getTask(i))
+					<< endl;
 		}
+		os << "  machine fitness: " << sol.fitnessByMachine(machineId) << endl;
 	}
+	os << "* overall fitness: " << sol.fitness() << endl;
 
 	return os;
 }
