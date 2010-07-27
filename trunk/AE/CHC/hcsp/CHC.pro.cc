@@ -807,30 +807,47 @@ void Diverge::diverge(Solution& sol) const {
 				costsByTaskPos.clear();
 
 				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
+					// Inicializo el vector de costos de las tareas de la máquina actual
+					// para sortear una tarea.
 					int taskId;
 					taskId = sol.machines()[machineId].getTask(taskPos);
 
 					int taskCost;
-					taskCost = sol.pbm().expectedTimeToCompute(taskId, machineId);
+					taskCost = sol.pbm().expectedTimeToCompute(taskId,
+							machineId);
 
 					costsByTaskPos.push_back(taskCost);
 				}
 
+				// Sorteo una tarea.
 				RouletteWheel roulette(costsByTaskPos, true);
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
+				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
 				minCostMachineId = sol.getMinCostMachineId();
 
 				if (sol.machines()[minCostMachineId].countTasks() > 0) {
+					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+					// con menor costo si se ejecuta en la máquina destino.
 					int minCostTaskPosOnMachine;
-					minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(minCostMachineId);
+					minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(
+							minCostMachineId);
 
-					sol.swapTasks(machineId, taskPos, minCostMachineId, minCostTaskPosOnMachine);
+					// Hago un swap entre las tareas de las máquinas.
+					sol.swapTasks(machineId, taskPos, minCostMachineId,
+							minCostTaskPosOnMachine);
 				} else {
+					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
+					// máquina origen a la destino.
+					int taskId;
+					taskId = sol.machines()[machineId].getTask(taskPos);
 
+					sol.removeTaskAt(machineId, taskPos);
+					sol.executeTaskAt(taskId, minCostMachineId, 0);
 				}
+
 				modificado = true;
 			}
 
@@ -842,26 +859,47 @@ void Diverge::diverge(Solution& sol) const {
 				costsByTaskPos.clear();
 
 				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
+					// Inicializo el vector de costos de las tareas de la máquina actual
+					// para sortear una tarea.
 					int taskId;
 					taskId = sol.machines()[machineId].getTask(taskPos);
 
 					int taskCost;
-					taskCost = sol.pbm().expectedTimeToCompute(taskId, machineId);
+					taskCost = sol.pbm().expectedTimeToCompute(taskId,
+							machineId);
 
 					costsByTaskPos.push_back(taskCost);
 				}
 
+				// Sorteo una tarea.
 				RouletteWheel roulette(costsByTaskPos, true);
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
+				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
 				minCostMachineId = sol.getMinCostMachineId();
 
-				int minCostTaskPosOnMachine;
-				minCostTaskPosOnMachine = sol.getMinDestinationCostTaskPosByMachine(minCostMachineId, machineId);
+				if (sol.machines()[minCostMachineId].countTasks() > 0) {
+					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+					// con menor costo si se ejecuta en la máquina origen.
+					int minCostTaskPosOnMachine;
+					minCostTaskPosOnMachine
+							= sol.getMinDestinationCostTaskPosByMachine(
+									minCostMachineId, machineId);
 
-				sol.swapTasks(machineId, taskPos, minCostMachineId, minCostTaskPosOnMachine);
+					// Hago un swap entre las tareas de las máquinas.
+					sol.swapTasks(machineId, taskPos, minCostMachineId,
+							minCostTaskPosOnMachine);
+				} else {
+					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
+					// máquina origen a la destino.
+					int taskId;
+					taskId = sol.machines()[machineId].getTask(taskPos);
+
+					sol.removeTaskAt(machineId, taskPos);
+					sol.executeTaskAt(taskId, minCostMachineId, 0);
+				}
 				modificado = true;
 			}
 
@@ -877,7 +915,7 @@ void Diverge::diverge(Solution& sol) const {
 					taskId = sol.machines()[machineId].getTask(taskPos);
 
 					int taskPriority;
-					taskPriority = sol.pbm().tasksPriorities(taskId);
+					taskPriority = sol.pbm().taskPriority(taskId);
 
 					priorityByTaskPos.push_back(taskPriority);
 				}
