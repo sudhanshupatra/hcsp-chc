@@ -441,10 +441,10 @@ void Population::evaluate_offsprings() {
 }
 
 void Population::evolution() {
-	if (DEBUG) {
-		cout << endl << "Population::evolution()" << endl;
-		cout << endl << *this << endl;
-	}
+//	if (DEBUG) {
+//		cout << endl << "Population::evolution()" << endl;
+//		cout << endl << *this << endl;
+//	}
 	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
 
 	select_parents(); // selects individuals to apply operators
@@ -458,8 +458,10 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 	evaluate_parents(); // calculates fitness of new individuals
 
+//	if (DEBUG) cout << endl << "best_cost: " << this->best_cost() << endl;
+
 	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
-	if (DEBUG) cout << endl << *this << endl;
+//	if (DEBUG) cout << endl << *this << endl;
 }
 
 void Population::interchange(const unsigned long current_generation,
@@ -645,8 +647,8 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-	if (DEBUG)
-		cout << endl << "[DEBUG] Crossover::cross" << endl;
+//	if (DEBUG)
+//		cout << endl << "[DEBUG] Crossover::cross" << endl;
 
 	if (probability[0] <= 0.0) {
 		probability[0] = sol1.length() / 4;
@@ -699,8 +701,8 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 	_values(), _minSelectionValues(), _maxSelectionValues(), _size(
 			values.size()), _maximize(maximizeDirection), _overallValue(0) {
 
-	if (DEBUG)
-		cout << endl << "RouletteWheel::RouletteWheel" << endl;
+//	if (DEBUG)
+//		cout << endl << "RouletteWheel::RouletteWheel" << endl;
 
 	_values.reserve(_size + 1);
 	_minSelectionValues.reserve(_size + 1);
@@ -741,10 +743,10 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 				+ previous;
 		previous = _maxSelectionValues[i];
 
-		if (DEBUG)
-			cout << " * index: " << i << " _minSelectionValues[i]: "
-					<< _minSelectionValues[i] << " _maxSelectionValues[i]: "
-					<< _maxSelectionValues[i] << endl;
+//		if (DEBUG)
+//			cout << " * index: " << i << " _minSelectionValues[i]: "
+//					<< _minSelectionValues[i] << " _maxSelectionValues[i]: "
+//					<< _maxSelectionValues[i] << endl;
 	}
 }
 
@@ -780,8 +782,8 @@ Diverge::Diverge() :
 
 void Diverge::diverge(Solution& sol) const {
 	//TODO: implementar mutación de una solución.
-	if (DEBUG)
-		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+//	if (DEBUG)
+//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
 	int MUT_MAQ = 1;
 
 	int machineCount = sol.machines().size();
@@ -794,8 +796,8 @@ void Diverge::diverge(Solution& sol) const {
 	RouletteWheel roulette(fitnessByMachine, true);
 
 	for (int i = 0; i < MUT_MAQ; i++) {
-		if (DEBUG)
-			cout << endl << " mutando máquina " << i << endl;
+//		if (DEBUG)
+//			cout << endl << " mutando máquina " << i << endl;
 
 		int machineId;
 		int tasksCount;
@@ -807,11 +809,11 @@ void Diverge::diverge(Solution& sol) const {
 			tasksCount = sol.machines()[machineId].countTasks();
 		}
 
-		if (DEBUG) {
-			cout << endl << " la máquina seleccionada es " << machineId
-					<< " con " << tasksCount << " trabajos." << endl;
-			cout << endl << sol << endl;
-		}
+//		if (DEBUG) {
+//			cout << endl << " la máquina seleccionada es " << machineId
+//					<< " con " << tasksCount << " trabajos." << endl;
+//			cout << endl << sol << endl;
+//		}
 
 		bool modificado;
 		modificado = false;
@@ -821,8 +823,8 @@ void Diverge::diverge(Solution& sol) const {
 				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de menor costo de la máquina con menor makespan.
 
-				if (DEBUG)
-					cout << endl << " caso [1]" << endl;
+//				if (DEBUG)
+//					cout << endl << " caso [1]" << endl;
 
 				vector<double> costsByTaskPos;
 				costsByTaskPos.clear();
@@ -845,7 +847,7 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
-				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
 
 				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
@@ -872,8 +874,8 @@ void Diverge::diverge(Solution& sol) const {
 				}
 
 				modificado = true;
-				if (DEBUG)
-					cout << endl << sol << endl;
+//				if (DEBUG)
+//					cout << endl << sol << endl;
 			}
 
 			if (rand01() >= 0.5) {
@@ -881,8 +883,8 @@ void Diverge::diverge(Solution& sol) const {
 				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
 				// más eficientemente en la máquina actual.
 
-				if (DEBUG)
-					cout << endl << " caso [2]" << endl;
+//				if (DEBUG)
+//					cout << endl << " caso [2]" << endl;
 
 				vector<double> costsByTaskPos;
 				costsByTaskPos.clear();
@@ -905,7 +907,7 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
-				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
 
 				// Obtengo la máquina que aporta un menor costo al total de la solución.
 				int minCostMachineId;
@@ -933,16 +935,16 @@ void Diverge::diverge(Solution& sol) const {
 				}
 
 				modificado = true;
-				if (DEBUG)
-					cout << endl << sol << endl;
+//				if (DEBUG)
+//					cout << endl << sol << endl;
 			}
 
 			if (rand01() >= 0.5) {
 				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
 				// de la máquina.
-				if (DEBUG)
-					cout << endl << " caso [3]" << endl;
+//				if (DEBUG)
+//					cout << endl << " caso [3]" << endl;
 
 				vector<double> priorityByTaskPos;
 				priorityByTaskPos.clear();
@@ -964,15 +966,15 @@ void Diverge::diverge(Solution& sol) const {
 				int taskPos;
 				taskPos = roulette.drawOneByIndex();
 
-				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
 
 				if (taskPos > 0) {
 					sol.swapTasks(machineId, taskPos, machineId, 0);
 				}
 
 				modificado = true;
-				if (DEBUG)
-					cout << endl << sol << endl;
+//				if (DEBUG)
+//					cout << endl << sol << endl;
 			}
 		}
 	}
@@ -983,8 +985,8 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 
 	bool KEEP_BEST = true;
 
-	if (DEBUG)
-		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+//	if (DEBUG)
+//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
 		if ((i != bestSolutionIndex) || (!KEEP_BEST)) {
@@ -1670,6 +1672,12 @@ void Selection_New_Population::prepare(
 		fitness_values.sort(greaterF);
 	else
 		fitness_values.sort(lessF);
+
+//	for (int i = 0; i < fitness_values.size(); i++) {
+//		if (DEBUG) cout << endl << "index: " << fitness_values[i].index << endl <<
+//				" fitness: " << fitness_values[i].fitness <<
+//				" change: " << fitness_values[i].change << endl;
+//	}
 }
 
 // Selecciona un hijo para apareamiento.
@@ -1712,11 +1720,18 @@ struct individual Selection_New_Population::select_one(
 	if (selection_position == -2) {
 		//TODO: implementar mutación cataclísmica.
 		assert(diverge != NULL);
-		((Diverge *) diverge)->diverge(to_select_1, 0, (float) 1.0);
+		((Diverge *) diverge)->diverge(to_select_1, fitness_values[0].index, (float) 1.0);
 
-		for (int i = 0; i < fitness_values.size(); i++)
-			if (fitness_values[i].index < (to_select_1.size() - 1))
+		for (int i = 0; i < fitness_values.size(); i++) {
+			//FIX: bug!
+			if (fitness_values[i].index < to_select_1.size()) {
 				fitness_values[i].change = true;
+			}
+
+//			if (DEBUG) cout << endl << "index: " << fitness_values[i].index << endl <<
+//					" fitness: " << fitness_values[i].fitness <<
+//					" change: " << fitness_values[i].change << endl;
+		}
 
 		selection_position = 1;
 	}
@@ -2540,7 +2555,7 @@ void Solver_Seq::StartUp() {
 }
 
 void Solver_Seq::StartUp(const Population& pop) {
-	cout << endl << "[INFO] Solver_Seq::StartUp" << endl;
+//	if (DEBUG) cout << endl << "[INFO] Solver_Seq::StartUp" << endl;
 	start_trial = _used_time();
 	start_global = total_time_spent;
 
@@ -2583,10 +2598,11 @@ void Solver_Seq::StartUp(const Population& pop) {
 }
 
 void Solver_Seq::DoStep() {
-	cout << endl << "[INFO] Solver_Seq::DoStep" << endl;
+//	if (DEBUG) cout << endl << "[INFO] Solver_Seq::DoStep" << endl;
 	current_iteration(current_iteration() + 1);
 	current_population.evolution();
 	current_evaluations(current_population.evaluations());
+//	if (DEBUG) cout << endl << current_population << endl;
 
 	// gets current interesting values in the current population
 
@@ -2595,6 +2611,8 @@ void Solver_Seq::DoStep() {
 	worst_cost = current_population.worst_cost();
 	average_cost = current_population.average_cost();
 	standard_deviation = current_population.standard_deviation();
+
+//	if (DEBUG) cout << endl << " >> best_cost: " << current_population.best_cost() << endl;
 
 	time_spent_in_trial = _used_time(start_trial);
 	total_time_spent = start_global + time_spent_in_trial;

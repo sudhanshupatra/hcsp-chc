@@ -1,0 +1,662 @@
+./MainSeq CHC.cfg ../../ProblemInstances/HCSP/prioridades/simple res/solucion.txt
+[H[2J[INFO] TaskCount: 4
+[INFO] MachineCount: 2
+[DEBUG] Task: 0 => Priority: 1
+[DEBUG] Task: 1 => Priority: 2
+[DEBUG] Task: 2 => Priority: 3
+[DEBUG] Task: 3 => Priority: 4
+[DEBUG] Task: 0, Machine: 0, ETC: 1
+[DEBUG] Task: 0, Machine: 1, ETC: 2
+[DEBUG] Task: 1, Machine: 0, ETC: 3
+[DEBUG] Task: 1, Machine: 1, ETC: 4
+[DEBUG] Task: 2, Machine: 0, ETC: 5
+[DEBUG] Task: 2, Machine: 1, ETC: 6
+[DEBUG] Task: 3, Machine: 0, ETC: 7
+[DEBUG] Task: 3, Machine: 1, ETC: 8
+
+[INFO] Solver_Seq::StartUp
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 0
+Current evaluations: 2
+Current best cost: 24.5
+Current worst cost: 47.6667
+Current Average cost: 36.0833
+Current Standard Deviation: 16.3813
+
+Trial: 
+Best cost trial: 24.5
+Worst cost trial: 47.6667
+Iteration best found in trial: 0
+Time best found trial: 0
+Time spent in trial: 0
+
+Global: 
+Global best cost: 24.5
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 0
+Time best found: 0
+
+Current time spent (so far): 0
+
+[INFO] Solver_Seq::DoStep
+
+Population::evolution()
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 0
+  machine fitness: 0
+> machineId: 1 fitness: 47.6667
+  taskPos: 0 taskId: 3 ETC: 8 priority: 4
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 1 ETC: 4 priority: 2
+  taskPos: 3 taskId: 0 ETC: 2 priority: 1
+  machine fitness: 47.6667
+* overall fitness: 47.6667
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 23.5
+  taskPos: 0 taskId: 2 ETC: 6 priority: 3
+  taskPos: 1 taskId: 1 ETC: 4 priority: 2
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 23.5
+* overall fitness: 24.5
+
+
+---------------------------------------------------------------
+
+
+[DEBUG] Crossover::cross
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 23.5
+  taskPos: 0 taskId: 2 ETC: 6 priority: 3
+  taskPos: 1 taskId: 1 ETC: 4 priority: 2
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 23.5
+* overall fitness: 24.5
+
+
+---------------------------------------------------------------
+
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 1
+Current evaluations: 4
+Current best cost: 22.8333
+Current worst cost: 24.5
+Current Average cost: 23.6667
+Current Standard Deviation: 1.17851
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 673
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 673
+
+[INFO] Solver_Seq::DoStep
+
+Population::evolution()
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 23.5
+  taskPos: 0 taskId: 2 ETC: 6 priority: 3
+  taskPos: 1 taskId: 1 ETC: 4 priority: 2
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 23.5
+* overall fitness: 24.5
+
+
+---------------------------------------------------------------
+
+
+[DEBUG] Crossover::cross
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 2
+Current evaluations: 6
+Current best cost: 22.8333
+Current worst cost: 22.8333
+Current Average cost: 22.8333
+Current Standard Deviation: 0
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 1293
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 1293
+
+[INFO] Solver_Seq::DoStep
+
+Population::evolution()
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+[DEBUG] Crossover::cross
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 3
+Current evaluations: 8
+Current best cost: 22.8333
+Current worst cost: 22.8333
+Current Average cost: 22.8333
+Current Standard Deviation: 0
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 1886
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 1886
+
+[INFO] Solver_Seq::DoStep
+
+Population::evolution()
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+[DEBUG] Crossover::cross
+
+[DEBUG] Diverge::diverge
+
+[DEBUG] Diverge::diverge
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.0437956
+ * index: 1 _minSelectionValues[i]: 0.0437956 _maxSelectionValues[i]: 1
+
+ mutando máquina 0
+
+ la máquina seleccionada es 1 con 3 trabajos.
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+ caso [1]
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.222222
+ * index: 1 _minSelectionValues[i]: 0.222222 _maxSelectionValues[i]: 0.555556
+ * index: 2 _minSelectionValues[i]: 0.555556 _maxSelectionValues[i]: 1
+ seleccionado taskPos: 1
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 19.5
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 0 ETC: 2 priority: 1
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 19.5
+* overall fitness: 24.5
+
+
+ caso [3]
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.285714
+ * index: 1 _minSelectionValues[i]: 0.285714 _maxSelectionValues[i]: 0.857143
+ * index: 2 _minSelectionValues[i]: 0.857143 _maxSelectionValues[i]: 1
+ seleccionado taskPos: 0
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 19.5
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 0 ETC: 2 priority: 1
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 19.5
+* overall fitness: 24.5
+
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 19.5
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 0 ETC: 2 priority: 1
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 19.5
+* overall fitness: 24.5
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 4
+Current evaluations: 11
+Current best cost: 22.8333
+Current worst cost: 22.8333
+Current Average cost: 22.8333
+Current Standard Deviation: 0
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 2930
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 2930
+
+[INFO] Solver_Seq::DoStep
+
+Population::evolution()
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 19.5
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 0 ETC: 2 priority: 1
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 19.5
+* overall fitness: 24.5
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+---------------------------------------------------------------
+
+
+[DEBUG] Crossover::cross
+
+[DEBUG] Diverge::diverge
+
+[DEBUG] Diverge::diverge
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.0437956
+ * index: 1 _minSelectionValues[i]: 0.0437956 _maxSelectionValues[i]: 1
+
+ mutando máquina 0
+
+ la máquina seleccionada es 1 con 3 trabajos.
+
+
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+
+ caso [1]
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.222222
+ * index: 1 _minSelectionValues[i]: 0.222222 _maxSelectionValues[i]: 0.555556
+ * index: 2 _minSelectionValues[i]: 0.555556 _maxSelectionValues[i]: 1
+ seleccionado taskPos: 0
+
+
+> machineId: 0 fitness: 3
+  taskPos: 0 taskId: 1 ETC: 3 priority: 2
+  machine fitness: 3
+> machineId: 1 fitness: 18.6667
+  taskPos: 0 taskId: 0 ETC: 2 priority: 1
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 18.6667
+* overall fitness: 21.6667
+
+
+ caso [2]
+
+RouletteWheel::RouletteWheel
+ * index: 0 _minSelectionValues[i]: 0 _maxSelectionValues[i]: 0.125
+ * index: 1 _minSelectionValues[i]: 0.125 _maxSelectionValues[i]: 0.5
+ * index: 2 _minSelectionValues[i]: 0.5 _maxSelectionValues[i]: 1
+ seleccionado taskPos: 1
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 16.5
+  taskPos: 0 taskId: 0 ETC: 2 priority: 1
+  taskPos: 1 taskId: 1 ETC: 4 priority: 2
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 16.5
+* overall fitness: 21.5
+
+
+---------------------------------------------------------------
+                           PRESENT POPULATION                    
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 19.5
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 0 ETC: 2 priority: 1
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 19.5
+* overall fitness: 24.5
+
+
+> machineId: 0 fitness: 5
+  taskPos: 0 taskId: 2 ETC: 5 priority: 3
+  machine fitness: 5
+> machineId: 1 fitness: 16.5
+  taskPos: 0 taskId: 0 ETC: 2 priority: 1
+  taskPos: 1 taskId: 1 ETC: 4 priority: 2
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 16.5
+* overall fitness: 21.5
+
+
+---------------------------------------------------------------
+
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 5
+Current evaluations: 14
+Current best cost: 22.8333
+Current worst cost: 24.5
+Current Average cost: 23.6667
+Current Standard Deviation: 1.17851
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 3978
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 3978
+
+ Current State ---------------------------------------------
+
+Current trial: 1
+Current iteration: 5
+Current evaluations: 14
+Current best cost: 22.8333
+Current worst cost: 24.5
+Current Average cost: 23.6667
+Current Standard Deviation: 1.17851
+
+Trial: 
+Best cost trial: 22.8333
+Worst cost trial: 47.6667
+Iteration best found in trial: 1
+Time best found trial: 673
+Time spent in trial: 3978
+
+Global: 
+Global best cost: 22.8333
+Global worst cost: 47.6667
+Trial best found: 1
+Iteration best found: 1
+Time best found: 673
+
+Current time spent (so far): 3978
+Solution
+> machineId: 0 fitness: 1
+  taskPos: 0 taskId: 0 ETC: 1 priority: 1
+  machine fitness: 1
+> machineId: 1 fitness: 21.8333
+  taskPos: 0 taskId: 1 ETC: 4 priority: 2
+  taskPos: 1 taskId: 2 ETC: 6 priority: 3
+  taskPos: 2 taskId: 3 ETC: 8 priority: 4
+  machine fitness: 21.8333
+* overall fitness: 22.8333
+
+ Fitness: 22.8333
+
+
+ :( ---------------------- THE END --------------- :) 
