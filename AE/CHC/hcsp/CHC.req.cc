@@ -625,7 +625,7 @@ int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
 		int highestPriorityTaskValue = _pbm.taskPriority(
 				machines()[machineId].getTask(0));
 
-		for (int taskPos = 1; taskPos < machines()[0].countTasks(); taskPos++) {
+		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 			int currentTaskPriority;
 			currentTaskPriority = _pbm.taskPriority(
 					machines()[machineId].getTask(taskPos));
@@ -648,7 +648,7 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 		int minCostTaskValue = _pbm.expectedTimeToCompute(
 				machines()[machineId].getTask(0), machineId);
 
-		for (int taskPos = 1; taskPos < machines()[0].countTasks(); taskPos++) {
+		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 			int currentTaskCost;
 			currentTaskCost = _pbm.expectedTimeToCompute(
 					machines()[machineId].getTask(taskPos), machineId);
@@ -668,12 +668,14 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
 		int destinationMachineId) const {
 
+//	if (DEBUG) cout << endl << "destinationMachineId: " << destinationMachineId << endl;
+
 	if (machines()[machineId].countTasks() > 0) {
 		int minCostTaskPos = 0;
 		int minCostTaskValue = _pbm.expectedTimeToCompute(
 				machines()[machineId].getTask(0), destinationMachineId);
 
-		for (int taskPos = 1; taskPos < machines()[0].countTasks(); taskPos++) {
+		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 			int currentTaskCost;
 			currentTaskCost = _pbm.expectedTimeToCompute(
 					machines()[machineId].getTask(taskPos),
