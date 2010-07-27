@@ -218,7 +218,6 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 					<< " priority: " << sol.pbm().taskPriority(sol.machines()[machineId].getTask(i))
 					<< endl;
 		}
-		os << "  machine fitness: " << sol.fitnessByMachine(machineId) << endl;
 	}
 	os << "* overall fitness: " << sol.fitness() << endl;
 
