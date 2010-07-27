@@ -116,7 +116,8 @@ public:
 
 	void initialize();
 	double fitness() const;
-	double fitnessByMachine(const int machineId) const;
+	double fitnessByMachine(int machineId) const;
+	double costByMachine(int machineId) const;
 	unsigned int size() const;
 
 	int length() const;
