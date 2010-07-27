@@ -787,7 +787,14 @@ void Diverge::diverge(Solution& sol) const {
 
 	for (int i = 0; i < MUT_MAQ; i++) {
 		int machineId;
-		machineId = roulette.drawOneByIndex();
+		int tasksCount;
+
+		tasksCount = 0;
+
+		while (tasksCount == 0) {
+			machineId = roulette.drawOneByIndex();
+			tasksCount = sol.machines()[machineId].countTasks();
+		}
 
 		bool modificado;
 		modificado = false;
@@ -796,10 +803,43 @@ void Diverge::diverge(Solution& sol) const {
 			if (rand01() >= 0.5) {
 				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de menor costo de la máquina con menor makespan.
-				int tasksCount;
-				tasksCount = sol.machines()[machineId].countTasks();
-
 				vector<double> costsByTaskPos;
+				costsByTaskPos.clear();
+
+				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
+					int taskId;
+					taskId = sol.machines()[machineId].getTask(taskPos);
+
+					int taskCost;
+					taskCost = sol.pbm().expectedTimeToCompute(taskId, machineId);
+
+					costsByTaskPos.push_back(taskCost);
+				}
+
+				RouletteWheel roulette(costsByTaskPos, true);
+				int taskPos;
+				taskPos = roulette.drawOneByIndex();
+
+				int minCostMachineId;
+				minCostMachineId = sol.getMinCostMachineId();
+
+				if (sol.machines()[minCostMachineId].countTasks() > 0) {
+					int minCostTaskPosOnMachine;
+					minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(minCostMachineId);
+
+					sol.swapTasks(machineId, taskPos, minCostMachineId, minCostTaskPosOnMachine);
+				} else {
+
+				}
+				modificado = true;
+			}
+
+			if (rand01() >= 0.5) {
+				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+				// más eficientemente en la máquina actual.
+				vector<double> costsByTaskPos;
+				costsByTaskPos.clear();
 
 				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
 					int taskId;
@@ -819,16 +859,9 @@ void Diverge::diverge(Solution& sol) const {
 				minCostMachineId = sol.getMinCostMachineId();
 
 				int minCostTaskPosOnMachine;
-				minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(minCostMachineId);
+				minCostTaskPosOnMachine = sol.getMinDestinationCostTaskPosByMachine(minCostMachineId, machineId);
 
 				sol.swapTasks(machineId, taskPos, minCostMachineId, minCostTaskPosOnMachine);
-				modificado = true;
-			}
-
-			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
-				// más eficientemente en la máquina actual.
 				modificado = true;
 			}
 
@@ -836,6 +869,24 @@ void Diverge::diverge(Solution& sol) const {
 				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
 				// de la máquina.
+				vector<double> priorityByTaskPos;
+				priorityByTaskPos.clear();
+
+				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
+					int taskId;
+					taskId = sol.machines()[machineId].getTask(taskPos);
+
+					int taskPriority;
+					taskPriority = sol.pbm().tasksPriorities(taskId);
+
+					priorityByTaskPos.push_back(taskPriority);
+				}
+
+				RouletteWheel roulette(priorityByTaskPos, false);
+				int taskPos;
+				taskPos = roulette.drawOneByIndex();
+
+				sol.swapTasks(machineId, taskPos, machineId, 0);
 				modificado = true;
 			}
 		}
