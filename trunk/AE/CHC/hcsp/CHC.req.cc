@@ -212,11 +212,12 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 		os << "> machineId: " << machineId << " fitness: "
 				<< sol.fitnessByMachine(machineId) << endl;
 		for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
-			os << "  taskPos: " << i
-					<< " taskId: " << sol.machines()[machineId].getTask(i)
-					<< " ETC: " << sol.pbm().expectedTimeToCompute(sol.machines()[machineId].getTask(i), machineId)
-					<< " priority: " << sol.pbm().taskPriority(sol.machines()[machineId].getTask(i))
-					<< endl;
+			os << "  taskPos: " << i << " taskId: "
+					<< sol.machines()[machineId].getTask(i) << " ETC: "
+					<< sol.pbm().expectedTimeToCompute(
+							sol.machines()[machineId].getTask(i), machineId)
+					<< " priority: " << sol.pbm().taskPriority(
+					sol.machines()[machineId].getTask(i)) << endl;
 		}
 	}
 	os << "* overall fitness: " << sol.fitness() << endl;
@@ -266,25 +267,26 @@ void Solution::initialize() {
 	if (direction == 0)
 		direction = -1;
 
-	if (DEBUG) {
-		//			cout << "[DEBUG] Initialize()" << endl;
-		//			cout << "[DEBUG] startTask: " << startTask << endl;
-		//			cout << "[DEBUG] direction: " << direction << endl;
-	}
+//	if (DEBUG) {
+//		cout << endl << endl << "[DEBUG] Initialize()" << endl;
+//		cout << "[DEBUG] startTask: " << startTask << endl;
+//		cout << "[DEBUG] direction: " << direction << endl;
+//	}
 
 	int currentTask;
 	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
 		currentTask = startTask + (direction * taskOffset);
 		if (currentTask < 0)
 			currentTask = _pbm.taskCount() + currentTask;
-		currentTask = currentTask % (_pbm.taskCount() + 1);
+		currentTask = currentTask % _pbm.taskCount();
 
 		int currentMachine;
 		currentMachine = rand_int(0, _pbm.machineCount() - 1);
 
-		//			if (DEBUG) {
-		//				cout << "[DEBUG] Task: " << currentTask << " sent to Machine: " << currentMachine << endl;
-		//			}
+//		if (DEBUG) {
+//			cout << "[DEBUG] Task: " << currentTask << " sent to Machine: "
+//					<< currentMachine << endl;
+//		}
 
 		_machines[currentMachine].addTask(currentTask);
 	}
@@ -310,20 +312,28 @@ double Solution::fitnessByMachine(const int machineId) const {
 	double fitness = 0.0;
 	double machineComputeCost = 0.0;
 
-	//if (DEBUG) cout << "[DEBUG] Solution::fitness machineId: " << machineId << endl;
+//	if (DEBUG)
+//		cout << endl << endl << "[DEBUG] Solution::fitness machineId: "
+//				<< machineId << endl;
 
 	for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 		int taskId;
 		taskId = _machines[machineId].getTask(taskPos);
 
-		//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
-		//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
 
 		double computeCost;
 		computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
-		//				if (DEBUG) cout << "[DEBUG] Solution::fitness computeCost: " << computeCost << endl;
-		//				if (DEBUG) cout << "[DEBUG] Solution::fitness taskPriority: " << _pbm.tasksPriorities(taskId) << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness computeCost: " << computeCost
+//					<< endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness taskPriority: "
+//					<< _pbm.taskPriority(taskId) << endl;
 
 		double priorityCost;
 		priorityCost = 0.0;
@@ -332,11 +342,15 @@ double Solution::fitnessByMachine(const int machineId) const {
 			priorityCost += machineComputeCost / _pbm.taskPriority(taskId);
 		}
 
-		//if (DEBUG) cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost
+//					<< endl;
 
 		machineComputeCost += computeCost;
 		fitness += (computeCost + priorityCost);
-		//if (DEBUG) cout << "[DEBUG] Solution::fitness partial fitness: " << fitness << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Solution::fitness partial fitness: " << fitness
+//					<< endl;
 	}
 
 	return fitness;
@@ -422,7 +436,6 @@ void Solution::executeTaskAt(const int taskId, const int machineId,
 void Solution::removeTaskAt(const int machineId, const int taskPos) {
 	_machines[machineId].removeTask(taskPos);
 }
-
 
 void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
