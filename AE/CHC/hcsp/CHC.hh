@@ -65,7 +65,7 @@ public:
 	// =================================
 	int taskCount() const;
 	int machineCount() const;
-	int tasksPriorities(const int& task) const;
+	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
 private:
 	int _taskCount;
@@ -131,7 +131,7 @@ public:
 
 	int getBestFitnessMachineId() const;
 	int getMinCostMachineId() const;
-	int getMostUrgentTaskPosByMachine(int machineId) const;
+	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId, int destinationMachineId) const;
 

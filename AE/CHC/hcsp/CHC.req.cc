@@ -119,7 +119,7 @@ skeleton CHC
 		return _expectedTimeToCompute[task][machine];
 	}
 
-	int Problem::tasksPriorities(const int& task) const {
+	int Problem::taskPriority(const int& task) const {
 		return _tasksPriorities[task];
 	}
 
@@ -314,7 +314,7 @@ skeleton CHC
 			priorityCost = 0.0;
 
 			if (taskPos > 0) {
-				priorityCost += machineComputeCost / _pbm.tasksPriorities(taskId);
+				priorityCost += machineComputeCost / _pbm.taskPriority(taskId);
 			}
 
 			//if (DEBUG) cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost << endl;
@@ -538,7 +538,7 @@ skeleton CHC
 
 	}
 
-	int Solution::getMostUrgentTaskPosByMachine(int machineId) const {
+	int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
 
 	}
 
