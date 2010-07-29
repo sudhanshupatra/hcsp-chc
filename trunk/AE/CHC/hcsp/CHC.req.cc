@@ -43,8 +43,6 @@ istream& operator>>(istream& input, Problem& pbm) {
 		input.getline(buffer, MAX_BUFFER, '\n');
 		sscanf(buffer, "%d", &taskPriority);
 
-		if (taskPriority == 0) taskPriority = 1;
-
 		pbm._tasksPriorities.push_back(taskPriority);
 
 //		if (DEBUG)
@@ -352,7 +350,7 @@ double Solution::fitnessByMachine(const int machineId) const {
 		double priorityCost;
 		priorityCost = 0.0;
 
-		if (taskPos > 0) {
+		if ((taskPos > 0) && (_pbm.taskPriority(taskId) != 0)) {
 			priorityCost += machineComputeCost / _pbm.taskPriority(taskId);
 		}
 
