@@ -115,6 +115,8 @@ public:
 	void to_Solution(char *_cadena_);
 
 	void initialize();
+	bool isInitilized() const;
+
 	double fitness() const;
 	double fitnessByMachine(int machineId) const;
 	double costByMachine(int machineId) const;

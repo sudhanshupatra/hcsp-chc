@@ -28,8 +28,8 @@ int main (int argc, char** argv)
 	if (solver.pid()==0)
 	{
 		solver.show_state();
-		cout << "Solution" << solver.global_best_solution() << endl
-		     << " Fitness: " << solver.global_best_solution().fitness() << endl;
+		cout << "Solution" << solver.global_best_solution() << endl;
+		//cout << " Fitness: " << solver.global_best_solution().fitness() << endl;
 		cout << "\n\n :( ---------------------- THE END --------------- :) ";
 
 		ofstream fexit(argv[3]);
