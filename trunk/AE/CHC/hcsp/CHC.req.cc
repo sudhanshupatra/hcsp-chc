@@ -43,11 +43,13 @@ istream& operator>>(istream& input, Problem& pbm) {
 		input.getline(buffer, MAX_BUFFER, '\n');
 		sscanf(buffer, "%d", &taskPriority);
 
+		if (taskPriority == 0) taskPriority = 1;
+
 		pbm._tasksPriorities.push_back(taskPriority);
 
-		if (DEBUG)
-			cout << "[DEBUG] Task: " << taskPos << " => Priority: "
-					<< pbm._tasksPriorities[taskPos] << endl;
+//		if (DEBUG)
+//			cout << "[DEBUG] Task: " << taskPos << " => Priority: "
+//					<< pbm._tasksPriorities[taskPos] << endl;
 	}
 
 	// Inicializo toda la matriz de ETC.
@@ -75,11 +77,11 @@ istream& operator>>(istream& input, Problem& pbm) {
 			sscanf(buffer, "%f",
 					&pbm._expectedTimeToCompute[taskPos][machinePos]);
 
-			if (DEBUG)
-				cout << "[DEBUG] Task: " << taskPos << ", Machine: "
-						<< machinePos << ", ETC: "
-						<< pbm._expectedTimeToCompute[taskPos][machinePos]
-						<< endl;
+//			if (DEBUG)
+//				cout << "[DEBUG] Task: " << taskPos << ", Machine: "
+//						<< machinePos << ", ETC: "
+//						<< pbm._expectedTimeToCompute[taskPos][machinePos]
+//						<< endl;
 		}
 	}
 
@@ -208,19 +210,23 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 // ===================================
 ostream& operator<<(ostream& os, const Solution& sol) {
 	os << endl;
-	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
-		os << "> machineId: " << machineId << " fitness: "
-				<< sol.fitnessByMachine(machineId) << endl;
-		for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
-			os << "  taskPos: " << i << " taskId: "
-					<< sol.machines()[machineId].getTask(i) << " ETC: "
-					<< sol.pbm().expectedTimeToCompute(
-							sol.machines()[machineId].getTask(i), machineId)
-					<< " priority: " << sol.pbm().taskPriority(
-					sol.machines()[machineId].getTask(i)) << endl;
+	if (sol.isInitilized()) {
+		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+			os << "> machineId: " << machineId << endl;
+			os << "  fitness: " << sol.fitnessByMachine(machineId) << endl;
+
+			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
+				os << "  taskPos: " << i;
+				os << " taskId: " << sol.machines()[machineId].getTask(i);
+				os << " ETC: "	<< sol.pbm().expectedTimeToCompute(sol.machines()[machineId].getTask(i), machineId);
+				os << " priority: " << sol.pbm().taskPriority(sol.machines()[machineId].getTask(i));
+				os << endl;
+			}
 		}
+		os << "* overall fitness: " << sol.fitness() << endl;
+	} else {
+		os << "> solution not inialized." << endl;
 	}
-	os << "* overall fitness: " << sol.fitness() << endl;
 
 	return os;
 }
@@ -254,6 +260,10 @@ bool Solution::operator==(const Solution& sol) const {
 
 bool Solution::operator!=(const Solution& sol) const {
 	return !(*this == sol);
+}
+
+bool Solution::isInitilized() const {
+	return _initialized;
 }
 
 // ===================================
@@ -290,6 +300,10 @@ void Solution::initialize() {
 
 		_machines[currentMachine].addTask(currentTask);
 	}
+
+//	if (DEBUG) cout << "[DEBUG] initialized: " << _initialized << endl;
+//	if (DEBUG) cout << "[DEBUG] fitness: " << fitness() << endl;
+//	if (DEBUG) cout << endl << *this << endl;
 }
 
 double Solution::costByMachine(int machineId) const {
@@ -361,7 +375,7 @@ double Solution::fitnessByMachine(const int machineId) const {
 // ===================================
 double Solution::fitness() const {
 	if (!_initialized) {
-		//if (DEBUG) cout << endl << "[DEBUG] Solution fitness: infinity" << endl;
+//		if (DEBUG) cout << endl << "[DEBUG] Solution not initialized, fitness: infinity" << endl;
 		return infinity();
 	}
 
@@ -371,7 +385,7 @@ double Solution::fitness() const {
 		fitness += fitnessByMachine(machineId);
 	}
 
-	//if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;
 	return fitness;
 }
 
@@ -519,57 +533,62 @@ bool Solution::equalTasks(Solution& solution, const int taskId) const {
 }
 
 char *Solution::to_String() const {
-	//		if (DEBUG) cout << endl << "[DEBUG] Solution::to_String()" << endl;
-	//		if (DEBUG) this->show();
+//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String()" << endl;
+//	if (DEBUG) cout << *this << endl;
 
 	int machineSeparator = -1;
 	int endMark = -2;
 
 	int rawPos = 0;
-	char *raw = new char[this->size()];
+	int *raw = new int[_pbm.taskCount() + _pbm.machineCount() + 1];
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 			int taskId;
 			taskId = _machines[machineId].getTask(taskPos);
 
-			memcpy(&raw[rawPos], &taskId, sizeof(int));
-			rawPos += sizeof(int);
+			raw[rawPos] = taskId;
+			rawPos += 1;
 		}
-		memcpy(&raw[rawPos], &machineSeparator, sizeof(int));
-		rawPos += sizeof(int);
+		raw[rawPos] = machineSeparator;
+		rawPos += 1;
 	}
-	memcpy(&raw[rawPos], &endMark, sizeof(int));
+	raw[rawPos] = endMark;
+	rawPos += 1;
 
-	//		if (DEBUG) {
-	//			if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution()" << endl;
-	//			Solution aux(_pbm);
-	//			aux.to_Solution(raw);
-	//			aux.show();
-	//		}
+//	if (DEBUG) {
+//		if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution()" << endl;
+//		Solution aux(_pbm);
+//		aux.to_Solution((char*)raw);
+//		cout << aux << endl;
+//	}
 
-	return raw;
+	return (char*)raw;
 }
 
 void Solution::to_Solution(char *_string_) {
-	_initialized = true;
+	_initialized = false;
 
+	int *raw = (int*)_string_;
 	int machineSeparator = -1;
 	int endMark = -2;
-
 	bool endFound = false;
-
 	int currentMachine = 0;
-	for (int pos = 0; pos < this->size() && !endFound; pos = pos + sizeof(int)) {
+
+	for (int pos = 0; pos < (_pbm.taskCount() + _pbm.machineCount() + 1) && !endFound;
+			pos++) {
+
 		int currentValue;
-		currentValue = (int) _string_[pos];
+		currentValue = raw[pos];
 
 		if (currentValue == endMark)
 			endFound = true;
 		else if (currentValue == machineSeparator)
 			currentMachine++;
-		else
+		else {
 			_machines[currentMachine].addTask(currentValue);
+			_initialized = true;
+		}
 	}
 }
 
