@@ -5,3200 +5,574 @@
  Current State ---------------------------------------------
 
 Current trial: 1
-Current iteration: 0
-Current evaluations: 20
-Current best cost: 3.63827e+08
-Current worst cost: 4.04583e+08
-Current Average cost: 3.83855e+08
-Current Standard Deviation: 1.04237e+07
-
-Trial: 
-Best cost trial: 3.63827e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 0
-Time best found trial: 0
-Time spent in trial: 0
-
-Global: 
-Global best cost: 3.63827e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 0
-Time best found: 0
-
-Current time spent (so far): 0
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 1
-Current evaluations: 40
-Current best cost: 3.63827e+08
-Current worst cost: 3.82382e+08
-Current Average cost: 3.75277e+08
-Current Standard Deviation: 5.68074e+06
-
-Trial: 
-Best cost trial: 3.63827e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 0
-Time best found trial: 0
-Time spent in trial: 9119
-
-Global: 
-Global best cost: 3.63827e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 0
-Time best found: 0
-
-Current time spent (so far): 9119
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 2
-Current evaluations: 60
-Current best cost: 3.61129e+08
-Current worst cost: 3.76738e+08
-Current Average cost: 3.70225e+08
-Current Standard Deviation: 5.59057e+06
-
-Trial: 
-Best cost trial: 3.61129e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 2
-Time best found trial: 18060
-Time spent in trial: 18060
-
-Global: 
-Global best cost: 3.61129e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 2
-Time best found: 18060
-
-Current time spent (so far): 18060
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 3
-Current evaluations: 80
-Current best cost: 3.52995e+08
-Current worst cost: 3.69548e+08
-Current Average cost: 3.64239e+08
-Current Standard Deviation: 3.85643e+06
-
-Trial: 
-Best cost trial: 3.52995e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 3
-Time best found trial: 26829
-Time spent in trial: 26829
-
-Global: 
-Global best cost: 3.52995e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 3
-Time best found: 26829
-
-Current time spent (so far): 26829
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 4
-Current evaluations: 100
-Current best cost: 3.50196e+08
-Current worst cost: 3.63827e+08
-Current Average cost: 3.59307e+08
-Current Standard Deviation: 4.09548e+06
-
-Trial: 
-Best cost trial: 3.50196e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 4
-Time best found trial: 35812
-Time spent in trial: 35812
-
-Global: 
-Global best cost: 3.50196e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 4
-Time best found: 35812
-
-Current time spent (so far): 35812
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 5
-Current evaluations: 120
-Current best cost: 3.46886e+08
-Current worst cost: 3.59324e+08
-Current Average cost: 3.55531e+08
-Current Standard Deviation: 3.33485e+06
-
-Trial: 
-Best cost trial: 3.46886e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 5
-Time best found trial: 44423
-Time spent in trial: 44423
-
-Global: 
-Global best cost: 3.46886e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 5
-Time best found: 44423
-
-Current time spent (so far): 44423
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 6
-Current evaluations: 140
-Current best cost: 3.42551e+08
-Current worst cost: 3.56149e+08
-Current Average cost: 3.51426e+08
-Current Standard Deviation: 4.01594e+06
-
-Trial: 
-Best cost trial: 3.42551e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 6
-Time best found trial: 53074
-Time spent in trial: 53074
-
-Global: 
-Global best cost: 3.42551e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 6
-Time best found: 53074
-
-Current time spent (so far): 53074
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 7
-Current evaluations: 160
-Current best cost: 3.35542e+08
-Current worst cost: 3.52289e+08
-Current Average cost: 3.46949e+08
-Current Standard Deviation: 4.74029e+06
-
-Trial: 
-Best cost trial: 3.35542e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 7
-Time best found trial: 61844
-Time spent in trial: 61844
-
-Global: 
-Global best cost: 3.35542e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 7
-Time best found: 61844
-
-Current time spent (so far): 61844
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 8
-Current evaluations: 180
-Current best cost: 3.32295e+08
-Current worst cost: 3.48589e+08
-Current Average cost: 3.4199e+08
-Current Standard Deviation: 4.42709e+06
-
-Trial: 
-Best cost trial: 3.32295e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 8
-Time best found trial: 70361
-Time spent in trial: 70361
-
-Global: 
-Global best cost: 3.32295e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 8
-Time best found: 70361
-
-Current time spent (so far): 70361
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 9
-Current evaluations: 200
-Current best cost: 3.22026e+08
-Current worst cost: 3.41729e+08
-Current Average cost: 3.36594e+08
-Current Standard Deviation: 5.02944e+06
-
-Trial: 
-Best cost trial: 3.22026e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 9
-Time best found trial: 78959
-Time spent in trial: 78959
-
-Global: 
-Global best cost: 3.22026e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 9
-Time best found: 78959
-
-Current time spent (so far): 78959
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 10
-Current evaluations: 220
-Current best cost: 3.21926e+08
-Current worst cost: 3.36385e+08
-Current Average cost: 3.32052e+08
-Current Standard Deviation: 5.12216e+06
-
-Trial: 
-Best cost trial: 3.21926e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 10
-Time best found trial: 87491
-Time spent in trial: 87491
-
-Global: 
-Global best cost: 3.21926e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 10
-Time best found: 87491
-
-Current time spent (so far): 87491
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 11
-Current evaluations: 240
-Current best cost: 3.15701e+08
-Current worst cost: 3.33424e+08
-Current Average cost: 3.2658e+08
-Current Standard Deviation: 5.50057e+06
-
-Trial: 
-Best cost trial: 3.15701e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 11
-Time best found trial: 96020
-Time spent in trial: 96020
-
-Global: 
-Global best cost: 3.15701e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 11
-Time best found: 96020
-
-Current time spent (so far): 96020
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 12
-Current evaluations: 260
-Current best cost: 3.1548e+08
-Current worst cost: 3.2706e+08
-Current Average cost: 3.222e+08
-Current Standard Deviation: 3.96202e+06
-
-Trial: 
-Best cost trial: 3.1548e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 12
-Time best found trial: 104584
-Time spent in trial: 104584
-
-Global: 
-Global best cost: 3.1548e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 12
-Time best found: 104584
-
-Current time spent (so far): 104584
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 13
-Current evaluations: 280
-Current best cost: 3.14118e+08
-Current worst cost: 3.23037e+08
-Current Average cost: 3.18971e+08
-Current Standard Deviation: 3.07943e+06
-
-Trial: 
-Best cost trial: 3.14118e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 13
-Time best found trial: 113063
-Time spent in trial: 113063
-
-Global: 
-Global best cost: 3.14118e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 13
-Time best found: 113063
-
-Current time spent (so far): 113063
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 14
-Current evaluations: 300
-Current best cost: 3.12621e+08
-Current worst cost: 3.18348e+08
-Current Average cost: 3.15874e+08
-Current Standard Deviation: 1.53233e+06
-
-Trial: 
-Best cost trial: 3.12621e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 14
-Time best found trial: 121452
-Time spent in trial: 121452
-
-Global: 
-Global best cost: 3.12621e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 14
-Time best found: 121452
-
-Current time spent (so far): 121452
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 15
-Current evaluations: 320
-Current best cost: 3.06836e+08
-Current worst cost: 3.1548e+08
-Current Average cost: 3.12901e+08
-Current Standard Deviation: 2.50195e+06
-
-Trial: 
-Best cost trial: 3.06836e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 15
-Time best found trial: 129862
-Time spent in trial: 129862
-
-Global: 
-Global best cost: 3.06836e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 15
-Time best found: 129862
-
-Current time spent (so far): 129862
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 16
-Current evaluations: 340
-Current best cost: 3.01262e+08
-Current worst cost: 3.12929e+08
-Current Average cost: 3.08692e+08
-Current Standard Deviation: 3.401e+06
-
-Trial: 
-Best cost trial: 3.01262e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 16
-Time best found trial: 138524
-Time spent in trial: 138524
-
-Global: 
-Global best cost: 3.01262e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 16
-Time best found: 138524
-
-Current time spent (so far): 138524
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 17
-Current evaluations: 360
-Current best cost: 2.94301e+08
-Current worst cost: 3.09478e+08
-Current Average cost: 3.04893e+08
-Current Standard Deviation: 3.78684e+06
-
-Trial: 
-Best cost trial: 2.94301e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 17
-Time best found trial: 147005
-Time spent in trial: 147005
-
-Global: 
-Global best cost: 2.94301e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 17
-Time best found: 147005
-
-Current time spent (so far): 147005
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 18
-Current evaluations: 380
-Current best cost: 2.94301e+08
-Current worst cost: 3.04865e+08
-Current Average cost: 3.01973e+08
-Current Standard Deviation: 3.07536e+06
-
-Trial: 
-Best cost trial: 2.94301e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 17
-Time best found trial: 147005
-Time spent in trial: 155390
-
-Global: 
-Global best cost: 2.94301e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 17
-Time best found: 147005
-
-Current time spent (so far): 155390
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 19
-Current evaluations: 400
-Current best cost: 2.87656e+08
-Current worst cost: 3.02085e+08
-Current Average cost: 2.98824e+08
-Current Standard Deviation: 3.32465e+06
-
-Trial: 
-Best cost trial: 2.87656e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 19
-Time best found trial: 163727
-Time spent in trial: 163727
-
-Global: 
-Global best cost: 2.87656e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 19
-Time best found: 163727
-
-Current time spent (so far): 163727
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 20
-Current evaluations: 420
-Current best cost: 2.87263e+08
-Current worst cost: 2.99044e+08
-Current Average cost: 2.95922e+08
-Current Standard Deviation: 3.87008e+06
-
-Trial: 
-Best cost trial: 2.87263e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 20
-Time best found trial: 172072
-Time spent in trial: 172072
-
-Global: 
-Global best cost: 2.87263e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 20
-Time best found: 172072
-
-Current time spent (so far): 172072
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 21
-Current evaluations: 440
-Current best cost: 2.82088e+08
-Current worst cost: 2.97094e+08
-Current Average cost: 2.93068e+08
-Current Standard Deviation: 4.21263e+06
-
-Trial: 
-Best cost trial: 2.82088e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 21
-Time best found trial: 180422
-Time spent in trial: 180422
-
-Global: 
-Global best cost: 2.82088e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 21
-Time best found: 180422
-
-Current time spent (so far): 180422
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 22
-Current evaluations: 460
-Current best cost: 2.82088e+08
-Current worst cost: 2.92408e+08
-Current Average cost: 2.89435e+08
-Current Standard Deviation: 2.59093e+06
-
-Trial: 
-Best cost trial: 2.82088e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 21
-Time best found trial: 180422
-Time spent in trial: 188646
-
-Global: 
-Global best cost: 2.82088e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 21
-Time best found: 180422
-
-Current time spent (so far): 188646
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 23
-Current evaluations: 480
-Current best cost: 2.80967e+08
-Current worst cost: 2.89336e+08
-Current Average cost: 2.86433e+08
-Current Standard Deviation: 2.92906e+06
-
-Trial: 
-Best cost trial: 2.80967e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 23
-Time best found trial: 196812
-Time spent in trial: 196812
-
-Global: 
-Global best cost: 2.80967e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 23
-Time best found: 196812
-
-Current time spent (so far): 196812
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 24
-Current evaluations: 500
-Current best cost: 2.80967e+08
-Current worst cost: 2.87116e+08
-Current Average cost: 2.83699e+08
-Current Standard Deviation: 2.09717e+06
-
-Trial: 
-Best cost trial: 2.80967e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 23
-Time best found trial: 196812
-Time spent in trial: 205130
-
-Global: 
-Global best cost: 2.80967e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 23
-Time best found: 196812
-
-Current time spent (so far): 205130
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 25
-Current evaluations: 520
-Current best cost: 2.75033e+08
-Current worst cost: 2.8334e+08
-Current Average cost: 2.81051e+08
-Current Standard Deviation: 2.20089e+06
-
-Trial: 
-Best cost trial: 2.75033e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 25
-Time best found trial: 213393
-Time spent in trial: 213393
-
-Global: 
-Global best cost: 2.75033e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 25
-Time best found: 213393
-
-Current time spent (so far): 213393
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 26
-Current evaluations: 540
-Current best cost: 2.74311e+08
-Current worst cost: 2.81438e+08
-Current Average cost: 2.79067e+08
-Current Standard Deviation: 2.33742e+06
-
-Trial: 
-Best cost trial: 2.74311e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 26
-Time best found trial: 221652
-Time spent in trial: 221652
-
-Global: 
-Global best cost: 2.74311e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 26
-Time best found: 221652
-
-Current time spent (so far): 221652
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 27
-Current evaluations: 560
-Current best cost: 2.72039e+08
-Current worst cost: 2.78981e+08
-Current Average cost: 2.76488e+08
-Current Standard Deviation: 1.96573e+06
-
-Trial: 
-Best cost trial: 2.72039e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 27
-Time best found trial: 229961
-Time spent in trial: 229961
-
-Global: 
-Global best cost: 2.72039e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 27
-Time best found: 229961
-
-Current time spent (so far): 229961
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 28
-Current evaluations: 580
-Current best cost: 2.65312e+08
-Current worst cost: 2.76532e+08
-Current Average cost: 2.74246e+08
-Current Standard Deviation: 2.68124e+06
-
-Trial: 
-Best cost trial: 2.65312e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 28
-Time best found trial: 238493
-Time spent in trial: 238493
-
-Global: 
-Global best cost: 2.65312e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 28
-Time best found: 238493
-
-Current time spent (so far): 238493
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 29
-Current evaluations: 600
-Current best cost: 2.65312e+08
-Current worst cost: 2.74402e+08
-Current Average cost: 2.71983e+08
-Current Standard Deviation: 2.81104e+06
-
-Trial: 
-Best cost trial: 2.65312e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 28
-Time best found trial: 238493
-Time spent in trial: 250655
-
-Global: 
-Global best cost: 2.65312e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 28
-Time best found: 238493
-
-Current time spent (so far): 250655
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 30
-Current evaluations: 620
-Current best cost: 2.65312e+08
-Current worst cost: 2.72524e+08
-Current Average cost: 2.6951e+08
-Current Standard Deviation: 2.48625e+06
-
-Trial: 
-Best cost trial: 2.65312e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 28
-Time best found trial: 238493
-Time spent in trial: 260664
-
-Global: 
-Global best cost: 2.65312e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 28
-Time best found: 238493
-
-Current time spent (so far): 260664
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 31
-Current evaluations: 640
-Current best cost: 2.60613e+08
-Current worst cost: 2.69922e+08
-Current Average cost: 2.66826e+08
-Current Standard Deviation: 2.14757e+06
-
-Trial: 
-Best cost trial: 2.60613e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 31
-Time best found trial: 268870
-Time spent in trial: 268870
-
-Global: 
-Global best cost: 2.60613e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 31
-Time best found: 268870
-
-Current time spent (so far): 268870
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 32
-Current evaluations: 660
-Current best cost: 2.60613e+08
-Current worst cost: 2.67076e+08
-Current Average cost: 2.64879e+08
-Current Standard Deviation: 1.75463e+06
-
-Trial: 
-Best cost trial: 2.60613e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 31
-Time best found trial: 268870
-Time spent in trial: 276968
-
-Global: 
-Global best cost: 2.60613e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 31
-Time best found: 268870
-
-Current time spent (so far): 276968
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 33
-Current evaluations: 680
-Current best cost: 2.60308e+08
-Current worst cost: 2.64561e+08
-Current Average cost: 2.62896e+08
-Current Standard Deviation: 1.30982e+06
-
-Trial: 
-Best cost trial: 2.60308e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 33
-Time best found trial: 285045
-Time spent in trial: 285045
-
-Global: 
-Global best cost: 2.60308e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 33
-Time best found: 285045
-
-Current time spent (so far): 285045
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 34
-Current evaluations: 700
-Current best cost: 2.56447e+08
-Current worst cost: 2.63155e+08
-Current Average cost: 2.61466e+08
-Current Standard Deviation: 1.513e+06
-
-Trial: 
-Best cost trial: 2.56447e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 34
-Time best found trial: 292997
-Time spent in trial: 292997
-
-Global: 
-Global best cost: 2.56447e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 34
-Time best found: 292997
-
-Current time spent (so far): 292997
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 35
-Current evaluations: 720
-Current best cost: 2.53588e+08
-Current worst cost: 2.61362e+08
-Current Average cost: 2.5968e+08
-Current Standard Deviation: 1.94455e+06
-
-Trial: 
-Best cost trial: 2.53588e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 35
-Time best found trial: 301128
-Time spent in trial: 301128
-
-Global: 
-Global best cost: 2.53588e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 35
-Time best found: 301128
-
-Current time spent (so far): 301128
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 36
-Current evaluations: 740
-Current best cost: 2.53588e+08
-Current worst cost: 2.59935e+08
-Current Average cost: 2.57902e+08
-Current Standard Deviation: 1.74799e+06
-
-Trial: 
-Best cost trial: 2.53588e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 35
-Time best found trial: 301128
-Time spent in trial: 309231
-
-Global: 
-Global best cost: 2.53588e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 35
-Time best found: 301128
-
-Current time spent (so far): 309231
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 37
-Current evaluations: 760
-Current best cost: 2.53588e+08
-Current worst cost: 2.58216e+08
-Current Average cost: 2.5639e+08
-Current Standard Deviation: 1.58777e+06
-
-Trial: 
-Best cost trial: 2.53588e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 35
-Time best found trial: 301128
-Time spent in trial: 317367
-
-Global: 
-Global best cost: 2.53588e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 35
-Time best found: 301128
-
-Current time spent (so far): 317367
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 38
-Current evaluations: 780
-Current best cost: 2.52911e+08
-Current worst cost: 2.56447e+08
-Current Average cost: 2.5489e+08
-Current Standard Deviation: 1.11421e+06
-
-Trial: 
-Best cost trial: 2.52911e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 38
-Time best found trial: 325408
-Time spent in trial: 325408
-
-Global: 
-Global best cost: 2.52911e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 38
-Time best found: 325408
-
-Current time spent (so far): 325408
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 39
-Current evaluations: 800
-Current best cost: 2.52237e+08
-Current worst cost: 2.54702e+08
-Current Average cost: 2.53711e+08
-Current Standard Deviation: 733001
-
-Trial: 
-Best cost trial: 2.52237e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 39
-Time best found trial: 333808
-Time spent in trial: 333808
-
-Global: 
-Global best cost: 2.52237e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 39
-Time best found: 333808
-
-Current time spent (so far): 333808
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 40
-Current evaluations: 820
-Current best cost: 2.51659e+08
-Current worst cost: 2.53799e+08
-Current Average cost: 2.52731e+08
-Current Standard Deviation: 694624
-
-Trial: 
-Best cost trial: 2.51659e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 40
-Time best found trial: 341723
-Time spent in trial: 341723
-
-Global: 
-Global best cost: 2.51659e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 40
-Time best found: 341723
-
-Current time spent (so far): 341723
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 41
-Current evaluations: 840
-Current best cost: 2.4805e+08
-Current worst cost: 2.52548e+08
-Current Average cost: 2.51521e+08
-Current Standard Deviation: 1.12681e+06
-
-Trial: 
-Best cost trial: 2.4805e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 41
-Time best found trial: 349771
-Time spent in trial: 349771
-
-Global: 
-Global best cost: 2.4805e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 41
-Time best found: 349771
-
-Current time spent (so far): 349771
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 42
-Current evaluations: 860
-Current best cost: 2.47037e+08
-Current worst cost: 2.51821e+08
-Current Average cost: 2.50182e+08
-Current Standard Deviation: 1.33479e+06
-
-Trial: 
-Best cost trial: 2.47037e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 42
-Time best found trial: 357703
-Time spent in trial: 357703
-
-Global: 
-Global best cost: 2.47037e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 42
-Time best found: 357703
-
-Current time spent (so far): 357703
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 43
-Current evaluations: 880
-Current best cost: 2.44521e+08
-Current worst cost: 2.50202e+08
-Current Average cost: 2.48823e+08
-Current Standard Deviation: 1.49422e+06
-
-Trial: 
-Best cost trial: 2.44521e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 43
-Time best found trial: 365736
-Time spent in trial: 365736
-
-Global: 
-Global best cost: 2.44521e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 43
-Time best found: 365736
-
-Current time spent (so far): 365736
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 44
-Current evaluations: 900
-Current best cost: 2.44521e+08
-Current worst cost: 2.48993e+08
-Current Average cost: 2.47379e+08
-Current Standard Deviation: 1.26017e+06
-
-Trial: 
-Best cost trial: 2.44521e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 43
-Time best found trial: 365736
-Time spent in trial: 373683
-
-Global: 
-Global best cost: 2.44521e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 43
-Time best found: 365736
-
-Current time spent (so far): 373683
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 45
-Current evaluations: 920
-Current best cost: 2.43352e+08
-Current worst cost: 2.47271e+08
-Current Average cost: 2.45943e+08
-Current Standard Deviation: 974060
-
-Trial: 
-Best cost trial: 2.43352e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 45
-Time best found trial: 381635
-Time spent in trial: 381635
-
-Global: 
-Global best cost: 2.43352e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 45
-Time best found: 381635
-
-Current time spent (so far): 381635
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 46
-Current evaluations: 940
-Current best cost: 2.43352e+08
-Current worst cost: 2.45884e+08
-Current Average cost: 2.45166e+08
-Current Standard Deviation: 642808
-
-Trial: 
-Best cost trial: 2.43352e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 45
-Time best found trial: 381635
-Time spent in trial: 389577
-
-Global: 
-Global best cost: 2.43352e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 45
-Time best found: 381635
-
-Current time spent (so far): 389577
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 47
-Current evaluations: 960
-Current best cost: 2.42533e+08
-Current worst cost: 2.45253e+08
-Current Average cost: 2.44313e+08
-Current Standard Deviation: 800967
-
-Trial: 
-Best cost trial: 2.42533e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 47
-Time best found trial: 397532
-Time spent in trial: 397532
-
-Global: 
-Global best cost: 2.42533e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 47
-Time best found: 397532
-
-Current time spent (so far): 397532
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 48
-Current evaluations: 980
-Current best cost: 2.41799e+08
-Current worst cost: 2.44521e+08
-Current Average cost: 2.4345e+08
-Current Standard Deviation: 724157
-
-Trial: 
-Best cost trial: 2.41799e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 48
-Time best found trial: 405577
-Time spent in trial: 405577
-
-Global: 
-Global best cost: 2.41799e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 48
-Time best found: 405577
-
-Current time spent (so far): 405577
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 49
-Current evaluations: 1000
-Current best cost: 2.40491e+08
-Current worst cost: 2.43601e+08
-Current Average cost: 2.42694e+08
-Current Standard Deviation: 707203
-
-Trial: 
-Best cost trial: 2.40491e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 49
-Time best found trial: 413461
-Time spent in trial: 413461
-
-Global: 
-Global best cost: 2.40491e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 49
-Time best found: 413461
-
-Current time spent (so far): 413461
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 50
-Current evaluations: 1020
-Current best cost: 2.40491e+08
-Current worst cost: 2.42657e+08
-Current Average cost: 2.42081e+08
-Current Standard Deviation: 560719
-
-Trial: 
-Best cost trial: 2.40491e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 49
-Time best found trial: 413461
-Time spent in trial: 421471
-
-Global: 
-Global best cost: 2.40491e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 49
-Time best found: 413461
-
-Current time spent (so far): 421471
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 51
-Current evaluations: 1040
-Current best cost: 2.40171e+08
-Current worst cost: 2.42133e+08
-Current Average cost: 2.41379e+08
-Current Standard Deviation: 606893
-
-Trial: 
-Best cost trial: 2.40171e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 51
-Time best found trial: 429343
-Time spent in trial: 429343
-
-Global: 
-Global best cost: 2.40171e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 51
-Time best found: 429343
-
-Current time spent (so far): 429343
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 52
-Current evaluations: 1060
-Current best cost: 2.37569e+08
-Current worst cost: 2.41584e+08
-Current Average cost: 2.40697e+08
-Current Standard Deviation: 880398
-
-Trial: 
-Best cost trial: 2.37569e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 52
-Time best found trial: 437563
-Time spent in trial: 437563
-
-Global: 
-Global best cost: 2.37569e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 52
-Time best found: 437563
-
-Current time spent (so far): 437563
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 53
-Current evaluations: 1080
-Current best cost: 2.37569e+08
-Current worst cost: 2.40871e+08
-Current Average cost: 2.3999e+08
-Current Standard Deviation: 805235
-
-Trial: 
-Best cost trial: 2.37569e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 52
-Time best found trial: 437563
-Time spent in trial: 445456
-
-Global: 
-Global best cost: 2.37569e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 52
-Time best found: 437563
-
-Current time spent (so far): 445456
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 54
-Current evaluations: 1100
-Current best cost: 2.37569e+08
-Current worst cost: 2.40173e+08
-Current Average cost: 2.39316e+08
-Current Standard Deviation: 816162
-
-Trial: 
-Best cost trial: 2.37569e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 52
-Time best found trial: 437563
-Time spent in trial: 453296
-
-Global: 
-Global best cost: 2.37569e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 52
-Time best found: 437563
-
-Current time spent (so far): 453296
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 55
-Current evaluations: 1120
-Current best cost: 2.371e+08
-Current worst cost: 2.3936e+08
-Current Average cost: 2.38509e+08
-Current Standard Deviation: 680187
-
-Trial: 
-Best cost trial: 2.371e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 55
-Time best found trial: 461210
-Time spent in trial: 461210
-
-Global: 
-Global best cost: 2.371e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 55
-Time best found: 461210
-
-Current time spent (so far): 461210
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 56
-Current evaluations: 1140
-Current best cost: 2.37091e+08
-Current worst cost: 2.38419e+08
-Current Average cost: 2.37792e+08
-Current Standard Deviation: 477947
-
-Trial: 
-Best cost trial: 2.37091e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 56
-Time best found trial: 469026
-Time spent in trial: 469026
-
-Global: 
-Global best cost: 2.37091e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 56
-Time best found: 469026
-
-Current time spent (so far): 469026
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 57
-Current evaluations: 1160
-Current best cost: 2.36649e+08
-Current worst cost: 2.37748e+08
-Current Average cost: 2.3736e+08
-Current Standard Deviation: 300760
-
-Trial: 
-Best cost trial: 2.36649e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 57
-Time best found trial: 476942
-Time spent in trial: 476942
-
-Global: 
-Global best cost: 2.36649e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 57
-Time best found: 476942
-
-Current time spent (so far): 476942
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 58
-Current evaluations: 1180
-Current best cost: 2.36328e+08
-Current worst cost: 2.3744e+08
-Current Average cost: 2.37008e+08
-Current Standard Deviation: 355243
-
-Trial: 
-Best cost trial: 2.36328e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 58
-Time best found trial: 484759
-Time spent in trial: 484759
-
-Global: 
-Global best cost: 2.36328e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 58
-Time best found: 484759
-
-Current time spent (so far): 484759
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 59
-Current evaluations: 1200
-Current best cost: 2.35794e+08
-Current worst cost: 2.36994e+08
-Current Average cost: 2.36597e+08
-Current Standard Deviation: 294817
-
-Trial: 
-Best cost trial: 2.35794e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 59
-Time best found trial: 492621
-Time spent in trial: 492621
-
-Global: 
-Global best cost: 2.35794e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 59
-Time best found: 492621
-
-Current time spent (so far): 492621
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 60
-Current evaluations: 1220
-Current best cost: 2.35375e+08
-Current worst cost: 2.36564e+08
-Current Average cost: 2.36173e+08
-Current Standard Deviation: 373295
-
-Trial: 
-Best cost trial: 2.35375e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 60
-Time best found trial: 500441
-Time spent in trial: 500441
-
-Global: 
-Global best cost: 2.35375e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 60
-Time best found: 500441
-
-Current time spent (so far): 500441
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 61
-Current evaluations: 1240
-Current best cost: 2.34502e+08
-Current worst cost: 2.36281e+08
-Current Average cost: 2.35738e+08
-Current Standard Deviation: 476794
-
-Trial: 
-Best cost trial: 2.34502e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 61
-Time best found trial: 508317
-Time spent in trial: 508317
-
-Global: 
-Global best cost: 2.34502e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 61
-Time best found: 508317
-
-Current time spent (so far): 508317
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 62
-Current evaluations: 1260
-Current best cost: 2.34502e+08
-Current worst cost: 2.35767e+08
-Current Average cost: 2.35382e+08
-Current Standard Deviation: 384339
-
-Trial: 
-Best cost trial: 2.34502e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 61
-Time best found trial: 508317
-Time spent in trial: 516135
-
-Global: 
-Global best cost: 2.34502e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 61
-Time best found: 508317
-
-Current time spent (so far): 516135
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 63
-Current evaluations: 1280
-Current best cost: 2.34251e+08
-Current worst cost: 2.35474e+08
-Current Average cost: 2.35001e+08
-Current Standard Deviation: 371000
-
-Trial: 
-Best cost trial: 2.34251e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 63
-Time best found trial: 523838
-Time spent in trial: 523838
-
-Global: 
-Global best cost: 2.34251e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 63
-Time best found: 523838
-
-Current time spent (so far): 523838
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 64
-Current evaluations: 1300
-Current best cost: 2.34041e+08
-Current worst cost: 2.34941e+08
-Current Average cost: 2.3462e+08
-Current Standard Deviation: 252983
-
-Trial: 
-Best cost trial: 2.34041e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 64
-Time best found trial: 531978
-Time spent in trial: 531978
-
-Global: 
-Global best cost: 2.34041e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 64
-Time best found: 531978
-
-Current time spent (so far): 531978
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 65
-Current evaluations: 1320
-Current best cost: 2.33947e+08
-Current worst cost: 2.34638e+08
-Current Average cost: 2.3437e+08
-Current Standard Deviation: 205447
-
-Trial: 
-Best cost trial: 2.33947e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 65
-Time best found trial: 539787
-Time spent in trial: 539787
-
-Global: 
-Global best cost: 2.33947e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 65
-Time best found: 539787
-
-Current time spent (so far): 539787
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 66
-Current evaluations: 1340
-Current best cost: 2.33487e+08
-Current worst cost: 2.34368e+08
-Current Average cost: 2.34103e+08
-Current Standard Deviation: 260876
-
-Trial: 
-Best cost trial: 2.33487e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 66
-Time best found trial: 547582
-Time spent in trial: 547582
-
-Global: 
-Global best cost: 2.33487e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 66
-Time best found: 547582
-
-Current time spent (so far): 547582
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 67
-Current evaluations: 1360
-Current best cost: 2.33089e+08
-Current worst cost: 2.34192e+08
-Current Average cost: 2.33844e+08
-Current Standard Deviation: 288009
-
-Trial: 
-Best cost trial: 2.33089e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 67
-Time best found trial: 555415
-Time spent in trial: 555415
-
-Global: 
-Global best cost: 2.33089e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 67
-Time best found: 555415
-
-Current time spent (so far): 555415
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 68
-Current evaluations: 1380
-Current best cost: 2.33089e+08
-Current worst cost: 2.33921e+08
-Current Average cost: 2.33632e+08
-Current Standard Deviation: 233751
-
-Trial: 
-Best cost trial: 2.33089e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 67
-Time best found trial: 555415
-Time spent in trial: 563154
-
-Global: 
-Global best cost: 2.33089e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 67
-Time best found: 555415
-
-Current time spent (so far): 563154
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 69
-Current evaluations: 1400
-Current best cost: 2.33044e+08
-Current worst cost: 2.33686e+08
-Current Average cost: 2.33413e+08
-Current Standard Deviation: 204624
-
-Trial: 
-Best cost trial: 2.33044e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 69
-Time best found trial: 570818
-Time spent in trial: 570818
-
-Global: 
-Global best cost: 2.33044e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 69
-Time best found: 570818
-
-Current time spent (so far): 570818
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 70
-Current evaluations: 1420
-Current best cost: 2.32968e+08
-Current worst cost: 2.3348e+08
-Current Average cost: 2.33254e+08
-Current Standard Deviation: 161838
-
-Trial: 
-Best cost trial: 2.32968e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 70
-Time best found trial: 578481
-Time spent in trial: 578481
-
-Global: 
-Global best cost: 2.32968e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 70
-Time best found: 578481
-
-Current time spent (so far): 578481
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 71
-Current evaluations: 1440
-Current best cost: 2.32783e+08
-Current worst cost: 2.33186e+08
-Current Average cost: 2.33076e+08
-Current Standard Deviation: 97920.5
-
-Trial: 
-Best cost trial: 2.32783e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 71
-Time best found trial: 586284
-Time spent in trial: 586284
-
-Global: 
-Global best cost: 2.32783e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 71
-Time best found: 586284
-
-Current time spent (so far): 586284
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 72
-Current evaluations: 1460
-Current best cost: 2.32783e+08
-Current worst cost: 2.33089e+08
-Current Average cost: 2.32977e+08
-Current Standard Deviation: 87961
-
-Trial: 
-Best cost trial: 2.32783e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 71
-Time best found trial: 586284
-Time spent in trial: 594105
-
-Global: 
-Global best cost: 2.32783e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 71
-Time best found: 586284
-
-Current time spent (so far): 594105
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 73
-Current evaluations: 1480
-Current best cost: 2.32727e+08
-Current worst cost: 2.32979e+08
-Current Average cost: 2.32875e+08
-Current Standard Deviation: 83239
-
-Trial: 
-Best cost trial: 2.32727e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 73
-Time best found trial: 601968
-Time spent in trial: 601968
-
-Global: 
-Global best cost: 2.32727e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 73
-Time best found: 601968
-
-Current time spent (so far): 601968
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 74
-Current evaluations: 1500
-Current best cost: 2.32638e+08
-Current worst cost: 2.32873e+08
-Current Average cost: 2.32785e+08
-Current Standard Deviation: 69353.6
-
-Trial: 
-Best cost trial: 2.32638e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 74
-Time best found trial: 609835
-Time spent in trial: 609835
-
-Global: 
-Global best cost: 2.32638e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 74
-Time best found: 609835
-
-Current time spent (so far): 609835
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 75
-Current evaluations: 1520
-Current best cost: 2.32636e+08
-Current worst cost: 2.32783e+08
-Current Average cost: 2.32717e+08
-Current Standard Deviation: 42839.5
-
-Trial: 
-Best cost trial: 2.32636e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 75
-Time best found trial: 617611
-Time spent in trial: 617611
-
-Global: 
-Global best cost: 2.32636e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 75
-Time best found: 617611
-
-Current time spent (so far): 617611
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 76
-Current evaluations: 1540
-Current best cost: 2.32581e+08
-Current worst cost: 2.32727e+08
-Current Average cost: 2.32672e+08
-Current Standard Deviation: 45813.3
-
-Trial: 
-Best cost trial: 2.32581e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 76
-Time best found trial: 625404
-Time spent in trial: 625404
-
-Global: 
-Global best cost: 2.32581e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 76
-Time best found: 625404
-
-Current time spent (so far): 625404
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 77
-Current evaluations: 1560
-Current best cost: 2.32581e+08
-Current worst cost: 2.3268e+08
-Current Average cost: 2.32635e+08
-Current Standard Deviation: 27113
-
-Trial: 
-Best cost trial: 2.32581e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 76
-Time best found trial: 625404
-Time spent in trial: 633611
-
-Global: 
-Global best cost: 2.32581e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 76
-Time best found: 625404
-
-Current time spent (so far): 633611
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 78
-Current evaluations: 1580
-Current best cost: 2.3258e+08
-Current worst cost: 2.32636e+08
-Current Average cost: 2.32612e+08
-Current Standard Deviation: 18831.3
-
-Trial: 
-Best cost trial: 2.3258e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 78
-Time best found trial: 641427
-Time spent in trial: 641427
-
-Global: 
-Global best cost: 2.3258e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 78
-Time best found: 641427
-
-Current time spent (so far): 641427
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 79
-Current evaluations: 1600
-Current best cost: 2.32579e+08
-Current worst cost: 2.32613e+08
-Current Average cost: 2.32597e+08
-Current Standard Deviation: 13765.9
-
-Trial: 
-Best cost trial: 2.32579e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 79
-Time best found trial: 649093
-Time spent in trial: 649093
-
-Global: 
-Global best cost: 2.32579e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 79
-Time best found: 649093
-
-Current time spent (so far): 649093
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 80
-Current evaluations: 1620
-Current best cost: 2.3257e+08
-Current worst cost: 2.32604e+08
-Current Average cost: 2.32584e+08
-Current Standard Deviation: 9119.49
-
-Trial: 
-Best cost trial: 2.3257e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 80
-Time best found trial: 656917
-Time spent in trial: 656917
-
-Global: 
-Global best cost: 2.3257e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 80
-Time best found: 656917
-
-Current time spent (so far): 656917
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 81
-Current evaluations: 1640
-Current best cost: 2.32546e+08
-Current worst cost: 2.32581e+08
-Current Average cost: 2.32574e+08
-Current Standard Deviation: 12064.9
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 664682
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 664682
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 82
-Current evaluations: 1660
-Current best cost: 2.32546e+08
-Current worst cost: 2.32581e+08
-Current Average cost: 2.32567e+08
-Current Standard Deviation: 13798.4
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 672410
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 672410
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 83
-Current evaluations: 1680
-Current best cost: 2.32546e+08
-Current worst cost: 2.3257e+08
-Current Average cost: 2.32556e+08
-Current Standard Deviation: 11458.8
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 680165
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 680165
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 84
-Current evaluations: 1700
-Current best cost: 2.32546e+08
-Current worst cost: 2.32548e+08
-Current Average cost: 2.32547e+08
-Current Standard Deviation: 847.658
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 687852
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 687852
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 85
-Current evaluations: 1720
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
+Current iteration: 30000
+Current evaluations: 3059700
+Current best cost: 9.34351e+07
+Current worst cost: 9.34351e+07
+Current Average cost: 9.34351e+07
 Current Standard Deviation: 0
 
 Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 695711
+Best cost trial: 9.34351e+07
+Worst cost trial: 4.06851e+08
+Iteration best found in trial: 168
+Time best found trial: 6.69084e+06
+Time spent in trial: 1.10397e+09
 
 Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
+Global best cost: 9.34351e+07
+Global worst cost: 4.06851e+08
 Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
+Iteration best found: 168
+Time best found: 6.69084e+06
 
-Current time spent (so far): 695711
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 86
-Current evaluations: 1740
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 703404
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 703404
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 87
-Current evaluations: 1760
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 711110
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 711110
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 88
-Current evaluations: 1780
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 718869
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 718869
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 89
-Current evaluations: 1800
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 726580
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 726580
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 90
-Current evaluations: 1820
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 734621
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 734621
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 91
-Current evaluations: 1840
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 742289
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 742289
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 92
-Current evaluations: 1860
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 749892
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 749892
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 93
-Current evaluations: 1880
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 757500
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 757500
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 94
-Current evaluations: 1900
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 765164
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 765164
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 95
-Current evaluations: 1920
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 772839
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 772839
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 96
-Current evaluations: 1940
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 780481
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 780481
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 97
-Current evaluations: 1960
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 788205
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 788205
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 98
-Current evaluations: 1980
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 796030
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 796030
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 99
-Current evaluations: 2000
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 803640
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 803640
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 100
-Current evaluations: 2020
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 811351
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 811351
-
- Current State ---------------------------------------------
-
-Current trial: 1
-Current iteration: 100
-Current evaluations: 2020
-Current best cost: 2.32546e+08
-Current worst cost: 2.32546e+08
-Current Average cost: 2.32546e+08
-Current Standard Deviation: 0
-
-Trial: 
-Best cost trial: 2.32546e+08
-Worst cost trial: 4.04583e+08
-Iteration best found in trial: 81
-Time best found trial: 664682
-Time spent in trial: 811351
-
-Global: 
-Global best cost: 2.32546e+08
-Global worst cost: 4.04583e+08
-Trial best found: 1
-Iteration best found: 81
-Time best found: 664682
-
-Current time spent (so far): 811351
+Current time spent (so far): 1.10397e+09
 Solution
 > machineId: 0
-  fitness: 9.83391e+06
-  taskPos: 0 taskId: 156 ETC: 262855 priority: 0
-  taskPos: 1 taskId: 112 ETC: 13760.9 priority: 0
-  taskPos: 2 taskId: 128 ETC: 422766 priority: 0
-  taskPos: 3 taskId: 286 ETC: 279522 priority: 0
-  taskPos: 4 taskId: 393 ETC: 577242 priority: 0
-  taskPos: 5 taskId: 158 ETC: 14251.2 priority: 0
-  taskPos: 6 taskId: 356 ETC: 890.898 priority: 0
-  taskPos: 7 taskId: 276 ETC: 24635.4 priority: 0
-  taskPos: 8 taskId: 308 ETC: 114822 priority: 0
-  taskPos: 9 taskId: 406 ETC: 838593 priority: 0
-  taskPos: 10 taskId: 315 ETC: 82542.2 priority: 0
-  taskPos: 11 taskId: 363 ETC: 131325 priority: 0
-  taskPos: 12 taskId: 230 ETC: 111757 priority: 0
-  taskPos: 13 taskId: 357 ETC: 196117 priority: 0
-  taskPos: 14 taskId: 219 ETC: 47568.5 priority: 0
-  taskPos: 15 taskId: 49 ETC: 51265.5 priority: 0
-  taskPos: 16 taskId: 52 ETC: 29292.1 priority: 0
-  taskPos: 17 taskId: 59 ETC: 100578 priority: 0
-  taskPos: 18 taskId: 134 ETC: 353846 priority: 0
-  taskPos: 19 taskId: 354 ETC: 89909 priority: 0
-  taskPos: 20 taskId: 369 ETC: 108539 priority: 0
-  taskPos: 21 taskId: 20 ETC: 62780.5 priority: 0
-  taskPos: 22 taskId: 398 ETC: 123685 priority: 0
-  taskPos: 23 taskId: 311 ETC: 98119.3 priority: 0
-  taskPos: 24 taskId: 336 ETC: 350858 priority: 0
-  taskPos: 25 taskId: 362 ETC: 72072.2 priority: 0
-  taskPos: 26 taskId: 83 ETC: 4193.71 priority: 0
-  taskPos: 27 taskId: 58 ETC: 595533 priority: 0
-  taskPos: 28 taskId: 287 ETC: 437588 priority: 0
-  taskPos: 29 taskId: 228 ETC: 409117 priority: 0
-  taskPos: 30 taskId: 89 ETC: 202676 priority: 0
-  taskPos: 31 taskId: 229 ETC: 317826 priority: 0
-  taskPos: 32 taskId: 135 ETC: 4896.61 priority: 0
-  taskPos: 33 taskId: 105 ETC: 20145.3 priority: 0
-  taskPos: 34 taskId: 256 ETC: 32979.5 priority: 0
-  taskPos: 35 taskId: 48 ETC: 217403 priority: 0
-  taskPos: 36 taskId: 22 ETC: 280062 priority: 0
-  taskPos: 37 taskId: 502 ETC: 485219 priority: 0
-  taskPos: 38 taskId: 191 ETC: 231116 priority: 0
-  taskPos: 39 taskId: 165 ETC: 44719 priority: 0
-  taskPos: 40 taskId: 150 ETC: 255801 priority: 0
-  taskPos: 41 taskId: 289 ETC: 191984 priority: 0
-  taskPos: 42 taskId: 325 ETC: 81223.6 priority: 0
-  taskPos: 43 taskId: 10 ETC: 5070.88 priority: 0
-  taskPos: 44 taskId: 136 ETC: 2196.6 priority: 0
-  taskPos: 45 taskId: 384 ETC: 482854 priority: 0
-  taskPos: 46 taskId: 227 ETC: 61368.7 priority: 0
-  taskPos: 47 taskId: 132 ETC: 149250 priority: 0
-  taskPos: 48 taskId: 36 ETC: 246194 priority: 0
-  taskPos: 49 taskId: 242 ETC: 20005.9 priority: 0
-  taskPos: 50 taskId: 119 ETC: 193060 priority: 0
-  taskPos: 51 taskId: 353 ETC: 25336.4 priority: 0
-  taskPos: 52 taskId: 69 ETC: 47384.3 priority: 0
-  taskPos: 53 taskId: 251 ETC: 6909.2 priority: 0
-  taskPos: 54 taskId: 71 ETC: 13554.7 priority: 0
-  taskPos: 55 taskId: 7 ETC: 104746 priority: 0
-  taskPos: 56 taskId: 189 ETC: 15478.4 priority: 0
-  taskPos: 57 taskId: 106 ETC: 29411.1 priority: 0
-  taskPos: 58 taskId: 255 ETC: 22095.6 priority: 0
-  taskPos: 59 taskId: 176 ETC: 14105.8 priority: 0
-  taskPos: 60 taskId: 94 ETC: 22809.8 priority: 0
+  fitness: 1.82858e+07
+  taskPos: 0 taskId: 309 ETC: 450412 priority: 0
+  taskPos: 1 taskId: 354 ETC: 89909 priority: 0
+  taskPos: 2 taskId: 30 ETC: 45778.2 priority: 0
+  taskPos: 3 taskId: 100 ETC: 213052 priority: 0
+  taskPos: 4 taskId: 198 ETC: 25277 priority: 0
+  taskPos: 5 taskId: 270 ETC: 19808.2 priority: 0
+  taskPos: 6 taskId: 316 ETC: 86864.3 priority: 0
+  taskPos: 7 taskId: 89 ETC: 202676 priority: 0
+  taskPos: 8 taskId: 188 ETC: 40885.6 priority: 0
+  taskPos: 9 taskId: 313 ETC: 34966.7 priority: 0
+  taskPos: 10 taskId: 146 ETC: 8386.68 priority: 0
+  taskPos: 11 taskId: 435 ETC: 54703.2 priority: 0
+  taskPos: 12 taskId: 357 ETC: 196117 priority: 0
+  taskPos: 13 taskId: 216 ETC: 47252.2 priority: 0
+  taskPos: 14 taskId: 331 ETC: 99206 priority: 0
+  taskPos: 15 taskId: 3 ETC: 48802.6 priority: 0
+  taskPos: 16 taskId: 336 ETC: 350858 priority: 0
+  taskPos: 17 taskId: 297 ETC: 84851.2 priority: 0
+  taskPos: 18 taskId: 294 ETC: 10292.3 priority: 0
+  taskPos: 19 taskId: 129 ETC: 25200.9 priority: 0
+  taskPos: 20 taskId: 284 ETC: 232108 priority: 0
+  taskPos: 21 taskId: 347 ETC: 18624.1 priority: 0
+  taskPos: 22 taskId: 302 ETC: 16082.6 priority: 0
+  taskPos: 23 taskId: 282 ETC: 21379.8 priority: 0
+  taskPos: 24 taskId: 36 ETC: 246194 priority: 0
+  taskPos: 25 taskId: 236 ETC: 38738.5 priority: 0
+  taskPos: 26 taskId: 154 ETC: 533064 priority: 0
+  taskPos: 27 taskId: 371 ETC: 16085.6 priority: 0
+  taskPos: 28 taskId: 310 ETC: 222937 priority: 0
+  taskPos: 29 taskId: 393 ETC: 577242 priority: 0
+  taskPos: 30 taskId: 315 ETC: 82542.2 priority: 0
+  taskPos: 31 taskId: 308 ETC: 114822 priority: 0
+  taskPos: 32 taskId: 10 ETC: 5070.88 priority: 0
+  taskPos: 33 taskId: 189 ETC: 15478.4 priority: 0
+  taskPos: 34 taskId: 178 ETC: 241306 priority: 0
+  taskPos: 35 taskId: 398 ETC: 123685 priority: 0
+  taskPos: 36 taskId: 342 ETC: 381294 priority: 0
+  taskPos: 37 taskId: 259 ETC: 228096 priority: 0
+  taskPos: 38 taskId: 239 ETC: 193620 priority: 0
+  taskPos: 39 taskId: 177 ETC: 23819.9 priority: 0
+  taskPos: 40 taskId: 145 ETC: 95342.1 priority: 0
+  taskPos: 41 taskId: 351 ETC: 33243.7 priority: 0
+  taskPos: 42 taskId: 62 ETC: 178711 priority: 0
+  taskPos: 43 taskId: 125 ETC: 23882.7 priority: 0
+  taskPos: 44 taskId: 326 ETC: 11978.4 priority: 0
+  taskPos: 45 taskId: 191 ETC: 231116 priority: 0
+  taskPos: 46 taskId: 328 ETC: 13013 priority: 0
+  taskPos: 47 taskId: 273 ETC: 34386.9 priority: 0
+  taskPos: 48 taskId: 320 ETC: 5536.05 priority: 0
+  taskPos: 49 taskId: 304 ETC: 82162.7 priority: 0
+  taskPos: 50 taskId: 200 ETC: 24448.2 priority: 0
+  taskPos: 51 taskId: 422 ETC: 110798 priority: 0
+  taskPos: 52 taskId: 242 ETC: 20005.9 priority: 0
+  taskPos: 53 taskId: 271 ETC: 61030.8 priority: 0
+  taskPos: 54 taskId: 132 ETC: 149250 priority: 0
+  taskPos: 55 taskId: 153 ETC: 26726.1 priority: 0
+  taskPos: 56 taskId: 227 ETC: 61368.7 priority: 0
+  taskPos: 57 taskId: 205 ETC: 92005.6 priority: 0
+  taskPos: 58 taskId: 318 ETC: 19110.2 priority: 0
+  taskPos: 59 taskId: 73 ETC: 171694 priority: 0
+  taskPos: 60 taskId: 192 ETC: 30668.4 priority: 0
+  taskPos: 61 taskId: 244 ETC: 142590 priority: 0
+  taskPos: 62 taskId: 355 ETC: 33842.4 priority: 0
+  taskPos: 63 taskId: 256 ETC: 32979.5 priority: 0
+  taskPos: 64 taskId: 362 ETC: 72072.2 priority: 0
+  taskPos: 65 taskId: 230 ETC: 111757 priority: 0
+  taskPos: 66 taskId: 170 ETC: 163767 priority: 0
+  taskPos: 67 taskId: 213 ETC: 39357.7 priority: 0
+  taskPos: 68 taskId: 155 ETC: 15431.9 priority: 0
+  taskPos: 69 taskId: 215 ETC: 59420.2 priority: 0
+  taskPos: 70 taskId: 291 ETC: 13324.8 priority: 0
+  taskPos: 71 taskId: 245 ETC: 287422 priority: 0
+  taskPos: 72 taskId: 339 ETC: 26258.8 priority: 0
+  taskPos: 73 taskId: 300 ETC: 1855.96 priority: 0
+  taskPos: 74 taskId: 24 ETC: 19240.4 priority: 0
+  taskPos: 75 taskId: 295 ETC: 109467 priority: 0
+  taskPos: 76 taskId: 248 ETC: 155554 priority: 0
+  taskPos: 77 taskId: 22 ETC: 280062 priority: 0
+  taskPos: 78 taskId: 156 ETC: 262855 priority: 0
+  taskPos: 79 taskId: 80 ETC: 31733 priority: 0
+  taskPos: 80 taskId: 224 ETC: 22852.6 priority: 0
+  taskPos: 81 taskId: 276 ETC: 24635.4 priority: 0
+  taskPos: 82 taskId: 157 ETC: 76817.2 priority: 0
+  taskPos: 83 taskId: 164 ETC: 66933.2 priority: 0
+  taskPos: 84 taskId: 42 ETC: 314081 priority: 0
+  taskPos: 85 taskId: 185 ETC: 21837.8 priority: 0
+  taskPos: 86 taskId: 277 ETC: 57526.2 priority: 0
+  taskPos: 87 taskId: 151 ETC: 45950 priority: 0
+  taskPos: 88 taskId: 54 ETC: 5959.42 priority: 0
+  taskPos: 89 taskId: 250 ETC: 180408 priority: 0
+  taskPos: 90 taskId: 265 ETC: 4861.76 priority: 0
+  taskPos: 91 taskId: 87 ETC: 108808 priority: 0
+  taskPos: 92 taskId: 66 ETC: 11645 priority: 0
+  taskPos: 93 taskId: 2 ETC: 169864 priority: 0
+  taskPos: 94 taskId: 5 ETC: 27957.7 priority: 0
+  taskPos: 95 taskId: 7 ETC: 104746 priority: 0
+  taskPos: 96 taskId: 44 ETC: 459624 priority: 0
+  taskPos: 97 taskId: 25 ETC: 731.932 priority: 0
+  taskPos: 98 taskId: 23 ETC: 44134.6 priority: 0
+  taskPos: 99 taskId: 246 ETC: 34193.3 priority: 0
+  taskPos: 100 taskId: 203 ETC: 1366.39 priority: 0
+  taskPos: 101 taskId: 228 ETC: 409117 priority: 0
+  taskPos: 102 taskId: 60 ETC: 282523 priority: 0
+  taskPos: 103 taskId: 117 ETC: 149647 priority: 0
+  taskPos: 104 taskId: 15 ETC: 119185 priority: 0
+  taskPos: 105 taskId: 49 ETC: 51265.5 priority: 0
+  taskPos: 106 taskId: 19 ETC: 105099 priority: 0
+  taskPos: 107 taskId: 219 ETC: 47568.5 priority: 0
+  taskPos: 108 taskId: 56 ETC: 3479.98 priority: 0
+  taskPos: 109 taskId: 43 ETC: 166619 priority: 0
+  taskPos: 110 taskId: 69 ETC: 47384.3 priority: 0
+  taskPos: 111 taskId: 206 ETC: 76212.3 priority: 0
+  taskPos: 112 taskId: 209 ETC: 117753 priority: 0
+  taskPos: 113 taskId: 20 ETC: 62780.5 priority: 0
+  taskPos: 114 taskId: 112 ETC: 13760.9 priority: 0
+  taskPos: 115 taskId: 184 ETC: 278113 priority: 0
+  taskPos: 116 taskId: 325 ETC: 81223.6 priority: 0
+  taskPos: 117 taskId: 78 ETC: 231839 priority: 0
+  taskPos: 118 taskId: 134 ETC: 353846 priority: 0
+  taskPos: 119 taskId: 90 ETC: 63930.8 priority: 0
+  taskPos: 120 taskId: 401 ETC: 306260 priority: 0
+  taskPos: 121 taskId: 262 ETC: 21607.2 priority: 0
+  taskPos: 122 taskId: 187 ETC: 1098.26 priority: 0
+  taskPos: 123 taskId: 186 ETC: 8677.35 priority: 0
+  taskPos: 124 taskId: 233 ETC: 10748.9 priority: 0
+  taskPos: 125 taskId: 59 ETC: 100578 priority: 0
+  taskPos: 126 taskId: 64 ETC: 12434.3 priority: 0
+  taskPos: 127 taskId: 21 ETC: 194660 priority: 0
+  taskPos: 128 taskId: 212 ETC: 17088.4 priority: 0
+  taskPos: 129 taskId: 121 ETC: 55120.4 priority: 0
+  taskPos: 130 taskId: 12 ETC: 216467 priority: 0
+  taskPos: 131 taskId: 197 ETC: 106089 priority: 0
+  taskPos: 132 taskId: 290 ETC: 200850 priority: 0
+  taskPos: 133 taskId: 150 ETC: 255801 priority: 0
+  taskPos: 134 taskId: 128 ETC: 422766 priority: 0
+  taskPos: 135 taskId: 254 ETC: 4566.12 priority: 0
+  taskPos: 136 taskId: 286 ETC: 279522 priority: 0
+  taskPos: 137 taskId: 70 ETC: 253011 priority: 0
+  taskPos: 138 taskId: 142 ETC: 66433.8 priority: 0
+  taskPos: 139 taskId: 168 ETC: 11397.5 priority: 0
+  taskPos: 140 taskId: 67 ETC: 28239.6 priority: 0
+  taskPos: 141 taskId: 163 ETC: 157343 priority: 0
+  taskPos: 142 taskId: 9 ETC: 984.739 priority: 0
+  taskPos: 143 taskId: 116 ETC: 45605.4 priority: 0
+  taskPos: 144 taskId: 71 ETC: 13554.7 priority: 0
+  taskPos: 145 taskId: 287 ETC: 437588 priority: 0
+  taskPos: 146 taskId: 222 ETC: 38403.9 priority: 0
+  taskPos: 147 taskId: 4 ETC: 42091.1 priority: 0
+  taskPos: 148 taskId: 33 ETC: 53223.6 priority: 0
+  taskPos: 149 taskId: 48 ETC: 217403 priority: 0
+  taskPos: 150 taskId: 220 ETC: 16264.1 priority: 0
+  taskPos: 151 taskId: 123 ETC: 8380.11 priority: 0
+  taskPos: 152 taskId: 258 ETC: 68238.2 priority: 0
+  taskPos: 153 taskId: 101 ETC: 31287.8 priority: 0
+  taskPos: 154 taskId: 58 ETC: 595533 priority: 0
+  taskPos: 155 taskId: 190 ETC: 300659 priority: 0
+  taskPos: 156 taskId: 144 ETC: 40332.5 priority: 0
+  taskPos: 157 taskId: 65 ETC: 83854.9 priority: 0
+  taskPos: 158 taskId: 106 ETC: 29411.1 priority: 0
+  taskPos: 159 taskId: 57 ETC: 104839 priority: 0
+  taskPos: 160 taskId: 175 ETC: 64836.6 priority: 0
+  taskPos: 161 taskId: 32 ETC: 113331 priority: 0
 > machineId: 1
-  fitness: 1.02288e+07
-  taskPos: 0 taskId: 420 ETC: 72886.6 priority: 0
-  taskPos: 1 taskId: 70 ETC: 258739 priority: 0
-  taskPos: 2 taskId: 371 ETC: 37944.5 priority: 0
-  taskPos: 3 taskId: 238 ETC: 387224 priority: 0
-  taskPos: 4 taskId: 8 ETC: 102669 priority: 0
-  taskPos: 5 taskId: 5 ETC: 79808.7 priority: 0
-  taskPos: 6 taskId: 39 ETC: 597556 priority: 0
-  taskPos: 7 taskId: 436 ETC: 525279 priority: 0
-  taskPos: 8 taskId: 437 ETC: 435501 priority: 0
-  taskPos: 9 taskId: 427 ETC: 160383 priority: 0
-  taskPos: 10 taskId: 495 ETC: 109594 priority: 0
-  taskPos: 11 taskId: 335 ETC: 246658 priority: 0
-  taskPos: 12 taskId: 343 ETC: 225366 priority: 0
-  taskPos: 13 taskId: 392 ETC: 31086.4 priority: 0
-  taskPos: 14 taskId: 210 ETC: 66037.4 priority: 0
-  taskPos: 15 taskId: 480 ETC: 30321 priority: 0
-  taskPos: 16 taskId: 298 ETC: 73867 priority: 0
-  taskPos: 17 taskId: 316 ETC: 209221 priority: 0
-  taskPos: 18 taskId: 147 ETC: 240074 priority: 0
-  taskPos: 19 taskId: 484 ETC: 96215.6 priority: 0
-  taskPos: 20 taskId: 359 ETC: 48982.7 priority: 0
-  taskPos: 21 taskId: 364 ETC: 83667 priority: 0
-  taskPos: 22 taskId: 169 ETC: 142463 priority: 0
-  taskPos: 23 taskId: 273 ETC: 46645.3 priority: 0
-  taskPos: 24 taskId: 41 ETC: 70486.6 priority: 0
-  taskPos: 25 taskId: 168 ETC: 31823.7 priority: 0
-  taskPos: 26 taskId: 26 ETC: 368970 priority: 0
-  taskPos: 27 taskId: 454 ETC: 57503.8 priority: 0
-  taskPos: 28 taskId: 377 ETC: 127128 priority: 0
-  taskPos: 29 taskId: 294 ETC: 229209 priority: 0
-  taskPos: 30 taskId: 60 ETC: 445982 priority: 0
-  taskPos: 31 taskId: 431 ETC: 71379.9 priority: 0
-  taskPos: 32 taskId: 302 ETC: 122468 priority: 0
-  taskPos: 33 taskId: 257 ETC: 29612.6 priority: 0
-  taskPos: 34 taskId: 500 ETC: 74028.6 priority: 0
-  taskPos: 35 taskId: 367 ETC: 136067 priority: 0
-  taskPos: 36 taskId: 77 ETC: 2973.91 priority: 0
-  taskPos: 37 taskId: 127 ETC: 58054.2 priority: 0
-  taskPos: 38 taskId: 462 ETC: 12021 priority: 0
-  taskPos: 39 taskId: 423 ETC: 63134.2 priority: 0
-  taskPos: 40 taskId: 439 ETC: 169862 priority: 0
-  taskPos: 41 taskId: 403 ETC: 991.02 priority: 0
-  taskPos: 42 taskId: 268 ETC: 533828 priority: 0
-  taskPos: 43 taskId: 93 ETC: 68284.1 priority: 0
-  taskPos: 44 taskId: 240 ETC: 131673 priority: 0
-  taskPos: 45 taskId: 275 ETC: 171900 priority: 0
-  taskPos: 46 taskId: 180 ETC: 456903 priority: 0
-  taskPos: 47 taskId: 498 ETC: 258610 priority: 0
-  taskPos: 48 taskId: 197 ETC: 119816 priority: 0
-  taskPos: 49 taskId: 351 ETC: 518420 priority: 0
-  taskPos: 50 taskId: 288 ETC: 33401.3 priority: 0
-  taskPos: 51 taskId: 92 ETC: 227669 priority: 0
-  taskPos: 52 taskId: 320 ETC: 159841 priority: 0
-  taskPos: 53 taskId: 195 ETC: 300100 priority: 0
-  taskPos: 54 taskId: 50 ETC: 349523 priority: 0
-  taskPos: 55 taskId: 15 ETC: 489311 priority: 0
-  taskPos: 56 taskId: 139 ETC: 29630.7 priority: 0
+  fitness: 1.83666e+07
+  taskPos: 0 taskId: 352 ETC: 63963 priority: 0
+  taskPos: 1 taskId: 341 ETC: 87779.8 priority: 0
+  taskPos: 2 taskId: 410 ETC: 2220.18 priority: 0
+  taskPos: 3 taskId: 268 ETC: 533828 priority: 0
+  taskPos: 4 taskId: 438 ETC: 40250.5 priority: 0
+  taskPos: 5 taskId: 238 ETC: 387224 priority: 0
+  taskPos: 6 taskId: 335 ETC: 246658 priority: 0
+  taskPos: 7 taskId: 31 ETC: 100543 priority: 0
+  taskPos: 8 taskId: 383 ETC: 32067.2 priority: 0
+  taskPos: 9 taskId: 104 ETC: 36697.2 priority: 0
+  taskPos: 10 taskId: 509 ETC: 24038.2 priority: 0
+  taskPos: 11 taskId: 324 ETC: 412637 priority: 0
+  taskPos: 12 taskId: 376 ETC: 42181.2 priority: 0
+  taskPos: 13 taskId: 459 ETC: 270497 priority: 0
+  taskPos: 14 taskId: 495 ETC: 109594 priority: 0
+  taskPos: 15 taskId: 348 ETC: 647204 priority: 0
+  taskPos: 16 taskId: 374 ETC: 1187 priority: 0
+  taskPos: 17 taskId: 454 ETC: 57503.8 priority: 0
+  taskPos: 18 taskId: 490 ETC: 365294 priority: 0
+  taskPos: 19 taskId: 390 ETC: 82605.8 priority: 0
+  taskPos: 20 taskId: 428 ETC: 80896.9 priority: 0
+  taskPos: 21 taskId: 275 ETC: 171900 priority: 0
+  taskPos: 22 taskId: 429 ETC: 5101.99 priority: 0
+  taskPos: 23 taskId: 391 ETC: 380871 priority: 0
+  taskPos: 24 taskId: 368 ETC: 311446 priority: 0
+  taskPos: 25 taskId: 204 ETC: 1449.61 priority: 0
+  taskPos: 26 taskId: 283 ETC: 42032.3 priority: 0
+  taskPos: 27 taskId: 468 ETC: 60774.5 priority: 0
+  taskPos: 28 taskId: 307 ETC: 83493.8 priority: 0
+  taskPos: 29 taskId: 16 ETC: 136978 priority: 0
+  taskPos: 30 taskId: 444 ETC: 57001.3 priority: 0
+  taskPos: 31 taskId: 414 ETC: 515759 priority: 0
+  taskPos: 32 taskId: 489 ETC: 4730 priority: 0
+  taskPos: 33 taskId: 278 ETC: 5557.81 priority: 0
+  taskPos: 34 taskId: 84 ETC: 75048 priority: 0
+  taskPos: 35 taskId: 97 ETC: 104545 priority: 0
+  taskPos: 36 taskId: 201 ETC: 4094.56 priority: 0
+  taskPos: 37 taskId: 52 ETC: 34747.1 priority: 0
+  taskPos: 38 taskId: 136 ETC: 145698 priority: 0
+  taskPos: 39 taskId: 240 ETC: 131673 priority: 0
+  taskPos: 40 taskId: 442 ETC: 20440.3 priority: 0
+  taskPos: 41 taskId: 497 ETC: 109008 priority: 0
+  taskPos: 42 taskId: 257 ETC: 29612.6 priority: 0
+  taskPos: 43 taskId: 237 ETC: 11183.8 priority: 0
+  taskPos: 44 taskId: 322 ETC: 34966.7 priority: 0
+  taskPos: 45 taskId: 406 ETC: 60296.1 priority: 0
+  taskPos: 46 taskId: 252 ETC: 75401.7 priority: 0
+  taskPos: 47 taskId: 494 ETC: 116534 priority: 0
+  taskPos: 48 taskId: 214 ETC: 37815.8 priority: 0
+  taskPos: 49 taskId: 229 ETC: 318956 priority: 0
+  taskPos: 50 taskId: 502 ETC: 160951 priority: 0
+  taskPos: 51 taskId: 124 ETC: 31385.4 priority: 0
+  taskPos: 52 taskId: 361 ETC: 44604.7 priority: 0
+  taskPos: 53 taskId: 122 ETC: 136875 priority: 0
+  taskPos: 54 taskId: 127 ETC: 58054.2 priority: 0
+  taskPos: 55 taskId: 152 ETC: 84426.3 priority: 0
+  taskPos: 56 taskId: 472 ETC: 18266 priority: 0
+  taskPos: 57 taskId: 424 ETC: 3247.75 priority: 0
+  taskPos: 58 taskId: 427 ETC: 160383 priority: 0
+  taskPos: 59 taskId: 37 ETC: 116663 priority: 0
+  taskPos: 60 taskId: 498 ETC: 258610 priority: 0
+  taskPos: 61 taskId: 207 ETC: 484387 priority: 0
+  taskPos: 62 taskId: 99 ETC: 69493.2 priority: 0
+  taskPos: 63 taskId: 359 ETC: 48982.7 priority: 0
+  taskPos: 64 taskId: 394 ETC: 52911.5 priority: 0
+  taskPos: 65 taskId: 161 ETC: 324677 priority: 0
+  taskPos: 66 taskId: 194 ETC: 195560 priority: 0
+  taskPos: 67 taskId: 358 ETC: 29105.9 priority: 0
+  taskPos: 68 taskId: 482 ETC: 166542 priority: 0
+  taskPos: 69 taskId: 488 ETC: 7159.9 priority: 0
+  taskPos: 70 taskId: 26 ETC: 368970 priority: 0
+  taskPos: 71 taskId: 303 ETC: 188853 priority: 0
+  taskPos: 72 taskId: 345 ETC: 399495 priority: 0
+  taskPos: 73 taskId: 143 ETC: 198624 priority: 0
+  taskPos: 74 taskId: 8 ETC: 102669 priority: 0
+  taskPos: 75 taskId: 408 ETC: 104294 priority: 0
+  taskPos: 76 taskId: 269 ETC: 29673.7 priority: 0
+  taskPos: 77 taskId: 450 ETC: 68630.6 priority: 0
+  taskPos: 78 taskId: 311 ETC: 390761 priority: 0
+  taskPos: 79 taskId: 288 ETC: 33401.3 priority: 0
+  taskPos: 80 taskId: 255 ETC: 30261.1 priority: 0
+  taskPos: 81 taskId: 293 ETC: 227764 priority: 0
+  taskPos: 82 taskId: 449 ETC: 49230 priority: 0
+  taskPos: 83 taskId: 195 ETC: 300100 priority: 0
+  taskPos: 84 taskId: 491 ETC: 30907.9 priority: 0
+  taskPos: 85 taskId: 404 ETC: 49629.9 priority: 0
+  taskPos: 86 taskId: 292 ETC: 54135.8 priority: 0
+  taskPos: 87 taskId: 18 ETC: 23523.8 priority: 0
+  taskPos: 88 taskId: 181 ETC: 85352.4 priority: 0
+  taskPos: 89 taskId: 484 ETC: 96215.6 priority: 0
+  taskPos: 90 taskId: 426 ETC: 5535.18 priority: 0
+  taskPos: 91 taskId: 478 ETC: 28299.4 priority: 0
+  taskPos: 92 taskId: 118 ETC: 49791.3 priority: 0
+  taskPos: 93 taskId: 81 ETC: 525796 priority: 0
+  taskPos: 94 taskId: 82 ETC: 177969 priority: 0
+  taskPos: 95 taskId: 264 ETC: 17135 priority: 0
+  taskPos: 96 taskId: 108 ETC: 107821 priority: 0
+  taskPos: 97 taskId: 272 ETC: 71366.7 priority: 0
+  taskPos: 98 taskId: 330 ETC: 50900.7 priority: 0
+  taskPos: 99 taskId: 363 ETC: 276019 priority: 0
+  taskPos: 100 taskId: 431 ETC: 71379.9 priority: 0
+  taskPos: 101 taskId: 261 ETC: 218954 priority: 0
+  taskPos: 102 taskId: 165 ETC: 158794 priority: 0
+  taskPos: 103 taskId: 437 ETC: 435501 priority: 0
+  taskPos: 104 taskId: 298 ETC: 73867 priority: 0
+  taskPos: 105 taskId: 105 ETC: 93987 priority: 0
+  taskPos: 106 taskId: 55 ETC: 211103 priority: 0
+  taskPos: 107 taskId: 148 ETC: 65186.6 priority: 0
+  taskPos: 108 taskId: 1 ETC: 29484.4 priority: 0
+  taskPos: 109 taskId: 202 ETC: 640.164 priority: 0
+  taskPos: 110 taskId: 306 ETC: 117079 priority: 0
+  taskPos: 111 taskId: 364 ETC: 83667 priority: 0
+  taskPos: 112 taskId: 169 ETC: 142463 priority: 0
+  taskPos: 113 taskId: 147 ETC: 240074 priority: 0
+  taskPos: 114 taskId: 399 ETC: 231363 priority: 0
+  taskPos: 115 taskId: 231 ETC: 67411.7 priority: 0
+  taskPos: 116 taskId: 113 ETC: 39874.7 priority: 0
+  taskPos: 117 taskId: 160 ETC: 486317 priority: 0
+  taskPos: 118 taskId: 39 ETC: 597556 priority: 0
+  taskPos: 119 taskId: 171 ETC: 105185 priority: 0
+  taskPos: 120 taskId: 241 ETC: 253834 priority: 0
+  taskPos: 121 taskId: 340 ETC: 28743.1 priority: 0
+  taskPos: 122 taskId: 41 ETC: 70486.6 priority: 0
+  taskPos: 123 taskId: 353 ETC: 81483.4 priority: 0
+  taskPos: 124 taskId: 138 ETC: 100155 priority: 0
+  taskPos: 125 taskId: 130 ETC: 58915 priority: 0
+  taskPos: 126 taskId: 243 ETC: 51707 priority: 0
+  taskPos: 127 taskId: 395 ETC: 143946 priority: 0
+  taskPos: 128 taskId: 225 ETC: 82726.4 priority: 0
+  taskPos: 129 taskId: 63 ETC: 21422.4 priority: 0
+  taskPos: 130 taskId: 91 ETC: 77147.6 priority: 0
+  taskPos: 131 taskId: 162 ETC: 126545 priority: 0
+  taskPos: 132 taskId: 235 ETC: 123416 priority: 0
+  taskPos: 133 taskId: 27 ETC: 107221 priority: 0
+  taskPos: 134 taskId: 266 ETC: 752.643 priority: 0
+  taskPos: 135 taskId: 119 ETC: 260809 priority: 0
 > machineId: 2
-  fitness: 1.46415e+07
-  taskPos: 0 taskId: 457 ETC: 197005 priority: 0
-  taskPos: 1 taskId: 481 ETC: 291372 priority: 0
-  taskPos: 2 taskId: 456 ETC: 11634.8 priority: 0
-  taskPos: 3 taskId: 338 ETC: 55691.3 priority: 0
-  taskPos: 4 taskId: 265 ETC: 263353 priority: 0
-  taskPos: 5 taskId: 355 ETC: 270249 priority: 0
-  taskPos: 6 taskId: 76 ETC: 220749 priority: 0
-  taskPos: 7 taskId: 328 ETC: 551556 priority: 0
-  taskPos: 8 taskId: 376 ETC: 47861.8 priority: 0
-  taskPos: 9 taskId: 155 ETC: 55609.3 priority: 0
-  taskPos: 10 taskId: 42 ETC: 598714 priority: 0
-  taskPos: 11 taskId: 252 ETC: 105806 priority: 0
-  taskPos: 12 taskId: 109 ETC: 170838 priority: 0
-  taskPos: 13 taskId: 474 ETC: 39084.7 priority: 0
-  taskPos: 14 taskId: 352 ETC: 345744 priority: 0
-  taskPos: 15 taskId: 349 ETC: 218878 priority: 0
-  taskPos: 16 taskId: 270 ETC: 289138 priority: 0
-  taskPos: 17 taskId: 441 ETC: 350699 priority: 0
-  taskPos: 18 taskId: 162 ETC: 237737 priority: 0
-  taskPos: 19 taskId: 491 ETC: 31166 priority: 0
-  taskPos: 20 taskId: 183 ETC: 358253 priority: 0
-  taskPos: 21 taskId: 55 ETC: 220288 priority: 0
-  taskPos: 22 taskId: 383 ETC: 34868.9 priority: 0
-  taskPos: 23 taskId: 54 ETC: 65832.7 priority: 0
-  taskPos: 24 taskId: 443 ETC: 317652 priority: 0
-  taskPos: 25 taskId: 446 ETC: 129972 priority: 0
-  taskPos: 26 taskId: 497 ETC: 615732 priority: 0
-  taskPos: 27 taskId: 107 ETC: 112094 priority: 0
-  taskPos: 28 taskId: 312 ETC: 11372.9 priority: 0
-  taskPos: 29 taskId: 35 ETC: 207445 priority: 0
-  taskPos: 30 taskId: 166 ETC: 177753 priority: 0
-  taskPos: 31 taskId: 332 ETC: 134144 priority: 0
-  taskPos: 32 taskId: 224 ETC: 260859 priority: 0
-  taskPos: 33 taskId: 361 ETC: 55958 priority: 0
-  taskPos: 34 taskId: 248 ETC: 439949 priority: 0
-  taskPos: 35 taskId: 78 ETC: 272118 priority: 0
-  taskPos: 36 taskId: 170 ETC: 400111 priority: 0
-  taskPos: 37 taskId: 86 ETC: 321863 priority: 0
-  taskPos: 38 taskId: 163 ETC: 457899 priority: 0
-  taskPos: 39 taskId: 102 ETC: 556975 priority: 0
-  taskPos: 40 taskId: 200 ETC: 57382.1 priority: 0
-  taskPos: 41 taskId: 485 ETC: 488763 priority: 0
-  taskPos: 42 taskId: 295 ETC: 317411 priority: 0
-  taskPos: 43 taskId: 277 ETC: 719324 priority: 0
-  taskPos: 44 taskId: 263 ETC: 299211 priority: 0
-  taskPos: 45 taskId: 296 ETC: 599174 priority: 0
-  taskPos: 46 taskId: 12 ETC: 388940 priority: 0
-  taskPos: 47 taskId: 247 ETC: 68583.8 priority: 0
-  taskPos: 48 taskId: 101 ETC: 99318.8 priority: 0
-  taskPos: 49 taskId: 310 ETC: 543799 priority: 0
-  taskPos: 50 taskId: 33 ETC: 284661 priority: 0
-  taskPos: 51 taskId: 80 ETC: 562885 priority: 0
-  taskPos: 52 taskId: 237 ETC: 22580.8 priority: 0
-  taskPos: 53 taskId: 185 ETC: 241311 priority: 0
-  taskPos: 54 taskId: 74 ETC: 64505.8 priority: 0
-  taskPos: 55 taskId: 181 ETC: 379650 priority: 0
+  fitness: 2.03685e+07
+  taskPos: 0 taskId: 506 ETC: 291734 priority: 0
+  taskPos: 1 taskId: 323 ETC: 32886.1 priority: 0
+  taskPos: 2 taskId: 17 ETC: 248695 priority: 0
+  taskPos: 3 taskId: 385 ETC: 65928.2 priority: 0
+  taskPos: 4 taskId: 479 ETC: 40316.6 priority: 0
+  taskPos: 5 taskId: 285 ETC: 179073 priority: 0
+  taskPos: 6 taskId: 481 ETC: 291372 priority: 0
+  taskPos: 7 taskId: 296 ETC: 599174 priority: 0
+  taskPos: 8 taskId: 463 ETC: 8763.36 priority: 0
+  taskPos: 9 taskId: 166 ETC: 177753 priority: 0
+  taskPos: 10 taskId: 415 ETC: 40300.9 priority: 0
+  taskPos: 11 taskId: 462 ETC: 26891.4 priority: 0
+  taskPos: 12 taskId: 411 ETC: 80129.4 priority: 0
+  taskPos: 13 taskId: 486 ETC: 174652 priority: 0
+  taskPos: 14 taskId: 109 ETC: 170838 priority: 0
+  taskPos: 15 taskId: 6 ETC: 433445 priority: 0
+  taskPos: 16 taskId: 441 ETC: 350699 priority: 0
+  taskPos: 17 taskId: 343 ETC: 569345 priority: 0
+  taskPos: 18 taskId: 218 ETC: 226279 priority: 0
+  taskPos: 19 taskId: 74 ETC: 64505.8 priority: 0
+  taskPos: 20 taskId: 439 ETC: 198545 priority: 0
+  taskPos: 21 taskId: 344 ETC: 4329.43 priority: 0
+  taskPos: 22 taskId: 476 ETC: 7769.29 priority: 0
+  taskPos: 23 taskId: 447 ETC: 291257 priority: 0
+  taskPos: 24 taskId: 432 ETC: 37106.6 priority: 0
+  taskPos: 25 taskId: 433 ETC: 165225 priority: 0
+  taskPos: 26 taskId: 460 ETC: 141458 priority: 0
+  taskPos: 27 taskId: 96 ETC: 82900.7 priority: 0
+  taskPos: 28 taskId: 510 ETC: 411548 priority: 0
+  taskPos: 29 taskId: 321 ETC: 237419 priority: 0
+  taskPos: 30 taskId: 337 ETC: 138490 priority: 0
+  taskPos: 31 taskId: 471 ETC: 480848 priority: 0
+  taskPos: 32 taskId: 474 ETC: 39084.7 priority: 0
+  taskPos: 33 taskId: 338 ETC: 55691.3 priority: 0
+  taskPos: 34 taskId: 405 ETC: 14145.2 priority: 0
+  taskPos: 35 taskId: 210 ETC: 77513 priority: 0
+  taskPos: 36 taskId: 475 ETC: 125750 priority: 0
+  taskPos: 37 taskId: 333 ETC: 298245 priority: 0
+  taskPos: 38 taskId: 334 ETC: 81499.3 priority: 0
+  taskPos: 39 taskId: 465 ETC: 227407 priority: 0
+  taskPos: 40 taskId: 102 ETC: 556975 priority: 0
+  taskPos: 41 taskId: 455 ETC: 225299 priority: 0
+  taskPos: 42 taskId: 372 ETC: 112723 priority: 0
+  taskPos: 43 taskId: 159 ETC: 153823 priority: 0
+  taskPos: 44 taskId: 402 ETC: 220359 priority: 0
+  taskPos: 45 taskId: 456 ETC: 11634.8 priority: 0
+  taskPos: 46 taskId: 267 ETC: 106133 priority: 0
+  taskPos: 47 taskId: 253 ETC: 744310 priority: 0
+  taskPos: 48 taskId: 387 ETC: 193547 priority: 0
+  taskPos: 49 taskId: 356 ETC: 76862 priority: 0
+  taskPos: 50 taskId: 349 ETC: 218878 priority: 0
+  taskPos: 51 taskId: 126 ETC: 459318 priority: 0
+  taskPos: 52 taskId: 469 ETC: 631732 priority: 0
+  taskPos: 53 taskId: 86 ETC: 321863 priority: 0
+  taskPos: 54 taskId: 68 ETC: 523455 priority: 0
+  taskPos: 55 taskId: 131 ETC: 522786 priority: 0
+  taskPos: 56 taskId: 446 ETC: 129972 priority: 0
+  taskPos: 57 taskId: 367 ETC: 272892 priority: 0
+  taskPos: 58 taskId: 452 ETC: 85346 priority: 0
+  taskPos: 59 taskId: 389 ETC: 146928 priority: 0
+  taskPos: 60 taskId: 46 ETC: 392894 priority: 0
+  taskPos: 61 taskId: 88 ETC: 303752 priority: 0
+  taskPos: 62 taskId: 75 ETC: 151467 priority: 0
+  taskPos: 63 taskId: 445 ETC: 338478 priority: 0
+  taskPos: 64 taskId: 260 ETC: 224639 priority: 0
+  taskPos: 65 taskId: 50 ETC: 448814 priority: 0
+  taskPos: 66 taskId: 196 ETC: 202300 priority: 0
+  taskPos: 67 taskId: 183 ETC: 358253 priority: 0
+  taskPos: 68 taskId: 137 ETC: 126775 priority: 0
+  taskPos: 69 taskId: 193 ETC: 125814 priority: 0
+  taskPos: 70 taskId: 199 ETC: 130587 priority: 0
+  taskPos: 71 taskId: 107 ETC: 112094 priority: 0
+  taskPos: 72 taskId: 217 ETC: 266254 priority: 0
+  taskPos: 73 taskId: 135 ETC: 27180.6 priority: 0
+  taskPos: 74 taskId: 430 ETC: 365104 priority: 0
+  taskPos: 75 taskId: 234 ETC: 1.14541e+06 priority: 0
+  taskPos: 76 taskId: 281 ETC: 875910 priority: 0
+  taskPos: 77 taskId: 226 ETC: 98530.3 priority: 0
+  taskPos: 78 taskId: 139 ETC: 35896.9 priority: 0
+  taskPos: 79 taskId: 93 ETC: 397423 priority: 0
+  taskPos: 80 taskId: 379 ETC: 19160.8 priority: 0
+  taskPos: 81 taskId: 92 ETC: 261111 priority: 0
+  taskPos: 82 taskId: 397 ETC: 8696.68 priority: 0
+  taskPos: 83 taskId: 319 ETC: 313868 priority: 0
+  taskPos: 84 taskId: 167 ETC: 420820 priority: 0
+  taskPos: 85 taskId: 141 ETC: 313407 priority: 0
 > machineId: 3
-  fitness: 1.6654e+07
-  taskPos: 0 taskId: 322 ETC: 71020.5 priority: 0
-  taskPos: 1 taskId: 399 ETC: 362325 priority: 0
-  taskPos: 2 taskId: 465 ETC: 398313 priority: 0
-  taskPos: 3 taskId: 281 ETC: 891211 priority: 0
-  taskPos: 4 taskId: 426 ETC: 341978 priority: 0
-  taskPos: 5 taskId: 113 ETC: 61479.2 priority: 0
-  taskPos: 6 taskId: 432 ETC: 106699 priority: 0
-  taskPos: 7 taskId: 153 ETC: 930409 priority: 0
-  taskPos: 8 taskId: 297 ETC: 360096 priority: 0
-  taskPos: 9 taskId: 331 ETC: 496585 priority: 0
-  taskPos: 10 taskId: 416 ETC: 146343 priority: 0
-  taskPos: 11 taskId: 283 ETC: 128925 priority: 0
-  taskPos: 12 taskId: 87 ETC: 512532 priority: 0
-  taskPos: 13 taskId: 204 ETC: 2936.69 priority: 0
-  taskPos: 14 taskId: 157 ETC: 560598 priority: 0
-  taskPos: 15 taskId: 30 ETC: 206951 priority: 0
-  taskPos: 16 taskId: 451 ETC: 85816.5 priority: 0
-  taskPos: 17 taskId: 404 ETC: 212485 priority: 0
-  taskPos: 18 taskId: 449 ETC: 343016 priority: 0
-  taskPos: 19 taskId: 212 ETC: 47140.8 priority: 0
-  taskPos: 20 taskId: 130 ETC: 445367 priority: 0
-  taskPos: 21 taskId: 323 ETC: 85911.2 priority: 0
-  taskPos: 22 taskId: 482 ETC: 492025 priority: 0
-  taskPos: 23 taskId: 463 ETC: 13670.6 priority: 0
-  taskPos: 24 taskId: 410 ETC: 43379.3 priority: 0
-  taskPos: 25 taskId: 182 ETC: 408706 priority: 0
-  taskPos: 26 taskId: 177 ETC: 29124.9 priority: 0
-  taskPos: 27 taskId: 272 ETC: 384414 priority: 0
-  taskPos: 28 taskId: 274 ETC: 65370.4 priority: 0
-  taskPos: 29 taskId: 122 ETC: 334402 priority: 0
-  taskPos: 30 taskId: 380 ETC: 79770.9 priority: 0
-  taskPos: 31 taskId: 209 ETC: 565035 priority: 0
-  taskPos: 32 taskId: 18 ETC: 42189.1 priority: 0
-  taskPos: 33 taskId: 478 ETC: 114341 priority: 0
-  taskPos: 34 taskId: 313 ETC: 270443 priority: 0
-  taskPos: 35 taskId: 198 ETC: 107543 priority: 0
-  taskPos: 36 taskId: 236 ETC: 121415 priority: 0
-  taskPos: 37 taskId: 216 ETC: 350814 priority: 0
-  taskPos: 38 taskId: 360 ETC: 45961.5 priority: 0
-  taskPos: 39 taskId: 84 ETC: 285242 priority: 0
-  taskPos: 40 taskId: 164 ETC: 350358 priority: 0
-  taskPos: 41 taskId: 160 ETC: 793110 priority: 0
-  taskPos: 42 taskId: 145 ETC: 270741 priority: 0
-  taskPos: 43 taskId: 115 ETC: 134193 priority: 0
-  taskPos: 44 taskId: 244 ETC: 460133 priority: 0
-  taskPos: 45 taskId: 44 ETC: 768185 priority: 0
-  taskPos: 46 taskId: 207 ETC: 875439 priority: 0
-  taskPos: 47 taskId: 32 ETC: 979662 priority: 0
-  taskPos: 48 taskId: 108 ETC: 149943 priority: 0
-  taskPos: 49 taskId: 368 ETC: 374416 priority: 0
-  taskPos: 50 taskId: 133 ETC: 23246.4 priority: 0
-  taskPos: 51 taskId: 394 ETC: 282475 priority: 0
-  taskPos: 52 taskId: 68 ETC: 640150 priority: 0
+  fitness: 1.34053e+07
+  taskPos: 0 taskId: 301 ETC: 123510 priority: 0
+  taskPos: 1 taskId: 419 ETC: 12425.1 priority: 0
+  taskPos: 2 taskId: 182 ETC: 408706 priority: 0
+  taskPos: 3 taskId: 467 ETC: 217069 priority: 0
+  taskPos: 4 taskId: 365 ETC: 260002 priority: 0
+  taskPos: 5 taskId: 453 ETC: 802910 priority: 0
+  taskPos: 6 taskId: 493 ETC: 384539 priority: 0
+  taskPos: 7 taskId: 76 ETC: 261283 priority: 0
+  taskPos: 8 taskId: 417 ETC: 190650 priority: 0
+  taskPos: 9 taskId: 443 ETC: 431715 priority: 0
+  taskPos: 10 taskId: 423 ETC: 112854 priority: 0
+  taskPos: 11 taskId: 440 ETC: 24145.7 priority: 0
+  taskPos: 12 taskId: 174 ETC: 1.12551e+06 priority: 0
+  taskPos: 13 taskId: 35 ETC: 319170 priority: 0
+  taskPos: 14 taskId: 366 ETC: 169435 priority: 0
+  taskPos: 15 taskId: 158 ETC: 129590 priority: 0
+  taskPos: 16 taskId: 263 ETC: 300121 priority: 0
+  taskPos: 17 taskId: 425 ETC: 209235 priority: 0
+  taskPos: 18 taskId: 418 ETC: 379114 priority: 0
+  taskPos: 19 taskId: 85 ETC: 383582 priority: 0
+  taskPos: 20 taskId: 95 ETC: 214073 priority: 0
+  taskPos: 21 taskId: 412 ETC: 912445 priority: 0
+  taskPos: 22 taskId: 115 ETC: 134193 priority: 0
+  taskPos: 23 taskId: 448 ETC: 394317 priority: 0
+  taskPos: 24 taskId: 508 ETC: 621418 priority: 0
+  taskPos: 25 taskId: 180 ETC: 474771 priority: 0
+  taskPos: 26 taskId: 79 ETC: 82440.6 priority: 0
+  taskPos: 27 taskId: 346 ETC: 128527 priority: 0
+  taskPos: 28 taskId: 473 ETC: 428706 priority: 0
+  taskPos: 29 taskId: 279 ETC: 198390 priority: 0
+  taskPos: 30 taskId: 110 ETC: 588249 priority: 0
+  taskPos: 31 taskId: 221 ETC: 122345 priority: 0
+  taskPos: 32 taskId: 369 ETC: 428651 priority: 0
+  taskPos: 33 taskId: 416 ETC: 146343 priority: 0
+  taskPos: 34 taskId: 451 ETC: 85816.5 priority: 0
+  taskPos: 35 taskId: 179 ETC: 176110 priority: 0
+  taskPos: 36 taskId: 436 ETC: 1.02586e+06 priority: 0
+  taskPos: 37 taskId: 507 ETC: 422574 priority: 0
+  taskPos: 38 taskId: 388 ETC: 189739 priority: 0
+  taskPos: 39 taskId: 461 ETC: 123455 priority: 0
+  taskPos: 40 taskId: 457 ETC: 261314 priority: 0
 > machineId: 4
-  fitness: 2.0372e+07
-  taskPos: 0 taskId: 339 ETC: 496675 priority: 0
-  taskPos: 1 taskId: 470 ETC: 47602.8 priority: 0
-  taskPos: 2 taskId: 455 ETC: 712622 priority: 0
-  taskPos: 3 taskId: 370 ETC: 73697 priority: 0
-  taskPos: 4 taskId: 161 ETC: 605932 priority: 0
-  taskPos: 5 taskId: 199 ETC: 458876 priority: 0
-  taskPos: 6 taskId: 6 ETC: 718619 priority: 0
-  taskPos: 7 taskId: 192 ETC: 296466 priority: 0
-  taskPos: 8 taskId: 117 ETC: 433169 priority: 0
-  taskPos: 9 taskId: 477 ETC: 89753.5 priority: 0
-  taskPos: 10 taskId: 387 ETC: 459319 priority: 0
-  taskPos: 11 taskId: 385 ETC: 145291 priority: 0
-  taskPos: 12 taskId: 492 ETC: 325059 priority: 0
-  taskPos: 13 taskId: 3 ETC: 871698 priority: 0
-  taskPos: 14 taskId: 211 ETC: 550069 priority: 0
-  taskPos: 15 taskId: 205 ETC: 709472 priority: 0
-  taskPos: 16 taskId: 24 ETC: 261256 priority: 0
-  taskPos: 17 taskId: 97 ETC: 346056 priority: 0
-  taskPos: 18 taskId: 412 ETC: 941648 priority: 0
-  taskPos: 19 taskId: 190 ETC: 567192 priority: 0
-  taskPos: 20 taskId: 418 ETC: 485660 priority: 0
-  taskPos: 21 taskId: 471 ETC: 770716 priority: 0
-  taskPos: 22 taskId: 447 ETC: 372252 priority: 0
-  taskPos: 23 taskId: 151 ETC: 182619 priority: 0
-  taskPos: 24 taskId: 17 ETC: 647239 priority: 0
-  taskPos: 25 taskId: 409 ETC: 264462 priority: 0
-  taskPos: 26 taskId: 31 ETC: 541018 priority: 0
-  taskPos: 27 taskId: 186 ETC: 101136 priority: 0
-  taskPos: 28 taskId: 167 ETC: 609999 priority: 0
-  taskPos: 29 taskId: 233 ETC: 343690 priority: 0
-  taskPos: 30 taskId: 11 ETC: 67386.8 priority: 0
-  taskPos: 31 taskId: 389 ETC: 369624 priority: 0
-  taskPos: 32 taskId: 473 ETC: 472253 priority: 0
-  taskPos: 33 taskId: 53 ETC: 366966 priority: 0
-  taskPos: 34 taskId: 511 ETC: 328765 priority: 0
-  taskPos: 35 taskId: 99 ETC: 316399 priority: 0
-  taskPos: 36 taskId: 358 ETC: 65089.1 priority: 0
-  taskPos: 37 taskId: 507 ETC: 502268 priority: 0
-  taskPos: 38 taskId: 319 ETC: 585142 priority: 0
-  taskPos: 39 taskId: 64 ETC: 587093 priority: 0
-  taskPos: 40 taskId: 408 ETC: 312117 priority: 0
-  taskPos: 41 taskId: 217 ETC: 358289 priority: 0
-  taskPos: 42 taskId: 381 ETC: 32450.5 priority: 0
-  taskPos: 43 taskId: 458 ETC: 730.718 priority: 0
-  taskPos: 44 taskId: 348 ETC: 765353 priority: 0
-  taskPos: 45 taskId: 314 ETC: 145049 priority: 0
-  taskPos: 46 taskId: 235 ETC: 434672 priority: 0
-  taskPos: 47 taskId: 421 ETC: 14806.2 priority: 0
-  taskPos: 48 taskId: 137 ETC: 421791 priority: 0
-  taskPos: 49 taskId: 146 ETC: 443844 priority: 0
-  taskPos: 50 taskId: 0 ETC: 352610 priority: 0
+  fitness: 8.90235e+06
+  taskPos: 0 taskId: 378 ETC: 213946 priority: 0
+  taskPos: 1 taskId: 370 ETC: 73697 priority: 0
+  taskPos: 2 taskId: 421 ETC: 14806.2 priority: 0
+  taskPos: 3 taskId: 396 ETC: 70175.9 priority: 0
+  taskPos: 4 taskId: 377 ETC: 448262 priority: 0
+  taskPos: 5 taskId: 332 ETC: 246117 priority: 0
+  taskPos: 6 taskId: 327 ETC: 135472 priority: 0
+  taskPos: 7 taskId: 247 ETC: 77689 priority: 0
+  taskPos: 8 taskId: 173 ETC: 158223 priority: 0
+  taskPos: 9 taskId: 503 ETC: 572162 priority: 0
+  taskPos: 10 taskId: 470 ETC: 47602.8 priority: 0
+  taskPos: 11 taskId: 409 ETC: 264462 priority: 0
+  taskPos: 12 taskId: 511 ETC: 328765 priority: 0
+  taskPos: 13 taskId: 29 ETC: 88075.9 priority: 0
+  taskPos: 14 taskId: 223 ETC: 630741 priority: 0
+  taskPos: 15 taskId: 114 ETC: 42037.7 priority: 0
+  taskPos: 16 taskId: 314 ETC: 145049 priority: 0
+  taskPos: 17 taskId: 413 ETC: 547099 priority: 0
+  taskPos: 18 taskId: 317 ETC: 725842 priority: 0
+  taskPos: 19 taskId: 249 ETC: 117659 priority: 0
+  taskPos: 20 taskId: 47 ETC: 40296 priority: 0
+  taskPos: 21 taskId: 505 ETC: 157125 priority: 0
+  taskPos: 22 taskId: 483 ETC: 61233.2 priority: 0
+  taskPos: 23 taskId: 208 ETC: 614148 priority: 0
+  taskPos: 24 taskId: 384 ETC: 287514 priority: 0
+  taskPos: 25 taskId: 120 ETC: 132997 priority: 0
+  taskPos: 26 taskId: 360 ETC: 112474 priority: 0
+  taskPos: 27 taskId: 407 ETC: 288028 priority: 0
+  taskPos: 28 taskId: 28 ETC: 490068 priority: 0
+  taskPos: 29 taskId: 140 ETC: 1.41896e+06 priority: 0
+  taskPos: 30 taskId: 420 ETC: 256690 priority: 0
+  taskPos: 31 taskId: 380 ETC: 94938.5 priority: 0
 > machineId: 5
-  fitness: 1.80656e+07
-  taskPos: 0 taskId: 45 ETC: 58196.2 priority: 0
-  taskPos: 1 taskId: 171 ETC: 364729 priority: 0
-  taskPos: 2 taskId: 148 ETC: 195264 priority: 0
-  taskPos: 3 taskId: 318 ETC: 442732 priority: 0
-  taskPos: 4 taskId: 188 ETC: 252325 priority: 0
-  taskPos: 5 taskId: 138 ETC: 209352 priority: 0
-  taskPos: 6 taskId: 402 ETC: 418164 priority: 0
-  taskPos: 7 taskId: 208 ETC: 643513 priority: 0
-  taskPos: 8 taskId: 4 ETC: 839666 priority: 0
-  taskPos: 9 taskId: 425 ETC: 457428 priority: 0
-  taskPos: 10 taskId: 489 ETC: 32064 priority: 0
-  taskPos: 11 taskId: 27 ETC: 406328 priority: 0
-  taskPos: 12 taskId: 65 ETC: 1.15152e+06 priority: 0
-  taskPos: 13 taskId: 450 ETC: 162484 priority: 0
-  taskPos: 14 taskId: 493 ETC: 716304 priority: 0
-  taskPos: 15 taskId: 282 ETC: 776748 priority: 0
-  taskPos: 16 taskId: 407 ETC: 403665 priority: 0
-  taskPos: 17 taskId: 206 ETC: 453794 priority: 0
-  taskPos: 18 taskId: 486 ETC: 672012 priority: 0
-  taskPos: 19 taskId: 306 ETC: 1.10255e+06 priority: 0
-  taskPos: 20 taskId: 366 ETC: 256448 priority: 0
-  taskPos: 21 taskId: 223 ETC: 718788 priority: 0
-  taskPos: 22 taskId: 40 ETC: 189371 priority: 0
-  taskPos: 23 taskId: 140 ETC: 1.51061e+06 priority: 0
-  taskPos: 24 taskId: 21 ETC: 462751 priority: 0
-  taskPos: 25 taskId: 440 ETC: 42571.2 priority: 0
-  taskPos: 26 taskId: 476 ETC: 254368 priority: 0
-  taskPos: 27 taskId: 430 ETC: 734069 priority: 0
-  taskPos: 28 taskId: 118 ETC: 241654 priority: 0
-  taskPos: 29 taskId: 253 ETC: 1.35226e+06 priority: 0
-  taskPos: 30 taskId: 411 ETC: 403186 priority: 0
-  taskPos: 31 taskId: 63 ETC: 52103.6 priority: 0
-  taskPos: 32 taskId: 239 ETC: 702857 priority: 0
-  taskPos: 33 taskId: 344 ETC: 9568.93 priority: 0
-  taskPos: 34 taskId: 327 ETC: 166873 priority: 0
-  taskPos: 35 taskId: 125 ETC: 64237.5 priority: 0
-  taskPos: 36 taskId: 28 ETC: 517268 priority: 0
-  taskPos: 37 taskId: 448 ETC: 627737 priority: 0
+  fitness: 4.79206e+06
+  taskPos: 0 taskId: 386 ETC: 675116 priority: 0
+  taskPos: 1 taskId: 280 ETC: 103894 priority: 0
+  taskPos: 2 taskId: 77 ETC: 11232.1 priority: 0
+  taskPos: 3 taskId: 350 ETC: 1.35596e+06 priority: 0
+  taskPos: 4 taskId: 500 ETC: 214073 priority: 0
+  taskPos: 5 taskId: 176 ETC: 488102 priority: 0
+  taskPos: 6 taskId: 94 ETC: 131361 priority: 0
+  taskPos: 7 taskId: 34 ETC: 808897 priority: 0
+  taskPos: 8 taskId: 373 ETC: 19344.5 priority: 0
+  taskPos: 9 taskId: 98 ETC: 171384 priority: 0
+  taskPos: 10 taskId: 45 ETC: 58196.2 priority: 0
+  taskPos: 11 taskId: 40 ETC: 189371 priority: 0
+  taskPos: 12 taskId: 480 ETC: 346393 priority: 0
+  taskPos: 13 taskId: 392 ETC: 119923 priority: 0
+  taskPos: 14 taskId: 381 ETC: 35022.4 priority: 0
+  taskPos: 15 taskId: 72 ETC: 5717.02 priority: 0
+  taskPos: 16 taskId: 14 ETC: 58078.6 priority: 0
 > machineId: 6
-  fitness: 1.69355e+07
-  taskPos: 0 taskId: 442 ETC: 630287 priority: 0
-  taskPos: 1 taskId: 417 ETC: 509229 priority: 0
-  taskPos: 2 taskId: 95 ETC: 734972 priority: 0
-  taskPos: 3 taskId: 196 ETC: 265980 priority: 0
-  taskPos: 4 taskId: 254 ETC: 1.02772e+06 priority: 0
-  taskPos: 5 taskId: 141 ETC: 464108 priority: 0
-  taskPos: 6 taskId: 422 ETC: 970930 priority: 0
-  taskPos: 7 taskId: 62 ETC: 991724 priority: 0
-  taskPos: 8 taskId: 386 ETC: 786971 priority: 0
-  taskPos: 9 taskId: 278 ETC: 122429 priority: 0
-  taskPos: 10 taskId: 16 ETC: 520099 priority: 0
-  taskPos: 11 taskId: 220 ETC: 544207 priority: 0
-  taskPos: 12 taskId: 43 ETC: 1.20013e+06 priority: 0
-  taskPos: 13 taskId: 131 ETC: 933554 priority: 0
-  taskPos: 14 taskId: 503 ETC: 599656 priority: 0
-  taskPos: 15 taskId: 469 ETC: 1.35154e+06 priority: 0
-  taskPos: 16 taskId: 509 ETC: 438449 priority: 0
-  taskPos: 17 taskId: 19 ETC: 754398 priority: 0
-  taskPos: 18 taskId: 285 ETC: 378498 priority: 0
-  taskPos: 19 taskId: 23 ETC: 518313 priority: 0
-  taskPos: 20 taskId: 490 ETC: 984248 priority: 0
-  taskPos: 21 taskId: 499 ETC: 25999 priority: 0
-  taskPos: 22 taskId: 203 ETC: 97711.2 priority: 0
-  taskPos: 23 taskId: 267 ETC: 263662 priority: 0
-  taskPos: 24 taskId: 496 ETC: 251200 priority: 0
-  taskPos: 25 taskId: 215 ETC: 528042 priority: 0
-  taskPos: 26 taskId: 341 ETC: 283286 priority: 0
-  taskPos: 27 taskId: 194 ETC: 758146 priority: 0
+  fitness: 3.00053e+06
+  taskPos: 0 taskId: 299 ETC: 128686 priority: 0
+  taskPos: 1 taskId: 312 ETC: 27279.1 priority: 0
+  taskPos: 2 taskId: 496 ETC: 251200 priority: 0
+  taskPos: 3 taskId: 485 ETC: 757977 priority: 0
+  taskPos: 4 taskId: 232 ETC: 117744 priority: 0
+  taskPos: 5 taskId: 149 ETC: 177406 priority: 0
+  taskPos: 6 taskId: 403 ETC: 122331 priority: 0
+  taskPos: 7 taskId: 83 ETC: 93625.1 priority: 0
+  taskPos: 8 taskId: 274 ETC: 143164 priority: 0
+  taskPos: 9 taskId: 466 ETC: 266092 priority: 0
+  taskPos: 10 taskId: 211 ETC: 915028 priority: 0
 > machineId: 7
-  fitness: 1.80064e+07
-  taskPos: 0 taskId: 326 ETC: 940390 priority: 0
-  taskPos: 1 taskId: 91 ETC: 1.11908e+06 priority: 0
-  taskPos: 2 taskId: 413 ETC: 1.28615e+06 priority: 0
-  taskPos: 3 taskId: 269 ETC: 70891.7 priority: 0
-  taskPos: 4 taskId: 435 ETC: 411637 priority: 0
-  taskPos: 5 taskId: 264 ETC: 651395 priority: 0
-  taskPos: 6 taskId: 461 ETC: 454668 priority: 0
-  taskPos: 7 taskId: 201 ETC: 39149.1 priority: 0
-  taskPos: 8 taskId: 508 ETC: 1.03667e+06 priority: 0
-  taskPos: 9 taskId: 149 ETC: 187886 priority: 0
-  taskPos: 10 taskId: 400 ETC: 113745 priority: 0
-  taskPos: 11 taskId: 405 ETC: 434545 priority: 0
-  taskPos: 12 taskId: 445 ETC: 827785 priority: 0
-  taskPos: 13 taskId: 293 ETC: 1.44735e+06 priority: 0
-  taskPos: 14 taskId: 374 ETC: 353591 priority: 0
-  taskPos: 15 taskId: 472 ETC: 1.16763e+06 priority: 0
-  taskPos: 16 taskId: 234 ETC: 1.30136e+06 priority: 0
-  taskPos: 17 taskId: 429 ETC: 692648 priority: 0
-  taskPos: 18 taskId: 111 ETC: 40702.7 priority: 0
-  taskPos: 19 taskId: 231 ETC: 754220 priority: 0
-  taskPos: 20 taskId: 245 ETC: 1.31098e+06 priority: 0
-  taskPos: 21 taskId: 261 ETC: 481307 priority: 0
-  taskPos: 22 taskId: 51 ETC: 102027 priority: 0
-  taskPos: 23 taskId: 154 ETC: 1.51036e+06 priority: 0
-  taskPos: 24 taskId: 494 ETC: 539007 priority: 0
-  taskPos: 25 taskId: 121 ETC: 540648 priority: 0
-  taskPos: 26 taskId: 144 ETC: 190570 priority: 0
+  fitness: 2.23021e+06
+  taskPos: 0 taskId: 103 ETC: 500056 priority: 0
+  taskPos: 1 taskId: 38 ETC: 20767.6 priority: 0
+  taskPos: 2 taskId: 382 ETC: 76342.4 priority: 0
+  taskPos: 3 taskId: 400 ETC: 113745 priority: 0
+  taskPos: 4 taskId: 499 ETC: 30215 priority: 0
+  taskPos: 5 taskId: 51 ETC: 102027 priority: 0
+  taskPos: 6 taskId: 289 ETC: 566548 priority: 0
+  taskPos: 7 taskId: 434 ETC: 32972.1 priority: 0
+  taskPos: 8 taskId: 61 ETC: 289621 priority: 0
+  taskPos: 9 taskId: 0 ETC: 497919 priority: 0
 > machineId: 8
-  fitness: 3.06011e+07
-  taskPos: 0 taskId: 378 ETC: 335972 priority: 0
-  taskPos: 1 taskId: 459 ETC: 1.43797e+06 priority: 0
-  taskPos: 2 taskId: 225 ETC: 1.03441e+06 priority: 0
-  taskPos: 3 taskId: 395 ETC: 1.08481e+06 priority: 0
-  taskPos: 4 taskId: 340 ETC: 367820 priority: 0
-  taskPos: 5 taskId: 505 ETC: 246372 priority: 0
-  taskPos: 6 taskId: 468 ETC: 1.04943e+06 priority: 0
-  taskPos: 7 taskId: 284 ETC: 944137 priority: 0
-  taskPos: 8 taskId: 342 ETC: 985061 priority: 0
-  taskPos: 9 taskId: 14 ETC: 96622.4 priority: 0
-  taskPos: 10 taskId: 388 ETC: 829823 priority: 0
-  taskPos: 11 taskId: 434 ETC: 33269.9 priority: 0
-  taskPos: 12 taskId: 292 ETC: 669468 priority: 0
-  taskPos: 13 taskId: 414 ETC: 901341 priority: 0
-  taskPos: 14 taskId: 309 ETC: 1.28498e+06 priority: 0
-  taskPos: 15 taskId: 100 ETC: 1.34088e+06 priority: 0
-  taskPos: 16 taskId: 61 ETC: 338983 priority: 0
-  taskPos: 17 taskId: 259 ETC: 1.42091e+06 priority: 0
-  taskPos: 18 taskId: 324 ETC: 807391 priority: 0
-  taskPos: 19 taskId: 401 ETC: 1.41016e+06 priority: 0
-  taskPos: 20 taskId: 159 ETC: 478824 priority: 0
-  taskPos: 21 taskId: 202 ETC: 2544.96 priority: 0
-  taskPos: 22 taskId: 280 ETC: 186769 priority: 0
-  taskPos: 23 taskId: 241 ETC: 1.88305e+06 priority: 0
-  taskPos: 24 taskId: 81 ETC: 1.44072e+06 priority: 0
-  taskPos: 25 taskId: 218 ETC: 564427 priority: 0
-  taskPos: 26 taskId: 116 ETC: 816840 priority: 0
-  taskPos: 27 taskId: 56 ETC: 36087 priority: 0
-  taskPos: 28 taskId: 129 ETC: 412843 priority: 0
-  taskPos: 29 taskId: 34 ETC: 1.43223e+06 priority: 0
-  taskPos: 30 taskId: 29 ETC: 237594 priority: 0
-  taskPos: 31 taskId: 75 ETC: 1.0882e+06 priority: 0
-  taskPos: 32 taskId: 246 ETC: 463019 priority: 0
-  taskPos: 33 taskId: 172 ETC: 195458 priority: 0
-  taskPos: 34 taskId: 85 ETC: 793296 priority: 0
-  taskPos: 35 taskId: 103 ETC: 537991 priority: 0
-  taskPos: 36 taskId: 184 ETC: 1.0543e+06 priority: 0
-  taskPos: 37 taskId: 303 ETC: 1.70926e+06 priority: 0
-  taskPos: 38 taskId: 124 ETC: 319662 priority: 0
-  taskPos: 39 taskId: 37 ETC: 328148 priority: 0
+  fitness: 1.6955e+06
+  taskPos: 0 taskId: 487 ETC: 432943 priority: 0
+  taskPos: 1 taskId: 11 ETC: 138267 priority: 0
+  taskPos: 2 taskId: 111 ETC: 53266.2 priority: 0
+  taskPos: 3 taskId: 375 ETC: 218710 priority: 0
+  taskPos: 4 taskId: 53 ETC: 628835 priority: 0
+  taskPos: 5 taskId: 464 ETC: 84045.9 priority: 0
+  taskPos: 6 taskId: 477 ETC: 139433 priority: 0
 > machineId: 9
-  fitness: 1.32872e+07
-  taskPos: 0 taskId: 305 ETC: 74726.4 priority: 0
-  taskPos: 1 taskId: 96 ETC: 826427 priority: 0
-  taskPos: 2 taskId: 444 ETC: 966525 priority: 0
-  taskPos: 3 taskId: 365 ETC: 949230 priority: 0
-  taskPos: 4 taskId: 79 ETC: 174166 priority: 0
-  taskPos: 5 taskId: 452 ETC: 413160 priority: 0
-  taskPos: 6 taskId: 46 ETC: 1.28385e+06 priority: 0
-  taskPos: 7 taskId: 321 ETC: 1.63148e+06 priority: 0
-  taskPos: 8 taskId: 307 ETC: 1.61192e+06 priority: 0
-  taskPos: 9 taskId: 126 ETC: 1.2946e+06 priority: 0
-  taskPos: 10 taskId: 174 ETC: 1.66058e+06 priority: 0
-  taskPos: 11 taskId: 9 ETC: 71309.5 priority: 0
-  taskPos: 12 taskId: 329 ETC: 160198 priority: 0
-  taskPos: 13 taskId: 123 ETC: 100491 priority: 0
-  taskPos: 14 taskId: 226 ETC: 301103 priority: 0
-  taskPos: 15 taskId: 501 ETC: 315251 priority: 0
-  taskPos: 16 taskId: 375 ETC: 228964 priority: 0
-  taskPos: 17 taskId: 317 ETC: 1.22322e+06 priority: 0
+  fitness: 1.11894e+06
+  taskPos: 0 taskId: 251 ETC: 37023.4 priority: 0
+  taskPos: 1 taskId: 329 ETC: 160198 priority: 0
+  taskPos: 2 taskId: 501 ETC: 315251 priority: 0
+  taskPos: 3 taskId: 492 ETC: 568760 priority: 0
+  taskPos: 4 taskId: 458 ETC: 1495.46 priority: 0
+  taskPos: 5 taskId: 133 ETC: 36208.4 priority: 0
 > machineId: 10
-  fitness: 1.94525e+07
-  taskPos: 0 taskId: 479 ETC: 496533 priority: 0
-  taskPos: 1 taskId: 467 ETC: 570708 priority: 0
-  taskPos: 2 taskId: 337 ETC: 1.20648e+06 priority: 0
-  taskPos: 3 taskId: 25 ETC: 4630.29 priority: 0
-  taskPos: 4 taskId: 90 ETC: 1.58817e+06 priority: 0
-  taskPos: 5 taskId: 506 ETC: 846099 priority: 0
-  taskPos: 6 taskId: 214 ETC: 722473 priority: 0
-  taskPos: 7 taskId: 460 ETC: 1.04155e+06 priority: 0
-  taskPos: 8 taskId: 290 ETC: 794641 priority: 0
-  taskPos: 9 taskId: 193 ETC: 1.19095e+06 priority: 0
-  taskPos: 10 taskId: 143 ETC: 1.21694e+06 priority: 0
-  taskPos: 11 taskId: 260 ETC: 882732 priority: 0
-  taskPos: 12 taskId: 301 ETC: 464579 priority: 0
-  taskPos: 13 taskId: 483 ETC: 247571 priority: 0
-  taskPos: 14 taskId: 428 ETC: 1.19981e+06 priority: 0
-  taskPos: 15 taskId: 333 ETC: 520621 priority: 0
-  taskPos: 16 taskId: 475 ETC: 625726 priority: 0
-  taskPos: 17 taskId: 304 ETC: 1.80095e+06 priority: 0
-  taskPos: 18 taskId: 258 ETC: 984057 priority: 0
-  taskPos: 19 taskId: 222 ETC: 1.47925e+06 priority: 0
-  taskPos: 20 taskId: 453 ETC: 1.46948e+06 priority: 0
-  taskPos: 21 taskId: 47 ETC: 98550.5 priority: 0
+  fitness: 304131
+  taskPos: 0 taskId: 172 ETC: 228288 priority: 0
+  taskPos: 1 taskId: 305 ETC: 75842.4 priority: 0
 > machineId: 11
-  fitness: 1.51305e+07
-  taskPos: 0 taskId: 142 ETC: 496994 priority: 0
+  fitness: 965209
+  taskPos: 0 taskId: 13 ETC: 240622 priority: 0
   taskPos: 1 taskId: 504 ETC: 724587 priority: 0
-  taskPos: 2 taskId: 334 ETC: 570929 priority: 0
-  taskPos: 3 taskId: 104 ETC: 829346 priority: 0
-  taskPos: 4 taskId: 152 ETC: 669806 priority: 0
-  taskPos: 5 taskId: 179 ETC: 320185 priority: 0
-  taskPos: 6 taskId: 178 ETC: 1.44681e+06 priority: 0
-  taskPos: 7 taskId: 350 ETC: 1.83051e+06 priority: 0
-  taskPos: 8 taskId: 82 ETC: 760490 priority: 0
-  taskPos: 9 taskId: 57 ETC: 863872 priority: 0
-  taskPos: 10 taskId: 382 ETC: 172632 priority: 0
-  taskPos: 11 taskId: 510 ETC: 984394 priority: 0
-  taskPos: 12 taskId: 175 ETC: 986676 priority: 0
-  taskPos: 13 taskId: 120 ETC: 299250 priority: 0
-  taskPos: 14 taskId: 424 ETC: 272964 priority: 0
-  taskPos: 15 taskId: 487 ETC: 889026 priority: 0
-  taskPos: 16 taskId: 187 ETC: 70355.1 priority: 0
-  taskPos: 17 taskId: 173 ETC: 664317 priority: 0
-  taskPos: 18 taskId: 299 ETC: 284040 priority: 0
-  taskPos: 19 taskId: 464 ETC: 142870 priority: 0
-  taskPos: 20 taskId: 345 ETC: 1.64841e+06 priority: 0
-  taskPos: 21 taskId: 243 ETC: 202021 priority: 0
 > machineId: 12
-  fitness: 9.50658e+06
-  taskPos: 0 taskId: 13 ETC: 244236 priority: 0
-  taskPos: 1 taskId: 250 ETC: 686181 priority: 0
-  taskPos: 2 taskId: 346 ETC: 325822 priority: 0
-  taskPos: 3 taskId: 213 ETC: 481682 priority: 0
-  taskPos: 4 taskId: 2 ETC: 1.6266e+06 priority: 0
-  taskPos: 5 taskId: 271 ETC: 1.21224e+06 priority: 0
-  taskPos: 6 taskId: 347 ETC: 1.81718e+06 priority: 0
-  taskPos: 7 taskId: 415 ETC: 1.21e+06 priority: 0
-  taskPos: 8 taskId: 291 ETC: 52007.7 priority: 0
-  taskPos: 9 taskId: 114 ETC: 237218 priority: 0
-  taskPos: 10 taskId: 279 ETC: 556092 priority: 0
-  taskPos: 11 taskId: 372 ETC: 294614 priority: 0
-  taskPos: 12 taskId: 67 ETC: 615678 priority: 0
-  taskPos: 13 taskId: 396 ETC: 140492 priority: 0
-  taskPos: 14 taskId: 266 ETC: 6542.15 priority: 0
+  fitness: 0
 > machineId: 13
-  fitness: 7.99284e+06
-  taskPos: 0 taskId: 390 ETC: 1.02692e+06 priority: 0
-  taskPos: 1 taskId: 330 ETC: 992335 priority: 0
-  taskPos: 2 taskId: 249 ETC: 389717 priority: 0
-  taskPos: 3 taskId: 1 ETC: 252703 priority: 0
-  taskPos: 4 taskId: 232 ETC: 240894 priority: 0
-  taskPos: 5 taskId: 66 ETC: 720094 priority: 0
-  taskPos: 6 taskId: 438 ETC: 2.09567e+06 priority: 0
-  taskPos: 7 taskId: 73 ETC: 1.72311e+06 priority: 0
-  taskPos: 8 taskId: 379 ETC: 551405 priority: 0
+  fitness: 0
 > machineId: 14
-  fitness: 7.10845e+06
-  taskPos: 0 taskId: 433 ETC: 1.84435e+06 priority: 0
-  taskPos: 1 taskId: 397 ETC: 102407 priority: 0
-  taskPos: 2 taskId: 488 ETC: 138953 priority: 0
-  taskPos: 3 taskId: 466 ETC: 536325 priority: 0
-  taskPos: 4 taskId: 88 ETC: 1.39398e+06 priority: 0
-  taskPos: 5 taskId: 98 ETC: 355324 priority: 0
-  taskPos: 6 taskId: 373 ETC: 53136.1 priority: 0
-  taskPos: 7 taskId: 300 ETC: 314734 priority: 0
-  taskPos: 8 taskId: 110 ETC: 2.36924e+06 priority: 0
+  fitness: 0
 > machineId: 15
-  fitness: 4.72952e+06
-  taskPos: 0 taskId: 391 ETC: 2.17519e+06 priority: 0
-  taskPos: 1 taskId: 262 ETC: 1.0329e+06 priority: 0
-  taskPos: 2 taskId: 419 ETC: 622281 priority: 0
-  taskPos: 3 taskId: 38 ETC: 47734.3 priority: 0
-  taskPos: 4 taskId: 72 ETC: 20201 priority: 0
-  taskPos: 5 taskId: 221 ETC: 831209 priority: 0
-* overall fitness: 2.32546e+08
+  fitness: 0
+* overall fitness: 9.34351e+07
 
 
 
