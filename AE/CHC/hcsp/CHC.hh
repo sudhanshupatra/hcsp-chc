@@ -129,7 +129,9 @@ public:
 	void swapTasks(Solution& solution, const int taskId);
 	bool equalTasks(Solution& solution, const int taskId) const;
 	int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
-	void executeTaskAt(const int taskId, const int machineId, const int taskPos);
+	void
+			executeTaskAt(const int taskId, const int machineId,
+					const int taskPos);
 	void addTask(const int taskId, const int machineId);
 	void removeTaskAt(const int machineId, const int taskPos);
 
@@ -137,7 +139,8 @@ public:
 	int getMinCostMachineId() const;
 	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
-	int getMinDestinationCostTaskPosByMachine(int machineId, int destinationMachineId) const;
+	int getMinDestinationCostTaskPosByMachine(int machineId,
+			int destinationMachineId) const;
 
 	bool validate() const;
 
@@ -421,8 +424,7 @@ public:
 
 	// interchange solutions between island
 	void
-			interchange(const unsigned long current_generation,
-					NetStream& channel);
+	interchange(const unsigned long current_generation, NetStream& channel);
 
 	// creates a array with fitness of all individuals in population and its position in the population
 	void evaluate_parents();
@@ -475,9 +477,9 @@ public:
 	friend ostream& operator<<(ostream& os, const Inter_Operator& inter);
 
 	virtual void
-			execute(Population& pop, const unsigned long current_generation,
-					NetStream& _netstream, const bool synchronized,
-					const unsigned int check_asyncrhonous) const=0;
+	execute(Population& pop, const unsigned long current_generation,
+			NetStream& _netstream, const bool synchronized,
+			const unsigned int check_asyncrhonous) const=0;
 	virtual void setup(char line[MAX_BUFFER]);
 	unsigned int number_operator() const;
 
@@ -495,9 +497,9 @@ public:
 	friend ostream& operator<<(ostream& os, const Migration& migration);
 
 	virtual void
-			execute(Population& pop, const unsigned long current_generation,
-					NetStream& _netstream, const bool synchronized,
-					const unsigned int check_asyncrhonous) const;
+	execute(Population& pop, const unsigned long current_generation,
+			NetStream& _netstream, const bool synchronized,
+			const unsigned int check_asyncrhonous) const;
 };
 
 // Selection ---------------------------------------------------------
@@ -564,7 +566,7 @@ public:
 	virtual ~Selection_New_Population();
 
 	friend ostream
-			& operator<<(ostream& os, const Selection_New_Population& sel);
+	& operator<<(ostream& os, const Selection_New_Population& sel);
 
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;
@@ -602,7 +604,7 @@ public:
 	virtual ~Selection_Roulette_Wheel();
 
 	friend ostream
-			& operator<<(ostream& os, const Selection_Roulette_Wheel& sel);
+	& operator<<(ostream& os, const Selection_Roulette_Wheel& sel);
 
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;

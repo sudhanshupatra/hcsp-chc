@@ -45,9 +45,9 @@ istream& operator>>(istream& input, Problem& pbm) {
 
 		pbm._tasksPriorities.push_back(taskPriority);
 
-//		if (DEBUG)
-//			cout << "[DEBUG] Task: " << taskPos << " => Priority: "
-//					<< pbm._tasksPriorities[taskPos] << endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Task: " << taskPos << " => Priority: "
+		//					<< pbm._tasksPriorities[taskPos] << endl;
 	}
 
 	// Inicializo toda la matriz de ETC.
@@ -75,11 +75,11 @@ istream& operator>>(istream& input, Problem& pbm) {
 			sscanf(buffer, "%f",
 					&pbm._expectedTimeToCompute[taskPos][machinePos]);
 
-//			if (DEBUG)
-//				cout << "[DEBUG] Task: " << taskPos << ", Machine: "
-//						<< machinePos << ", ETC: "
-//						<< pbm._expectedTimeToCompute[taskPos][machinePos]
-//						<< endl;
+			//			if (DEBUG)
+			//				cout << "[DEBUG] Task: " << taskPos << ", Machine: "
+			//						<< machinePos << ", ETC: "
+			//						<< pbm._expectedTimeToCompute[taskPos][machinePos]
+			//						<< endl;
 		}
 	}
 
@@ -219,8 +219,10 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
 				os << "  taskPos: " << i;
 				os << " taskId: " << sol.machines()[machineId].getTask(i);
-				os << " ETC: "	<< sol.pbm().expectedTimeToCompute(sol.machines()[machineId].getTask(i), machineId);
-				os << " priority: " << sol.pbm().taskPriority(sol.machines()[machineId].getTask(i));
+				os << " ETC: " << sol.pbm().expectedTimeToCompute(
+						sol.machines()[machineId].getTask(i), machineId);
+				os << " priority: " << sol.pbm().taskPriority(
+						sol.machines()[machineId].getTask(i));
 				os << endl;
 			}
 		}
@@ -246,8 +248,8 @@ Solution& Solution::operator=(const Solution &sol) {
 	_machines = sol._machines;
 	_initialized = sol._initialized;
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::operator= this fitness: " << fitness() << endl;
-//	if (DEBUG) cout << "[DEBUG] Solution::operator= sol fitness: " << sol.fitness() << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::operator= this fitness: " << fitness() << endl;
+	//	if (DEBUG) cout << "[DEBUG] Solution::operator= sol fitness: " << sol.fitness() << endl;
 
 	return *this;
 }
@@ -277,11 +279,11 @@ void Solution::initialize() {
 	if (direction == 0)
 		direction = -1;
 
-//	if (DEBUG) {
-//		cout << endl << endl << "[DEBUG] Initialize()" << endl;
-//		cout << "[DEBUG] startTask: " << startTask << endl;
-//		cout << "[DEBUG] direction: " << direction << endl;
-//	}
+	//	if (DEBUG) {
+	//		cout << endl << endl << "[DEBUG] Initialize()" << endl;
+	//		cout << "[DEBUG] startTask: " << startTask << endl;
+	//		cout << "[DEBUG] direction: " << direction << endl;
+	//	}
 
 	int currentTask;
 	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
@@ -293,21 +295,21 @@ void Solution::initialize() {
 		int currentMachine;
 		currentMachine = rand_int(0, _pbm.machineCount() - 1);
 
-//		if (DEBUG) {
-//			cout << "[DEBUG] Task: " << currentTask << " sent to Machine: "
-//					<< currentMachine << endl;
-//		}
+		//		if (DEBUG) {
+		//			cout << "[DEBUG] Task: " << currentTask << " sent to Machine: "
+		//					<< currentMachine << endl;
+		//		}
 
 		_machines[currentMachine].addTask(currentTask);
 	}
 
-//	if (DEBUG) cout << "[DEBUG] initialized: " << _initialized << endl;
-//	if (DEBUG) cout << "[DEBUG] fitness: " << fitness() << endl;
-//	if (DEBUG) cout << endl << *this << endl;
+	//	if (DEBUG) cout << "[DEBUG] initialized: " << _initialized << endl;
+	//	if (DEBUG) cout << "[DEBUG] fitness: " << fitness() << endl;
+	//	if (DEBUG) cout << endl << *this << endl;
 }
 
 double Solution::costByMachine(int machineId) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::costByMachine start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::costByMachine start" << endl;
 	double machineComputeCost = 0.0;
 
 	for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
@@ -320,37 +322,37 @@ double Solution::costByMachine(int machineId) const {
 		machineComputeCost += computeCost;
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::costByMachine end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::costByMachine end" << endl;
 	return machineComputeCost;
 }
 
 double Solution::fitnessByMachine(const int machineId) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitnessByMachine start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitnessByMachine start" << endl;
 	double fitness = 0.0;
 	double machineComputeCost = 0.0;
 
-//	if (DEBUG)
-//		cout << endl << endl << "[DEBUG] Solution::fitness machineId: "
-//				<< machineId << endl;
+	//	if (DEBUG)
+	//		cout << endl << endl << "[DEBUG] Solution::fitness machineId: "
+	//				<< machineId << endl;
 
 	for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 		int taskId;
 		taskId = _machines[machineId].getTask(taskPos);
 
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness taskId: " << taskId << endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness taskPos: " << taskPos << endl;
 
 		double computeCost;
 		computeCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness computeCost: " << computeCost
-//					<< endl;
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness taskPriority: "
-//					<< _pbm.taskPriority(taskId) << endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness computeCost: " << computeCost
+		//					<< endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness taskPriority: "
+		//					<< _pbm.taskPriority(taskId) << endl;
 
 		double priorityCost;
 		priorityCost = 0.0;
@@ -359,53 +361,62 @@ double Solution::fitnessByMachine(const int machineId) const {
 			priorityCost += machineComputeCost / _pbm.taskPriority(taskId);
 		}
 
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost
-//					<< endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness priorityCost: " << priorityCost
+		//					<< endl;
 
 		machineComputeCost += computeCost;
 		fitness += (computeCost + priorityCost);
-//		if (DEBUG)
-//			cout << "[DEBUG] Solution::fitness partial fitness: " << fitness
-//					<< endl;
+		//		if (DEBUG)
+		//			cout << "[DEBUG] Solution::fitness partial fitness: " << fitness
+		//					<< endl;
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitnessByMachine end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitnessByMachine end" << endl;
 	return fitness;
 }
 
 bool Solution::validate() const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate start" << endl;
 	if (false) {
 		if (_machines.size() == _pbm.machineCount()) {
 			int taskCount = 0;
 			for (int machineId = 0; machineId < _machines.size(); machineId++) {
-				for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				for (int taskPos = 0; taskPos
+						< _machines[machineId].countTasks(); taskPos++) {
 					taskCount++;
 
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
 
 					if ((taskId < 0) || (taskId >= _pbm.taskCount())) {
-						if (DEBUG) cout << endl << "[DEBUG] (taskId < 0) || (taskId >= _pbm.taskCount())" << endl;
+						if (DEBUG)
+							cout << endl
+									<< "[DEBUG] (taskId < 0) || (taskId >= _pbm.taskCount())"
+									<< endl;
 						return false;
 					}
 				}
 			}
 
 			if (taskCount != _pbm.taskCount()) {
-				if (DEBUG) cout << endl << "[DEBUG] taskCount != _pbm.taskCount()" << endl;
+				if (DEBUG)
+					cout << endl << "[DEBUG] taskCount != _pbm.taskCount()"
+							<< endl;
 				return false;
 			}
 		} else {
-			if (DEBUG) cout << endl << "[DEBUG] this->_machines.size() == _pbm.machineCount()" << endl;
+			if (DEBUG)
+				cout << endl
+						<< "[DEBUG] this->_machines.size() == _pbm.machineCount()"
+						<< endl;
 			return false;
 		}
 	} else {
 		return false;
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate end" << endl;
 	return true;
 }
 
@@ -413,9 +424,9 @@ bool Solution::validate() const {
 // Fitness de la solución.
 // ===================================
 double Solution::fitness() const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness start" << endl;
 	if (!_initialized) {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution not initialized, fitness: infinity" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution not initialized, fitness: infinity" << endl;
 		return infinity();
 	}
 
@@ -425,8 +436,8 @@ double Solution::fitness() const {
 		fitness += fitnessByMachine(machineId);
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution fitness: " << fitness << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness end" << endl;
 	return fitness;
 }
 
@@ -440,7 +451,7 @@ unsigned int Solution::size() const {
 }
 
 int Solution::distanceTo(const Solution& solution) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo start" << endl;
 	int distance = 0;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
@@ -461,15 +472,15 @@ int Solution::distanceTo(const Solution& solution) const {
 		}
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo: " << distance << endl;
-//	if (DEBUG) cout << *this;
-//	if (DEBUG) cout << solution;
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo: " << distance << endl;
+	//	if (DEBUG) cout << *this;
+	//	if (DEBUG) cout << solution;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo end" << endl;
 	return distance;
 }
 
 int Solution::findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask start" << endl;
 	foundMachineId = -1;
 	foundTaskPos = -1;
 
@@ -479,12 +490,12 @@ int Solution::findTask(const int taskId, int& foundMachineId, int& foundTaskPos)
 				foundMachineId = machineId;
 				foundTaskPos = taskPos;
 
-//				if (DEBUG) cout << endl << "[DEBUG] Solution::findTask end" << endl;
+				//				if (DEBUG) cout << endl << "[DEBUG] Solution::findTask end" << endl;
 				return 1;
 			}
 		}
 	}
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask end" << endl;
 	return 0;
 }
 
@@ -503,7 +514,7 @@ void Solution::removeTaskAt(const int machineId, const int taskPos) {
 
 void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
 
 	int taskId1 = machines()[machineId1].getTask(taskPos1);
 	int taskId2 = machines()[machineId2].getTask(taskPos2);
@@ -513,24 +524,24 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		_machines[machineId2].setTask(taskId1, taskPos2);
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks end" << endl;
 }
 
 void Solution::swapTasks(Solution& solution, const int taskId) {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks taskId: " << taskId << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks taskId: " << taskId << endl;
 
 	Solution& sol1 = *this;
 	Solution& sol2 = solution;
 	int machine1, machine2, taskPos1, taskPos2;
 
-//	if (DEBUG) cout << sol1;
-//	if (DEBUG) cout << sol2;
+	//	if (DEBUG) cout << sol1;
+	//	if (DEBUG) cout << sol2;
 
 	if (sol1.findTask(taskId, machine1, taskPos1) && sol2.findTask(taskId,
 			machine2, taskPos2)) {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
 
 		// Modifico la solución 1.
 		// Borro la tarea de la ubicación original.
@@ -562,24 +573,24 @@ void Solution::swapTasks(Solution& solution, const int taskId) {
 
 	//		sol1.show();
 	//		sol2.show();
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks end" << endl;
 }
 
 bool Solution::equalTasks(Solution& solution, const int taskId) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks start" << endl;
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks taskId " << taskId << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks taskId " << taskId << endl;
 
 	int machine1, machine2, taskPos1, taskPos2;
 
 	if (findTask(taskId, machine1, taskPos1) && solution.findTask(taskId,
 			machine2, taskPos2)) {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol1 machineId: " << machine1 << " taskPos: "  << taskPos1 << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks sol2 machineId: " << machine2 << " taskPos: "  << taskPos2 << endl;
 
 		bool equal = (machine1 == machine2) && (taskPos1 == taskPos2);
 
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks equals " << equal << endl;
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks equals " << equal << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks end" << endl;
 
 		return equal;
 	} else {
@@ -592,8 +603,8 @@ bool Solution::equalTasks(Solution& solution, const int taskId) const {
 }
 
 char *Solution::to_String() const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String start" << endl;
-//	if (DEBUG) cout << *this << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String start" << endl;
+	//	if (DEBUG) cout << *this << endl;
 
 	int machineSeparator = -1;
 	int endMark = -2;
@@ -615,29 +626,29 @@ char *Solution::to_String() const {
 	raw[rawPos] = endMark;
 	rawPos += 1;
 
-//	if (DEBUG) {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution()" << endl;
-//		Solution aux(_pbm);
-//		aux.to_Solution((char*)raw);
-//		cout << aux << endl;
-//	}
+	//	if (DEBUG) {
+	//		if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution()" << endl;
+	//		Solution aux(_pbm);
+	//		aux.to_Solution((char*)raw);
+	//		cout << aux << endl;
+	//	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String end" << endl;
-	return (char*)raw;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String end" << endl;
+	return (char*) raw;
 }
 
 void Solution::to_Solution(char *_string_) {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution start" << endl;
 	_initialized = false;
 
-	int *raw = (int*)_string_;
+	int *raw = (int*) _string_;
 	int machineSeparator = -1;
 	int endMark = -2;
 	bool endFound = false;
 	int currentMachine = 0;
 
-	for (int pos = 0; pos < (_pbm.taskCount() + _pbm.machineCount() + 1) && !endFound;
-			pos++) {
+	for (int pos = 0; pos < (_pbm.taskCount() + _pbm.machineCount() + 1)
+			&& !endFound; pos++) {
 
 		int currentValue;
 		currentValue = raw[pos];
@@ -651,7 +662,7 @@ void Solution::to_Solution(char *_string_) {
 			_initialized = true;
 		}
 	}
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution end" << endl;
 }
 
 const vector<struct SolutionMachine>& Solution::machines() const {
@@ -659,7 +670,7 @@ const vector<struct SolutionMachine>& Solution::machines() const {
 }
 
 int Solution::getBestFitnessMachineId() const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId start" << endl;
 
 	int bestFitnessMachineId = 0;
 	double bestFitnessMachineValue = fitnessByMachine(0);
@@ -682,13 +693,13 @@ int Solution::getBestFitnessMachineId() const {
 		}
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId end" << endl;
 
 	return bestFitnessMachineId;
 }
 
 int Solution::getMinCostMachineId() const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostMachineId start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostMachineId start" << endl;
 
 	int minCostMachineId = 0;
 	double minCostMachineValue = costByMachine(0);
@@ -703,13 +714,13 @@ int Solution::getMinCostMachineId() const {
 		}
 	}
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostMachineId end" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostMachineId end" << endl;
 
 	return minCostMachineId;
 }
 
 int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine start" << endl;
 
 	if (machines()[machineId].countTasks() > 0) {
 		int highestPriorityTaskPos = 0;
@@ -727,16 +738,16 @@ int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
 			}
 		}
 
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine end" << endl;
 		return highestPriorityTaskPos;
 	} else {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine end" << endl;
 		return -1;
 	}
 }
 
 int Solution::getMinCostTaskPosByMachine(int machineId) const {
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine start" << endl;
 
 	if (machines()[machineId].countTasks() > 0) {
 		int minCostTaskPos = 0;
@@ -754,10 +765,10 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 			}
 		}
 
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
 		return minCostTaskPos;
 	} else {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
 		return -1;
 	}
 }
@@ -765,8 +776,8 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
 		int destinationMachineId) const {
 
-//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine start" << endl;
-//	if (DEBUG) cout << endl << "destinationMachineId: " << destinationMachineId << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine start" << endl;
+	//	if (DEBUG) cout << endl << "destinationMachineId: " << destinationMachineId << endl;
 
 	if (machines()[machineId].countTasks() > 0) {
 		int minCostTaskPos = 0;
@@ -785,10 +796,10 @@ int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
 			}
 		}
 
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine end" << endl;
 		return minCostTaskPos;
 	} else {
-//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine end" << endl;
+		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine end" << endl;
 		return -1;
 	}
 }
