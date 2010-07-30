@@ -441,11 +441,7 @@ void Population::evaluate_offsprings() {
 }
 
 void Population::evolution() {
-//	if (DEBUG) {
-//		cout << endl << "Population::evolution()" << endl;
-//		cout << endl << *this << endl;
-//	}
-	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
+//	if (DEBUG) cout << endl << "Population::evolution()" << endl;
 
 	select_parents(); // selects individuals to apply operators
 
@@ -457,11 +453,6 @@ void Population::evolution() {
 	evaluate_offsprings();
 	select_offsprings(); // selects new individuals
 	evaluate_parents(); // calculates fitness of new individuals
-
-//	if (DEBUG) cout << endl << "best_cost: " << this->best_cost() << endl;
-
-	//if (DEBUG) for (int s = 0; s < _parents.size(); s++) _parents[s]->show();
-//	if (DEBUG) cout << endl << *this << endl;
 }
 
 void Population::interchange(const unsigned long current_generation,
@@ -647,8 +638,7 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-//	if (DEBUG)
-//		cout << endl << "[DEBUG] Crossover::cross" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross start" << endl;
 
 	if (probability[0] <= 0.0) {
 		probability[0] = sol1.length() / 4;
@@ -663,6 +653,14 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 			}
 		}
 	}
+
+//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross end" << endl;
+
+//	if (DEBUG)
+//		if (!sol1.validate() && !sol2.validate()) {
+//			cout << sol1;
+//			cout << sol2;
+//		}
 }
 
 void Crossover::execute(Rarray<Solution*>& sols) const {
@@ -701,8 +699,7 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 	_values(), _minSelectionValues(), _maxSelectionValues(), _size(
 			values.size()), _maximize(maximizeDirection), _overallValue(0) {
 
-//	if (DEBUG)
-//		cout << endl << "RouletteWheel::RouletteWheel" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] RouletteWheel::RouletteWheel start" << endl;
 
 	_values.reserve(_size + 1);
 	_minSelectionValues.reserve(_size + 1);
@@ -719,24 +716,24 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 
 		_overallValue += _maxSelectionValues[i];
 
-		//		if (DEBUG)
-		//			cout << " * index: " << i << " value: " << _values[i]
-		//					<< " selectionValue: " << _maxSelectionValues[i] << endl;
+//		if (DEBUG)
+//			cout << " * index: " << i << " value: " << _values[i]
+//					<< " selectionValue: " << _maxSelectionValues[i] << endl;
 	}
 
 	if (_overallValue > MAXDOUBLE)
 		_overallValue = MAXDOUBLE;
 
-	//	if (DEBUG)
-	//		cout << endl << " overallValue: " << _overallValue << endl << endl;
+//	if (DEBUG)
+//		cout << endl << " overallValue: " << _overallValue << endl << endl;
 
 	double previous = 0.0;
 	for (int i = 0; i < _size; i++) {
-		//		if (DEBUG)
-		//			cout << " * index: " << i
-		//					<< " (_maxSelectionValues[machineId] / overallValue) + previous"
-		//					<< " (" << _maxSelectionValues[i] << " / " << _overallValue
-		//					<< ") + " << previous << endl;
+//		if (DEBUG)
+//			cout << " * index: " << i
+//					<< " (_maxSelectionValues[machineId] / overallValue) + previous"
+//					<< " (" << _maxSelectionValues[i] << " / " << _overallValue
+//					<< ") + " << previous << endl;
 
 		_minSelectionValues[i] = previous;
 		_maxSelectionValues[i] = (_maxSelectionValues[i] / _overallValue)
@@ -748,6 +745,8 @@ RouletteWheel::RouletteWheel(const vector<double> values,
 //					<< _minSelectionValues[i] << " _maxSelectionValues[i]: "
 //					<< _maxSelectionValues[i] << endl;
 	}
+
+//	if (DEBUG) 	cout << endl << "[DEBUG] RouletteWheel::RouletteWheel end" << endl;
 }
 
 RouletteWheel::~RouletteWheel() {
@@ -755,13 +754,15 @@ RouletteWheel::~RouletteWheel() {
 }
 
 int RouletteWheel::drawOneByIndex() const {
+//	if (DEBUG) cout << endl << "[DEBUG] RouletteWheel::drawOneByIndex start" << endl;
+
 	double random_selected;
 	int selectedValueIndex = 0;
 
 	random_selected = rand01();
 
-	//	if (DEBUG)
-	//		cout << endl << ">> random_selected: " << random_selected << endl;
+//	if (DEBUG)
+//		cout << endl << ">> random_selected: " << random_selected << endl;
 
 	while (!((random_selected >= _minSelectionValues[selectedValueIndex])
 			&& (random_selected < _maxSelectionValues[selectedValueIndex]))
@@ -769,8 +770,10 @@ int RouletteWheel::drawOneByIndex() const {
 
 		selectedValueIndex++;
 
-	//	if (DEBUG)
-	//		cout << ">> selected machineId: " << selectedValueIndex << endl;
+//	if (DEBUG)
+//		cout << ">> selected machineId: " << selectedValueIndex << endl;
+
+//	if (DEBUG)	cout << endl << "[DEBUG] RouletteWheel::drawOneByIndex end" << endl;
 
 	return selectedValueIndex;
 }
@@ -782,8 +785,7 @@ Diverge::Diverge() :
 
 void Diverge::diverge(Solution& sol) const {
 	//TODO: implementar mutación de una solución.
-//	if (DEBUG)
-//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+//	if (DEBUG)	cout << endl << "[DEBUG] Diverge::diverge start" << endl;
 	int MUT_MAQ = 1;
 
 	int machineCount = sol.machines().size();
@@ -796,17 +798,16 @@ void Diverge::diverge(Solution& sol) const {
 	RouletteWheel roulette(fitnessByMachine, true);
 
 	for (int i = 0; i < MUT_MAQ; i++) {
-//		if (DEBUG)
-//			cout << endl << " mutando máquina " << i << endl;
+//		if (DEBUG) cout << endl << " mutando máquina " << i << endl;
 
 		int machineId;
-		int tasksCount;
-		tasksCount = 0;
+		int machineTasksCount;
+		machineTasksCount = 0;
 
 		// Sorteo una máquina para mutar.
-		while (tasksCount == 0) {
+		while (machineTasksCount == 0) {
 			machineId = roulette.drawOneByIndex();
-			tasksCount = sol.machines()[machineId].countTasks();
+			machineTasksCount = sol.machines()[machineId].countTasks();
 		}
 
 //		if (DEBUG) {
@@ -819,165 +820,187 @@ void Diverge::diverge(Solution& sol) const {
 		modificado = false;
 
 		while (!modificado) {
-			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-				// intercambia con la tarea de menor costo de la máquina con menor makespan.
+			if (rand01() >= 0.5)
+				if (sol.machines()[machineId].countTasks() > 0)
+				{
+					// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+					// intercambia con la tarea de menor costo de la máquina con menor makespan.
+//					if (DEBUG) 	cout << "Caso [1]" << endl;
 
-//				if (DEBUG)
-//					cout << endl << " caso [1]" << endl;
+					vector<double> costsByTaskPos;
+					costsByTaskPos.clear();
 
-				vector<double> costsByTaskPos;
-				costsByTaskPos.clear();
+					for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
+						// Inicializo el vector de costos de las tareas de la máquina actual
+						// para sortear una tarea.
+						int taskId;
+						taskId = sol.machines()[machineId].getTask(taskPos);
 
-				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
-					// Inicializo el vector de costos de las tareas de la máquina actual
-					// para sortear una tarea.
-					int taskId;
-					taskId = sol.machines()[machineId].getTask(taskPos);
+						int taskCost;
+						taskCost = sol.pbm().expectedTimeToCompute(taskId,
+								machineId);
 
-					int taskCost;
-					taskCost = sol.pbm().expectedTimeToCompute(taskId,
-							machineId);
+						costsByTaskPos.push_back(taskCost);
+					}
 
-					costsByTaskPos.push_back(taskCost);
+					// Sorteo una tarea.
+					RouletteWheel roulette(costsByTaskPos, true);
+					int taskPos;
+					taskPos = roulette.drawOneByIndex();
+
+	//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
+					// Obtengo la máquina que aporta un menor costo al total de la solución.
+					int minCostMachineId;
+					minCostMachineId = sol.getMinCostMachineId();
+
+					if (sol.machines()[minCostMachineId].countTasks() > 0) {
+						// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+						// con menor costo si se ejecuta en la máquina destino.
+						int minCostTaskPosOnMachine;
+						minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(
+								minCostMachineId);
+
+						// Hago un swap entre las tareas de las máquinas.
+						sol.swapTasks(machineId, taskPos, minCostMachineId,
+								minCostTaskPosOnMachine);
+					} else {
+						// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
+						// máquina origen a la destino.
+//						if (DEBUG) cout << "[DEBUG] muevo la tarea a minCostMachine [1]." << endl;
+
+						int taskId;
+						taskId = sol.machines()[machineId].getTask(taskPos);
+
+						sol.removeTaskAt(machineId, taskPos);
+						sol.addTask(taskId, minCostMachineId);
+					}
+
+					modificado = true;
+
+//					if (DEBUG)
+//						if (!sol.validate())
+//							cout << sol;
 				}
 
-				// Sorteo una tarea.
-				RouletteWheel roulette(costsByTaskPos, true);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
+			if (rand01() >= 0.5)
+				if (sol.machines()[machineId].countTasks() > 0)
+				{
+					// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+					// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+					// más eficientemente en la máquina actual.
+//					if (DEBUG)	cout << "Caso [2]" << endl;
 
-//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+					vector<double> costsByTaskPos;
+					costsByTaskPos.clear();
 
-				// Obtengo la máquina que aporta un menor costo al total de la solución.
-				int minCostMachineId;
-				minCostMachineId = sol.getMinCostMachineId();
+					for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
+						// Inicializo el vector de costos de las tareas de la máquina actual
+						// para sortear una tarea.
+						int taskId;
+						taskId = sol.machines()[machineId].getTask(taskPos);
 
-				if (sol.machines()[minCostMachineId].countTasks() > 0) {
-					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
-					// con menor costo si se ejecuta en la máquina destino.
-					int minCostTaskPosOnMachine;
-					minCostTaskPosOnMachine = sol.getMinCostTaskPosByMachine(
-							minCostMachineId);
+	//					if (DEBUG) cout << endl << "Diverge::diverge machineId: " << machineId
+	//							<< " taskPos: " << taskPos << " taskId: " << taskId << endl;
 
-					// Hago un swap entre las tareas de las máquinas.
-					sol.swapTasks(machineId, taskPos, minCostMachineId,
-							minCostTaskPosOnMachine);
-				} else {
-					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
-					// máquina origen a la destino.
-					int taskId;
-					taskId = sol.machines()[machineId].getTask(taskPos);
+						int taskCost;
+						taskCost = sol.pbm().expectedTimeToCompute(taskId,
+								machineId);
 
-					sol.removeTaskAt(machineId, taskPos);
-					sol.executeTaskAt(taskId, minCostMachineId, 0);
+						costsByTaskPos.push_back(taskCost);
+					}
+
+					// Sorteo una tarea.
+					RouletteWheel roulette(costsByTaskPos, true);
+					int taskPos;
+					taskPos = roulette.drawOneByIndex();
+
+	//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
+					// Obtengo la máquina que aporta un menor costo al total de la solución.
+					int minCostMachineId;
+					minCostMachineId = sol.getMinCostMachineId();
+
+//					if (DEBUG) cout << "[DEBUG] minCostMachineId: " << minCostMachineId << endl;
+
+					if (sol.machines()[minCostMachineId].countTasks() > 0) {
+						// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+						// con menor costo si se ejecuta en la máquina origen.
+//						if (DEBUG) cout << "[DEBUG] hago swap" << endl;
+
+						int minCostTaskPosOnMachine;
+						minCostTaskPosOnMachine
+								= sol.getMinDestinationCostTaskPosByMachine(
+										minCostMachineId, machineId);
+
+						// Hago un swap entre las tareas de las máquinas.
+						sol.swapTasks(machineId, taskPos, minCostMachineId,
+								minCostTaskPosOnMachine);
+					} else {
+						// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
+						// máquina origen a la destino.
+//						if (DEBUG) cout << "[DEBUG] muevo la tarea a minCostMachine [2]." << endl;
+//						if (DEBUG) cout << "[DEBUG] machineId:" << machineId << endl;
+//						if (DEBUG) cout << "[DEBUG] taskPos:" << taskPos << endl;
+//
+						int taskId;
+						taskId = sol.machines()[machineId].getTask(taskPos);
+//						if (DEBUG) cout << "[DEBUG] taskId:" << taskId << endl;
+
+//						if (taskId < 0) cout << sol << endl;
+
+						sol.removeTaskAt(machineId, taskPos);
+//						if (DEBUG) cout << "[DEBUG] removeTaskAt" << endl;
+
+						sol.addTask(taskId, minCostMachineId);
+//						if (DEBUG) cout << "[DEBUG] addTask(" << taskId << "," << minCostMachineId << ")" << endl;
+						//sol.executeTaskAt(taskId, minCostMachineId, 0);
+					}
+
+					modificado = true;
 				}
 
-				modificado = true;
-//				if (DEBUG)
-//					cout << endl << sol << endl;
-			}
+			if (rand01() >= 0.5)
+				if (sol.machines()[machineId].countTasks() > 0)
+				{
+					// Se selecciona una tarea T según rueda de ruleta por el inverso de su
+					// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
+					// de la máquina.
+//					if (DEBUG)
+//						cout << "Caso [3]" << endl;
 
-			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
-				// más eficientemente en la máquina actual.
+					vector<double> priorityByTaskPos;
+					priorityByTaskPos.clear();
 
-//				if (DEBUG)
-//					cout << endl << " caso [2]" << endl;
+					for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
+						// Inicializo el vector de prioridades de las tareas de
+						// la máquina actual para sortear una tarea.
+						int taskId;
+						taskId = sol.machines()[machineId].getTask(taskPos);
 
-				vector<double> costsByTaskPos;
-				costsByTaskPos.clear();
+						int taskPriority;
+						taskPriority = sol.pbm().taskPriority(taskId);
 
-				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
-					// Inicializo el vector de costos de las tareas de la máquina actual
-					// para sortear una tarea.
-					int taskId;
-					taskId = sol.machines()[machineId].getTask(taskPos);
+						priorityByTaskPos.push_back(taskPriority);
+					}
 
-					int taskCost;
-					taskCost = sol.pbm().expectedTimeToCompute(taskId,
-							machineId);
+					// Sorteo una tarea.
+					RouletteWheel roulette(priorityByTaskPos, false);
+					int taskPos;
+					taskPos = roulette.drawOneByIndex();
 
-					costsByTaskPos.push_back(taskCost);
+	//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
+
+					if (taskPos > 0) {
+						sol.swapTasks(machineId, taskPos, machineId, 0);
+					}
+
+					modificado = true;
 				}
-
-				// Sorteo una tarea.
-				RouletteWheel roulette(costsByTaskPos, true);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
-
-//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
-
-				// Obtengo la máquina que aporta un menor costo al total de la solución.
-				int minCostMachineId;
-				minCostMachineId = sol.getMinCostMachineId();
-
-				if (sol.machines()[minCostMachineId].countTasks() > 0) {
-					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
-					// con menor costo si se ejecuta en la máquina origen.
-					int minCostTaskPosOnMachine;
-					minCostTaskPosOnMachine
-							= sol.getMinDestinationCostTaskPosByMachine(
-									minCostMachineId, machineId);
-
-					// Hago un swap entre las tareas de las máquinas.
-					sol.swapTasks(machineId, taskPos, minCostMachineId,
-							minCostTaskPosOnMachine);
-				} else {
-					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
-					// máquina origen a la destino.
-					int taskId;
-					taskId = sol.machines()[machineId].getTask(taskPos);
-
-					sol.removeTaskAt(machineId, taskPos);
-					sol.executeTaskAt(taskId, minCostMachineId, 0);
-				}
-
-				modificado = true;
-//				if (DEBUG)
-//					cout << endl << sol << endl;
-			}
-
-			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
-				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
-				// de la máquina.
-//				if (DEBUG)
-//					cout << endl << " caso [3]" << endl;
-
-				vector<double> priorityByTaskPos;
-				priorityByTaskPos.clear();
-
-				for (int taskPos = 0; taskPos < tasksCount; taskPos++) {
-					// Inicializo el vector de prioridades de las tareas de
-					// la máquina actual para sortear una tarea.
-					int taskId;
-					taskId = sol.machines()[machineId].getTask(taskPos);
-
-					int taskPriority;
-					taskPriority = sol.pbm().taskPriority(taskId);
-
-					priorityByTaskPos.push_back(taskPriority);
-				}
-
-				// Sorteo una tarea.
-				RouletteWheel roulette(priorityByTaskPos, false);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
-
-//				if (DEBUG) cout << " seleccionado taskPos: " << taskPos << endl;
-
-				if (taskPos > 0) {
-					sol.swapTasks(machineId, taskPos, machineId, 0);
-				}
-
-				modificado = true;
-//				if (DEBUG)
-//					cout << endl << sol << endl;
-			}
 		}
 	}
+
+//	if (DEBUG) cout << "[DEBUG] Diverge::diverge end" << endl;
 }
 
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,

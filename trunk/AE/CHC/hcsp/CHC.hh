@@ -130,6 +130,7 @@ public:
 	bool equalTasks(Solution& solution, const int taskId) const;
 	int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
 	void executeTaskAt(const int taskId, const int machineId, const int taskPos);
+	void addTask(const int taskId, const int machineId);
 	void removeTaskAt(const int machineId, const int taskPos);
 
 	int getBestFitnessMachineId() const;
@@ -137,6 +138,8 @@ public:
 	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId, int destinationMachineId) const;
+
+	bool validate() const;
 
 	// =================================
 	// Especificos del problema.
