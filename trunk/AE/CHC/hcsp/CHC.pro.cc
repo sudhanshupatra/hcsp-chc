@@ -389,7 +389,7 @@ const SetUpParams& Population::setup() const {
 
 void Population::initialize() {
 	for (int i = 0; i < _parents.size(); i++) {
-		_parents[i]->initialize();
+		_parents[i]->initialize(i);
 		_fitness_values[i].index = i;
 		_fitness_values[i].change = true;
 	}
@@ -646,7 +646,8 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 	int dh = sol1.distanceTo(sol2);
 
-	if ((dh / 2) > probability[0]) {
+	//if ((dh / 2) > probability[0]) {
+	if (dh > probability[0]) {
 		for (int i = 0; i < sol1.length(); i++) {
 			if ((!sol1.equalTasks(sol2, i)) && (0.5 <= rand01())) {
 				sol1.swapTasks(sol2, i);
@@ -786,7 +787,6 @@ Diverge::Diverge() :
 void Diverge::diverge(Solution& sol) const {
 	//TODO: implementar mutación de una solución.
 	//	if (DEBUG)	cout << endl << "[DEBUG] Diverge::diverge start" << endl;
-	int MUT_MAQ = 1;
 
 	int machineCount = sol.machines().size();
 	vector<double> fitnessByMachine;
@@ -1007,22 +1007,17 @@ void Diverge::diverge(Solution& sol) const {
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-	bool KEEP_BEST = true;
-
 	//	if (DEBUG)
 	//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		if ((i != bestSolutionIndex) || (!KEEP_BEST)) {
+		if (i != bestSolutionIndex) {
 			if (rand01() < mutationProbability)
 				diverge(*sols[i]);
 		}
 	}
 
 	//TODO: implementar búsqueda local.
-	if (KEEP_BEST) {
-
-	}
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {

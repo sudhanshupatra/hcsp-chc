@@ -15,6 +15,11 @@
 using std::vector;
 
 skeleton CHC {
+
+// Cantidad máxima de máquinas que se mutan durante un Diverge
+#define MUT_MAQ 1
+#define RANDOM_INIT 0.0
+
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
 
@@ -114,7 +119,7 @@ public:
 	char *to_String() const;
 	void to_Solution(char *_cadena_);
 
-	void initialize();
+	void initialize(const int solutionIndex);
 	bool isInitilized() const;
 
 	double fitness() const;
@@ -130,8 +135,7 @@ public:
 	bool equalTasks(Solution& solution, const int taskId) const;
 	int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
 	void
-			executeTaskAt(const int taskId, const int machineId,
-					const int taskPos);
+	executeTaskAt(const int taskId, const int machineId, const int taskPos);
 	void addTask(const int taskId, const int machineId);
 	void removeTaskAt(const int machineId, const int taskPos);
 
