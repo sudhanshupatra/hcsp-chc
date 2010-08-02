@@ -271,41 +271,160 @@ bool Solution::isInitilized() const {
 // ===================================
 // Inicializo la solución.
 // ===================================
-void Solution::initialize() {
+void Solution::initialize(const int solutionIndex) {
 	_initialized = true;
 
-	int startTask = rand_int(0, _pbm.taskCount() - 1);
-	int direction = rand_int(0, 1);
-	if (direction == 0)
-		direction = -1;
+	if (solutionIndex == 0) {
+		// Inicialización usando una heurística "pesada": MIN-MIN.
+		// Utilizo MIN-MIN para un único elemento de la población inicial.
 
-	//	if (DEBUG) {
-	//		cout << endl << endl << "[DEBUG] Initialize()" << endl;
-	//		cout << "[DEBUG] startTask: " << startTask << endl;
-	//		cout << "[DEBUG] direction: " << direction << endl;
-	//	}
+		if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
-	int currentTask;
-	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
-		currentTask = startTask + (direction * taskOffset);
-		if (currentTask < 0)
-			currentTask = _pbm.taskCount() + currentTask;
-		currentTask = currentTask % _pbm.taskCount();
+		vector<double> machineMakespan;
+		machineMakespan.reserve(_pbm.machineCount() + 1);
 
-		int currentMachine;
-		currentMachine = rand_int(0, _pbm.machineCount() - 1);
+		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+			machineMakespan.push_back(0.0);
 
-		//		if (DEBUG) {
-		//			cout << "[DEBUG] Task: " << currentTask << " sent to Machine: "
-		//					<< currentMachine << endl;
-		//		}
+		vector<bool> taskIsUnmapped;
+		taskIsUnmapped.reserve(_pbm.taskCount() + 1);
 
-		_machines[currentMachine].addTask(currentTask);
+		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+			taskIsUnmapped.push_back(true);
+
+		int unmappedTasksCount = _pbm.taskCount();
+
+		while (unmappedTasksCount > 0) {
+			double minCT;
+			minCT = infinity();
+
+			int minCTTaskId;
+			minCTTaskId = -1;
+
+			int minCTMachineId;
+			minCTMachineId = -1;
+
+			for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+				//				if (DEBUG) cout << endl << "[DEBUG] taskId: " << taskId << endl;
+
+				if (taskIsUnmapped[taskId]) {
+					//					if (DEBUG) cout << endl << "[DEBUG] task is unmapped" << taskId << endl;
+
+					for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+						//						if (DEBUG) cout << endl << "[DEBUG] machineId:" << machineId << endl;
+
+						if ((machineMakespan[machineId]
+								+ _pbm.expectedTimeToCompute(taskId, machineId))
+								< minCT) {
+							minCT = machineMakespan[machineId]
+									+ _pbm.expectedTimeToCompute(taskId,
+											machineId);
+							minCTTaskId = taskId;
+							minCTMachineId = machineId;
+						}
+					}
+				}
+			}
+
+			//			if (DEBUG) cout << endl << "[DEBUG] min => taskId: " << minCTTaskId << " machineId: " << minCTMachineId << endl;
+
+			unmappedTasksCount--;
+			taskIsUnmapped[minCTTaskId] = false;
+			machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+					minCTTaskId, minCTMachineId);
+
+			_machines[minCTMachineId].addTask(minCTTaskId);
+		}
+	} else {
+		if (RANDOM_INIT > rand01()) {
+			// Inicialización aleatoria
+
+			if (DEBUG) cout << endl << "[DEBUG] Inicialización random" << endl;
+
+			int startTask = rand_int(0, _pbm.taskCount() - 1);
+			int direction = rand_int(0, 1);
+			if (direction == 0)
+				direction = -1;
+
+			//	if (DEBUG) {
+			//		cout << endl << endl << "[DEBUG] Initialize()" << endl;
+			//		cout << "[DEBUG] startTask: " << startTask << endl;
+			//		cout << "[DEBUG] direction: " << direction << endl;
+			//	}
+
+			int currentTask;
+			for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+				currentTask = startTask + (direction * taskOffset);
+				if (currentTask < 0)
+					currentTask = _pbm.taskCount() + currentTask;
+				currentTask = currentTask % _pbm.taskCount();
+
+				int currentMachine;
+				currentMachine = rand_int(0, _pbm.machineCount() - 1);
+
+				//		if (DEBUG) {
+				//			cout << "[DEBUG] Task: " << currentTask << " sent to Machine: "
+				//					<< currentMachine << endl;
+				//		}
+
+				_machines[currentMachine].addTask(currentTask);
+			}
+
+			//	if (DEBUG) cout << "[DEBUG] initialized: " << _initialized << endl;
+			//	if (DEBUG) cout << "[DEBUG] fitness: " << fitness() << endl;
+			//	if (DEBUG) cout << endl << *this << endl;
+		} else {
+			// Inicialización usando una heurística no tan buena y
+			// que permita obtener diferentes soluciones: MCT
+
+			if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT" << endl;
+
+			vector<double> machineMakespan;
+			machineMakespan.reserve(_pbm.machineCount() + 1);
+
+			for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+				machineMakespan.push_back(0.0);
+
+			int startTask = rand_int(0, _pbm.taskCount() - 1);
+			int direction = rand_int(0, 1);
+			if (direction == 0)
+				direction = -1;
+
+			int currentTask;
+			for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+				currentTask = startTask + (direction * taskOffset);
+				if (currentTask < 0)
+					currentTask = _pbm.taskCount() + currentTask;
+				currentTask = currentTask % _pbm.taskCount();
+
+				double minCT;
+				minCT = infinity();
+
+				int minCTTaskId;
+				minCTTaskId = -1;
+
+				int minCTMachineId;
+				minCTMachineId = -1;
+
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					if ((machineMakespan[machineId]
+							+ _pbm.expectedTimeToCompute(currentTask,
+									machineId)) < minCT) {
+						minCT = machineMakespan[machineId]
+								+ _pbm.expectedTimeToCompute(currentTask,
+										machineId);
+						minCTTaskId = currentTask;
+						minCTMachineId = machineId;
+					}
+				}
+
+				machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+						minCTTaskId, minCTMachineId);
+
+				_machines[minCTMachineId].addTask(minCTTaskId);
+			}
+		}
 	}
-
-	//	if (DEBUG) cout << "[DEBUG] initialized: " << _initialized << endl;
-	//	if (DEBUG) cout << "[DEBUG] fitness: " << fitness() << endl;
-	//	if (DEBUG) cout << endl << *this << endl;
 }
 
 double Solution::costByMachine(int machineId) const {
