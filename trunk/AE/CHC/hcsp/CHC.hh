@@ -138,6 +138,7 @@ public:
 	executeTaskAt(const int taskId, const int machineId, const int taskPos);
 	void addTask(const int taskId, const int machineId);
 	void removeTaskAt(const int machineId, const int taskPos);
+	void doLocalSearch();
 
 	int getBestFitnessMachineId() const;
 	int getMinCostMachineId() const;
