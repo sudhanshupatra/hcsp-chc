@@ -785,7 +785,6 @@ Diverge::Diverge() :
 }
 
 void Diverge::diverge(Solution& sol) const {
-	//TODO: implementar mutación de una solución.
 	//	if (DEBUG)	cout << endl << "[DEBUG] Diverge::diverge start" << endl;
 
 	int machineCount = sol.machines().size();
@@ -820,7 +819,7 @@ void Diverge::diverge(Solution& sol) const {
 		modificado = false;
 
 		while (!modificado) {
-			if (rand01() >= 0.5)
+			if (rand01() >= 0.5) {
 				if (sol.machines()[machineId].countTasks() > 0) {
 					// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 					// intercambia con la tarea de menor costo de la máquina con menor makespan.
@@ -883,8 +882,9 @@ void Diverge::diverge(Solution& sol) const {
 					//						if (!sol.validate())
 					//							cout << sol;
 				}
+			}
 
-			if (rand01() >= 0.5)
+			if (rand01() >= 0.5) {
 				if (sol.machines()[machineId].countTasks() > 0) {
 					// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 					// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
@@ -960,8 +960,9 @@ void Diverge::diverge(Solution& sol) const {
 
 					modificado = true;
 				}
+			}
 
-			if (rand01() >= 0.5)
+			if (rand01() >= 0.5) {
 				if (sol.machines()[machineId].countTasks() > 0) {
 					// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 					// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
@@ -998,6 +999,7 @@ void Diverge::diverge(Solution& sol) const {
 
 					modificado = true;
 				}
+			}
 		}
 	}
 
@@ -1012,12 +1014,14 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (i != bestSolutionIndex) {
+			// Si no es la mejor solución aplico operaciones de mutación.
 			if (rand01() < mutationProbability)
 				diverge(*sols[i]);
+		} else {
+			// Ejecuto la búsqueda local solo en la mejor solución.
+			sols[i]->doLocalSearch();
 		}
 	}
-
-	//TODO: implementar búsqueda local.
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {
@@ -1737,7 +1741,6 @@ struct individual Selection_New_Population::select_one(
 	}
 
 	if (selection_position == -2) {
-		//TODO: implementar mutación cataclísmica.
 		assert(diverge != NULL);
 		((Diverge *) diverge)->diverge(to_select_1, fitness_values[0].index,
 				(float) 1.0);
