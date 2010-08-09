@@ -629,12 +629,6 @@ void Solution::executeTaskAt(const int taskId, const int machineId,
 
 void Solution::doLocalSearch() {
 //	if (DEBUG) cout << endl << "[DEBUG] Solution::doLocalSearch() begin" << endl;
-	int PALS_MAQ = 5;
-	int PALS_MAX_INTENTOS = 3;
-	double PALS_UMBRAL_MEJORA = 1.0;
-	int PALS_TOP_M = 5;
-	int PALS_TOP_T = 512;
-
 //	if (DEBUG) cout << endl << "[DEBUG] Seleccionar máquinas" << endl;
 
 	vector<double> fitnessByMachine;
@@ -787,6 +781,10 @@ void Solution::removeTaskAt(const int machineId, const int taskPos) {
 void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
+
+	cout << "machineId1: " << machineId1 << " taskPos1: " << taskPos1 << endl;
+	cout << "machineId2: " << machineId2 << " taskPos2: " << taskPos2 << endl;
+	cout << "task count: " << machines()[machineId1].countTasks() << endl;
 
 	int taskId1 = machines()[machineId1].getTask(taskPos1);
 	int taskId2 = machines()[machineId2].getTask(taskPos2);
@@ -1020,29 +1018,27 @@ int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
 
 int Solution::getMinCostTaskPosByMachine(int machineId) const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine start" << endl;
+	assert(machines()[machineId].countTasks() > 0);
 
-	if (machines()[machineId].countTasks() > 0) {
-		int minCostTaskPos = 0;
-		int minCostTaskValue = _pbm.expectedTimeToCompute(
-				machines()[machineId].getTask(0), machineId);
+	int minCostTaskPos = 0;
+	int minCostTaskValue = _pbm.expectedTimeToCompute(
+			machines()[machineId].getTask(0), machineId);
 
-		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
-			int currentTaskCost;
-			currentTaskCost = _pbm.expectedTimeToCompute(
-					machines()[machineId].getTask(taskPos), machineId);
+	for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
+		int currentTaskCost;
+		currentTaskCost = _pbm.expectedTimeToCompute(
+				machines()[machineId].getTask(taskPos), machineId);
 
-			if (minCostTaskValue > currentTaskCost) {
-				minCostTaskValue = currentTaskCost;
-				minCostTaskPos = taskPos;
-			}
+		if (minCostTaskValue > currentTaskCost) {
+			minCostTaskValue = currentTaskCost;
+			minCostTaskPos = taskPos;
 		}
-
-		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
-		return minCostTaskPos;
-	} else {
-		//		if (DEBUG) cout << endl << "[DEBUG] Solution::getMinCostTaskPosByMachine end" << endl;
-		return -1;
 	}
+
+	assert(machines()[machineId].countTasks() > minCostTaskPos);
+	assert(minCostTaskPos >= 0);
+
+	return minCostTaskPos;
 }
 
 int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
