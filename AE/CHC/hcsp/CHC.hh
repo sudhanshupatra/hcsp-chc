@@ -90,11 +90,20 @@ private:
 
 class SolutionMachine {
 private:
+	const Problem& _pbm;
 	vector<int> _tasks;
 	int _machineId;
+
+	double _fitness;
+	double _makespan;
+	bool _dirty;
+
+	void refresh();
 public:
-	SolutionMachine(int machineId);
+	SolutionMachine(const Problem& problem, int machineId);
 	~SolutionMachine();
+
+	SolutionMachine& operator=(const SolutionMachine& machine);
 
 	void addTask(const int taskId);
 	void setTask(const int taskId, const int taskPos);
@@ -102,6 +111,9 @@ public:
 	void removeTask(const int taskPos);
 	int getTask(const int taskPos) const;
 	int countTasks() const;
+
+	double getFitness();
+	double getMakespan();
 
 	int machineId() const;
 };
@@ -129,9 +141,9 @@ public:
 	void initialize(const int solutionIndex);
 	bool isInitilized() const;
 
-	double fitness() const;
-	double fitnessByMachine(int machineId) const;
-	double costByMachine(int machineId) const;
+	double fitness();
+	double fitnessByMachine(int machineId);
+	double costByMachine(int machineId);
 	unsigned int size() const;
 
 	int length() const;
@@ -139,16 +151,16 @@ public:
 
 	void swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2);
 	void swapTasks(Solution& solution, const int taskId);
-	bool equalTasks(Solution& solution, const int taskId) const;
-	int findTask(const int taskId, int& foundMachineId, int& foundTaskPos) const;
+	bool equalTasks(Solution& solution, const int taskId);
+	bool findTask(const int taskId, int& foundMachineId, int& foundTaskPos);
 	void
 	executeTaskAt(const int taskId, const int machineId, const int taskPos);
 	void addTask(const int taskId, const int machineId);
 	void removeTaskAt(const int machineId, const int taskPos);
 	void doLocalSearch();
 
-	int getBestFitnessMachineId() const;
-	int getMinCostMachineId() const;
+	int getBestFitnessMachineId();
+	int getMinCostMachineId();
 	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId,
