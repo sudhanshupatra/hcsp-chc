@@ -156,7 +156,7 @@ void SolutionMachine::addTask(const int taskId) {
 	_makespan = _makespan + computeCost;
 
 	_tasks.push_back(taskId);
-	_assignedTasks[taskId] = _tasks.size() - 1;
+	_assignedTasks[taskId] = NULL;
 }
 
 void SolutionMachine::setTask(const int taskId, const int taskPos) {
@@ -167,9 +167,25 @@ void SolutionMachine::setTask(const int taskId, const int taskPos) {
 
 	int removedTaskId = _tasks[taskPos];
 	_assignedTasks.erase(removedTaskId);
+	_assignedTasks[taskId] = NULL;
 
 	_tasks.at(taskPos) = taskId;
-	_assignedTasks[taskId] = taskPos;
+}
+
+void SolutionMachine::swapTasks(const int taskPos1, const int taskPos2) {
+	assert(taskPos1 >= 0);
+	assert(taskPos1 < _tasks.size());
+
+	assert(taskPos2 >= 0);
+	assert(taskPos2 < _tasks.size());
+
+	_dirty = true;
+
+	int taskId1 = _tasks[taskPos1];
+	int taskId2 = _tasks[taskPos2];
+
+	_tasks[taskPos1] = taskId2;
+	_tasks[taskPos2] = taskId1;
 }
 
 int SolutionMachine::getTask(const int taskPos) const {
@@ -183,13 +199,26 @@ int SolutionMachine::countTasks() const {
 }
 
 bool SolutionMachine::hasTask(const int taskId) const {
+	// show content:
+//	if (DEBUG)
+//		cout << endl << "[DEBUG] SolutionMachine::hasTask" << endl;
+
 	return _assignedTasks.count(taskId) == 1;
 }
 
-int SolutionMachine::getTaskPos(const int taskId) const {
-	assert(hasTask(taskId));
-	return _assignedTasks.find(taskId)->second;
+void SolutionMachine::showMap() const {
+	for (map<int, void*>::const_iterator it = _assignedTasks.begin(); it
+			!= _assignedTasks.end(); it++) {
+		cout << (*it).first;
+		//cout << " => " << (*it).second;
+		cout << endl;
+	}
 }
+
+//int SolutionMachine::getTaskPos(const int taskId) const {
+//	assert(hasTask(taskId));
+//	return _assignedTasks.find(taskId)->second;
+//}
 
 void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	assert(taskPos >= 0);
@@ -198,12 +227,7 @@ void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	_dirty = true;
 
 	_tasks.insert(_tasks.begin() + taskPos, taskId);
-
-	// Actualizo el hash!
-	_assignedTasks[taskId] = taskPos;
-	for (int i = taskPos + 1; i < _tasks.size(); i++) {
-		_assignedTasks[_tasks[i]] = i;
-	}
+	_assignedTasks[taskId] = NULL;
 }
 
 void SolutionMachine::removeTask(const int taskPos) {
@@ -213,13 +237,9 @@ void SolutionMachine::removeTask(const int taskPos) {
 	_dirty = true;
 
 	int removedId = _tasks[taskPos];
-	_tasks.erase(_tasks.begin() + taskPos);
-
-	// Actualizo el hash!
 	_assignedTasks.erase(removedId);
-	for (int i = taskPos; i < _tasks.size(); i++) {
-		_assignedTasks[_tasks[i]] = i;
-	}
+
+	_tasks.erase(_tasks.begin() + taskPos);
 }
 
 double SolutionMachine::getMakespan() {
@@ -497,24 +517,26 @@ void Solution::initialize(const int solutionIndex) {
 }
 
 bool Solution::validate() const {
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
-	if (false) {
+	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
+	if (true) {
 		if (_machines.size() == _pbm.machineCount()) {
 			int taskCount = 0;
+
 			for (int machineId = 0; machineId < _machines.size(); machineId++) {
-				for (int taskPos = 0; taskPos
-						< _machines[machineId].countTasks(); taskPos++) {
+				for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 					taskCount++;
 
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
+
+					assert(_machines[machineId].hasTask(taskId));
 
 					if ((taskId < 0) || (taskId >= _pbm.taskCount())) {
 						if (DEBUG)
 							cout << endl
 									<< "[DEBUG] (taskId < 0) || (taskId >= _pbm.taskCount())"
 									<< endl;
-						return false;
+						assert(false);
 					}
 				}
 			}
@@ -523,17 +545,17 @@ bool Solution::validate() const {
 				if (DEBUG)
 					cout << endl << "[DEBUG] taskCount != _pbm.taskCount()"
 							<< endl;
-				return false;
+				assert(false);
 			}
 		} else {
 			if (DEBUG)
 				cout << endl
 						<< "[DEBUG] this->_machines.size() == _pbm.machineCount()"
 						<< endl;
-			return false;
+			assert(false);
 		}
 	} else {
-		return false;
+		assert(false);
 	}
 
 	return true;
@@ -597,22 +619,26 @@ bool Solution::findTask(const int taskId, int& foundMachineId,
 	foundTaskPos = -1;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-			if (_machines[machineId].getTask(taskPos) == taskId) {
-				foundMachineId = machineId;
-				foundTaskPos = taskPos;
+		if (_machines[machineId].hasTask(taskId)) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				if (_machines[machineId].getTask(taskPos) == taskId) {
+					foundMachineId = machineId;
+					foundTaskPos = taskPos;
 
-				return true;
+					return true;
+				}
 			}
+
+			assert(false);
 		}
 	}
 
-	return false;
+	assert(false);
 }
 
 void Solution::doLocalSearch() {
-	if (DEBUG)
-		cout << endl << "[DEBUG] Solution::doLocalSearch" << endl;
+//	if (DEBUG)
+//		cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
 
 	vector<double> fitnessByMachine;
 
@@ -712,14 +738,15 @@ void Solution::doLocalSearch() {
 						countSwapTaskOffset--;
 
 						int swapMachineId, swapTaskPos;
-						this->findTask(swapTaskId, swapMachineId, swapTaskPos);
+						assert(this->findTask(swapTaskId, swapMachineId, swapTaskPos));
 
+						//==============================================================
 						//TODO: Optimizar!!!
-						this->swapTasks(machineId, taskPos, swapMachineId,
-								swapTaskPos);
+						//==============================================================
+						this->swapTasks(machineId, taskPos, swapMachineId, swapTaskPos);
 						movimientoFitness = this->fitness();
-						this->swapTasks(swapMachineId, swapTaskPos, machineId,
-								taskPos);
+						this->swapTasks(swapMachineId, swapTaskPos, machineId, taskPos);
+						//==============================================================
 
 						if (movimientoFitness < mejorMovimientoFitness) {
 							mejorMovimientoFitness = movimientoFitness;
@@ -781,11 +808,14 @@ void Solution::mutate() {
 						&& (_machines[machineId].countTasks() > 0)) {
 
 					int bestTaskPosForMachine;
-					bestTaskPosForMachine = getMinDestinationCostTaskPosByMachine(machineId, auxMachineId);
+					bestTaskPosForMachine
+							= getMinDestinationCostTaskPosByMachine(machineId,
+									auxMachineId);
 
 					if (bestTaskPosForMachine >= 0) {
 						int bestTaskIdForMachine;
-						bestTaskIdForMachine = _machines[machineId].getTask(bestTaskPosForMachine);
+						bestTaskIdForMachine = _machines[machineId].getTask(
+								bestTaskPosForMachine);
 
 						_machines[machineId].removeTask(bestTaskPosForMachine);
 						_machines[auxMachineId].addTask(bestTaskIdForMachine);
@@ -795,7 +825,7 @@ void Solution::mutate() {
 				}
 			}
 
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks()	> 0)) {
+			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
 				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de menor costo de la máquina con menor makespan.
 
@@ -810,8 +840,7 @@ void Solution::mutate() {
 					taskId = _machines[machineId].getTask(taskPos);
 
 					int taskCost;
-					taskCost = _pbm.expectedTimeToCompute(taskId,
-							machineId);
+					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
 					costsByTaskPos.push_back(taskCost);
 				}
@@ -849,8 +878,7 @@ void Solution::mutate() {
 				modificado = true;
 			}
 
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks()
-					> 0)) {
+			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
 				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
 				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
 				// más eficientemente en la máquina actual.
@@ -866,8 +894,7 @@ void Solution::mutate() {
 					taskId = _machines[machineId].getTask(taskPos);
 
 					int taskCost;
-					taskCost = _pbm.expectedTimeToCompute(taskId,
-							machineId);
+					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
 					costsByTaskPos.push_back(taskCost);
 				}
@@ -906,8 +933,7 @@ void Solution::mutate() {
 				modificado = true;
 			}
 
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks()
-					> 0)) {
+			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
 				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
 				// de la máquina.
@@ -947,12 +973,16 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
 
-	int taskId1 = machines()[machineId1].getTask(taskPos1);
-	int taskId2 = machines()[machineId2].getTask(taskPos2);
+	if (machineId1 != machineId2) {
+		int taskId1 = machines()[machineId1].getTask(taskPos1);
+		int taskId2 = machines()[machineId2].getTask(taskPos2);
 
-	if (taskId1 != taskId2) {
-		_machines[machineId1].setTask(taskId2, taskPos1);
-		_machines[machineId2].setTask(taskId1, taskPos2);
+		if (taskId1 != taskId2) {
+			_machines[machineId1].setTask(taskId2, taskPos1);
+			_machines[machineId2].setTask(taskId1, taskPos2);
+		}
+	} else {
+		_machines[machineId1].swapTasks(taskPos1, taskPos2);
 	}
 }
 

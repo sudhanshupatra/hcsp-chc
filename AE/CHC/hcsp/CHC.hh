@@ -95,7 +95,7 @@ class SolutionMachine {
 private:
 	const Problem& _pbm;
 	vector<int> _tasks;
-	map<int, int> _assignedTasks;
+	map<int, void*> _assignedTasks;
 	int _machineId;
 
 	double _fitness;
@@ -113,9 +113,10 @@ public:
 	void setTask(const int taskId, const int taskPos);
 	void insertTask(const int taskId, const int taskPos);
 	void removeTask(const int taskPos);
+	void swapTasks(const int taskPos1, const int taskPos2);
 
 	bool hasTask(const int taskId) const;
-	int getTaskPos(const int taskId) const;
+//	int getTaskPos(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
@@ -123,6 +124,8 @@ public:
 	double getMakespan();
 
 	int machineId() const;
+
+	void showMap() const;
 };
 
 requires class Solution {
