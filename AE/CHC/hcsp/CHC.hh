@@ -149,8 +149,6 @@ public:
 	bool isInitilized() const;
 
 	double fitness();
-	double fitnessByMachine(int machineId);
-	double costByMachine(int machineId);
 	unsigned int size() const;
 
 	int length() const;
@@ -160,11 +158,9 @@ public:
 	void swapTasks(Solution& solution, const int taskId);
 	bool equalTasks(Solution& solution, const int taskId);
 	bool findTask(const int taskId, int& foundMachineId, int& foundTaskPos);
-	void
-	executeTaskAt(const int taskId, const int machineId, const int taskPos);
-	void addTask(const int taskId, const int machineId);
-	void removeTaskAt(const int machineId, const int taskPos);
+
 	void doLocalSearch();
+	void mutate();
 
 	int getBestFitnessMachineId();
 	int getMinCostMachineId();
