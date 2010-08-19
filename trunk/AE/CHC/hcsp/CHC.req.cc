@@ -122,7 +122,7 @@ Problem::~Problem() {
 // Solution machine ------------------------------------------------------
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
-	_tasks(), _machineId(machineId), _fitness(0.0),
+	_tasks(), _assignedTasks(), _machineId(machineId), _fitness(0.0),
 	_makespan(0.0), _dirty(true), _pbm(problem) {
 }
 
@@ -131,6 +131,7 @@ SolutionMachine::~SolutionMachine() {
 
 SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_tasks = machine._tasks;
+	_assignedTasks = machine._assignedTasks;
 	_machineId = machine._machineId;
 	_fitness = machine._fitness;
 	_makespan = machine._makespan;
@@ -155,6 +156,7 @@ void SolutionMachine::addTask(const int taskId) {
 	_makespan = _makespan + computeCost;
 
 	_tasks.push_back(taskId);
+	_assignedTasks[taskId] = _tasks.size()-1;
 }
 
 void SolutionMachine::setTask(const int taskId, const int taskPos) {
@@ -164,8 +166,10 @@ void SolutionMachine::setTask(const int taskId, const int taskPos) {
 	_dirty = true;
 
 	int removedTaskId = _tasks[taskPos];
+	_assignedTasks.erase(removedTaskId);
 
 	_tasks.at(taskPos) = taskId;
+	_assignedTasks[taskId] = taskPos;
 }
 
 int SolutionMachine::getTask(const int taskPos) const {
@@ -178,6 +182,15 @@ int SolutionMachine::countTasks() const {
 	return _tasks.size();
 }
 
+bool SolutionMachine::hasTask(const int taskId) const {
+	return _assignedTasks.count(taskId) == 1;
+}
+
+int SolutionMachine::getTaskPos(const int taskId) const {
+	assert(hasTask(taskId));
+	return _assignedTasks.find(taskId)->second;
+}
+
 void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	assert(taskPos >= 0);
 	assert(taskPos < _tasks.size());
@@ -185,6 +198,12 @@ void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	_dirty = true;
 
 	_tasks.insert(_tasks.begin() + taskPos, taskId);
+
+	// Actualizo el hash!
+	_assignedTasks[taskId] = taskPos;
+	for (int i = taskPos+1; i < _tasks.size(); i++) {
+		_assignedTasks[_tasks[i]] = i;
+	}
 }
 
 void SolutionMachine::removeTask(const int taskPos) {
@@ -193,7 +212,14 @@ void SolutionMachine::removeTask(const int taskPos) {
 
 	_dirty = true;
 
+	int removedId = _tasks[taskPos];
 	_tasks.erase(_tasks.begin() + taskPos);
+
+	// Actualizo el hash!
+	_assignedTasks.erase(removedId);
+	for (int i = taskPos; i < _tasks.size(); i++) {
+		_assignedTasks[_tasks[i]] = i;
+	}
 }
 
 double SolutionMachine::getMakespan() {

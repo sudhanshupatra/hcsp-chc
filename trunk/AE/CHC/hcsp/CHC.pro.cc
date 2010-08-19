@@ -638,7 +638,7 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-	//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross start" << endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
 
 	if (probability[0] <= 0.0) {
 		probability[0] = sol1.length() / CROSSOVER_DISTANCE;
@@ -649,19 +649,11 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 	//if ((dh / 2) > probability[0]) {
 	if (dh > probability[0]) {
 		for (int i = 0; i < sol1.length(); i++) {
-			if ((!sol1.equalTasks(sol2, i)) && (0.5 <= rand01())) {
+			if (0.5 <= rand01()) {
 				sol1.swapTasks(sol2, i);
 			}
 		}
 	}
-
-	//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross end" << endl;
-
-	//	if (DEBUG)
-	//		if (!sol1.validate() && !sol2.validate()) {
-	//			cout << sol1;
-	//			cout << sol2;
-	//		}
 }
 
 void Crossover::execute(Rarray<Solution*>& sols) const {

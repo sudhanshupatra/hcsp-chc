@@ -12,7 +12,10 @@
 #include "CHCstructures.hh"
 
 #include <vector>
+#include <map>
+
 using std::vector;
+using std::map;
 
 skeleton CHC {
 
@@ -92,6 +95,7 @@ class SolutionMachine {
 private:
 	const Problem& _pbm;
 	vector<int> _tasks;
+	map<int, int> _assignedTasks;
 	int _machineId;
 
 	double _fitness;
@@ -109,6 +113,9 @@ public:
 	void setTask(const int taskId, const int taskPos);
 	void insertTask(const int taskId, const int taskPos);
 	void removeTask(const int taskPos);
+
+	bool hasTask(const int taskId) const;
+	int getTaskPos(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
