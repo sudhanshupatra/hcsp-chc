@@ -755,19 +755,43 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-	//	if (DEBUG)
-	//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+	if (DEBUG) {
+		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+	}
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (i != bestSolutionIndex) {
-			// Si no es la mejor solución aplico operaciones de mutación.
-			if (rand01() < mutationProbability)
-				sols[i]->mutate();
-		} else {
-			// Ejecuto la búsqueda local solo en la mejor solución.
-			sols[i]->doLocalSearch();
+		if (rand01() < mutationProbability) {
+			if (DEBUG) {
+				int maquinasConCeroTasks;
+				maquinasConCeroTasks = 0;
+				for (int machineId = 0; machineId < sols[i]->machines().size(); machineId++) {
+					if (sols[i]->machines()[machineId].countTasks() == 0) {
+						maquinasConCeroTasks++;
+					}
+				}
+
+				if (maquinasConCeroTasks > 0)
+					cout << "[PreMutación] Solución " << i << " tiene " << maquinasConCeroTasks << " máquinas con cero tasks." << endl;
+			}
+
+			sols[i]->mutate();
+
+			if (DEBUG) {
+				int maquinasConCeroTasks;
+				maquinasConCeroTasks = 0;
+				for (int machineId = 0; machineId < sols[i]->machines().size(); machineId++) {
+					if (sols[i]->machines()[machineId].countTasks() == 0) {
+						maquinasConCeroTasks++;
+					}
+				}
+				if (maquinasConCeroTasks > 0)
+					cout << "[PostMutación] Solución " << i << " tiene " << maquinasConCeroTasks << " máquinas con cero tasks." << endl;
+			}
 		}
 	}
+
+	int seleccionPALS = rand01() * sols.size();
+	sols[seleccionPALS]->doLocalSearch();
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {
