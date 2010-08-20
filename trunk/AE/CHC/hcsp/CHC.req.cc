@@ -325,26 +325,26 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 // Serialización de la solución.
 // ===================================
 ostream& operator<<(ostream& os, const Solution& sol) {
-	os << endl;
-	if (sol.isInitilized()) {
-		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
-			os << "> machineId: " << machineId << endl;
-			//os << "  fitness: " << sol.fitnessByMachine(machineId) << endl;
-
-			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
-				os << "  taskPos: " << i;
-				os << " taskId: " << sol.machines()[machineId].getTask(i);
-				os << " ETC: " << sol.pbm().expectedTimeToCompute(
-						sol.machines()[machineId].getTask(i), machineId);
-				os << " priority: " << sol.pbm().taskPriority(
-						sol.machines()[machineId].getTask(i));
-				os << endl;
-			}
-		}
-		//os << "* overall fitness: " << sol.fitness() << endl;
-	} else {
-		os << "> solution not inialized." << endl;
-	}
+//	os << endl;
+//	if (sol.isInitilized()) {
+//		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+//			os << "> machineId: " << machineId << endl;
+//			//os << "  fitness: " << sol.fitnessByMachine(machineId) << endl;
+//
+//			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
+//				os << "  taskPos: " << i;
+//				os << " taskId: " << sol.machines()[machineId].getTask(i);
+//				os << " ETC: " << sol.pbm().expectedTimeToCompute(
+//						sol.machines()[machineId].getTask(i), machineId);
+//				os << " priority: " << sol.pbm().taskPriority(
+//						sol.machines()[machineId].getTask(i));
+//				os << endl;
+//			}
+//		}
+//		//os << "* overall fitness: " << sol.fitness() << endl;
+//	} else {
+//		os << "> solution not inialized." << endl;
+//	}
 
 	return os;
 }
