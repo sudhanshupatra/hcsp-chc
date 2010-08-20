@@ -19,16 +19,19 @@ using std::map;
 
 skeleton CHC {
 
-// Cantidad máxima de máquinas que se mutan durante un Diverge
-#define MUT_MAQ 1
-#define RANDOM_INIT 0.0
-#define CROSSOVER_DISTANCE 3
+// Cantidad máxima de máquinas que se mutan durante un Diverge.
+#define MUT_MAQ 5
+// Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
+#define RANDOM_INIT 0.8
+// Distancia minima para permitir el crossover (1/4).
+#define CROSSOVER_DISTANCE 4
 //define CROSSOVER_DISTANCE 4
+// Propiedades del PALS.
 #define PALS_MAQ 5
 #define PALS_MAX_INTENTOS 3
 #define PALS_UMBRAL_MEJORA 1.0
-#define PALS_TOP_M 5
-#define PALS_TOP_T 512
+#define PALS_TOP_M 16
+#define PALS_TOP_T 1024
 
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
