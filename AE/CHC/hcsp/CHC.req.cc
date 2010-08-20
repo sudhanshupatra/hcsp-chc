@@ -463,6 +463,8 @@ void Solution::initialize(const int solutionIndex) {
 
 			_machines[minCTMachineId].addTask(minCTTaskId);
 		}
+
+		cout  << endl << "Min-Min fitness: " << fitness() << endl;
 	} else {
 		if (RANDOM_INIT > rand01()) {
 			// Inicialización aleatoria
@@ -801,17 +803,39 @@ void Solution::mutate() {
 	// Con una probabilidad de 0.8 a cada máquina sin tareas se le asigna la tarea que
 	// mejor puede ejecutar.
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		if ((rand01() >= 0.8) && (_machines[machineId].countTasks() == 0)) {
-			int bestTaskIdForMachine;
-			bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
+		if (_machines[machineId].countTasks() == 0) {
+			if (rand01() < 0.8) {
+				{
+					int bestTaskIdForMachine;
+					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
 
-			int origenMachineId, origenTaskPos;
-			assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
+					int origenMachineId, origenTaskPos;
+					assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
 
-			if (_machines[origenMachineId].countTasks() > 0) {
-				_machines[origenMachineId].removeTask(origenTaskPos);
-				_machines[machineId].addTask(bestTaskIdForMachine);
-				cout << endl << "move task to empty machine" << endl;
+					if (_machines[origenMachineId].countTasks() > 1) {
+						if (_pbm.getBestTaskIdForMachine(origenMachineId) != bestTaskIdForMachine) {
+							_machines[origenMachineId].removeTask(origenTaskPos);
+							_machines[machineId].addTask(bestTaskIdForMachine);
+							cout << "[Best] Task " << bestTaskIdForMachine << " moved from " << origenMachineId << " to " << machineId << endl;
+						}
+					}
+				}
+
+				{
+					if (_machines[machineId].countTasks() == 0) {
+						int mostLoadedMachineId = getMaxCostMachineId();
+
+						int bestTaskPosForMachine;
+						bestTaskPosForMachine = getMinDestinationCostTaskPosByMachine(mostLoadedMachineId, machineId);
+
+						int bestTaskIdForMachine;
+						bestTaskIdForMachine = _machines[mostLoadedMachineId].getTask(bestTaskPosForMachine);
+
+						_machines[mostLoadedMachineId].removeTask(bestTaskPosForMachine);
+						_machines[machineId].addTask(bestTaskIdForMachine);
+						cout << "[Loaded] Task " << bestTaskIdForMachine << " moved from " << mostLoadedMachineId << " to " << machineId << endl;
+					}
+				}
 			}
 		}
 	}
@@ -1101,6 +1125,24 @@ int Solution::getMinCostMachineId() {
 	}
 
 	return minCostMachineId;
+}
+
+int Solution::getMaxCostMachineId() {
+	// if (DEBUG) cout << endl << "[DEBUG] Solution::getMaxCostMachineId" << endl;
+	int maxCostMachineId = 0;
+	double maxCostMachineValue = _machines[0].getMakespan();
+
+	for (int machineId = 1; machineId < machines().size(); machineId++) {
+		double currentMachineCost;
+		currentMachineCost = _machines[machineId].getMakespan();
+
+		if (maxCostMachineValue < currentMachineCost) {
+			maxCostMachineValue = currentMachineCost;
+			maxCostMachineId = machineId;
+		}
+	}
+
+	return maxCostMachineId;
 }
 
 int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {

@@ -178,6 +178,7 @@ public:
 
 	int getBestFitnessMachineId();
 	int getMinCostMachineId();
+	int getMaxCostMachineId();
 	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId,
