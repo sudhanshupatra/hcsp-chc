@@ -807,7 +807,7 @@ void Solution::mutate() {
 	// mejor puede ejecutar.
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (_machines[machineId].countTasks() == 0) {
-//			if (rand01() < 0.8) {
+			if (rand01() < 0.8) {
 				{
 					int bestTaskIdForMachine;
 					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
@@ -819,7 +819,6 @@ void Solution::mutate() {
 						if (_pbm.getBestTaskIdForMachine(origenMachineId) != bestTaskIdForMachine) {
 							_machines[origenMachineId].removeTask(origenTaskPos);
 							_machines[machineId].addTask(bestTaskIdForMachine);
-							cout << "[Best] Task " << bestTaskIdForMachine << " moved from " << origenMachineId << " to " << machineId << endl;
 						}
 					}
 				}
@@ -836,10 +835,9 @@ void Solution::mutate() {
 
 						_machines[mostLoadedMachineId].removeTask(bestTaskPosForMachine);
 						_machines[machineId].addTask(bestTaskIdForMachine);
-						cout << "[Loaded] Task " << bestTaskIdForMachine << " moved from " << mostLoadedMachineId << " to " << machineId << endl;
 					}
 				}
-//			}
+			}
 		}
 	}
 
