@@ -102,6 +102,28 @@ int Problem::machineCount() const {
 	return _machineCount;
 }
 
+int Problem::getBestTaskIdForMachine(int machineId) const {
+	//TODO: Optimizar!
+	int minTaskId = 0;
+	for (int i = 1; i < taskCount(); i++) {
+		if (expectedTimeToCompute(i,machineId) < expectedTimeToCompute(minTaskId,machineId)) {
+			minTaskId = i;
+		}
+	}
+	return minTaskId;
+}
+
+int Problem::getBestMachineForTaskId(int taskId) const {
+	//TODO: Optimizar!
+	int minMachineId = 0;
+	for (int i = 1; i < machineCount(); i++) {
+		if (expectedTimeToCompute(taskId,i) < expectedTimeToCompute(taskId,minMachineId)) {
+			minMachineId = i;
+		}
+	}
+	return minMachineId;
+}
+
 float Problem::expectedTimeToCompute(const int& task, const int& machine) const {
 	assert(task >= 0);
 	assert(task < _taskCount);
@@ -124,6 +146,8 @@ Problem::~Problem() {
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _fitness(0.0),
 			_makespan(0.0), _dirty(true), _pbm(problem) {
+
+	_tasks.reserve(problem.taskCount());
 }
 
 SolutionMachine::~SolutionMachine() {
@@ -325,26 +349,26 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 // Serialización de la solución.
 // ===================================
 ostream& operator<<(ostream& os, const Solution& sol) {
-//	os << endl;
-//	if (sol.isInitilized()) {
-//		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
-//			os << "> machineId: " << machineId << endl;
-//			//os << "  fitness: " << sol.fitnessByMachine(machineId) << endl;
-//
-//			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
-//				os << "  taskPos: " << i;
-//				os << " taskId: " << sol.machines()[machineId].getTask(i);
-//				os << " ETC: " << sol.pbm().expectedTimeToCompute(
-//						sol.machines()[machineId].getTask(i), machineId);
-//				os << " priority: " << sol.pbm().taskPriority(
-//						sol.machines()[machineId].getTask(i));
-//				os << endl;
-//			}
-//		}
-//		//os << "* overall fitness: " << sol.fitness() << endl;
-//	} else {
-//		os << "> solution not inialized." << endl;
-//	}
+	os << endl;
+	if (sol.isInitilized()) {
+		for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+			os << "> machineId: " << machineId << endl;
+			//os << "  fitness: " << sol.fitnessByMachine(machineId) << endl;
+
+			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
+				os << "  taskPos: " << i;
+				os << " taskId: " << sol.machines()[machineId].getTask(i);
+				os << " ETC: " << sol.pbm().expectedTimeToCompute(
+						sol.machines()[machineId].getTask(i), machineId);
+				os << " priority: " << sol.pbm().taskPriority(
+						sol.machines()[machineId].getTask(i));
+				os << endl;
+			}
+		}
+		//os << "* overall fitness: " << sol.fitness() << endl;
+	} else {
+		os << "> solution not inialized." << endl;
+	}
 
 	return os;
 }
@@ -774,10 +798,28 @@ void Solution::doLocalSearch() {
 void Solution::mutate() {
 	//	if (DEBUG)	cout << endl << "[DEBUG] Solution::mutate" << endl;
 
-	int machineCount = _machines.size();
-	vector<double> fitnessByMachine;
+	// Con una probabilidad de 0.8 a cada máquina sin tareas se le asigna la tarea que
+	// mejor puede ejecutar.
+	for (int machineId = 0; machineId < _machines.size(); machineId++) {
+		if ((rand01() >= 0.8) && (_machines[machineId].countTasks() == 0)) {
+			int bestTaskIdForMachine;
+			bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
 
-	for (int machineId = 0; machineId < machineCount; machineId++) {
+			int origenMachineId, origenTaskPos;
+			assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
+
+			if (_machines[origenMachineId].countTasks() > 0) {
+				_machines[origenMachineId].removeTask(origenTaskPos);
+				_machines[machineId].addTask(bestTaskIdForMachine);
+				cout << endl << "move task to empty machine" << endl;
+			}
+		}
+	}
+
+	vector<double> fitnessByMachine;
+	fitnessByMachine.reserve(_machines.size());
+
+	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		fitnessByMachine.push_back(_machines[machineId].getFitness());
 	}
 
@@ -786,162 +828,96 @@ void Solution::mutate() {
 	for (int i = 0; i < MUT_MAQ; i++) {
 		int machineId;
 		{
-			int machineTasksCount;
-			machineTasksCount = 0;
-
 			// Sorteo una máquina para mutar.
-			while (machineTasksCount == 0) {
+			do {
 				machineId = roulette.drawOneByIndex();
-				machineTasksCount = _machines[machineId].countTasks();
-			}
+			} while (_machines[machineId].countTasks() == 0);
 		}
 
-		bool modificado;
-		modificado = false;
+		if (_machines[machineId].countTasks() > 0) {
+			{
+				vector<double> costsByTaskPos;
+				costsByTaskPos.reserve(_machines[machineId].countTasks());
+				costsByTaskPos.clear();
 
-		while (!modificado) {
-			// Con una probabilidad de 0.5 a cada máquina sin tareas se le asigna la tarea que
-			// mejor puede ejecutar de la máquina actual.
-			for (int auxMachineId = 0; auxMachineId < _machines.size(); auxMachineId++) {
-				if ((auxMachineId != machineId) && (rand01() >= 0.5)
-						&& (_machines[auxMachineId].countTasks() == 0)
-						&& (_machines[machineId].countTasks() > 0)) {
+				for (int taskPos = 0; taskPos
+						< _machines[machineId].countTasks(); taskPos++) {
+					// Inicializo el vector de costos de las tareas de la máquina actual
+					// para sortear una tarea.
+					int taskId;
+					taskId = _machines[machineId].getTask(taskPos);
 
-					int bestTaskPosForMachine;
-					bestTaskPosForMachine
-							= getMinDestinationCostTaskPosByMachine(machineId,
-									auxMachineId);
+					int taskCost;
+					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
-					if (bestTaskPosForMachine >= 0) {
-						int bestTaskIdForMachine;
-						bestTaskIdForMachine = _machines[machineId].getTask(
-								bestTaskPosForMachine);
+					costsByTaskPos.push_back(taskCost);
+				}
 
-						_machines[machineId].removeTask(bestTaskPosForMachine);
-						_machines[auxMachineId].addTask(bestTaskIdForMachine);
+				RouletteWheel roulette(costsByTaskPos, true);
 
-						modificado = true;
+				set<int> taskPosSorteadas;
+				taskPosSorteadas.clear();
+
+				for (int MUT_TASKS_COUNT = 0; MUT_TASKS_COUNT < MUT_TASKS; MUT_TASKS_COUNT++) {
+					taskPosSorteadas.insert(roulette.drawOneByIndex());
+				}
+
+				for (int selectedTaskPos = 0; selectedTaskPos < taskPosSorteadas.size(); selectedTaskPos++) {
+					if (rand01() >= 0.5) {
+						// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+						// intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
+						// la máquina en la que mejor puede ejecutarse la tarea sorteada.
+
+						// Obtengo la máquina que que mejor puede ejecutar la tarea.
+						int bestMachineId;
+						bestMachineId = _pbm.getBestMachineForTaskId(_machines[machineId].getTask(selectedTaskPos));
+
+						if (bestMachineId != machineId) {
+							if (_machines[bestMachineId].countTasks() > 0) {
+								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+								// con menor costo de ejecución en la máquina sorteada.
+								int minCostTaskPosOnMachine;
+								minCostTaskPosOnMachine = getMinDestinationCostTaskPosByMachine(bestMachineId, machineId);
+
+								// Hago un swap entre las tareas de las máquinas.
+								swapTasks(machineId, selectedTaskPos, bestMachineId,
+										minCostTaskPosOnMachine);
+							}
+						}
+					}
+
+					if (rand01() >= 0.5) {
+						// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+						// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+						// más eficientemente en la máquina actual.
+
+						// Obtengo la máquina que aporta un menor costo al total de la solución.
+						int minCostMachineId;
+						minCostMachineId = getMinCostMachineId();
+
+						if (_machines[minCostMachineId].countTasks() > 0) {
+							// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+							// con menor costo de ejecución en la máquina sorteada.
+
+							int minCostTaskPosOnMachine;
+							minCostTaskPosOnMachine
+									= getMinDestinationCostTaskPosByMachine(
+											minCostMachineId, machineId);
+
+							// Hago un swap entre las tareas de las máquinas.
+							swapTasks(machineId, selectedTaskPos, minCostMachineId,
+									minCostTaskPosOnMachine);
+						}
 					}
 				}
 			}
 
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
-				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-				// intercambia con la tarea de menor costo de la máquina con menor makespan.
-
-				vector<double> costsByTaskPos;
-				costsByTaskPos.clear();
-
-				for (int taskPos = 0; taskPos
-						< _machines[machineId].countTasks(); taskPos++) {
-					// Inicializo el vector de costos de las tareas de la máquina actual
-					// para sortear una tarea.
-					int taskId;
-					taskId = _machines[machineId].getTask(taskPos);
-
-					int taskCost;
-					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
-
-					costsByTaskPos.push_back(taskCost);
-				}
-
-				// Sorteo una tarea.
-				RouletteWheel roulette(costsByTaskPos, true);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
-
-				// Obtengo la máquina que aporta un menor costo al total de la solución.
-				int minCostMachineId;
-				minCostMachineId = getMinCostMachineId();
-
-				if (_machines[minCostMachineId].countTasks() > 0) {
-					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
-					// con menor costo si se ejecuta en la máquina destino.
-					int minCostTaskPosOnMachine;
-					minCostTaskPosOnMachine = getMinCostTaskPosByMachine(
-							minCostMachineId);
-
-					// Hago un swap entre las tareas de las máquinas.
-					swapTasks(machineId, taskPos, minCostMachineId,
-							minCostTaskPosOnMachine);
-				} else {
-					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
-					// máquina origen a la destino.
-
-					int taskId;
-					taskId = _machines[machineId].getTask(taskPos);
-
-					_machines[machineId].removeTask(taskPos);
-					_machines[minCostMachineId].addTask(taskId);
-				}
-
-				modificado = true;
-			}
-
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
-				// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-				// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
-				// más eficientemente en la máquina actual.
-
-				vector<double> costsByTaskPos;
-				costsByTaskPos.clear();
-
-				for (int taskPos = 0; taskPos
-						< _machines[machineId].countTasks(); taskPos++) {
-					// Inicializo el vector de costos de las tareas de la máquina actual
-					// para sortear una tarea.
-					int taskId;
-					taskId = _machines[machineId].getTask(taskPos);
-
-					int taskCost;
-					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
-
-					costsByTaskPos.push_back(taskCost);
-				}
-
-				// Sorteo una tarea.
-				RouletteWheel roulette(costsByTaskPos, true);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
-
-				// Obtengo la máquina que aporta un menor costo al total de la solución.
-				int minCostMachineId;
-				minCostMachineId = getMinCostMachineId();
-
-				if (_machines[minCostMachineId].countTasks() > 0) {
-					// Si la máquina destino tiene al menos una tarea, obtengo la tarea
-					// con menor costo si se ejecuta en la máquina origen.
-
-					int minCostTaskPosOnMachine;
-					minCostTaskPosOnMachine
-							= getMinDestinationCostTaskPosByMachine(
-									minCostMachineId, machineId);
-
-					// Hago un swap entre las tareas de las máquinas.
-					swapTasks(machineId, taskPos, minCostMachineId,
-							minCostTaskPosOnMachine);
-				} else {
-					// La máquina destino no tiene tareas. Muevo la tarea sorteada en la
-					// máquina origen a la destino.
-					int taskId;
-					taskId = _machines[machineId].getTask(taskPos);
-
-					_machines[machineId].removeTask(taskPos);
-					_machines[minCostMachineId].addTask(taskId);
-				}
-
-				modificado = true;
-			}
-
-			if ((rand01() >= 0.5) && (_machines[machineId].countTasks() > 0)) {
+			if (rand01() >= 0.5) {
 				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
 				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
 				// de la máquina.
 
-				vector<double> priorityByTaskPos;
-				priorityByTaskPos.clear();
-
-				for (int taskPos = 0; taskPos
+				for (int taskPos = 1; taskPos
 						< _machines[machineId].countTasks(); taskPos++) {
 					// Inicializo el vector de prioridades de las tareas de
 					// la máquina actual para sortear una tarea.
@@ -951,19 +927,16 @@ void Solution::mutate() {
 					int taskPriority;
 					taskPriority = _pbm.taskPriority(taskId);
 
-					priorityByTaskPos.push_back(taskPriority);
+					int anteriorTaskId;
+					anteriorTaskId = _machines[machineId].getTask(taskPos-1);
+
+					int anteriorTaskPriority;
+					anteriorTaskPriority = _pbm.taskPriority(anteriorTaskId);
+
+					if (taskPriority < anteriorTaskPriority) {
+						_machines[machineId].swapTasks(taskPriority, anteriorTaskPriority);
+					}
 				}
-
-				// Sorteo una tarea.
-				RouletteWheel roulette(priorityByTaskPos, false);
-				int taskPos;
-				taskPos = roulette.drawOneByIndex();
-
-				if (taskPos > 0) {
-					swapTasks(machineId, taskPos, machineId, 0);
-				}
-
-				modificado = true;
 			}
 		}
 	}
