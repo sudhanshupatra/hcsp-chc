@@ -13,14 +13,19 @@
 
 #include <vector>
 #include <map>
+#include <set>
 
 using std::vector;
 using std::map;
+using std::set;
 
 skeleton CHC {
 
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
 #define MUT_MAQ 5
+#define MUT_TASKS 5
+#define MUT_RANDOM 0.2
+#define MUT_BESTMUTATION 0.1
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.8
 // Distancia minima para permitir el crossover (1/4).
@@ -85,6 +90,9 @@ public:
 	int machineCount() const;
 	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
+
+	int getBestTaskIdForMachine(int machineId) const;
+	int getBestMachineForTaskId(int taskId) const;
 private:
 	int _taskCount;
 	int _machineCount;
