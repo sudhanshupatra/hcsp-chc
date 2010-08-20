@@ -599,7 +599,10 @@ double Solution::fitness() {
 	double fitness = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		fitness += _machines[machineId].getFitness();
+		// TODO: re-pensar esto!
+		if (_machines[machineId].getFitness() > fitness) {
+			fitness = _machines[machineId].getFitness();
+		}
 	}
 
 	return fitness;
@@ -804,7 +807,7 @@ void Solution::mutate() {
 	// mejor puede ejecutar.
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (_machines[machineId].countTasks() == 0) {
-			if (rand01() < 0.8) {
+//			if (rand01() < 0.8) {
 				{
 					int bestTaskIdForMachine;
 					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
@@ -836,7 +839,7 @@ void Solution::mutate() {
 						cout << "[Loaded] Task " << bestTaskIdForMachine << " moved from " << mostLoadedMachineId << " to " << machineId << endl;
 					}
 				}
-			}
+//			}
 		}
 	}
 
