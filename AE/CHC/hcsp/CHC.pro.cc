@@ -755,72 +755,19 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-	if (DEBUG) {
-		cout << endl << "[DEBUG] Diverge::diverge" << endl;
-	}
+//	if (DEBUG) {
+//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+//	}
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (rand01() < mutationProbability) {
-			bool mostrar;
-			mostrar = false;
-			if (DEBUG) {
-				int maquinasConCeroTasks;
-				maquinasConCeroTasks = 0;
-				for (int machineId = 0; machineId < sols[i]->machines().size(); machineId++) {
-					if (sols[i]->machines()[machineId].countTasks() == 0) {
-						maquinasConCeroTasks++;
-					}
-				}
-
-				if (maquinasConCeroTasks > 0) {
-					mostrar = true;
-					cout << "[PreMutación] Solución " << i << " tiene " << maquinasConCeroTasks << " máquinas con cero tasks y fitness " << sols[i]->fitness() << "." << endl;
-				}
-			}
-
 			sols[i]->mutate();
-
-			if (DEBUG) {
-				int maquinasConCeroTasks;
-				maquinasConCeroTasks = 0;
-				for (int machineId = 0; machineId < sols[i]->machines().size(); machineId++) {
-					if (sols[i]->machines()[machineId].countTasks() == 0) {
-						maquinasConCeroTasks++;
-					}
-				}
-				if ((maquinasConCeroTasks > 0) || (mostrar)) {
-					cout << "[PostMutación] Solución " << i << " tiene " << maquinasConCeroTasks << " máquinas con cero tasks y fitness " << sols[i]->fitness() << "." << endl;
-				}
-			}
 		}
 	}
 
 	{
 		int seleccionPALS = rand01() * sols.size();
-
-		if (DEBUG) {
-			int maquinasConCeroTasks;
-			maquinasConCeroTasks = 0;
-			for (int machineId = 0; machineId < sols[seleccionPALS]->machines().size(); machineId++) {
-				if (sols[seleccionPALS]->machines()[machineId].countTasks() == 0) {
-					maquinasConCeroTasks++;
-				}
-			}
-			cout << "[PrePALS] Solución PALS tiene " << maquinasConCeroTasks << " máquinas con cero tasks y fitness " << sols[seleccionPALS]->fitness() << "." << endl;
-		}
-
 		sols[seleccionPALS]->doLocalSearch();
-
-		if (DEBUG) {
-			int maquinasConCeroTasks;
-			maquinasConCeroTasks = 0;
-			for (int machineId = 0; machineId < sols[seleccionPALS]->machines().size(); machineId++) {
-				if (sols[seleccionPALS]->machines()[machineId].countTasks() == 0) {
-					maquinasConCeroTasks++;
-				}
-			}
-			cout << "[PostPALS] Solución PALS tiene " << maquinasConCeroTasks << " máquinas con cero tasks y fitness " << sols[seleccionPALS]->fitness() << "." << endl;
-		}
 	}
 }
 
