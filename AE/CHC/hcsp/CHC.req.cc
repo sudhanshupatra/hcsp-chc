@@ -407,6 +407,218 @@ bool Solution::isInitilized() const {
 // ===================================
 // Inicializo la solución.
 // ===================================
+void Solution::initializeMCT() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT" << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	int startTask = rand_int(0, _pbm.taskCount() - 1);
+	int direction = rand_int(0, 1);
+	if (direction == 0)
+		direction = -1;
+
+	int currentTask;
+	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+		currentTask = startTask + (direction * taskOffset);
+		if (currentTask < 0)
+			currentTask = _pbm.taskCount() + currentTask;
+		currentTask = currentTask % _pbm.taskCount();
+
+		double minCT;
+		minCT = infinity();
+
+		int minCTTaskId;
+		minCTTaskId = -1;
+
+		int minCTMachineId;
+		minCTMachineId = -1;
+
+		for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+			if ((machineMakespan[machineId]
+					+ _pbm.expectedTimeToCompute(currentTask, machineId))
+					< minCT) {
+				minCT = machineMakespan[machineId]
+						+ _pbm.expectedTimeToCompute(currentTask,
+								machineId);
+				minCTTaskId = currentTask;
+				minCTMachineId = machineId;
+			}
+		}
+
+		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+				minCTTaskId, minCTMachineId);
+
+		_machines[minCTMachineId].addTask(minCTTaskId);
+	}
+	cout  << endl << "MCT fitness: " << fitness() << endl;
+}
+
+void Solution::initializeMinMin() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount = _pbm.taskCount();
+
+	while (unmappedTasksCount > 0) {
+		double minCT;
+		minCT = infinity();
+
+		int minCTTaskId;
+		minCTTaskId = -1;
+
+		int minCTMachineId;
+		minCTMachineId = -1;
+
+		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+			if (taskIsUnmapped[taskId]) {
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					if ((machineMakespan[machineId]
+							+ _pbm.expectedTimeToCompute(taskId, machineId))
+							< minCT) {
+						minCT = machineMakespan[machineId]
+								+ _pbm.expectedTimeToCompute(taskId,
+										machineId);
+						minCTTaskId = taskId;
+						minCTMachineId = machineId;
+					}
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[minCTTaskId] = false;
+		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+				minCTTaskId, minCTMachineId);
+
+		_machines[minCTMachineId].addTask(minCTTaskId);
+	}
+
+	cout  << endl << "Min-Min fitness: " << fitness() << endl;
+}
+
+void Solution::initializeRandom() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización random" << endl;
+
+	int startTask = rand_int(0, _pbm.taskCount() - 1);
+	int direction = rand_int(0, 1);
+	if (direction == 0)
+		direction = -1;
+
+	int currentTask;
+	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+		currentTask = startTask + (direction * taskOffset);
+		if (currentTask < 0)
+			currentTask = _pbm.taskCount() + currentTask;
+		currentTask = currentTask % _pbm.taskCount();
+
+		int currentMachine;
+		currentMachine = rand_int(0, _pbm.machineCount() - 1);
+
+		_machines[currentMachine].addTask(currentTask);
+	}
+}
+
+void Solution::initializeSufferage() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización Sufferage" << endl;
+	int unmappedTasks = _pbm.taskCount();
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount());
+	for (int i = 0; i < _pbm.taskCount(); i++) {
+		taskIsUnmapped[i] = true;
+	}
+
+	vector<double> machinesMakespan;
+	machinesMakespan.reserve(_pbm.machineCount());
+	for (int i = 0; i < machinesMakespan.size(); i++) {
+		machinesMakespan[i] = 0.0;
+	}
+
+	int maxSufferageTaskId;
+	int maxSufferageMachineId;
+	double maxSufferageValue;
+
+	while (unmappedTasks > 0) {
+		maxSufferageTaskId = -1;
+		maxSufferageMachineId = -1;
+		maxSufferageValue = 0.0;
+
+		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+			if (taskIsUnmapped[taskId]) {
+				int minMakespanMachineId;
+				minMakespanMachineId = 0;
+
+				int secondMinMakeSpanMachineId;
+				secondMinMakeSpanMachineId = 0;
+
+				assert(_pbm.machineCount() > 2);
+				if ((machinesMakespan[0] + _pbm.expectedTimeToCompute(taskId, 0))
+						< (machinesMakespan[1] + _pbm.expectedTimeToCompute(taskId, 1))) {
+					minMakespanMachineId = 0;
+					secondMinMakeSpanMachineId = 1;
+				} else {
+					minMakespanMachineId = 1;
+					secondMinMakeSpanMachineId = 0;
+				}
+
+				for (int machineId = 2; machineId < _pbm.machineCount(); machineId++) {
+					if ((machinesMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
+							< (machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId))) {
+
+						secondMinMakeSpanMachineId = minMakespanMachineId;
+						minMakespanMachineId = machineId;
+					} else if ((machinesMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
+							< (machinesMakespan[secondMinMakeSpanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakeSpanMachineId))) {
+
+						secondMinMakeSpanMachineId = machineId;
+					}
+				}
+
+				double sufferageValue;
+				sufferageValue = (machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId)) -
+						(machinesMakespan[secondMinMakeSpanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakeSpanMachineId));
+
+				if ((maxSufferageMachineId == -1)||(maxSufferageTaskId == -1)) {
+					maxSufferageTaskId = taskId;
+					maxSufferageMachineId = minMakespanMachineId;
+					maxSufferageValue = sufferageValue;
+				} else if (maxSufferageValue < sufferageValue) {
+					maxSufferageTaskId = taskId;
+					maxSufferageMachineId = minMakespanMachineId;
+					maxSufferageValue = sufferageValue;
+				}
+			}
+		}
+
+		assert((maxSufferageTaskId >= 0) && (maxSufferageMachineId >= 0));
+
+		machinesMakespan[maxSufferageMachineId] = machinesMakespan[maxSufferageMachineId] +
+				_pbm.expectedTimeToCompute(maxSufferageTaskId, maxSufferageMachineId);
+
+		_machines[maxSufferageMachineId].addTask(maxSufferageTaskId);
+
+		taskIsUnmapped[maxSufferageTaskId] = false;
+		unmappedTasks--;
+	}
+
+	cout << endl << "Sufferage fitness: " << fitness() << endl;
+}
+
 void Solution::initialize(const int solutionIndex) {
 	_initialized = true;
 
@@ -414,137 +626,34 @@ void Solution::initialize(const int solutionIndex) {
 		// Inicialización usando una heurística "pesada": MIN-MIN.
 		// Utilizo MIN-MIN para un único elemento de la población inicial.
 
-		//if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+		initializeMinMin();
+	} else if (solutionIndex == 1) {
+		// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+		// Utilizo Sufferage para un único elemento de la población inicial.
 
-		vector<double> machineMakespan;
-		machineMakespan.reserve(_pbm.machineCount() + 1);
-
-		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
-			machineMakespan.push_back(0.0);
-
-		vector<bool> taskIsUnmapped;
-		taskIsUnmapped.reserve(_pbm.taskCount() + 1);
-
-		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
-			taskIsUnmapped.push_back(true);
-
-		int unmappedTasksCount = _pbm.taskCount();
-
-		while (unmappedTasksCount > 0) {
-			double minCT;
-			minCT = infinity();
-
-			int minCTTaskId;
-			minCTTaskId = -1;
-
-			int minCTMachineId;
-			minCTMachineId = -1;
-
-			for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
-				if (taskIsUnmapped[taskId]) {
-					for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-						if ((machineMakespan[machineId]
-								+ _pbm.expectedTimeToCompute(taskId, machineId))
-								< minCT) {
-							minCT = machineMakespan[machineId]
-									+ _pbm.expectedTimeToCompute(taskId,
-											machineId);
-							minCTTaskId = taskId;
-							minCTMachineId = machineId;
-						}
-					}
-				}
-			}
-
-			unmappedTasksCount--;
-			taskIsUnmapped[minCTTaskId] = false;
-			machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
-					minCTTaskId, minCTMachineId);
-
-			_machines[minCTMachineId].addTask(minCTTaskId);
-		}
-
-		cout  << endl << "Min-Min fitness: " << fitness() << endl;
+		initializeSufferage();
 	} else {
 		if (RANDOM_INIT > rand01()) {
 			// Inicialización aleatoria
 
-			//if (DEBUG) cout << endl << "[DEBUG] Inicialización random" << endl;
-
-			int startTask = rand_int(0, _pbm.taskCount() - 1);
-			int direction = rand_int(0, 1);
-			if (direction == 0)
-				direction = -1;
-
-			int currentTask;
-			for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
-				currentTask = startTask + (direction * taskOffset);
-				if (currentTask < 0)
-					currentTask = _pbm.taskCount() + currentTask;
-				currentTask = currentTask % _pbm.taskCount();
-
-				int currentMachine;
-				currentMachine = rand_int(0, _pbm.machineCount() - 1);
-
-				_machines[currentMachine].addTask(currentTask);
-			}
+			initializeRandom();
 		} else {
 			// Inicialización usando una heurística no tan buena y
 			// que permita obtener diferentes soluciones: MCT
 
-			//if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT" << endl;
-
-			vector<double> machineMakespan;
-			machineMakespan.reserve(_pbm.machineCount() + 1);
-
-			for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
-				machineMakespan.push_back(0.0);
-
-			int startTask = rand_int(0, _pbm.taskCount() - 1);
-			int direction = rand_int(0, 1);
-			if (direction == 0)
-				direction = -1;
-
-			int currentTask;
-			for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
-				currentTask = startTask + (direction * taskOffset);
-				if (currentTask < 0)
-					currentTask = _pbm.taskCount() + currentTask;
-				currentTask = currentTask % _pbm.taskCount();
-
-				double minCT;
-				minCT = infinity();
-
-				int minCTTaskId;
-				minCTTaskId = -1;
-
-				int minCTMachineId;
-				minCTMachineId = -1;
-
-				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-					if ((machineMakespan[machineId]
-							+ _pbm.expectedTimeToCompute(currentTask, machineId))
-							< minCT) {
-						minCT = machineMakespan[machineId]
-								+ _pbm.expectedTimeToCompute(currentTask,
-										machineId);
-						minCTTaskId = currentTask;
-						minCTMachineId = machineId;
-					}
-				}
-
-				machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
-						minCTTaskId, minCTMachineId);
-
-				_machines[minCTMachineId].addTask(minCTTaskId);
-			}
+			initializeMCT();
 		}
 	}
 }
 
-bool Solution::validate() const {
+bool Solution::validate() {
 	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
 	if (true) {
+		for (int t = 0; t < _pbm.taskCount(); t++) {
+			int machineId, taskPos;
+			assert(findTask(t, machineId, taskPos));
+		}
+
 		if (_machines.size() == _pbm.machineCount()) {
 			int taskCount = 0;
 

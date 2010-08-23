@@ -184,7 +184,7 @@ public:
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 
-	bool validate() const;
+	bool validate();
 
 	// =================================
 	// Especificos del problema.
@@ -195,6 +195,11 @@ private:
 	bool _initialized;
 
 	vector<struct SolutionMachine> _machines;
+
+	void initializeSufferage();
+	void initializeRandom();
+	void initializeMinMin();
+	void initializeMCT();
 };
 
 // UserStatistics ----------------------------------------------------------------------------
