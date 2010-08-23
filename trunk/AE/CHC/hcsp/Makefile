@@ -21,4 +21,4 @@ WAN:
 	$(RUN)  -v  -p4pg pgfileWan MainWan
 
 SEQ:
-	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/Braun_et_al.mod/u_c_hihi.0.txt res/u_c_hihi.0.sol.txt
+	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
