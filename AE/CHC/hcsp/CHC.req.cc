@@ -545,7 +545,7 @@ void Solution::initializeSufferage() {
 
 	vector<double> machinesMakespan;
 	machinesMakespan.reserve(_pbm.machineCount());
-	for (int i = 0; i < machinesMakespan.size(); i++) {
+	for (int i = 0; i < _pbm.machineCount(); i++) {
 		machinesMakespan[i] = 0.0;
 	}
 
@@ -561,37 +561,48 @@ void Solution::initializeSufferage() {
 		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
 			if (taskIsUnmapped[taskId]) {
 				int minMakespanMachineId;
-				minMakespanMachineId = 0;
+				minMakespanMachineId = -1;
 
-				int secondMinMakeSpanMachineId;
-				secondMinMakeSpanMachineId = 0;
+				int secondMinMakespanMachineId;
+				secondMinMakespanMachineId = -1;
 
 				assert(_pbm.machineCount() > 2);
-				if ((machinesMakespan[0] + _pbm.expectedTimeToCompute(taskId, 0))
-						< (machinesMakespan[1] + _pbm.expectedTimeToCompute(taskId, 1))) {
-					minMakespanMachineId = 0;
-					secondMinMakeSpanMachineId = 1;
-				} else {
-					minMakespanMachineId = 1;
-					secondMinMakeSpanMachineId = 0;
-				}
 
-				for (int machineId = 2; machineId < _pbm.machineCount(); machineId++) {
-					if ((machinesMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
-							< (machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId))) {
+				for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+					double currentMakespan;
+					double minMakespan;
+					double secondMinMakespan;
 
-						secondMinMakeSpanMachineId = minMakespanMachineId;
+					currentMakespan = machinesMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId);
+					if (minMakespanMachineId != -1) minMakespan = machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId);
+					if (secondMinMakespanMachineId != -1) secondMinMakespan = machinesMakespan[secondMinMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakespanMachineId);
+
+					if (minMakespanMachineId == -1)
+					{
 						minMakespanMachineId = machineId;
-					} else if ((machinesMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
-							< (machinesMakespan[secondMinMakeSpanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakeSpanMachineId))) {
-
-						secondMinMakeSpanMachineId = machineId;
+					}
+					else if (minMakespan > currentMakespan)
+					{
+						secondMinMakespanMachineId = minMakespanMachineId;
+						minMakespanMachineId = machineId;
+					}
+					else if (secondMinMakespanMachineId == -1)
+					{
+						secondMinMakespanMachineId = machineId;
+					}
+					else if (secondMinMakespan > currentMakespan)
+					{
+						secondMinMakespanMachineId = machineId;
 					}
 				}
 
+				double minMakespan;
+				double secondMinMakespan;
 				double sufferageValue;
-				sufferageValue = (machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId)) -
-						(machinesMakespan[secondMinMakeSpanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakeSpanMachineId));
+
+				minMakespan = machinesMakespan[minMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, minMakespanMachineId);
+				secondMinMakespan = machinesMakespan[secondMinMakespanMachineId] + _pbm.expectedTimeToCompute(taskId, secondMinMakespanMachineId);
+				sufferageValue = secondMinMakespan - minMakespan;
 
 				if ((maxSufferageMachineId == -1)||(maxSufferageTaskId == -1)) {
 					maxSufferageTaskId = taskId;
