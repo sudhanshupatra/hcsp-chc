@@ -643,6 +643,7 @@ void Solution::initialize(const int solutionIndex) {
 		// Utilizo Sufferage para un único elemento de la población inicial.
 
 		initializeSufferage();
+		//initializeRandom();
 	} else {
 		if (RANDOM_INIT > rand01()) {
 			// Inicialización aleatoria
