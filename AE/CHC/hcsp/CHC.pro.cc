@@ -755,19 +755,18 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-//	if (DEBUG) {
-//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
-//	}
+	//	if (DEBUG) {
+	//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
+	//	}
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (rand01() < mutationProbability) {
-			sols[i]->mutate();
+		if (i != bestSolutionIndex) {
+			if (rand01() < mutationProbability) {
+				sols[i]->mutate();
+			}
+		} else {
+			sols[i]->doLocalSearch();
 		}
-	}
-
-	{
-		int seleccionPALS = rand01() * sols.size();
-		sols[seleccionPALS]->doLocalSearch();
 	}
 }
 
@@ -979,7 +978,7 @@ void Migration::execute(Population& pop,
 	} // end if
 
 	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
-	// but, if there are data, i have to receive it
+		// but, if there are data, i have to receive it
 		int pending = false;
 		_netstream._probe(packed, pending);
 		if (pending) {
@@ -1584,7 +1583,7 @@ Inter_Operator& Operator_Pool::inter_operator(const unsigned int index) const {
 }
 
 const Rlist<Inter_Operator>& Operator_Pool::inter_operators() const {
-return _inter_operators;
+	return _inter_operators;
 }
 
 Operator_Pool::~Operator_Pool() {

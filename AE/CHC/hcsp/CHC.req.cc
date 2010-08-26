@@ -812,7 +812,7 @@ void Solution::doLocalSearch() {
 		machineId = maquinasSeleccionadas[machinePos];
 
 		// PALS aleatorio para HCSP.
-		//		if (DEBUG) cout << endl << "[DEBUG] Búsqueda en la máquina " << machineId << endl;
+//		if (DEBUG) cout << endl << "[DEBUG] Búsqueda en la máquina " << machineId << endl;
 
 		bool finBusqMaquina;
 		finBusqMaquina = false;
@@ -826,6 +826,8 @@ void Solution::doLocalSearch() {
 			mejorMovimientoDestinoTaskPos = -1;
 			mejorMovimientoDestinoMachineId = -1;
 
+//			if (DEBUG) cout << endl << "[DEBUG] Intento " << intento << endl;
+
 			// Itero en las tareas de la máquina actual.
 			int startTaskOffset, endTaskOffset;
 			if (this->machines()[machineId].countTasks() > PALS_TOP_M) {
@@ -837,13 +839,16 @@ void Solution::doLocalSearch() {
 				aux = rand * this->machines()[machineId].countTasks();
 
 				startTaskOffset = (int) aux;
-				endTaskOffset = PALS_TOP_M;
+				endTaskOffset = startTaskOffset + PALS_TOP_M;
 			} else {
 				// Si hay menos o igual cantidad de tareas en la máquina actual que el
 				// tope PALS_TOP_M, las recorro todas.
 				startTaskOffset = 0;
 				endTaskOffset = this->machines()[machineId].countTasks();
 			}
+
+//			if (DEBUG) cout << endl << "[DEBUG] En la máquina actual hay " << this->machines()[machineId].countTasks()
+//					<< " tareas, pruebo desde la " << startTaskOffset << " a la " << endTaskOffset << endl;
 
 			for (int taskOffset = startTaskOffset; taskOffset < endTaskOffset; taskOffset++) {
 				int taskPos;
@@ -876,12 +881,18 @@ void Solution::doLocalSearch() {
 				double movimientoFitness;
 				movimientoFitness = 0.0;
 
+//				if (DEBUG) cout << endl << "[DEBUG] En el problema hay " << this->pbm().taskCount()
+//						<< " tareas, pruebo desde la " << startSwapTaskOffset << endl;
+
 				for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
 						> 0; swapTaskOffset++) {
 					assert(swapTaskOffset < (2*this->pbm().taskCount()));
 
 					int swapTaskId;
 					swapTaskId = swapTaskOffset % this->pbm().taskCount();
+
+//					if (DEBUG) cout << endl << "[DEBUG] Intento swapear taskId=" << taskId
+//							<< "con taskId=" << swapTaskId << endl;
 
 					if (swapTaskId != taskId) {
 						countSwapTaskOffset--;
@@ -898,6 +909,8 @@ void Solution::doLocalSearch() {
 						//==============================================================
 
 						if (movimientoFitness < mejorMovimientoFitness) {
+//							cout << endl << "Mejora parcial " << movimientoFitness - mejorMovimientoFitness << endl;
+
 							mejorMovimientoFitness = movimientoFitness;
 							mejorMovimientoTaskPos = taskPos;
 							mejorMovimientoDestinoMachineId = swapMachineId;
@@ -908,6 +921,7 @@ void Solution::doLocalSearch() {
 			}
 
 			if (mejorMovimientoFitness < fitnessInicial) {
+//				if (DEBUG) cout << endl << "[DEBUG] Se mejoró la solución!" << endl;
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
