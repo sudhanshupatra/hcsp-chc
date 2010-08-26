@@ -10,6 +10,6 @@ MPI_BIN=/home/${whoami}/bin/mpich2-1.2.1p1/bin
 CXX=$(MPI_BIN)/mpic++
 RUN=$(MPI_BIN)/mpirun
 #other options: -g for debugging and -pg for profiling
-CPPFLAGS=-I$(MALLBA_INC) -Wno-deprecated -O3 -I/home/siturria/bin/mpich2-1.2.1p1/include -L/home/siturria/bin/mpich2-1.2.1p1/lib -g
+CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -I/home/siturria/bin/mpich2-1.2.1p1/include -L/home/siturria/bin/mpich2-1.2.1p1/lib -g
 LDFLAGS=-L$(MALLBA_LIB)
 LOADLIBES=-lmallba  -lm

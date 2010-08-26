@@ -332,6 +332,8 @@ istream& operator>>(istream& is, Solution& sol) {
 	//for (int i=0;i<sol.pbm().dimension();i++)
 	//	is >> sol._var[i];
 
+	assert(false);
+
 	return is;
 }
 
@@ -341,6 +343,8 @@ istream& operator>>(istream& is, Solution& sol) {
 NetStream& operator >>(NetStream& ns, Solution& sol) {
 	//for (int i=0;i<sol._var.size();i++)
 	//	ns >> sol._var[i];
+
+	assert(false);
 
 	return ns;
 }
@@ -379,6 +383,8 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 NetStream& operator <<(NetStream& ns, const Solution& sol) {
 	//for (int i=0;i<sol._var.size();i++)
 	//	ns << sol._var[i];
+
+	assert(false);
 
 	return ns;
 }
@@ -1007,7 +1013,7 @@ void Solution::mutate() {
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
 
-					int taskCost;
+					double taskCost;
 					taskCost = _pbm.expectedTimeToCompute(taskId, machineId);
 
 					costsByTaskPos.push_back(taskCost);
@@ -1311,11 +1317,11 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 	assert(machines()[machineId].countTasks() > 0);
 
 	int minCostTaskPos = 0;
-	int minCostTaskValue = _pbm.expectedTimeToCompute(
+	double minCostTaskValue = _pbm.expectedTimeToCompute(
 			machines()[machineId].getTask(0), machineId);
 
 	for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
-		int currentTaskCost;
+		double currentTaskCost;
 		currentTaskCost = _pbm.expectedTimeToCompute(
 				machines()[machineId].getTask(taskPos), machineId);
 
@@ -1337,11 +1343,11 @@ int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
 	// if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine" << endl;
 	if (machines()[machineId].countTasks() > 0) {
 		int minCostTaskPos = 0;
-		int minCostTaskValue = _pbm.expectedTimeToCompute(
+		double minCostTaskValue = _pbm.expectedTimeToCompute(
 				machines()[machineId].getTask(0), destinationMachineId);
 
 		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
-			int currentTaskCost;
+			double currentTaskCost;
 			currentTaskCost = _pbm.expectedTimeToCompute(
 					machines()[machineId].getTask(taskPos),
 					destinationMachineId);

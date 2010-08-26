@@ -53,17 +53,17 @@ Trial:
 Best cost trial: 1.90305e+07
 Worst cost trial: 2.22704e+08
 Iteration best found in trial: 1373
-Time best found trial: 5.12846e+07
-Time spent in trial: 5.56024e+07
+Time best found trial: 5.15996e+07
+Time spent in trial: 5.59246e+07
 
 Global: 
 Global best cost: 1.90305e+07
 Global worst cost: 2.22704e+08
 Trial best found: 1
 Iteration best found: 1373
-Time best found: 5.12846e+07
+Time best found: 5.15996e+07
 
-Current time spent (so far): 5.56024e+07
+Current time spent (so far): 5.59246e+07
 Solution
 > machineId: 0
   taskPos: 0 taskId: 305 ETC: 37.96 priority: 0
