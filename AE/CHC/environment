@@ -1,5 +1,5 @@
 # Mallba Configuration.
-whoami=`whoami`
+whoami=santiago
 MALLBA_DIR=/home/${whoami}/bin/Mallba
 MALLBA_INC=${MALLBA_DIR}/inc
 MALLBA_LIB=${MALLBA_DIR}/lib

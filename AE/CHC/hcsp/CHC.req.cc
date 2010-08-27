@@ -338,18 +338,6 @@ istream& operator>>(istream& is, Solution& sol) {
 }
 
 // ===================================
-// Deserialización de la solución.
-// ===================================
-NetStream& operator >>(NetStream& ns, Solution& sol) {
-	//for (int i=0;i<sol._var.size();i++)
-	//	ns >> sol._var[i];
-
-	assert(false);
-
-	return ns;
-}
-
-// ===================================
 // Serialización de la solución.
 // ===================================
 ostream& operator<<(ostream& os, const Solution& sol) {
@@ -381,10 +369,77 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 // Serialización de la solución.
 // ===================================
 NetStream& operator <<(NetStream& ns, const Solution& sol) {
-	//for (int i=0;i<sol._var.size();i++)
-	//	ns << sol._var[i];
+	if (DEBUG) cout << endl << "[DEBUG] operator <<(NetStream& ns, Solution& sol)" << endl;
+	int currentTask = 0;
+	int currentItem = 0;
 
-	assert(false);
+	int machineSeparator = -1;
+
+	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+		for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
+			int taskId;
+			taskId = sol.machines()[machineId].getTask(taskPos);
+
+			assert(taskId >= 0);
+			assert(taskId < sol.pbm().taskCount());
+
+			ns << taskId;
+
+			currentTask++;
+			currentItem++;
+		}
+		ns << machineSeparator;
+
+		currentItem++;
+	}
+
+	assert(currentTask == sol.pbm().taskCount());
+	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
+
+	return ns;
+}
+
+// ===================================
+// Deserialización de la solución.
+// ===================================
+NetStream& operator >>(NetStream& ns, Solution& sol) {
+	if (DEBUG) cout << endl << "[DEBUG] operator >>(NetStream& ns, Solution& sol)" << endl;
+	int machineSeparator = -1;
+
+	int currentTask = 0;
+	int currentMachine = 0;
+
+	for (int pos = 0; pos < sol.pbm().taskCount() + sol.pbm().machineCount(); pos++) {
+		int currentValue;
+		ns >> currentValue;
+
+		if (currentValue == machineSeparator) {
+			assert(currentMachine < sol.pbm().machineCount());
+
+			currentMachine++;
+		} else {
+			while ((currentValue < 0) || (currentValue >= sol.pbm().taskCount())) {
+				cout << endl << "currentValue: " << currentValue << endl;
+				ns >> currentValue;
+			}
+
+			assert(currentValue >= 0);
+			assert(currentValue < sol.pbm().taskCount());
+			assert(currentMachine < sol.pbm().machineCount());
+
+			sol.addTask(currentMachine, currentValue);
+			currentTask++;
+		}
+	}
+
+	if (DEBUG) cout << endl << "sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
+	if (DEBUG) cout << endl << "currentTask = " << currentTask << endl;
+
+	assert(sol.machines().size() == sol.pbm().machineCount());
+	assert(currentTask == sol.pbm().taskCount());
+
+	sol.markAsInitialized();
+	sol.validate();
 
 	return ns;
 }
@@ -636,8 +691,12 @@ void Solution::initializeSufferage() {
 	cout << endl << "Sufferage fitness: " << fitness() << endl;
 }
 
-void Solution::initialize(const int solutionIndex) {
+void Solution::markAsInitialized() {
 	_initialized = true;
+}
+
+void Solution::initialize(const int solutionIndex) {
+	markAsInitialized();
 
 	if (solutionIndex == 0) {
 		// Inicialización usando una heurística "pesada": MIN-MIN.
@@ -740,7 +799,8 @@ int Solution::length() const {
 }
 
 unsigned int Solution::size() const {
-	return _pbm.taskCount() * sizeof(int) + _pbm.machineCount() * sizeof(int)
+	return (_pbm.taskCount() * sizeof(int))
+			+ (_pbm.machineCount() * sizeof(int))
 			+ sizeof(int);
 }
 
@@ -1108,6 +1168,10 @@ void Solution::mutate() {
 	}
 }
 
+void Solution::addTask(const int machineId, const int taskId) {
+	_machines[machineId].addTask(taskId);
+}
+
 void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks start" << endl;
@@ -1169,7 +1233,7 @@ bool Solution::equalTasks(Solution& solution, const int taskId) {
 }
 
 char *Solution::to_String() const {
-	// if (DEBUG) cout << endl << "[DEBUG] Solution::to_String" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String" << endl;
 	int machineSeparator = -1;
 	int endMark = -2;
 
@@ -1194,13 +1258,16 @@ char *Solution::to_String() const {
 }
 
 void Solution::to_Solution(char *_string_) {
-	// if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution" << endl;
-	_initialized = false;
+//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_Solution" << endl;
 
 	int *raw = (int*) _string_;
+
 	int machineSeparator = -1;
 	int endMark = -2;
+
 	bool endFound = false;
+
+	int currentTask = 0;
 	int currentMachine = 0;
 
 	for (int pos = 0; pos < (_pbm.taskCount() + _pbm.machineCount() + 1)
@@ -1209,15 +1276,27 @@ void Solution::to_Solution(char *_string_) {
 		int currentValue;
 		currentValue = raw[pos];
 
-		if (currentValue == endMark)
+		if (currentValue == endMark) {
 			endFound = true;
-		else if (currentValue == machineSeparator)
+		} else if (currentValue == machineSeparator) {
+			assert(currentMachine < _pbm.machineCount());
+
 			currentMachine++;
-		else {
+		} else {
+			assert(currentValue >= 0);
+			assert(currentValue < _pbm.taskCount());
+			assert(currentMachine < _pbm.machineCount());
+
 			_machines[currentMachine].addTask(currentValue);
-			_initialized = true;
+			currentTask++;
 		}
 	}
+
+	assert(_machines.size() == _pbm.machineCount());
+	assert(currentTask == _pbm.taskCount());
+	assert(endFound);
+
+	markAsInitialized();
 }
 
 const vector<struct SolutionMachine>& Solution::machines() const {

@@ -161,6 +161,7 @@ public:
 
 	void initialize(const int solutionIndex);
 	bool isInitilized() const;
+	void markAsInitialized();
 
 	double fitness();
 	unsigned int size() const;
@@ -168,6 +169,7 @@ public:
 	int length() const;
 	int distanceTo(const Solution& solution) const;
 
+	void addTask(const int machineId, const int taskId);
 	void swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2);
 	void swapTasks(Solution& solution, const int taskId);
 	bool equalTasks(Solution& solution, const int taskId);
