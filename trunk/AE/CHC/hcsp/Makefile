@@ -15,10 +15,10 @@ MainWan: CHC.req.o CHC.pro.o MainWan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
 LAN:
-	$(RUN)  -v  -p4pg pgfileLan MainLan
+	$(RUN) -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 WAN:
-	$(RUN)  -v  -p4pg pgfileWan MainWan
+	$(RUN) -v  -p4pg pgfileWan MainWan
 
 SEQ:
 	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt

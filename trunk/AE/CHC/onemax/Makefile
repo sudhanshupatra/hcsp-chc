@@ -15,7 +15,7 @@ MainWan: CHC.req.o CHC.pro.o MainWan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
 LAN:
-	$(RUN)  -v  -p4pg pgfileLan MainLan
+	$(RUN)  -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/onemax/MainLan
 
 WAN:
 	$(RUN)  -v  -p4pg pgfileWan MainWan

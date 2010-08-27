@@ -1,5 +1,2 @@
-localhost 0 ~/Mallba/rep/CHC/onemax/MainLan
-localhost 1 ~/Mallba/rep/CHC/onemax/MainLan
-localhost 1 ~/Mallba/rep/CHC/onemax/MainLan
-localhost 1 ~/Mallba/rep/CHC/onemax/MainLan
-localhost 1 ~/Mallba/rep/CHC/onemax/MainLan
+localhost 0 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+
