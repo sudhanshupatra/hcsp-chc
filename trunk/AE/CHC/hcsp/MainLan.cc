@@ -19,17 +19,14 @@ int main (int argc, char** argv)
 
 	strcat(path,"Config.cfg");
 	ifstream f(path);
-	cout << endl << "PATH: " << path << endl;
 	if(!f) show_message(10);
 
 	f.getline(&(path[len]),longitud,'\n');
 	ifstream f1(path);
-	cout << endl << "PATH: " << path << endl;
 	if(!f1)	show_message(11);
 
 	f.getline(&(path[len]),longitud,'\n');
 	ifstream f2(path);
-	cout << endl << "PATH: " << path << endl;
 	if(!f2) show_message(12);
 
 	Problem pbm;

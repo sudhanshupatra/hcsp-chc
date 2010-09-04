@@ -441,8 +441,6 @@ void Population::evaluate_offsprings() {
 }
 
 void Population::evolution() {
-	//	if (DEBUG) cout << endl << "Population::evolution()" << endl;
-
 	select_parents(); // selects individuals to apply operators
 
 	// apply selected operators
@@ -638,7 +636,7 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-	//	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
+	//if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
 
 	if (probability[0] <= 0.0) {
 		probability[0] = sol1.length() / CROSSOVER_DISTANCE;
@@ -755,9 +753,7 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-	//	if (DEBUG) {
-	//		cout << endl << "[DEBUG] Diverge::diverge" << endl;
-	//	}
+	// if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (i != bestSolutionIndex) {
@@ -1441,12 +1437,6 @@ void Selection_New_Population::prepare(
 		fitness_values.sort(greaterF);
 	else
 		fitness_values.sort(lessF);
-
-	//	for (int i = 0; i < fitness_values.size(); i++) {
-	//		if (DEBUG) cout << endl << "index: " << fitness_values[i].index << endl <<
-	//				" fitness: " << fitness_values[i].fitness <<
-	//				" change: " << fitness_values[i].change << endl;
-	//	}
 }
 
 // Selecciona un hijo para apareamiento.
@@ -1496,10 +1486,6 @@ struct individual Selection_New_Population::select_one(
 			if (fitness_values[i].index < to_select_1.size()) {
 				fitness_values[i].change = true;
 			}
-
-			//			if (DEBUG) cout << endl << "index: " << fitness_values[i].index << endl <<
-			//					" fitness: " << fitness_values[i].fitness <<
-			//					" change: " << fitness_values[i].change << endl;
 		}
 
 		selection_position = 1;
@@ -2210,13 +2196,27 @@ StateCenter *Solver::GetState() {
 }
 
 void Solver::RefreshState() {
-	current_best_solution(best_solution);
 	current_best_cost(best_cost);
 	current_worst_cost(worst_cost);
 	current_average_cost(average_cost);
 	current_standard_deviation(standard_deviation);
 	current_time_spent(total_time_spent);
 	time_spent_trial(time_spent_in_trial);
+
+	//TODO: ERROR!!!
+	cout << "============================================" << endl;
+	cout << "= RefreshState" << endl;
+	//cout << "fitness: " << best_solution.fitness() << endl;
+	//cout << "size: " << best_solution.size() << endl;
+
+	Solution s(problem);
+	s.initialize(0);
+	current_best_solution(s);
+
+	//current_best_solution(best_solution);
+
+	cout << "============================================" << endl;
+
 	KeepHistory(best_solution, best_cost, worst_cost, time_spent_in_trial,
 			total_time_spent);
 }
@@ -2325,7 +2325,6 @@ void Solver_Seq::StartUp() {
 }
 
 void Solver_Seq::StartUp(const Population& pop) {
-	//	if (DEBUG) cout << endl << "[INFO] Solver_Seq::StartUp" << endl;
 	start_trial = _used_time();
 	start_global = total_time_spent;
 
@@ -2368,11 +2367,9 @@ void Solver_Seq::StartUp(const Population& pop) {
 }
 
 void Solver_Seq::DoStep() {
-	//	if (DEBUG) cout << endl << "[INFO] Solver_Seq::DoStep" << endl;
 	current_iteration(current_iteration() + 1);
 	current_population.evolution();
 	current_evaluations(current_population.evaluations());
-	//	if (DEBUG) cout << endl << current_population << endl;
 
 	// gets current interesting values in the current population
 
@@ -2381,8 +2378,6 @@ void Solver_Seq::DoStep() {
 	worst_cost = current_population.worst_cost();
 	average_cost = current_population.average_cost();
 	standard_deviation = current_population.standard_deviation();
-
-	//	if (DEBUG) cout << endl << " >> best_cost: " << current_population.best_cost() << endl;
 
 	time_spent_in_trial = _used_time(start_trial);
 	total_time_spent = start_global + time_spent_in_trial;
@@ -2522,7 +2517,8 @@ void Solver_Lan::DoStep() {
 		final_phase = true;
 	////////////////////////
 
-	current_population.interchange(current_iteration(), _netstream);
+	//TODO: descomentar!
+	//current_population.interchange(current_iteration(), _netstream);
 
 	// gets current interesting values in the current population
 
@@ -2548,20 +2544,31 @@ void Solver_Lan::DoStep() {
 	_stat.update(*this);
 	_userstat.update(*this);
 
-	// if (display_state()) show_state();
+	if (display_state()) {
+		show_state();
+	}
 }
 
 void Solver_Lan::send_local_state_to(int _mypid) {
 	_netstream << set_target(0);
-	_netstream << pack_begin << _mypid << current_trial()
-			<< current_iteration() << current_evaluations()
-			<< best_cost_trial() << best_solution_trial()
-			<< iteration_best_found_in_trial()
-			<< evaluations_best_found_in_trial() << time_best_found_trial()
-			<< worst_cost_trial() << current_best_cost()
-			<< current_best_solution() << current_worst_cost()
-			<< current_average_cost() << current_standard_deviation()
-			<< pack_end;
+
+    _netstream << pack_begin
+               << _mypid
+               << current_trial()
+               << current_iteration()
+               << current_evaluations()
+               << current_best_solution()
+               << best_cost_trial()
+               << worst_cost_trial()
+               << time_best_found_trial()
+               << current_best_cost()
+               << current_worst_cost()
+               << current_average_cost()
+               << current_standard_deviation()
+               << iteration_best_found_in_trial()
+               << evaluations_best_found_in_trial()
+               << best_solution_trial()
+               << pack_end;
 }
 
 int Solver_Lan::receive_local_state() {
@@ -2569,12 +2576,24 @@ int Solver_Lan::receive_local_state() {
 
 	_netstream._wait(packed);
 
-	_netstream << pack_begin >> r_pid >> _current_trial >> _current_iteration
-			>> _current_evaluations >> _best_cost_trial >> _best_solution_trial
-			>> _iteration_best_found_in_trial
-			>> _evaluations_best_found_in_trial >> _time_best_found_in_trial
-			>> _worst_cost_trial >> best_cost >> best_solution >> worst_cost
-			>> average_cost >> standard_deviation << pack_end;
+    _netstream << pack_begin
+                >> r_pid
+                >> _current_trial
+                >> _current_iteration
+                >> _current_evaluations
+                >> _best_solution_trial
+                >> _best_cost_trial
+                >> _worst_cost_trial
+                >> _time_best_found_in_trial
+                >> best_cost
+                >> worst_cost
+                >> average_cost
+                >> standard_deviation
+                >> _iteration_best_found_in_trial
+                >> _evaluations_best_found_in_trial
+                >> best_solution
+                << pack_end;
+
 	return r_pid;
 }
 
@@ -2631,8 +2650,9 @@ void Solver_Lan::check_for_refresh_global_state() // Executed in process with pi
 		//_userstat.update(*this);
 
 		// display current global state
-		if (display_state())
+		if (display_state()) {
 			show_state();
+		}
 	} // end while
 
 	// Actualizaci�n de las estad�sticas // Termination phase //
@@ -2693,6 +2713,8 @@ void Solver_Lan::run(const unsigned long int nb_generations) {
 
 void Solver_Lan::run(const Population& pop,
 		const unsigned long int nb_generations) {
+	assert(false);
+
 	StartUp(pop);
 	if (mypid != 0) {
 		while (!final_phase && (current_iteration() < nb_generations)
