@@ -382,7 +382,7 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 // Serialización de la solución.
 // ===================================
 NetStream& operator <<(NetStream& ns, const Solution& sol) {
-	if (DEBUG) cout << endl << "[DEBUG] operator <<(NetStream& ns, Solution& sol)" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] operator <<(NetStream& ns, Solution& sol)" << endl;
 
 	int currentTask = 0;
 	int currentItem = 0;
@@ -400,18 +400,18 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 			assert(taskId < sol.pbm().taskCount());
 
 			ns << taskId;
-			if (DEBUG) cout << "[DEBUG] operator<< " << taskId << endl;
+//			if (DEBUG) cout << "[DEBUG] operator<< " << taskId << endl;
 
 			currentTask++;
 			currentItem++;
 		}
 		ns << machineSeparator;
-		if (DEBUG) cout << "[DEBUG] operator<< " << machineSeparator << endl;
+//		if (DEBUG) cout << "[DEBUG] operator<< " << machineSeparator << endl;
 
 		currentItem++;
 	}
 
-	if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
+//	if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
 
 	assert(currentTask == sol.pbm().taskCount());
 	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
@@ -423,18 +423,18 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 // Deserialización de la solución.
 // ===================================
 NetStream& operator >>(NetStream& ns, Solution& sol) {
-	if (DEBUG) cout << endl << "[DEBUG] operator >>(NetStream& ns, Solution& sol)" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] operator >>(NetStream& ns, Solution& sol)" << endl;
 
 	int machineSeparator = -1;
 
 	int currentTask = 0;
 	int currentMachine = 0;
 
-	if (DEBUG) cout << "[DEBUG] operator>> voy a leer "
-			<< sol.pbm().taskCount() + sol.pbm().machineCount() <<
-			" integers." << endl;
+//	if (DEBUG) cout << "[DEBUG] operator>> voy a leer "
+//			<< sol.pbm().taskCount() + sol.pbm().machineCount() <<
+//			" integers." << endl;
 
-	if (DEBUG) cout << "[DEBUG] operator>> cantidad actual de tasks " << sol.countTasks() << " las voy a vaciar." << endl;
+//	if (DEBUG) cout << "[DEBUG] operator>> cantidad actual de tasks " << sol.countTasks() << " las voy a vaciar." << endl;
 	sol.emptyTasks();
 
 	for (int pos = 0; pos < sol.pbm().taskCount() + sol.pbm().machineCount(); pos++) {
@@ -444,7 +444,7 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 //		if (DEBUG) cout << "[DEBUG] operator>> currentMachine:" << currentMachine
 //				<< " currentTask:" << currentTask << " currentValue:" << currentValue << endl;
 
-		if (DEBUG) cout << "[DEBUG] operator>> " << currentValue << endl;
+//		if (DEBUG) cout << "[DEBUG] operator>> " << currentValue << endl;
 
 		if (currentValue == machineSeparator) {
 			assert(currentMachine < sol.pbm().machineCount());
@@ -460,8 +460,8 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 		}
 	}
 
-	if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
-	if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
+//	if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
+//	if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
 
 	assert(sol.machines().size() == sol.pbm().machineCount());
 	assert(currentTask == sol.pbm().taskCount());
