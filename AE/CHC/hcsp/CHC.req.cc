@@ -274,6 +274,11 @@ void SolutionMachine::removeTask(const int taskPos) {
 	_tasks.erase(_tasks.begin() + taskPos);
 }
 
+void SolutionMachine::emptyTasks() {
+	_assignedTasks.clear();
+	_tasks.clear();
+}
+
 double SolutionMachine::getMakespan() {
 	refresh();
 	return _makespan;
@@ -378,34 +383,38 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 // ===================================
 NetStream& operator <<(NetStream& ns, const Solution& sol) {
 	if (DEBUG) cout << endl << "[DEBUG] operator <<(NetStream& ns, Solution& sol)" << endl;
-//	int currentTask = 0;
-//	int currentItem = 0;
-//
-//	int machineSeparator = -1;
-//
-//	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
-//		for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
-//			int taskId;
-//			taskId = sol.machines()[machineId].getTask(taskPos);
-//
-//			assert(taskId >= 0);
-//			assert(taskId < sol.pbm().taskCount());
-//
-//			ns << taskId;
-//
-//			currentTask++;
-//			currentItem++;
-//		}
-//		ns << machineSeparator;
-//
-//		currentItem++;
-//	}
-//
-//	assert(currentTask == sol.pbm().taskCount());
-//	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
 
-//	int i = 0;
-//	ns << i;
+	int currentTask = 0;
+	int currentItem = 0;
+
+	int machineSeparator = -1;
+
+	assert(sol.validate());
+
+	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
+		for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
+			int taskId;
+			taskId = sol.machines()[machineId].getTask(taskPos);
+
+			assert(taskId >= 0);
+			assert(taskId < sol.pbm().taskCount());
+
+			ns << taskId;
+			if (DEBUG) cout << "[DEBUG] operator<< " << taskId << endl;
+
+			currentTask++;
+			currentItem++;
+		}
+		ns << machineSeparator;
+		if (DEBUG) cout << "[DEBUG] operator<< " << machineSeparator << endl;
+
+		currentItem++;
+	}
+
+	if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
+
+	assert(currentTask == sol.pbm().taskCount());
+	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
 
 	return ns;
 }
@@ -415,48 +424,50 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 // ===================================
 NetStream& operator >>(NetStream& ns, Solution& sol) {
 	if (DEBUG) cout << endl << "[DEBUG] operator >>(NetStream& ns, Solution& sol)" << endl;
-//	int machineSeparator = -1;
-//
-//	int currentTask = 0;
-//	int currentMachine = 0;
-//
-//	for (int pos = 0; pos < sol.pbm().taskCount() + sol.pbm().machineCount(); pos++) {
-//		int currentValue;
-//		ns >> currentValue;
-//
-//		if (currentValue == machineSeparator) {
-//			assert(currentMachine < sol.pbm().machineCount());
-//
-//			currentMachine++;
-//		} else {
-//			while ((currentValue < 0) || (currentValue >= sol.pbm().taskCount())) {
-//				cout << endl << "currentValue: " << currentValue << endl;
-//				ns >> currentValue;
-//			}
-//
-//			assert(currentValue >= 0);
-//			assert(currentValue < sol.pbm().taskCount());
-//			assert(currentMachine < sol.pbm().machineCount());
-//
-//			sol.addTask(currentMachine, currentValue);
-//			currentTask++;
-//		}
-//	}
-//
-//	if (DEBUG) cout << endl << "sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
-//	if (DEBUG) cout << endl << "currentTask = " << currentTask << endl;
 
-//	assert(sol.machines().size() == sol.pbm().machineCount());
-//	assert(currentTask == sol.pbm().taskCount());
-//
-//	sol.markAsInitialized();
-//	sol.validate();
+	int machineSeparator = -1;
 
-//	int i = 0;
-//	ns >> i;
+	int currentTask = 0;
+	int currentMachine = 0;
 
-	sol.initializeRandom();
+	if (DEBUG) cout << "[DEBUG] operator>> voy a leer "
+			<< sol.pbm().taskCount() + sol.pbm().machineCount() <<
+			" integers." << endl;
+
+	if (DEBUG) cout << "[DEBUG] operator>> cantidad actual de tasks " << sol.countTasks() << " las voy a vaciar." << endl;
+	sol.emptyTasks();
+
+	for (int pos = 0; pos < sol.pbm().taskCount() + sol.pbm().machineCount(); pos++) {
+		int currentValue;
+		ns >> currentValue;
+
+//		if (DEBUG) cout << "[DEBUG] operator>> currentMachine:" << currentMachine
+//				<< " currentTask:" << currentTask << " currentValue:" << currentValue << endl;
+
+		if (DEBUG) cout << "[DEBUG] operator>> " << currentValue << endl;
+
+		if (currentValue == machineSeparator) {
+			assert(currentMachine < sol.pbm().machineCount());
+			currentMachine++;
+		} else {
+			assert(currentValue >= 0);
+			assert(currentValue < sol.pbm().taskCount());
+			assert(currentMachine >= 0);
+			assert(currentMachine < sol.pbm().machineCount());
+
+			sol.addTask(currentMachine, currentValue);
+			currentTask++;
+		}
+	}
+
+	if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
+	if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
+
+	assert(sol.machines().size() == sol.pbm().machineCount());
+	assert(currentTask == sol.pbm().taskCount());
+
 	sol.markAsInitialized();
+	sol.validate();
 
 	return ns;
 }
@@ -483,6 +494,20 @@ bool Solution::operator!=(const Solution& sol) const {
 
 bool Solution::isInitilized() const {
 	return _initialized;
+}
+
+void Solution::emptyTasks() {
+	for (int machineId = 0; machineId < _machines.size(); machineId++) {
+		_machines[machineId].emptyTasks();
+	}
+}
+
+int Solution::countTasks() {
+	int count = 0;
+	for (int machineId = 0; machineId < _machines.size(); machineId++) {
+		count += _machines[machineId].countTasks();
+	}
+	return count;
 }
 
 // ===================================
@@ -743,12 +768,12 @@ void Solution::initialize(const int solutionIndex) {
 	}
 }
 
-bool Solution::validate() {
+bool Solution::validate() const {
 //	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
 	if (true) {
 		for (int t = 0; t < _pbm.taskCount(); t++) {
 			int machineId, taskPos;
-			assert(findTask(t, machineId, taskPos));
+			//assert(findTask(t, machineId, taskPos));
 		}
 
 		if (_machines.size() == _pbm.machineCount()) {
@@ -777,6 +802,7 @@ bool Solution::validate() {
 				if (DEBUG)
 					cout << endl << "[DEBUG] taskCount != _pbm.taskCount()"
 							<< endl;
+					cout << endl << "[DEBUG] taskCount:" << taskCount << " _pbm.taskCount():" << _pbm.taskCount() << endl;
 				assert(false);
 			}
 		} else {
