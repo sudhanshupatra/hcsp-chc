@@ -17,6 +17,9 @@ MainWan: CHC.req.o CHC.pro.o MainWan.o
 LAN:
 	$(RUN) -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
+LAND:
+	$(RUN) -gdb -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+
 WAN:
 	$(RUN) -v  -p4pg pgfileWan MainWan
 

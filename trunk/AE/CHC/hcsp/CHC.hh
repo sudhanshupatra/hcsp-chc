@@ -125,6 +125,7 @@ public:
 	void insertTask(const int taskId, const int taskPos);
 	void removeTask(const int taskPos);
 	void swapTasks(const int taskPos1, const int taskPos2);
+	void emptyTasks();
 
 	bool hasTask(const int taskId) const;
 //	int getTaskPos(const int taskId) const;
@@ -174,6 +175,8 @@ public:
 	void swapTasks(Solution& solution, const int taskId);
 	bool equalTasks(Solution& solution, const int taskId);
 	bool findTask(const int taskId, int& foundMachineId, int& foundTaskPos);
+	void emptyTasks();
+	int countTasks();
 
 	void doLocalSearch();
 	void mutate();
@@ -186,7 +189,7 @@ public:
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 
-	bool validate();
+	bool validate() const;
 
 	// =================================
 	// Especificos del problema.

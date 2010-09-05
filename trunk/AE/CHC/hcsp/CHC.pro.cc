@@ -2554,10 +2554,12 @@ void Solver_Lan::send_local_state_to(int _mypid) {
 
     _netstream << pack_begin
                << _mypid
+               << best_solution_trial()
+               << current_best_solution()
+
                << current_trial()
                << current_iteration()
                << current_evaluations()
-               << current_best_solution()
                << best_cost_trial()
                << worst_cost_trial()
                << time_best_found_trial()
@@ -2567,7 +2569,6 @@ void Solver_Lan::send_local_state_to(int _mypid) {
                << current_standard_deviation()
                << iteration_best_found_in_trial()
                << evaluations_best_found_in_trial()
-               << best_solution_trial()
                << pack_end;
 }
 
@@ -2578,10 +2579,12 @@ int Solver_Lan::receive_local_state() {
 
     _netstream << pack_begin
                 >> r_pid
+                >> _best_solution_trial
+                >> best_solution
+
                 >> _current_trial
                 >> _current_iteration
                 >> _current_evaluations
-                >> _best_solution_trial
                 >> _best_cost_trial
                 >> _worst_cost_trial
                 >> _time_best_found_in_trial
@@ -2591,7 +2594,6 @@ int Solver_Lan::receive_local_state() {
                 >> standard_deviation
                 >> _iteration_best_found_in_trial
                 >> _evaluations_best_found_in_trial
-                >> best_solution
                 << pack_end;
 
 	return r_pid;
