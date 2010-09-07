@@ -2202,19 +2202,6 @@ void Solver::RefreshState() {
 	current_standard_deviation(standard_deviation);
 	current_time_spent(total_time_spent);
 	time_spent_trial(time_spent_in_trial);
-
-	//TODO: ERROR!!!
-//	cout << "============================================" << endl;
-//	cout << "= RefreshState" << endl;
-//	cout << "fitness: " << best_solution.fitness() << endl;
-//	cout << "size: " << best_solution.size() << endl;
-//
-//	Solution s(problem);
-//	s.initialize(0);
-//	current_best_solution(s);
-//
-//	cout << "============================================" << endl;
-
 	current_best_solution(best_solution);
 
 	KeepHistory(best_solution, best_cost, worst_cost, time_spent_in_trial,
