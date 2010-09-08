@@ -2320,8 +2320,10 @@ Solver_Seq::Solver_Seq(const Problem& pbm, const SetUpParams& setup) :
 	Solver(pbm, setup) {
 
 	if (setup.seed() >= 0) {
+		if (DEBUG) cout << endl << "[DEBUG] Seed fijo." << endl;
 		random_seed(setup.seed());
 	} else {
+		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;
 		random_seed(time(0));
 	}
 
@@ -2443,8 +2445,13 @@ Solver_Lan::Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
 	NetStream::init(argc, argv);
 	mypid = _netstream.my_pid();
 
-	random_seed(time(0) + (mypid + 1));
-	//  random_seed(time(0) + (mypid+1));
+	if (setup.seed() >= 0) {
+		if (DEBUG) cout << endl << "[DEBUG] Seed fijo." << endl;
+		random_seed(setup.seed() + (mypid + 1));
+	} else {
+		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;
+		random_seed(time(0) + (mypid + 1));
+	}
 }
 
 Solver_Lan::~Solver_Lan() {
@@ -2530,7 +2537,6 @@ void Solver_Lan::DoStep() {
 		final_phase = true;
 	////////////////////////
 
-	//TODO: descomentar!
 	current_population.interchange(current_iteration(), _netstream);
 
 	// gets current interesting values in the current population

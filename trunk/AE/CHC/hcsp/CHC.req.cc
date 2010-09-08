@@ -144,7 +144,7 @@ Problem::~Problem() {
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _fitness(0.0),
-			_makespan(0.0), _dirty(true), _pbm(problem) {
+			_makespan(0.0), _relativeDelay(0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
 }
@@ -247,11 +247,6 @@ void SolutionMachine::showMap() const {
 	}
 }
 
-//int SolutionMachine::getTaskPos(const int taskId) const {
-//	assert(hasTask(taskId));
-//	return _assignedTasks.find(taskId)->second;
-//}
-
 void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	assert(taskPos >= 0);
 	assert(taskPos < _tasks.size());
@@ -284,6 +279,11 @@ double SolutionMachine::getMakespan() {
 	return _makespan;
 }
 
+double SolutionMachine::getRelativeDelay() {
+	refresh();
+	return _relativeDelay;
+}
+
 double SolutionMachine::getFitness() {
 	refresh();
 	return _fitness;
@@ -293,6 +293,7 @@ void SolutionMachine::refresh() {
 	if (_dirty) {
 		double fitness = 0.0;
 		double makespan = 0.0;
+		double relativeDelay = 0.0;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
@@ -306,12 +307,14 @@ void SolutionMachine::refresh() {
 
 			if ((taskPos > 0) && (_pbm.taskPriority(taskId) != 0)) {
 				priorityCost += makespan / _pbm.taskPriority(taskId);
+				relativeDelay += (priorityCost / _pbm.machineCount());
 			}
 
 			makespan += computeCost;
 			fitness += (computeCost + priorityCost);
 		}
 
+		_relativeDelay = relativeDelay;
 		_makespan = makespan;
 		_fitness = fitness;
 		_dirty = false;
@@ -823,21 +826,26 @@ bool Solution::validate() const {
 // Fitness de la solución.
 // ===================================
 double Solution::fitness() {
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness" << endl;
+	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness" << endl;
 	if (!_initialized) {
 		return infinity();
 	}
 
-	double fitness = 0.0;
+	double maxMakespan = 0.0;
+	double totalDelay = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 		// TODO: re-pensar esto!
-		if (_machines[machineId].getFitness() > fitness) {
-			fitness = _machines[machineId].getFitness();
+		totalDelay += _machines[machineId].getRelativeDelay();
+
+		if (_machines[machineId].getMakespan() > maxMakespan) {
+			maxMakespan = _machines[machineId].getMakespan();
 		}
 	}
 
-	return fitness;
+	if (DEBUG) cout << endl << "[DEBUG] MaxMakespan: " << maxMakespan << ", TotalDelay: " << totalDelay << endl;
+
+	return (maxMakespan + totalDelay);
 }
 
 int Solution::length() const {

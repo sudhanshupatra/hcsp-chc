@@ -14,10 +14,13 @@ MainLan: CHC.req.o CHC.pro.o MainLan.o
 MainWan: CHC.req.o CHC.pro.o MainWan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
-LAN:
-	$(RUN) -np 3 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+LAN4:
+	$(RUN) -np 4 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
-LAND:
+LAN3:
+	$(RUN) -gdb -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+
+LAN2:
 	$(RUN) -gdb -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 WAN:
@@ -25,3 +28,6 @@ WAN:
 
 SEQ:
 	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
+
+SEQP:
+	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/prioridades/simple res/sol.txt

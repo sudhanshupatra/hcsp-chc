@@ -111,6 +111,7 @@ private:
 
 	double _fitness;
 	double _makespan;
+	double _relativeDelay;
 	bool _dirty;
 
 	void refresh();
@@ -134,6 +135,7 @@ public:
 
 	double getFitness();
 	double getMakespan();
+	double getRelativeDelay();
 
 	int machineId() const;
 
