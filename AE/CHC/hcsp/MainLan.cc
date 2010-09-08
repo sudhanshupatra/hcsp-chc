@@ -43,7 +43,8 @@ int main (int argc, char** argv)
 	if (solver.pid()==0)
 	{
 		solver.show_state();
-		cout << "Solucion: " << solver.global_best_solution() << " Fitness: " << solver.global_best_solution().fitness();
+		cout << "Solucion: " << solver.global_best_solution() << endl;
+		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
 
 		f.getline(&(path[len]),longitud,'\n');
 	  	ofstream fexit(path);
