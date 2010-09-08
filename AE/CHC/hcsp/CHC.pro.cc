@@ -904,8 +904,11 @@ void Migration::execute(Population& pop,
 
 	mypid = _netstream.my_pid();
 
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute begin" << endl;
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_proc:" << nb_proc << endl;
+
 	int to = (mypid + 1) % nb_proc; // Source (from) and Target (to) of processes
-	int from = (nb_proc + mypid - 1) % nb_proc;
+	int from = mypid - 1;
 
 	// process number 0 is only to store the global state
 	if (to == 0)
@@ -913,14 +916,24 @@ void Migration::execute(Population& pop,
 	if (from == 0)
 		from = nb_proc - 1;
 
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute from:" << from << endl;
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute to:" << to << endl;
+
 	_netstream << set_target(to) << set_source(from) << get_target(&to)
 			<< get_source(&from);
 
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute current_generation:" << current_generation << endl;
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute migration_rate:" << migration_rate << endl;
+	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_evolution_steps:" << pop.setup().nb_evolution_steps() << endl;
+
 	if ((current_generation % migration_rate) == 0 && (current_generation
-			!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
+			!= pop.setup().nb_evolution_steps()))
+		// in this generation this operator have to be applied
 	{
 		pop.setup().pool().selector(migration_selection_1).prepare(
 				pop.fitness_values(), false);
+
+		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sending..." << endl;
 
 		_netstream << pack_begin;
 		for (int i = 0; i < migration_size; i++) {
@@ -938,13 +951,15 @@ void Migration::execute(Population& pop,
 		{
 			pop.setup().pool().selector(migration_selection_2).prepare(
 					pop.fitness_values(), true);
+
+			if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sync receiving..." << endl;
+
 			_netstream << wait(packed);
 			_netstream << pack_begin;
 			for (int i = 0; i < migration_size; i++) {
 				// select individual to be remplaced
 				struct individual ind;
-				ind
-						= pop.setup().pool().selector(migration_selection_2).select_one(
+				ind	= pop.setup().pool().selector(migration_selection_2).select_one(
 								pop.parents(), pop.offsprings(),
 								pop.fitness_values(),
 								migration_selection_conf_2, true);
@@ -958,7 +973,11 @@ void Migration::execute(Population& pop,
 						== minimize) || (solution_received->fitness()
 						>= solution_to_remplace->fitness() && direction
 						== maximize)) {
+
+					if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute reemplazo una solución!!!" << endl;
+
 					need_to_revaluate = true;
+
 					for (int j = 0; j < pop.parents().size(); j++) {
 						if (pop.fitness_values()[j].index == ind.index) {
 							pop.fitness_values()[j].change = true;
@@ -973,8 +992,12 @@ void Migration::execute(Population& pop,
 		}
 	} // end if
 
-	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
+	if (!synchronized && ((current_generation % check_asynchronous) == 0)) {
+		// asynchronous mode: if there are not data, continue;
 		// but, if there are data, i have to receive it
+
+		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute a-sync receiving..." << endl;
+
 		int pending = false;
 		_netstream._probe(packed, pending);
 		if (pending) {
@@ -990,8 +1013,7 @@ void Migration::execute(Population& pop,
 
 				// select individual to be remplaced
 				struct individual ind;
-				ind
-						= pop.setup().pool().selector(migration_selection_2).select_one(
+				ind = pop.setup().pool().selector(migration_selection_2).select_one(
 								pop.parents(), pop.offsprings(),
 								pop.fitness_values(),
 								migration_selection_conf_2, true);
@@ -1020,7 +1042,11 @@ void Migration::execute(Population& pop,
 	}
 
 	if (need_to_revaluate)
+		if (DEBUG) cout << endl << "Migration::execute re-evalúo la población" << endl;
+
 		pop.evaluate_parents();
+
+	if (DEBUG) cout << endl << "Migration::execute end" << endl;
 }
 
 ostream& operator<<(ostream& os, const Migration& migration) {
@@ -2505,10 +2531,9 @@ void Solver_Lan::DoStep() {
 	////////////////////////
 
 	//TODO: descomentar!
-	//current_population.interchange(current_iteration(), _netstream);
+	current_population.interchange(current_iteration(), _netstream);
 
 	// gets current interesting values in the current population
-
 	best_cost = current_population.best_cost();
 	best_solution = current_population.best_solution();
 	worst_cost = current_population.worst_cost();
@@ -2606,6 +2631,7 @@ void Solver_Lan::check_for_refresh_global_state() // Executed in process with pi
 		KeepHistory(_best_solution_trial, _best_cost_trial, _worst_cost_trial,
 				_time_best_found_in_trial, start_global
 						+ _time_best_found_in_trial);
+
 		// the process that has send data has finished the current trial
 		if (received_pid == -1) {
 			// Termination phase //
@@ -2644,7 +2670,8 @@ void Solver_Lan::check_for_refresh_global_state() // Executed in process with pi
 		}
 	} // end while
 
-	// Actualizaci�n de las estad�sticas // Termination phase //
+	// Actualización de las estadísticas
+	// Termination phase //
 	iteration_best_found_in_trial(acum_iterations / (_netstream.pnumber() - 1));
 	evaluations_best_found_in_trial(acum_evaluations / (_netstream.pnumber()
 			- 1));
