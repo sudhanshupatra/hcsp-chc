@@ -826,7 +826,7 @@ bool Solution::validate() const {
 // Fitness de la solución.
 // ===================================
 double Solution::fitness() {
-	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness" << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness" << endl;
 	if (!_initialized) {
 		return infinity();
 	}
@@ -835,7 +835,6 @@ double Solution::fitness() {
 	double totalDelay = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		// TODO: re-pensar esto!
 		totalDelay += _machines[machineId].getRelativeDelay();
 
 		if (_machines[machineId].getMakespan() > maxMakespan) {
@@ -843,7 +842,7 @@ double Solution::fitness() {
 		}
 	}
 
-	if (DEBUG) cout << endl << "[DEBUG] MaxMakespan: " << maxMakespan << ", TotalDelay: " << totalDelay << endl;
+//	if (DEBUG) cout << endl << "[DEBUG] MaxMakespan: " << maxMakespan << ", TotalDelay: " << totalDelay << endl;
 
 	return (maxMakespan + totalDelay);
 }

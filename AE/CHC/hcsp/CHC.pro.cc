@@ -904,8 +904,8 @@ void Migration::execute(Population& pop,
 
 	mypid = _netstream.my_pid();
 
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute begin" << endl;
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_proc:" << nb_proc << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute begin" << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_proc:" << nb_proc << endl;
 
 	int to = (mypid + 1) % nb_proc; // Source (from) and Target (to) of processes
 	int from = mypid - 1;
@@ -916,15 +916,15 @@ void Migration::execute(Population& pop,
 	if (from == 0)
 		from = nb_proc - 1;
 
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute from:" << from << endl;
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute to:" << to << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute from:" << from << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute to:" << to << endl;
 
 	_netstream << set_target(to) << set_source(from) << get_target(&to)
 			<< get_source(&from);
 
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute current_generation:" << current_generation << endl;
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute migration_rate:" << migration_rate << endl;
-	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_evolution_steps:" << pop.setup().nb_evolution_steps() << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute current_generation:" << current_generation << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute migration_rate:" << migration_rate << endl;
+//	if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute nb_evolution_steps:" << pop.setup().nb_evolution_steps() << endl;
 
 	if ((current_generation % migration_rate) == 0 && (current_generation
 			!= pop.setup().nb_evolution_steps()))
@@ -933,7 +933,7 @@ void Migration::execute(Population& pop,
 		pop.setup().pool().selector(migration_selection_1).prepare(
 				pop.fitness_values(), false);
 
-		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sending..." << endl;
+//		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sending..." << endl;
 
 		_netstream << pack_begin;
 		for (int i = 0; i < migration_size; i++) {
@@ -952,7 +952,7 @@ void Migration::execute(Population& pop,
 			pop.setup().pool().selector(migration_selection_2).prepare(
 					pop.fitness_values(), true);
 
-			if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sync receiving..." << endl;
+//			if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute sync receiving..." << endl;
 
 			_netstream << wait(packed);
 			_netstream << pack_begin;
@@ -974,7 +974,7 @@ void Migration::execute(Population& pop,
 						>= solution_to_remplace->fitness() && direction
 						== maximize)) {
 
-					if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute reemplazo una solución!!!" << endl;
+//					if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute reemplazo una solución!!!" << endl;
 
 					need_to_revaluate = true;
 
@@ -996,7 +996,7 @@ void Migration::execute(Population& pop,
 		// asynchronous mode: if there are not data, continue;
 		// but, if there are data, i have to receive it
 
-		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute a-sync receiving..." << endl;
+//		if (DEBUG) cout << endl << "<" << mypid << ">" << "[DEBUG] Migration::execute a-sync receiving..." << endl;
 
 		int pending = false;
 		_netstream._probe(packed, pending);
@@ -1041,12 +1041,12 @@ void Migration::execute(Population& pop,
 		} // end if
 	}
 
-	if (need_to_revaluate)
-		if (DEBUG) cout << endl << "Migration::execute re-evalúo la población" << endl;
-
+	if (need_to_revaluate) {
+//		if (DEBUG) cout << endl << "Migration::execute re-evalúo la población" << endl;
 		pop.evaluate_parents();
+	}
 
-	if (DEBUG) cout << endl << "Migration::execute end" << endl;
+//	if (DEBUG) cout << endl << "Migration::execute end" << endl;
 }
 
 ostream& operator<<(ostream& os, const Migration& migration) {
@@ -2320,7 +2320,7 @@ Solver_Seq::Solver_Seq(const Problem& pbm, const SetUpParams& setup) :
 	Solver(pbm, setup) {
 
 	if (setup.seed() >= 0) {
-		if (DEBUG) cout << endl << "[DEBUG] Seed fijo." << endl;
+		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() << "." << endl;
 		random_seed(setup.seed());
 	} else {
 		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;
@@ -2446,7 +2446,7 @@ Solver_Lan::Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
 	mypid = _netstream.my_pid();
 
 	if (setup.seed() >= 0) {
-		if (DEBUG) cout << endl << "[DEBUG] Seed fijo." << endl;
+		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() + (mypid + 1) << "." << endl;
 		random_seed(setup.seed() + (mypid + 1));
 	} else {
 		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;

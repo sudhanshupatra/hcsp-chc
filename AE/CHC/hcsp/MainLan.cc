@@ -11,7 +11,7 @@ int main (int argc, char** argv)
 	int len;
 	int longitud;
 
-	//int clear = system("clear");
+	int clear = system("clear");
 
 	get_path(argv[0],path);
 	len = strlen(path);
