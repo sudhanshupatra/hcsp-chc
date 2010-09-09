@@ -18,16 +18,16 @@ LAN4:
 	$(RUN) -np 4 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 LAN3:
-	$(RUN) -gdb -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+	$(RUN) -np 3 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 LAN2:
-	$(RUN) -gdb -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+	$(RUN) -np 2 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 WAN:
 	$(RUN) -v  -p4pg pgfileWan MainWan
 
 SEQ:
-	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
+	./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
 
 SEQP:
 	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/prioridades/simple res/sol.txt
