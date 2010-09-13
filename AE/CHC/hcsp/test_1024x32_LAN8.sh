@@ -27,8 +27,8 @@ data[23]="B.u_s_lolo"
 
 for i in {0..0}
 do
-	echo "CHC_LAN8.cfg" > Config.cfg
-	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config.cfg
-	echo "res/LAN8.sol.txt" >> Config.cfg
-	time(make LANTORQUE > res/A.u_c_hihi_LAN8.log)        
+	echo "CHC_LAN8.cfg" > Config_LAN8.cfg
+	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN8.cfg
+	echo "res/${data[i]}_LAN8.sol" >> Config_LAN8.cfg
+	time(make LANTORQUE Config_LAN8.cfg > res/${data[i]}_LAN8.log)        
 done
