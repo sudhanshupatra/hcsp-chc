@@ -17,7 +17,7 @@ int main (int argc, char** argv)
 	len = strlen(path);
 	longitud = MAX_BUFFER - len;
 
-	strcat(path,"Config.cfg");
+	strcat(path,argv[1]);
 	ifstream f(path);
 	if(!f) show_message(10);
 
