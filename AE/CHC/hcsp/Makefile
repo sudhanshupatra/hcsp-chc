@@ -15,16 +15,16 @@ MainWan: CHC.req.o CHC.pro.o MainWan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
 LAN8:
-	$(RUN) -np 4 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+	$(RUN) -np 8 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 LAN4:
-	$(RUN) -np 4 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
+	$(RUN) -np 4 /home/siturria/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
 LAN8C:
-	$(RUN) -np 4 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
+	$(RUN) -np 8 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
 
 LAN4C:
-	$(RUN) -np 4 /home/siturria/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+	$(RUN) -np 4 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
 
 LAN3:
 	$(RUN) -np 3 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
