@@ -36,7 +36,7 @@ WAN:
 	$(RUN) -v  -p4pg pgfileWan MainWan
 
 SEQ:
-	./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
+	./MainSeq CHC_SEQ_DORA.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi res/sol.txt
 
 SEQP:
 	./MainSeq CHC.cfg ../../ProblemInstances/HCSP/prioridades/simple res/sol.txt
