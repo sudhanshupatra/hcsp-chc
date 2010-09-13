@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CFG_FILE="CHC_LAN8.cfg"
-MAKE_CFG="LAN8"
+MAKE_CFG="LAN8C"
 DATA_DIR="../../ProblemInstances/HCSP/1024x32.mod/"
 
 data[0]="A.u_c_hihi"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CFG_FILE="CHC_LAN4.cfg"
-MAKE_CFG="LAN4"
+MAKE_CFG="LAN4C"
 DATA_DIR="../../ProblemInstances/HCSP/1024x32.mod/"
 
 data[0]="A.u_c_hihi"
