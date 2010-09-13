@@ -1,3 +1,5 @@
+#!/bin/bash
+
 time(./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_c_hihi res/sol0.txt > res/A.u_c_hihi_SEQ.log)
 time(./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_c_hilo res/sol1.txt > res/A.u_c_hilo_SEQ.log)
 time(./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/A.u_c_lohi res/sol2.txt > res/A.u_c_lohi_SEQ.log)

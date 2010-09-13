@@ -1,4 +1,9 @@
-echo "CHC_LAN.cfg" > Config.cfg
+#!/bin/bash
+
+CFG_FILE="CHC_LAN4.cfg"
+MAKE_CFG="LAN4"
+
+echo $CFG_FILE > Config.cfg
 echo "../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi" >> Config.cfg
-echo "res/lan.sol.txt" >> Config.cfg
-time(make LAN4 > res/A.u_c_hihi_LAN4.log)
+echo "res/$MAKE_CFG.sol.txt" >> Config.cfg
+time(make $MAKE_CFG > res/A.u_c_hihi_$MAKE_CFG.log)
