@@ -27,10 +27,10 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for i in {0..0}
+for i in {0..23}
 do
 	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
 	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN4.cfg
-	echo "res/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
-	time($EXEC Config_LAN4.cfg > res/${data[i]}_LAN4.log)        
+	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
+	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
 done
