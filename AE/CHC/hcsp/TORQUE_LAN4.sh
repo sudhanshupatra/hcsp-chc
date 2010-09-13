@@ -25,8 +25,6 @@
 
 #PBS -V
 
-EXEC=./test_1024x32_LAN4.sh
-
 echo Job Name: $PBS_JOBNAME
 echo Working directory: $PBS_O_WORKDIR
 echo Queue: $PBS_QUEUE
@@ -58,4 +56,4 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-time /home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs $EXEC
+./test_1024x32_LAN4.sh

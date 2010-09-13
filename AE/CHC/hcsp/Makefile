@@ -25,6 +25,9 @@ LAN8C:
 
 LAN4C:
 	$(RUN) -np 4 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
+	
+LANTORQUE:
+	/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan
 
 LAN3:
 	$(RUN) -np 3 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
