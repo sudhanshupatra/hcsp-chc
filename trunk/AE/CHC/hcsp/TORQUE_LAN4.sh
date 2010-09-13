@@ -20,8 +20,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/res/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/res/
 
 #PBS -V
 
