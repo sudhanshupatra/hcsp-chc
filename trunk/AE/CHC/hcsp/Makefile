@@ -14,6 +14,9 @@ MainLan: CHC.req.o CHC.pro.o MainLan.o
 MainWan: CHC.req.o CHC.pro.o MainWan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
+LAN8:
+	$(RUN) -np 4 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
+
 LAN4:
 	$(RUN) -np 4 /home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/MainLan
 
