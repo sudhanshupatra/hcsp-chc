@@ -27,10 +27,10 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for i in {0..0}
+for i in {0..23}
 do
 	echo "CHC_LAN8.cfg" > Config_LAN8.cfg
 	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN8.cfg
-	echo "res/${data[i]}_LAN8.sol" >> Config_LAN8.cfg
-	time($EXEC Config_LAN8.cfg > res/${data[i]}_LAN8.log)        
+	echo "lan8/${data[i]}_LAN8.sol" >> Config_LAN8.cfg
+	time($EXEC Config_LAN8.cfg > lan8/${data[i]}_LAN8.log)        
 done

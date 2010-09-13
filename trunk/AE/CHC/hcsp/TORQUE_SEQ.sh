@@ -4,7 +4,7 @@
 #PBS -N ae_seq
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=01:00:00
+#PBS -l nodes=1:cpu16,walltime=01:00:00
 
 # Cola
 #PBS -q privada
@@ -20,8 +20,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/res/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/res/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
 
 #PBS -V
 
