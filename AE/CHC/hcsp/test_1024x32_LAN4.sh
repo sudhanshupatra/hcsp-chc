@@ -32,5 +32,5 @@ do
 	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
 	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN4.cfg
 	echo "res/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
-	time($EXEC LANTORQUE Config_LAN4.cfg > res/${data[i]}_LAN4.log)        
+	time($EXEC Config_LAN4.cfg > res/${data[i]}_LAN4.log)        
 done
