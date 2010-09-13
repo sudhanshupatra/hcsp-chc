@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+
 data[0]="A.u_c_hihi"
 data[1]="A.u_c_hilo"
 data[2]="A.u_c_lohi"
@@ -30,5 +32,5 @@ do
 	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
 	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN4.cfg
 	echo "res/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
-	time(make LANTORQUE Config_LAN4.cfg > res/${data[i]}_LAN4.log)        
+	time($EXEC LANTORQUE Config_LAN4.cfg > res/${data[i]}_LAN4.log)        
 done
