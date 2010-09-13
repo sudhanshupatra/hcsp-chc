@@ -12,6 +12,9 @@
 # Working dir
 #PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
 
+# Correo electronico
+#PBS -M siturria@fing.edu.uy
+
 # Email
 #PBS -m abe
 # n: no mail will be sent.
