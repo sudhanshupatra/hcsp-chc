@@ -1,9 +1,5 @@
 #!/bin/bash
 
-CFG_FILE="CHC_LAN4.cfg"
-MAKE_CFG="LANTORQUE"
-DATA_DIR="../../ProblemInstances/HCSP/1024x32.mod/"
-
 data[0]="A.u_c_hihi"
 data[1]="A.u_c_hilo"
 data[2]="A.u_c_lohi"
@@ -31,8 +27,8 @@ data[23]="B.u_s_lolo"
 
 for i in {0..0}
 do
-	echo $CFG_FILE > Config.cfg
-	echo "$DATA_DIR${data[i]}" >> Config.cfg
-	echo "res/$MAKE_CFG.sol.txt" >> Config.cfg
-	time(make $MAKE_CFG > res/A.u_c_hihi_$MAKE_CFG.log)        
+	echo "CHC_LAN4.cfg" > Config.cfg
+	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config.cfg
+	echo "res/LAN4.sol.txt" >> Config.cfg
+	time(make LANTORQUE > res/A.u_c_hihi_LAN4.log)        
 done
