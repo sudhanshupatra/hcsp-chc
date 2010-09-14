@@ -4,10 +4,10 @@
 #PBS -N ae_lan8
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=8,walltime=05:00:00
+#PBS -l nodes=1:cpu8:ppn=8,walltime=10:00:00
 
 # Cola
-#PBS -q privada
+#PBS -q publica
 
 # Working dir
 #PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
