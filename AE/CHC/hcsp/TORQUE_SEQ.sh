@@ -4,10 +4,10 @@
 #PBS -N ae_seq
 
 # Requerimientos
-#PBS -l nodes=1:cpu16,walltime=05:00:00
+#PBS -l nodes=1:cpu8,walltime=07:00:00
 
 # Cola
-#PBS -q privada
+#PBS -q publica
 
 # Working dir
 #PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
