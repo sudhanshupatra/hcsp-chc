@@ -2282,7 +2282,7 @@ Solver::~Solver() {
 Solver_Seq::Solver_Seq(const Problem& pbm, const SetUpParams& setup) :
 	Solver(pbm, setup) {
 
-	if (setup.seed() >= 0) {
+	if (setup.seed() > 0) {
 		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() << "." << endl;
 		random_seed(setup.seed());
 	} else {
@@ -2408,7 +2408,7 @@ Solver_Lan::Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
 	NetStream::init(argc, argv);
 	mypid = _netstream.my_pid();
 
-	if (setup.seed() >= 0) {
+	if (setup.seed() > 0) {
 		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() + (mypid + 1) << "." << endl;
 		random_seed(setup.seed() + (mypid + 1));
 	} else {

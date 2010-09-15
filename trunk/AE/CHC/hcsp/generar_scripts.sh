@@ -31,7 +31,7 @@ do
 			echo "10000			// number of generations" >> $Filename
 			echo "${Poblacion[indexP]}			// number of individuals" >> $Filename
 			echo "0				// display state ?" >> $Filename
-			echo "-1			// seed" >> $Filename
+			echo "0				// seed, 0 = aleatorio" >> $Filename
 			echo "Selection-Parameters	// selections to apply" >> $Filename
 			echo "0.9 1 ${Mutacion[indexM]}			// selection parameter, diverge operator & its probability" >> $Filename
 			echo "Intra-Operators		// operators to apply in the population" >> $Filename
