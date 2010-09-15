@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq
+#PBS -N ae_seq_cal
 
 # Requerimientos
 #PBS -l nodes=1:cpu8,walltime=12:00:00
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/seq/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/seq/
 
 #PBS -V
 
