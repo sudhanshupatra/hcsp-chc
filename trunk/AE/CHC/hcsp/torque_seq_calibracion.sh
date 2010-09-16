@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cal
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=12:00:00
+#PBS -l nodes=1:cpu8,walltime=24:00:00
 
 # Cola
 #PBS -q publica
@@ -98,7 +98,7 @@ do
 				
 				echo "Datos $DataFile"
 				
-				./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log    
+				time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
 			done
 		done
 	done

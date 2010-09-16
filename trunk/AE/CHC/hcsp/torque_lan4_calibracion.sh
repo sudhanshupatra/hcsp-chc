@@ -4,7 +4,7 @@
 #PBS -N ae_lan4
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=15:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=24:00:00
 
 # Cola
 #PBS -q publica
@@ -104,7 +104,7 @@ do
 				echo "$DataFile" >> Config_LAN4.cfg
 				echo "$OutputFile.sol" >> Config_LAN4.cfg
 				
-				$EXEC Config_LAN4.cfg > $OutputFile.log    
+				time($EXEC Config_LAN4.cfg > $OutputFile.log)    
 			done
 		done
 	done
