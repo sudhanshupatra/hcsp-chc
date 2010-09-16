@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan4
+#PBS -N ae_lan8_cal
 
 # Requerimientos
 #PBS -l nodes=1:cpu8:ppn=8,walltime=24:00:00
