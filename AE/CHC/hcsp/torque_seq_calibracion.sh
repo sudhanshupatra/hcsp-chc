@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cal
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=24:00:00
+#PBS -l nodes=1:cpu8,walltime=48:00:00
 
 # Cola
 #PBS -q publica
