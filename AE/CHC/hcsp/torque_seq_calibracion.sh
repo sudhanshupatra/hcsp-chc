@@ -94,7 +94,7 @@ do
 			do
 				CfgFile="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 				DataFile="../../ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
-				OutputFile="calibracion/seq/$CfgFile"
+				OutputFile="calibracion/seq/$DataFile_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
