@@ -4,7 +4,7 @@
 #PBS -N ae_lan4_cprio_cal
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=200:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=250:00:00
 
 # Cola
 #PBS -q publica
@@ -63,6 +63,8 @@ data[0]="u_c_hilo.0"
 data[1]="u_c_lohi.0"
 data[2]="u_s_hilo.0"
 data[3]="u_s_lohi.0"
+data[4]="u_i_hilo.0"
+data[5]="u_i_lohi.0"
 
 Poblacion[0]=5
 Poblacion[1]=10
@@ -92,7 +94,7 @@ do
 			echo "Cruzamiento ${Cruzamiento[indexC]}"
 			echo "Mutación ${Mutacion[indexM]}"
 
-			for i in {0..3}
+			for i in {0..5}
 			do
 				CfgFile="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 				DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
