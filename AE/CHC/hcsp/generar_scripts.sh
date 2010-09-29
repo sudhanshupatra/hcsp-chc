@@ -27,8 +27,8 @@ do
 			echo "Mutación ${Mutacion[indexM]}"
 
 			Filename="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-			echo "10			// number of independent runs" > $Filename
-			echo "10000			// number of generations" >> $Filename
+			echo "20			// number of independent runs" > $Filename
+			echo "100000			// number of generations" >> $Filename
 			echo "${Poblacion[indexP]}			// number of individuals" >> $Filename
 			echo "0				// display state ?" >> $Filename
 			echo "0				// seed, 0 = aleatorio" >> $Filename
