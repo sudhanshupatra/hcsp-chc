@@ -1214,14 +1214,12 @@ void Solution::mutate() {
 			}
 
 			if (rand01() >= 0.5) {
-				// Se selecciona una tarea T según rueda de ruleta por el inverso de su
-				// función de PRIORIDAD y se coloca en el primer lugar de la cola de ejecución
-				// de la máquina.
+				// Se selecciona una tarea T según su función de PRIORIDAD y se
+				// adelanta si lugar en la cola de ejecución.
 
 				for (int taskPos = 1; taskPos
 						< _machines[machineId].countTasks(); taskPos++) {
-					// Inicializo el vector de prioridades de las tareas de
-					// la máquina actual para sortear una tarea.
+
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
 
@@ -1235,8 +1233,7 @@ void Solution::mutate() {
 					anteriorTaskPriority = _pbm.taskPriority(anteriorTaskId);
 
 					if (taskPriority < anteriorTaskPriority) {
-						_machines[machineId].swapTasks(taskPriority,
-								anteriorTaskPriority);
+						_machines[machineId].swapTasks(taskPos,	taskPos - 1);
 					}
 				}
 			}
