@@ -836,7 +836,6 @@ bool Solution::validate() const {
 // Fitness de la solución.
 // ===================================
 double Solution::fitness() {
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::fitness" << endl;
 	if (!_initialized) {
 		return infinity();
 	}
@@ -852,9 +851,37 @@ double Solution::fitness() {
 		}
 	}
 
-	//	if (DEBUG) cout << endl << "[DEBUG] MaxMakespan: " << maxMakespan << ", TotalDelay: " << totalDelay << endl;
-
 	return (maxMakespan + totalDelay);
+}
+
+double Solution::makespan() {
+	if (!_initialized) {
+		return infinity();
+	}
+
+	double maxMakespan = 0.0;
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		if (_machines[machineId].getMakespan() > maxMakespan) {
+			maxMakespan = _machines[machineId].getMakespan();
+		}
+	}
+
+	return maxMakespan;
+}
+
+double Solution::wqt() {
+	if (!_initialized) {
+		return infinity();
+	}
+
+	double totalDelay = 0.0;
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		totalDelay += _machines[machineId].getRelativeDelay();
+	}
+
+	return totalDelay;
 }
 
 int Solution::length() const {
@@ -1217,8 +1244,8 @@ void Solution::mutate() {
 				// Se selecciona una tarea T según su función de PRIORIDAD y se
 				// adelanta si lugar en la cola de ejecución.
 
-				for (int taskPos = 1; taskPos
-						< _machines[machineId].countTasks(); taskPos++) {
+				for (int taskPos = _machines[machineId].countTasks() - 1;
+						taskPos > 0; taskPos--) {
 
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);

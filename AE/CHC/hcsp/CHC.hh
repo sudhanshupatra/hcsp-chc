@@ -24,8 +24,8 @@ skeleton CHC {
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
 #define MUT_MAQ 5
 #define MUT_TASKS 5
-#define MUT_RANDOM 0.2
-#define MUT_BESTMUTATION 0.1
+//#define MUT_RANDOM 0.2
+//#define MUT_BESTMUTATION 0.1
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.8
 // Distancia minima para permitir el crossover (1/4).
@@ -167,6 +167,8 @@ public:
 	void markAsInitialized();
 
 	double fitness();
+	double makespan();
+	double wqt();
 	unsigned int size() const;
 
 	int length() const;
