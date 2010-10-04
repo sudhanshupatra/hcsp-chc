@@ -33,6 +33,8 @@ int main (int argc, char** argv)
 	{
 		solver.show_state();
 		cout << "Solution" << solver.global_best_solution() << endl;
+		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
+		cout << "WQT: " << solver.global_best_solution().wqt() << endl;
 		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
 		cout << "\n\n :( ---------------------- THE END --------------- :) ";
 
