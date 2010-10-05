@@ -23,7 +23,7 @@ int main (int argc, char** argv)
 	f2 >> pbm;
 
 	Operator_Pool pool(pbm);
-	SetUpParams cfg(pool);
+	SetUpParams cfg(pool, pbm);
 	f1 >> cfg;
 
 	Solver_Seq solver(pbm,cfg);

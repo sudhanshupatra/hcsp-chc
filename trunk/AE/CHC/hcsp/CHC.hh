@@ -93,7 +93,16 @@ public:
 
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
+
+	float getWQTWeight() const;
+	void setWQTWeight(const float weight);
+
+	float getMakespanWeight() const;
+	void setMakespanWeight(const float weight);
 private:
+	float _wqt_weight;
+	float _makespan_weight;
+
 	int _taskCount;
 	int _machineCount;
 	vector<int> _tasksPriorities;
@@ -373,10 +382,14 @@ private:
 	Rlist<unsigned int> _inter_operators;
 
 	Operator_Pool& _pool;
+
+	Problem& _pbm;
 	unsigned long _seed;
+	float _wqt_weight;
+	float _makespan_weight;
 
 public:
-	SetUpParams(Operator_Pool& pool);
+	SetUpParams(Operator_Pool& pool, Problem& pbm);
 	Operator_Pool& pool() const;
 
 	friend ostream& operator<<(ostream& os, const SetUpParams& setup);
@@ -417,6 +430,10 @@ public:
 
 	const unsigned long seed() const;
 	void seed(const unsigned long val);
+
+	const float wqt_weight() const;
+	const float makespan_weight() const;
+	void obj_weight(const char* buffer);
 
 	~SetUpParams();
 };

@@ -9,9 +9,9 @@ skeleton CHC {
 
 // Problem ---------------------------------------------------------------
 
-Problem::Problem() :
+Problem::Problem():
 	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL),
-			_tasksPriorities() {
+	_wqt_weight(1.0), _makespan_weight(1.0), _tasksPriorities() {
 }
 
 // ===================================
@@ -138,6 +138,22 @@ int Problem::taskPriority(const int& task) const {
 	assert(task >= 0);
 	assert(task < _taskCount);
 	return _tasksPriorities[task];
+}
+
+float Problem::getWQTWeight() const {
+	return _wqt_weight;
+}
+
+void Problem::setWQTWeight(const float weight) {
+	_wqt_weight = weight;
+}
+
+float Problem::getMakespanWeight() const {
+	return _makespan_weight;
+}
+
+void Problem::setMakespanWeight(const float weight) {
+	_makespan_weight = weight;
 }
 
 Problem::~Problem() {
@@ -310,7 +326,7 @@ void SolutionMachine::refresh() {
 
 			if ((taskPos > 0) && (_pbm.taskPriority(taskId) != 0)) {
 				priorityCost += makespan / _pbm.taskPriority(taskId);
-				relativeDelay += (priorityCost / _pbm.machineCount());
+				relativeDelay += priorityCost / countTasks();
 			}
 
 			makespan += computeCost;
@@ -851,7 +867,7 @@ double Solution::fitness() {
 		}
 	}
 
-	return (maxMakespan + totalDelay);
+	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getWQTWeight() * totalDelay);
 }
 
 double Solution::makespan() {
