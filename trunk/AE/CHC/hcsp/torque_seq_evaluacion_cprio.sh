@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq_cprio_cal
+#PBS -N ae_seq_cprio_eval
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=10:00:00
+#PBS -l nodes=1:cpu8,walltime=20:00:00
 
 # Cola
 #PBS -q publica
@@ -95,7 +95,7 @@ Poblacion=10
 Cruzamiento=1.0
 Mutacion=1.0
 
-for i in {0..0}
+for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
@@ -106,7 +106,7 @@ do
 	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
 done
 
-for i in {6..6}
+for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="../../ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
