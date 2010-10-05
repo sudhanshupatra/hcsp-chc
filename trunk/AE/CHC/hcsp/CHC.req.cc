@@ -1104,7 +1104,7 @@ void Solution::doLocalSearch() {
 		}
 
 		solucionAceptada = (this->fitness() / fitnessInicial)
-				> PALS_UMBRAL_MEJORA;
+				>= PALS_UMBRAL_MEJORA;
 	}
 }
 
@@ -1260,8 +1260,9 @@ void Solution::mutate() {
 				// Se selecciona una tarea T según su función de PRIORIDAD y se
 				// adelanta si lugar en la cola de ejecución.
 
-				for (int taskPos = _machines[machineId].countTasks() - 1;
-						taskPos > 0; taskPos--) {
+//				for (int taskPos = _machines[machineId].countTasks() - 1;
+//						taskPos > 0; taskPos--) {
+				for (int taskPos = 1; taskPos < _machines[machineId].countTasks(); taskPos++) {
 
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
