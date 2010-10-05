@@ -6,7 +6,7 @@ Mutacion="1.0"
 Pesos="1.0 1.0"
 
 Filename="scripts_evaluacion/chc.cfg"
-echo "1			// number of independent runs" > $Filename
+echo "20			// number of independent runs" > $Filename
 echo "100000			// number of generations" >> $Filename
 echo "$Poblacion			// number of individuals" >> $Filename
 echo "0				// display state ?" >> $Filename

@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cprio_fp
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=01:00:00
+#PBS -l nodes=1:cpu8,walltime=02:00:00
 
 # Cola
 #PBS -q publica
