@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/scripts_frente_pareto/seq_cprio/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/scripts_frente_pareto/seq_cprio/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/frente_pareto/seq_cprio/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/frente_pareto/seq_cprio/
 
 #PBS -V
 
@@ -68,7 +68,7 @@ for indexP in {0..2}
 do
 	CfgFile="scripts_frente_pareto/chc_$indexP.cfg"
 	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
-	OutputFile="scripts_frente_pareto/seq_cprio/$indexP"
+	OutputFile="frente_pareto/seq_cprio/$indexP"
 	
 	echo "Datos $DataFile"
 	

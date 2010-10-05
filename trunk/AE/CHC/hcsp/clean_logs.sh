@@ -6,7 +6,7 @@ mkdir -p calibracion/lan8
 mkdir -p calibracion/seq_cprio
 mkdir -p calibracion/lan4_cprio
 mkdir -p calibracion/lan8_cprio
-mkdir -p scripts_frente_pareto/seq_cprio
+mkdir -p frente_pareto/seq_cprio
 mkdir -p evaluacion/seq_cprio/Braun_et_al.CPrio
 mkdir -p evaluacion/seq_cprio/1024x32.CPrio
 mkdir -p seq
@@ -21,7 +21,7 @@ rm calibracion/lan4_cprio/*
 rm calibracion/lan8_cprio/*
 rm evaluacion/seq_cprio/Braun_et_al.CPrio/*
 rm evaluacion/seq_cprio/1024x32.CPrio/*
-rm scripts_frente_pareto/seq_cprio/*
+rm frente_pareto/seq_cprio/*
 rm seq/*
 rm lan4/*
 rm lan8/*
