@@ -13,14 +13,14 @@ StopCondition::~StopCondition() {
 
 // SetUpParams -----------------------------------------------------------
 
-SetUpParams::SetUpParams(Operator_Pool& pool) :
-	_seed(0), _independent_runs(0), _nb_evolution_steps(0),
-			_population_size(0),
-			_select_parents(6), // Selection of parents: Select all individuals. (fixed)
-			_select_offsprings(7), // Selection of offspring : Select the best individuals. (fixed)
-			_inter_operators(), _intra_operators(), _refresh_global_state(1),
-			_synchronized(0), _check_asynchronous(1), _display_state(0), _pool(
-					pool) {
+SetUpParams::SetUpParams(Operator_Pool& pool, Problem& pbm) :
+	_seed(0), _wqt_weight(1.0), _makespan_weight(1.0), _pbm(pbm),
+	_independent_runs(0), _nb_evolution_steps(0),
+	_population_size(0),
+	_select_parents(6), // Selection of parents: Select all individuals. (fixed)
+	_select_offsprings(7), // Selection of offspring : Select the best individuals. (fixed)
+	_inter_operators(), _intra_operators(), _refresh_global_state(1),
+	_synchronized(0), _check_asynchronous(1), _display_state(0), _pool(pool) {
 }
 
 Operator_Pool& SetUpParams::pool() const {
@@ -71,6 +71,9 @@ istream& operator>>(istream& is, SetUpParams& setup) {
 				break;
 			case 4:
 				setup.seed(op);
+				break;
+			case 5:
+				setup.obj_weight(buffer);
 				break;
 			}
 			nb_param++;
@@ -188,6 +191,18 @@ const bool SetUpParams::display_state() const {
 
 void SetUpParams::seed(const unsigned long val) {
 	_seed = val;
+}
+
+void SetUpParams::obj_weight(const char* buffer) {
+	sscanf(buffer, " %f %f %*s ", &_makespan_weight, &_wqt_weight);
+
+	if (DEBUG) {
+		cout << "[DEBUG] Makespan weight: " << _makespan_weight << "\n";
+		cout << "[DEBUG] WQT weight: " << _wqt_weight << "\n";
+	}
+
+	_pbm.setMakespanWeight(_makespan_weight);
+	_pbm.setWQTWeight(_wqt_weight);
 }
 
 const unsigned long SetUpParams::seed() const {

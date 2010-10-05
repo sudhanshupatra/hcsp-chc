@@ -96,7 +96,7 @@ do
 
 			for i in {0..5}
 			do
-				CfgFile="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
+				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 				DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 				OutputFile="calibracion/lan4_cprio/${data[i]}_$CfgFile"
 				
