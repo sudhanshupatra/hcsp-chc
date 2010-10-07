@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cprio_fp
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=02:00:00
+#PBS -l nodes=1:cpu8,walltime=03:00:00
 
 # Cola
 #PBS -q publica
@@ -61,18 +61,19 @@ echo
 
 Data="u_s_hilo.0"
 
-for indexP in {0..2}
+for index in {0..2}
 do
-	CfgFile="scripts_frente_pareto/chc_$indexP.cfg"
+	CfgFile="scripts_frente_pareto/chc_$index.cfg"
 	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
-	OutputFile="frente_pareto/seq_cprio/$indexP"
 	
 	echo "==========================================================="
 	echo "Datos $DataFile"
 	echo "==========================================================="
 	
-	for instancias in {0..19}
+	for i in {0..4}
 	do
-		./MainSeq $CfgFile $DataFile $OutputFile.sol
+		OutputFile="frente_pareto/seq_cprio/$index$i"
+		
+		./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log
 	done    
 done
