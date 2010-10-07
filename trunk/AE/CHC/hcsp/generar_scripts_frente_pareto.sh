@@ -1,8 +1,8 @@
 #!/bin/bash
 
-Poblacion=10
-Cruzamiento=1.0
-Mutacion=1.0
+Poblacion="15"
+Cruzamiento="0.8"
+Mutacion="0.9"
 
 Pesos[0]="0.0 1.0"
 Pesos[1]="1.0 1.0"
