@@ -16,7 +16,7 @@ do
 	echo "Pesos ${Pesos[indexP]}"
 
 	Filename="scripts_frente_pareto/chc_$indexP.cfg"
-	echo "20			// number of independent runs" > $Filename
+	echo "1			// number of independent runs" > $Filename
 	echo "100000			// number of generations" >> $Filename
 	echo "$Poblacion			// number of individuals" >> $Filename
 	echo "0				// display state ?" >> $Filename
