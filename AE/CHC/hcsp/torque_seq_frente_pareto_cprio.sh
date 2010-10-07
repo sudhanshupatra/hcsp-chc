@@ -60,9 +60,6 @@ echo $NPROCS
 echo
 
 Data="u_s_hilo.0"
-Poblacion=10
-Cruzamiento=1.0
-Mutacion=1.0
 
 for indexP in {0..2}
 do
@@ -72,5 +69,8 @@ do
 	
 	echo "Datos $DataFile"
 	
-	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	for instancias in {0..19}
+	do
+		time(./MainSeq $CfgFile $DataFile $OutputFile_$instancias.sol > $OutputFile_$instancias.log)
+	done    
 done

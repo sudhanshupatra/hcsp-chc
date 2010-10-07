@@ -91,10 +91,6 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-Poblacion=10
-Cruzamiento=1.0
-Mutacion=1.0
-
 for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
