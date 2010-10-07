@@ -67,10 +67,12 @@ do
 	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
 	OutputFile="frente_pareto/seq_cprio/$indexP"
 	
+	echo "==========================================================="
 	echo "Datos $DataFile"
+	echo "==========================================================="
 	
 	for instancias in {0..19}
 	do
-		time(./MainSeq $CfgFile $DataFile $OutputFile_$instancias.sol > $OutputFile_$instancias.log)
+		./MainSeq $CfgFile $DataFile $OutputFile.sol
 	done    
 done
