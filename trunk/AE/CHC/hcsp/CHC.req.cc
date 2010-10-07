@@ -173,9 +173,16 @@ SolutionMachine::~SolutionMachine() {
 
 SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
+
+	/*
 	_fitness = machine._fitness;
 	_makespan = machine._makespan;
 	_dirty = machine._dirty;
+	*/
+
+	_fitness = 0.0;
+	_makespan = 0.0;
+	_dirty = true;
 
 	_tasks.clear();
 	_tasks.reserve(machine._tasks.size());
@@ -198,7 +205,7 @@ int SolutionMachine::machineId() const {
 }
 
 void SolutionMachine::addTask(const int taskId) {
-	double computeCost = _pbm.expectedTimeToCompute(taskId, _machineId);
+	/*double computeCost = _pbm.expectedTimeToCompute(taskId, _machineId);
 	double priorityCost = 0.0;
 
 	if ((_makespan > 0) && (_pbm.taskPriority(taskId) != 0)) {
@@ -206,7 +213,9 @@ void SolutionMachine::addTask(const int taskId) {
 	}
 
 	_fitness = _fitness + (computeCost + priorityCost);
-	_makespan = _makespan + computeCost;
+	_makespan = _makespan + computeCost;*/
+
+	_dirty = true;
 
 	_tasks.push_back(taskId);
 	_assignedTasks[taskId] = NULL;
@@ -289,6 +298,7 @@ void SolutionMachine::removeTask(const int taskPos) {
 }
 
 void SolutionMachine::emptyTasks() {
+	_dirty = true;
 	_assignedTasks.clear();
 	_tasks.clear();
 }
@@ -309,6 +319,7 @@ double SolutionMachine::getFitness() {
 }
 
 void SolutionMachine::refresh() {
+	//_dirty = true;
 	if (_dirty) {
 		double fitness = 0.0;
 		double makespan = 0.0;
