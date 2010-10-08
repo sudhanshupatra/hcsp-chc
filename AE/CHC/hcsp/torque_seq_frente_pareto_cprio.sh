@@ -61,7 +61,7 @@ echo
 
 Data="u_s_hilo.0"
 
-for index in {2..2}
+for index in {0..2}
 do
 	CfgFile="scripts_frente_pareto/chc_$index.cfg"
 	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
