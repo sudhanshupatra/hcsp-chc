@@ -9,9 +9,9 @@ skeleton CHC {
 
 // Problem ---------------------------------------------------------------
 
-Problem::Problem():
-	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL),
-	_wqt_weight(1.0), _makespan_weight(1.0), _tasksPriorities() {
+Problem::Problem() :
+	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL), _wqt_weight(
+			1.0), _makespan_weight(1.0), _tasksPriorities() {
 }
 
 // ===================================
@@ -175,10 +175,10 @@ SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
 
 	/*
-	_fitness = machine._fitness;
-	_makespan = machine._makespan;
-	_dirty = machine._dirty;
-	*/
+	 _fitness = machine._fitness;
+	 _makespan = machine._makespan;
+	 _dirty = machine._dirty;
+	 */
 
 	_fitness = 0.0;
 	_makespan = 0.0;
@@ -206,14 +206,14 @@ int SolutionMachine::machineId() const {
 
 void SolutionMachine::addTask(const int taskId) {
 	/*double computeCost = _pbm.expectedTimeToCompute(taskId, _machineId);
-	double priorityCost = 0.0;
+	 double priorityCost = 0.0;
 
-	if ((_makespan > 0) && (_pbm.taskPriority(taskId) != 0)) {
-		priorityCost += _makespan / _pbm.taskPriority(taskId);
-	}
+	 if ((_makespan > 0) && (_pbm.taskPriority(taskId) != 0)) {
+	 priorityCost += _makespan / _pbm.taskPriority(taskId);
+	 }
 
-	_fitness = _fitness + (computeCost + priorityCost);
-	_makespan = _makespan + computeCost;*/
+	 _fitness = _fitness + (computeCost + priorityCost);
+	 _makespan = _makespan + computeCost;*/
 
 	_dirty = true;
 
@@ -319,7 +319,7 @@ double SolutionMachine::getFitness() {
 }
 
 void SolutionMachine::refresh() {
-	//_dirty = true;
+	_dirty = true;
 	if (_dirty) {
 		double fitness = 0.0;
 		double makespan = 0.0;
@@ -576,11 +576,16 @@ void Solution::initializeMCT() {
 		int minCTMachineId;
 		minCTMachineId = -1;
 
+		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
+		double priorityCoef = _pbm.taskPriority(currentTask) * estimatedSize;
+
 		for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 			if ((machineMakespan[machineId] + _pbm.expectedTimeToCompute(
 					currentTask, machineId)) < minCT) {
 				minCT = machineMakespan[machineId]
 						+ _pbm.expectedTimeToCompute(currentTask, machineId);
+				minCT = minCT + (machineMakespan[machineId] / priorityCoef);
+
 				minCTTaskId = currentTask;
 				minCTMachineId = machineId;
 			}
@@ -591,6 +596,7 @@ void Solution::initializeMCT() {
 
 		_machines[minCTMachineId].addTask(minCTTaskId);
 	}
+
 	cout << endl << "MCT fitness: " << fitness() << endl;
 }
 
@@ -621,7 +627,11 @@ void Solution::initializeMinMin() {
 		int minCTMachineId;
 		minCTMachineId = -1;
 
+		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
+
 		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+			double priorityCoef = _pbm.taskPriority(taskId) * estimatedSize;
+
 			if (taskIsUnmapped[taskId]) {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if ((machineMakespan[machineId]
@@ -629,6 +639,8 @@ void Solution::initializeMinMin() {
 							< minCT) {
 						minCT = machineMakespan[machineId]
 								+ _pbm.expectedTimeToCompute(taskId, machineId);
+						minCT = minCT + (machineMakespan[machineId]
+								/ priorityCoef);
 						minCTTaskId = taskId;
 						minCTMachineId = machineId;
 					}
@@ -694,7 +706,11 @@ void Solution::initializeSufferage() {
 		maxSufferageMachineId = -1;
 		maxSufferageValue = 0.0;
 
+		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
+
 		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+			double priorityCoef = _pbm.taskPriority(taskId) * estimatedSize;
+
 			if (taskIsUnmapped[taskId]) {
 				int minMakespanMachineId;
 				minMakespanMachineId = -1;
@@ -711,16 +727,26 @@ void Solution::initializeSufferage() {
 
 					currentMakespan = machinesMakespan[machineId]
 							+ _pbm.expectedTimeToCompute(taskId, machineId);
-					if (minMakespanMachineId != -1)
+					currentMakespan = currentMakespan
+							+ (machinesMakespan[machineId] / priorityCoef);
+
+					if (minMakespanMachineId != -1) {
 						minMakespan = machinesMakespan[minMakespanMachineId]
 								+ _pbm.expectedTimeToCompute(taskId,
 										minMakespanMachineId);
-					if (secondMinMakespanMachineId != -1)
+						minMakespan = minMakespan
+								+ (machinesMakespan[minMakespanMachineId]
+										/ priorityCoef);
+					}
+					if (secondMinMakespanMachineId != -1) {
 						secondMinMakespan
 								= machinesMakespan[secondMinMakespanMachineId]
 										+ _pbm.expectedTimeToCompute(taskId,
 												secondMinMakespanMachineId);
-
+						secondMinMakespan = secondMinMakespan
+								+ (machinesMakespan[secondMinMakespanMachineId]
+										/ priorityCoef);
+					}
 					if (minMakespanMachineId == -1) {
 						minMakespanMachineId = machineId;
 					} else if (minMakespan > currentMakespan) {
@@ -740,10 +766,18 @@ void Solution::initializeSufferage() {
 				minMakespan = machinesMakespan[minMakespanMachineId]
 						+ _pbm.expectedTimeToCompute(taskId,
 								minMakespanMachineId);
+				minMakespan = minMakespan
+						+ (machinesMakespan[minMakespanMachineId]
+								/ priorityCoef);
+
 				secondMinMakespan
 						= machinesMakespan[secondMinMakespanMachineId]
 								+ _pbm.expectedTimeToCompute(taskId,
 										secondMinMakespanMachineId);
+				secondMinMakespan = secondMinMakespan
+						+ (machinesMakespan[secondMinMakespanMachineId]
+								/ priorityCoef);
+
 				sufferageValue = secondMinMakespan - minMakespan;
 
 				if ((maxSufferageMachineId == -1) || (maxSufferageTaskId == -1)) {
@@ -764,6 +798,8 @@ void Solution::initializeSufferage() {
 				= machinesMakespan[maxSufferageMachineId]
 						+ _pbm.expectedTimeToCompute(maxSufferageTaskId,
 								maxSufferageMachineId);
+		+(machinesMakespan[maxSufferageMachineId] / (_pbm.taskPriority(
+				maxSufferageTaskId) * estimatedSize));
 
 		_machines[maxSufferageMachineId].addTask(maxSufferageTaskId);
 
@@ -878,7 +914,8 @@ double Solution::fitness() {
 		}
 	}
 
-	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getWQTWeight() * totalDelay);
+	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getWQTWeight()
+			* totalDelay);
 }
 
 double Solution::makespan() {
@@ -1271,9 +1308,10 @@ void Solution::mutate() {
 				// Se selecciona una tarea T según su función de PRIORIDAD y se
 				// adelanta si lugar en la cola de ejecución.
 
-//				for (int taskPos = _machines[machineId].countTasks() - 1;
-//						taskPos > 0; taskPos--) {
-				for (int taskPos = 1; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				//				for (int taskPos = _machines[machineId].countTasks() - 1;
+				//						taskPos > 0; taskPos--) {
+				for (int taskPos = 1; taskPos
+						< _machines[machineId].countTasks(); taskPos++) {
 
 					int taskId;
 					taskId = _machines[machineId].getTask(taskPos);
@@ -1288,7 +1326,7 @@ void Solution::mutate() {
 					anteriorTaskPriority = _pbm.taskPriority(anteriorTaskId);
 
 					if (taskPriority < anteriorTaskPriority) {
-						_machines[machineId].swapTasks(taskPos,	taskPos - 1);
+						_machines[machineId].swapTasks(taskPos, taskPos - 1);
 					}
 				}
 			}
