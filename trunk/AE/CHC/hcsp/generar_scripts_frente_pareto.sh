@@ -6,7 +6,7 @@ Mutacion="0.9"
 
 Pesos[0]="0.5 2.0"
 Pesos[1]="1.0 1.0"
-Pesos[2]="2.0 5.0"
+Pesos[2]="2.0 0.5"
 
 for indexP in {0..2}
 do
