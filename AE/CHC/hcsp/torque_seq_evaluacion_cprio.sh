@@ -99,7 +99,7 @@ do
 	
 	echo "Datos $DataFile"
 		
-	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	#time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
 done
 
 for i in {6..29}
@@ -107,6 +107,17 @@ do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="../../ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
 	OutputFile="evaluacion/seq_cprio/1024x32.CPrio/${data[i]}"
+	
+	echo "Datos $DataFile"
+	
+	#time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+done
+
+for i in {6..29}
+do
+	CfgFile="scripts_evaluacion/chc.cfg"
+	DataFile="../../ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
+	OutputFile="evaluacion/seq_cprio/2048x64.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
