@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cprio_eval
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=20:00:00
+#PBS -l nodes=1:cpu8,walltime=30:00:00
 
 # Cola
 #PBS -q publica
@@ -99,7 +99,7 @@ do
 	
 	echo "Datos $DataFile"
 		
-	#time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
 done
 
 for i in {6..29}
@@ -110,7 +110,7 @@ do
 	
 	echo "Datos $DataFile"
 	
-	#time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
 done
 
 for i in {6..29}
