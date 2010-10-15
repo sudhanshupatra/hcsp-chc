@@ -4,7 +4,7 @@
 #PBS -N ae_lan4_cprio_cal
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=250:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=04:00:00
 
 # Cola
 #PBS -q publica
@@ -59,55 +59,30 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-data[0]="u_c_hilo.0"
-data[1]="u_c_lohi.0"
-data[2]="u_s_hilo.0"
-data[3]="u_s_lohi.0"
-data[4]="u_i_hilo.0"
-data[5]="u_i_lohi.0"
+data[0]="B.u_c_hilo"
+data[1]="B.u_c_lohi"
+data[2]="B.u_s_hilo"
+data[3]="B.u_s_lohi"
+data[4]="B.u_i_hilo"
+data[5]="B.u_i_lohi"
 
-Poblacion[0]=5
-Poblacion[1]=10
-Poblacion[2]=15
-Poblacion[3]=20
-Poblacion[4]=30
-
-Cruzamiento[0]=0.7
-Cruzamiento[1]=0.8
-Cruzamiento[2]=0.9
-Cruzamiento[3]=1.0
-
-Mutacion[0]=0.5
-Mutacion[1]=0.7
-Mutacion[2]=0.9
-Mutacion[3]=1.0
+Poblacion=15
+Cruzamiento=0.8
+Mutacion=0.9
 
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
-for indexP in {0..4}
+for i in {0..5}
 do
-	for indexC in {0..3}
-	do
-		for indexM in {0..3}
-		do
-			echo "Población ${Poblacion[indexP]}"
-			echo "Cruzamiento ${Cruzamiento[indexC]}"
-			echo "Mutación ${Mutacion[indexM]}"
-
-			for i in {0..5}
-			do
-				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-				DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-				OutputFile="calibracion/lan4_cprio/${data[i]}_$CfgFile"
-				
-				echo "Datos $DataFile"
-				
-				echo "$CfgFile" > Config_LAN4.cfg
-				echo "$DataFile" >> Config_LAN4.cfg
-				echo "$OutputFile.sol" >> Config_LAN4.cfg
-				
-				time($EXEC Config_LAN4.cfg > $OutputFile.log)    
-			done
-		done
-	done
+	CfgFile="scripts_calibracion/chc_${Poblacion}_${Cruzamiento}_${Mutacion}.cfg"
+	DataFile="../../ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
+	OutputFile="calibracion/lan4_cprio/${data[i]}_$CfgFile"
+	
+	echo "Datos $DataFile"
+	
+	echo "$CfgFile" > Config_LAN4.cfg
+	echo "$DataFile" >> Config_LAN4.cfg
+	echo "$OutputFile.sol" >> Config_LAN4.cfg
+	
+	time($EXEC Config_LAN4.cfg > $OutputFile.log)    
 done
