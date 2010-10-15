@@ -76,7 +76,7 @@ for i in {0..5}
 do
 	CfgFile="scripts_calibracion/chc_${Poblacion}_${Cruzamiento}_${Mutacion}.cfg"
 	DataFile="../../ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
-	OutputFile="calibracion/lan4_cprio/${data[i]}_$CfgFile"
+	OutputFile="calibracion/lan4_cprio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
