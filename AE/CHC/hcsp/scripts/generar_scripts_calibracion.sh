@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ejecuciones
+
 Poblacion[0]=5
 Poblacion[1]=10
 Poblacion[2]=15
