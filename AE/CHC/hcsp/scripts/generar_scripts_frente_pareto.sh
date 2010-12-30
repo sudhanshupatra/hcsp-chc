@@ -1,5 +1,11 @@
 #!/bin/bash
 
+cd ../ejecuciones
+
+if [ $? != 0 ]; then
+	exit $?
+fi
+
 Poblacion="15"
 Cruzamiento="0.8"
 Mutacion="0.9"
@@ -17,6 +23,11 @@ do
 
 	Filename="scripts_frente_pareto/chc_$indexP.cfg"
 	echo "5			// number of independent runs" > $Filename
+	
+	if [ $? != 0 ]; then
+		exit $?
+	fi
+	
 	echo "100000			// number of generations" >> $Filename
 	echo "$Poblacion			// number of individuals" >> $Filename
 	echo "0				// display state ?" >> $Filename

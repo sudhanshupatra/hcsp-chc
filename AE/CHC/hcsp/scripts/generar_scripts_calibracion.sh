@@ -1,6 +1,10 @@
 #!/bin/bash
 
-cd ejecuciones
+cd ../ejecuciones
+
+if [ $? != 0 ]; then
+	exit $?
+fi
 
 Poblacion[0]=5
 Poblacion[1]=10
@@ -30,6 +34,11 @@ do
 
 			Filename="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 			echo "20			// number of independent runs" > $Filename
+			
+			if [ $? != 0 ]; then
+				exit $?
+			fi
+			
 			echo "100000			// number of generations" >> $Filename
 			echo "${Poblacion[indexP]}			// number of individuals" >> $Filename
 			echo "0				// display state ?" >> $Filename
