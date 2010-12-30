@@ -1,6 +1,10 @@
 #!/bin/bash
 
-cd ../ejecuciones/
+cd ../ejecuciones
+
+if [ $? != 0 ]; then
+	exit $?
+fi
 
 mkdir -p calibracion/seq
 mkdir -p calibracion/lan4

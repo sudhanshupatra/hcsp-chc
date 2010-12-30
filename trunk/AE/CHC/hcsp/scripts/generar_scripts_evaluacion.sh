@@ -1,12 +1,28 @@
 #!/bin/bash
 
+cd ../ejecuciones
+
+if [ $? != 0 ]; then
+	exit $?
+fi
+
 Poblacion="15"
 Cruzamiento="0.8"
 Mutacion="0.9"
 Pesos="1.0 1.0"
 
+echo "Población $Poblacion"
+echo "Cruzamiento $Cruzamiento"
+echo "Mutación $Mutacion"
+echo "Pesos $Pesos"
+
 Filename="scripts_evaluacion/chc.cfg"
 echo "20			// number of independent runs" > $Filename
+
+if [ $? != 0 ]; then
+	exit $?
+fi
+
 echo "100000			// number of generations" >> $Filename
 echo "$Poblacion			// number of individuals" >> $Filename
 echo "0				// display state ?" >> $Filename
