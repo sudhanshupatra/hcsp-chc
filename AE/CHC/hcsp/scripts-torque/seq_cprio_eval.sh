@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/evaluacion/seq_cprio/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/evaluacion/seq_cprio/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/seq_cprio/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/seq_cprio/
 
 #PBS -V
 
@@ -94,32 +94,32 @@ data[29]="B.u_s_lolo"
 for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 	OutputFile="evaluacion/seq_cprio/Braun_et_al.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 		
-	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
 done
 
 for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="../../ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
 	OutputFile="evaluacion/seq_cprio/1024x32.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
-	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
 done
 
 for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="../../ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="evaluacion/seq_cprio/2048x64.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
-	time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
 done
