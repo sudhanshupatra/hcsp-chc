@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/lan4_cprio/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/lan4_cprio/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/lan4_cprio/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/lan4_cprio/
 
 #PBS -V
 
@@ -70,19 +70,20 @@ Poblacion=15
 Cruzamiento=0.8
 Mutacion=0.9
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+#EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 for i in {0..5}
 do
 	CfgFile="scripts_calibracion/chc_${Poblacion}_${Cruzamiento}_${Mutacion}.cfg"
-	DataFile="../../ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="calibracion/lan4_cprio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
 	echo "$CfgFile" > Config_LAN4.cfg
 	echo "$DataFile" >> Config_LAN4.cfg
-	echo "$OutputFile.sol" >> Config_LAN4.cfg
+	echo "calibracion/lan4_cprio/$OutputFile.sol" >> Config_LAN4.cfg
 	
-	time($EXEC Config_LAN4.cfg > $OutputFile.log)    
+	time($EXEC Config_LAN4.cfg > calibracion/lan4_cprio/$OutputFile.log)    
 done
