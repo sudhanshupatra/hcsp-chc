@@ -84,7 +84,8 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for i in {0..23}
+#for i in {0..23}
+for i in {0..0}
 do
 	time(../MainSeq CHC_SEQ.cfg \
 		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]} \

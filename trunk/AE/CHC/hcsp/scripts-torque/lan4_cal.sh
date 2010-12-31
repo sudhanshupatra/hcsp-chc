@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/lan4/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/lan4/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/lan4/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/lan4/
 
 #PBS -V
 
@@ -82,7 +82,8 @@ Mutacion[1]=0.7
 Mutacion[2]=0.9
 Mutacion[3]=1.0
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+#EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 for indexP in {0..4}
 do
@@ -97,16 +98,16 @@ do
 			for i in {0..5}
 			do
 				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-				DataFile="../../ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
+				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
 				OutputFile="calibracion/lan4/${data[i]}_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
 				echo "$CfgFile" > Config_LAN4.cfg
 				echo "$DataFile" >> Config_LAN4.cfg
-				echo "$OutputFile.sol" >> Config_LAN4.cfg
+				echo "calibracion/lan4/$OutputFile.sol" >> Config_LAN4.cfg
 				
-				time($EXEC Config_LAN4.cfg > $OutputFile.log)    
+				time($EXEC Config_LAN4.cfg > calibracion/lan4/$OutputFile.log)    
 			done
 		done
 	done
