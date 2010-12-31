@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/seq/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/calibracion/seq/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/seq/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/calibracion/seq/
 
 #PBS -V
 
@@ -95,12 +95,12 @@ do
 			for i in {0..5}
 			do
 				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-				DataFile="../../ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
+				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
 				OutputFile="calibracion/seq/${data[i]}_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
-				time(./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log)    
+				time(../MainSeq $CfgFile $DataFile calibracion/seq/$OutputFile.sol > calibracion/seq/$OutputFile.log)    
 			done
 		done
 	done

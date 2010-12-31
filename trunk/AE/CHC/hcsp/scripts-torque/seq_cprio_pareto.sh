@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq_cprio_fp
+#PBS -N ae_seq_cprio_pareto
 
 # Requerimientos
 #PBS -l nodes=1:cpu8,walltime=10:00:00
@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 ###PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/frente_pareto/seq_cprio/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/frente_pareto/seq_cprio/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/seq_cprio/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/seq_cprio/
 
 #PBS -V
 
@@ -64,7 +64,7 @@ Data="u_s_hilo.0"
 for index in {0..4}
 do
 	CfgFile="scripts_frente_pareto/chc_$index.cfg"
-	DataFile="../../ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
 	
 	echo "==========================================================="
 	echo "Datos $DataFile"
@@ -74,6 +74,6 @@ do
 	do
 		OutputFile="frente_pareto/seq_cprio/$index$i"
 		
-		./MainSeq $CfgFile $DataFile $OutputFile.sol > $OutputFile.log
+		../MainSeq $CfgFile $DataFile frente_pareto/seq_cprio/$OutputFile.sol > frente_pareto/seq_cprio/$OutputFile.log
 	done    
 done

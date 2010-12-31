@@ -26,8 +26,3 @@ Run_SEQ:
 	$(BIN_PATH)/MainSeq $(BIN_PATH)/ejecuciones/CHC_SEQ.cfg \
 		$(BIN_PATH)/../../ProblemInstances/HCSP/1024x32.mod/A.u_i_hihi \
 		$(BIN_PATH)/tests/resultados/sol.txt
-
-Run_SEQ_FIX:
-	$(BIN_PATH)/MainSeq $(BIN_PATH)/ejecuciones/CHC.cfg \
-		$(BIN_PATH)/../../ProblemInstances/HCSP/prioridades/simple \
-		$(BIN_PATH)/tests/resultados/sol.txt

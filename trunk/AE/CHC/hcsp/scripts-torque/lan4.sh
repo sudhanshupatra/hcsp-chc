@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq
+#PBS -N ae_lan4
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=07:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=10:00:00
 
 # Cola
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/seq/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/
 
 #PBS -V
 
@@ -59,6 +59,9 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
+#EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
+
 data[0]="A.u_c_hihi"
 data[1]="A.u_c_hilo"
 data[2]="A.u_c_lohi"
@@ -84,7 +87,11 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for i in {0..23}
+#for i in {0..23}
+for i in {0..0}
 do
-	time(./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/${data[i]} seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
+	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN4.cfg
+	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
+	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
 done
