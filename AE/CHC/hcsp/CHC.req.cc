@@ -300,7 +300,7 @@ double SolutionMachine::getFitness() {
 }
 
 void SolutionMachine::refresh() {
-	_dirty = true;
+	//_dirty = true;
 	if (_dirty) {
 		double fitness = 0.0;
 		double partial_makespan = 0.0;
@@ -326,11 +326,11 @@ void SolutionMachine::refresh() {
 		_awrr = partial_awrr;
 		_makespan = partial_makespan;
 
-		if (DEBUG) {
-			cout << "[INFO] machine: " << _machineId << endl;
-			cout << "       awrr: " << _awrr << endl;
-			cout << "       makespan: " << _makespan << endl;
-		}
+//		if (DEBUG) {
+//			cout << "[INFO] machine: " << _machineId << endl;
+//			cout << "       awrr: " << _awrr << endl;
+//			cout << "       makespan: " << _makespan << endl;
+//		}
 
 		_fitness = (_pbm.getMakespanWeight() * _makespan) + (_pbm.getAWRRWeight() * _awrr);
 
@@ -931,9 +931,9 @@ double Solution::accumulatedWeightedResponseRatio() {
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
 
-		if (DEBUG) {
-			cout << "[INFO] machine: " << machineId << " awrr:" << awrr << endl;
-		}
+//		if (DEBUG) {
+//			cout << "[INFO] machine: " << machineId << " awrr:" << awrr << endl;
+//		}
 	}
 
 	return awrr;
