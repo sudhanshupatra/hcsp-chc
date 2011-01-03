@@ -409,7 +409,6 @@ void Population::initialize() {
 		_fitness_values[i].change = true;
 	}
 	evaluate_parents();
-
 }
 
 void Population::evaluate_parents() {

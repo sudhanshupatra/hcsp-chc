@@ -201,6 +201,12 @@ public:
 
 	bool validate() const;
 
+//	double getMakespanReferenceValue() const;
+//	void setMakespanReferenceValue(double value);
+//
+//	double getAWRRReferenceValue() const;
+//	void setAWRRReferenceValue(double value);
+
 	// =================================
 	// Especificos del problema.
 	// =================================
@@ -209,12 +215,17 @@ private:
 	const Problem& _pbm;
 	bool _initialized;
 
+	static double _awrr_reference;
+	static double _makespan_reference;
+
 	vector<struct SolutionMachine> _machines;
 
 	void initializeSufferage();
 	void initializeRandom();
 	void initializeMinMin();
-	void initializeMCT();
+	void initializeMCT(int startTask, int direction);
+	void initializeStaticMCT();
+	void initializeRandomMCT();
 };
 
 // UserStatistics ----------------------------------------------------------------------------
