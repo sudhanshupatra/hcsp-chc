@@ -27,5 +27,5 @@ data[23]="B.u_s_lolo"
 
 for i in {0..23}
 do
-	time(./MainSeq CHC_SEQ.cfg ../../ProblemInstances/HCSP/1024x32.mod/${data[i]} seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
+	time(../MainSeq CHC_SEQ.cfg ../../../ProblemInstances/HCSP/1024x32.mod/${data[i]} resultados/${data[i]}_SEQ.sol > resultados/${data[i]}_SEQ.log)    
 done
