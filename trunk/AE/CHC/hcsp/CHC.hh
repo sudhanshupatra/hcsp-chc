@@ -91,13 +91,13 @@ public:
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
 
-	float getWQTWeight() const;
-	void setWQTWeight(const float weight);
+	float getAWRRWeight() const;
+	void setAWRRWeight(const float weight);
 
 	float getMakespanWeight() const;
 	void setMakespanWeight(const float weight);
 private:
-	float _wqt_weight;
+	float _awrr_weight;
 	float _makespan_weight;
 
 	int _taskCount;
@@ -117,7 +117,7 @@ private:
 
 	double _fitness;
 	double _makespan;
-	double _relativeDelay;
+	double _awrr;
 	bool _dirty;
 
 	void refresh();
@@ -141,7 +141,7 @@ public:
 
 	double getFitness();
 	double getMakespan();
-	double getRelativeDelay();
+	double getAccumulatedWeightedResponseRatio();
 
 	int machineId() const;
 
@@ -174,7 +174,7 @@ public:
 
 	double fitness();
 	double makespan();
-	double wqt();
+	double accumulatedWeightedResponseRatio();
 	unsigned int size() const;
 
 	int length() const;
@@ -382,7 +382,7 @@ private:
 
 	Problem& _pbm;
 	unsigned long _seed;
-	float _wqt_weight;
+	float _awrr_weight;
 	float _makespan_weight;
 
 public:
@@ -428,7 +428,7 @@ public:
 	const unsigned long seed() const;
 	void seed(const unsigned long val);
 
-	const float wqt_weight() const;
+	const float awrr_weight() const;
 	const float makespan_weight() const;
 	void obj_weight(const char* buffer);
 

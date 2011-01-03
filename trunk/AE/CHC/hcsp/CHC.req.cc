@@ -10,7 +10,7 @@ skeleton CHC {
 // Problem ---------------------------------------------------------------
 
 Problem::Problem() :
-	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL), _wqt_weight(
+	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL), _awrr_weight(
 			1.0), _makespan_weight(1.0), _tasksPriorities() {
 }
 
@@ -140,12 +140,12 @@ int Problem::taskPriority(const int& task) const {
 	return _tasksPriorities[task];
 }
 
-float Problem::getWQTWeight() const {
-	return _wqt_weight;
+float Problem::getAWRRWeight() const {
+	return _awrr_weight;
 }
 
-void Problem::setWQTWeight(const float weight) {
-	_wqt_weight = weight;
+void Problem::setAWRRWeight(const float weight) {
+	_awrr_weight = weight;
 }
 
 float Problem::getMakespanWeight() const {
@@ -163,7 +163,7 @@ Problem::~Problem() {
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _fitness(0.0),
-			_makespan(0.0), _relativeDelay(0.0), _dirty(true), _pbm(problem) {
+			_makespan(0.0), _awrr(0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
 }
@@ -173,12 +173,6 @@ SolutionMachine::~SolutionMachine() {
 
 SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
-
-	/*
-	 _fitness = machine._fitness;
-	 _makespan = machine._makespan;
-	 _dirty = machine._dirty;
-	 */
 
 	_fitness = 0.0;
 	_makespan = 0.0;
@@ -205,16 +199,6 @@ int SolutionMachine::machineId() const {
 }
 
 void SolutionMachine::addTask(const int taskId) {
-	/*double computeCost = _pbm.expectedTimeToCompute(taskId, _machineId);
-	 double priorityCost = 0.0;
-
-	 if ((_makespan > 0) && (_pbm.taskPriority(taskId) != 0)) {
-	 priorityCost += _makespan / _pbm.taskPriority(taskId);
-	 }
-
-	 _fitness = _fitness + (computeCost + priorityCost);
-	 _makespan = _makespan + computeCost;*/
-
 	_dirty = true;
 
 	_tasks.push_back(taskId);
@@ -261,9 +245,6 @@ int SolutionMachine::countTasks() const {
 }
 
 bool SolutionMachine::hasTask(const int taskId) const {
-	//	if (DEBUG)
-	//		cout << endl << "[DEBUG] SolutionMachine::hasTask" << endl;
-
 	return _assignedTasks.count(taskId) == 1;
 }
 
@@ -308,9 +289,9 @@ double SolutionMachine::getMakespan() {
 	return _makespan;
 }
 
-double SolutionMachine::getRelativeDelay() {
+double SolutionMachine::getAccumulatedWeightedResponseRatio() {
 	refresh();
-	return _relativeDelay;
+	return _awrr;
 }
 
 double SolutionMachine::getFitness() {
@@ -322,31 +303,29 @@ void SolutionMachine::refresh() {
 	_dirty = true;
 	if (_dirty) {
 		double fitness = 0.0;
-		double makespan = 0.0;
-		double relativeDelay = 0.0;
+		double partial_makespan = 0.0;
+		double partial_awrr = 0.0;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
 			taskId = getTask(taskPos);
 
-			double computeCost;
-			computeCost = _pbm.expectedTimeToCompute(taskId, machineId());
+			double compute_cost;
+			compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
+			partial_makespan += compute_cost;
 
-			double priorityCost;
-			priorityCost = 0.0;
+			double rr;
+			rr = (partial_makespan + compute_cost) / compute_cost;
 
-			if ((taskPos > 0) && (_pbm.taskPriority(taskId) != 0)) {
-				priorityCost += makespan / _pbm.taskPriority(taskId);
-				relativeDelay += priorityCost / countTasks();
-			}
-
-			makespan += computeCost;
-			fitness += (computeCost + priorityCost);
+			double priority_cost;
+			priority_cost = (_pbm.taskPriority(taskId) * rr);
+			partial_awrr += priority_cost;
 		}
 
-		_relativeDelay = relativeDelay;
-		_makespan = makespan;
-		_fitness = fitness;
+		_awrr = partial_awrr;
+		_makespan = partial_makespan;
+		_fitness = (_pbm.getMakespanWeight() * _makespan) + (_pbm.getAWRRWeight() * _awrr);
+
 		_dirty = false;
 	}
 }
@@ -904,18 +883,18 @@ double Solution::fitness() {
 	}
 
 	double maxMakespan = 0.0;
-	double totalDelay = 0.0;
+	double awrr = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		totalDelay += _machines[machineId].getRelativeDelay();
+		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
 
 		if (_machines[machineId].getMakespan() > maxMakespan) {
 			maxMakespan = _machines[machineId].getMakespan();
 		}
 	}
 
-	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getWQTWeight()
-			* totalDelay);
+	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getAWRRWeight()
+			* awrr);
 }
 
 double Solution::makespan() {
@@ -934,18 +913,18 @@ double Solution::makespan() {
 	return maxMakespan;
 }
 
-double Solution::wqt() {
+double Solution::accumulatedWeightedResponseRatio() {
 	if (!_initialized) {
 		return infinity();
 	}
 
-	double totalDelay = 0.0;
+	double awrr = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		totalDelay += _machines[machineId].getRelativeDelay();
+		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
 	}
 
-	return totalDelay;
+	return awrr;
 }
 
 int Solution::length() const {
