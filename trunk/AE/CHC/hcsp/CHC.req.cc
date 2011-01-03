@@ -162,7 +162,7 @@ Problem::~Problem() {
 // Solution machine ------------------------------------------------------
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
-	_tasks(), _assignedTasks(), _machineId(machineId), _fitness(0.0),
+	_tasks(), _assignedTasks(), _machineId(machineId),
 			_makespan(0.0), _awrr(0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
@@ -174,7 +174,6 @@ SolutionMachine::~SolutionMachine() {
 SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
 
-	_fitness = 0.0;
 	_makespan = 0.0;
 	_dirty = true;
 
@@ -294,15 +293,9 @@ double SolutionMachine::getAccumulatedWeightedResponseRatio() {
 	return _awrr;
 }
 
-double SolutionMachine::getFitness() {
-	refresh();
-	return _fitness;
-}
-
 void SolutionMachine::refresh() {
 	//_dirty = true;
 	if (_dirty) {
-		double fitness = 0.0;
 		double partial_makespan = 0.0;
 		double partial_awrr = 0.0;
 
@@ -325,14 +318,6 @@ void SolutionMachine::refresh() {
 
 		_awrr = partial_awrr;
 		_makespan = partial_makespan;
-
-//		if (DEBUG) {
-//			cout << "[INFO] machine: " << _machineId << endl;
-//			cout << "       awrr: " << _awrr << endl;
-//			cout << "       makespan: " << _makespan << endl;
-//		}
-
-		_fitness = (_pbm.getMakespanWeight() * _makespan) + (_pbm.getAWRRWeight() * _awrr);
 
 		_dirty = false;
 	}
@@ -537,13 +522,13 @@ int Solution::countTasks() {
 // Inicializo la solución.
 // ===================================
 void Solution::initializeStaticMCT() {
-	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Estática" << endl;
+	//if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Estática" << endl;
 
 	initializeMCT(0, 1);
 }
 
 void Solution::initializeRandomMCT() {
-	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Aleatoria" << endl;
+	//if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Aleatoria" << endl;
 
 	int startTask = rand_int(0, _pbm.taskCount() - 1);
 	int direction = rand_int(0, 1);
@@ -596,10 +581,6 @@ void Solution::initializeMCT(int startTask, int direction) {
 
 		_machines[minFitnessMachineId].addTask(currentTask);
 	}
-
-	cout << endl << "MCT fitness: " << fitness() << endl;
-	cout << " AWRR: " << accumulatedWeightedResponseRatio() << endl;
-	cout << " Makespan: " << makespan() << endl;
 }
 
 void Solution::initializeMinMin() {
@@ -657,8 +638,6 @@ void Solution::initializeMinMin() {
 
 		_machines[minCTMachineId].addTask(minCTTaskId);
 	}
-
-	cout << endl << "Min-Min fitness: " << fitness() << endl;
 }
 
 void Solution::initializeRandom() {
@@ -808,8 +787,6 @@ void Solution::initializeSufferage() {
 		taskIsUnmapped[maxSufferageTaskId] = false;
 		unmappedTasks--;
 	}
-
-	cout << endl << "Sufferage fitness: " << fitness() << endl;
 }
 
 void Solution::markAsInitialized() {
@@ -826,47 +803,42 @@ void Solution::initialize(const int solutionIndex) {
 
 		initializeStaticMCT();
 
+		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
 		Solution::_makespan_reference = makespan();
+
+		cout << endl << "MCT fitness: " << fitness() << endl;
+		cout << " AWRR: " << accumulatedWeightedResponseRatio() << endl;
+		cout << " AWRR Ratio: " << (accumulatedWeightedResponseRatio() + Solution::_awrr_reference) / Solution::_awrr_reference << endl;
+		cout << " Makespan: " << makespan() << endl;
+		cout << " Makespan Ratio: " << (makespan() + Solution::_makespan_reference) / Solution::_makespan_reference << endl;
 	} else if (solutionIndex == 1) {
 		// Inicialización usando una heurística "pesada": MIN-MIN.
 		// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 		initializeMinMin();
+		cout << endl << "Min-Min fitness: " << fitness() << endl;
 	} else if (solutionIndex == 2) {
 		// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 		// Utilizo Sufferage para un único elemento de la población inicial.
 
 		initializeSufferage();
+		cout << endl << "Sufferage fitness: " << fitness() << endl;
 	} else {
 		if (RANDOM_INIT > rand01()) {
 			// Inicialización aleatoria
 
 			initializeRandom();
+			cout << endl << "Random fitness: " << fitness() << endl;
 		} else {
 			// Inicialización usando una heurística no tan buena y
 			// que permita obtener diferentes soluciones: MCT
 
 			initializeRandomMCT();
+			cout << endl << "Random MCT fitness: " << fitness() << endl;
 		}
 	}
 }
-
-//double Problem::getMakespanReferenceValue() const {
-//
-//}
-//
-//void Problem::setMakespanReferenceValue(double value) {
-//
-//}
-//
-//double Problem::getAWRRReferenceValue() const {
-//
-//}
-//
-//void Problem::setAWRRReferenceValue(double value) {
-//
-//}
 
 bool Solution::validate() const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
@@ -1041,6 +1013,12 @@ bool Solution::findTask(const int taskId, int& foundMachineId,
 	assert(false);
 }
 
+double Solution::getMachineFitness(int machineId) {
+	double awrr_ratio = (accumulatedWeightedResponseRatio() + Solution::_awrr_reference) / Solution::_awrr_reference;
+	double makespan_ratio = (makespan() + Solution::_makespan_reference) / Solution::_makespan_reference;
+	return (_pbm.getAWRRWeight() * awrr_ratio) + (_pbm.getMakespanWeight() * makespan_ratio);
+}
+
 void Solution::doLocalSearch() {
 	//	if (DEBUG)
 	//		cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
@@ -1048,7 +1026,7 @@ void Solution::doLocalSearch() {
 	vector<double> fitnessByMachine;
 
 	for (int machineId = 0; machineId < this->machines().size(); machineId++) {
-		fitnessByMachine.push_back(_machines[machineId].getFitness());
+		fitnessByMachine.push_back(getMachineFitness(machineId));
 	}
 
 	RouletteWheel roulette(fitnessByMachine, true);
@@ -1244,7 +1222,7 @@ void Solution::mutate() {
 	fitnessByMachine.reserve(_machines.size());
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		fitnessByMachine.push_back(_machines[machineId].getFitness());
+		fitnessByMachine.push_back(getMachineFitness(machineId));
 	}
 
 	RouletteWheel roulette(fitnessByMachine, true);
@@ -1512,11 +1490,11 @@ int Solution::getBestFitnessMachineId() {
 	// if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId" << endl;
 
 	int bestFitnessMachineId = 0;
-	double bestFitnessMachineValue = _machines[0].getFitness();
+	double bestFitnessMachineValue = getMachineFitness(0);
 
 	for (int machineId = 1; machineId < machines().size(); machineId++) {
 		double currentMachineFitness;
-		currentMachineFitness = _machines[machineId].getFitness();
+		currentMachineFitness = getMachineFitness(machineId);
 
 		if ((bestFitnessMachineValue > currentMachineFitness)
 				&& (_pbm.direction() == minimize)) {

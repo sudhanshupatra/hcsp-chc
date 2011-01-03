@@ -115,7 +115,6 @@ private:
 	map<int, void*> _assignedTasks;
 	int _machineId;
 
-	double _fitness;
 	double _makespan;
 	double _awrr;
 	bool _dirty;
@@ -139,7 +138,6 @@ public:
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
-	double getFitness();
 	double getMakespan();
 	double getAccumulatedWeightedResponseRatio();
 
@@ -198,6 +196,7 @@ public:
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
+	double getMachineFitness(int machineId);
 
 	bool validate() const;
 
