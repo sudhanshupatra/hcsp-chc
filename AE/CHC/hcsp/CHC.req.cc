@@ -340,6 +340,9 @@ void SolutionMachine::refresh() {
 
 // Solution --------------------------------------------------------------
 
+double Solution::_awrr_reference=1.0;
+double Solution::_makespan_reference=1.0;
+
 Solution::Solution(const Problem& pbm) :
 	_pbm(pbm), _machines(), _initialized(false) {
 	_machines.reserve(pbm.machineCount());
@@ -533,7 +536,24 @@ int Solution::countTasks() {
 // ===================================
 // Inicializo la solución.
 // ===================================
-void Solution::initializeMCT() {
+void Solution::initializeStaticMCT() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Estática" << endl;
+
+	initializeMCT(0, 1);
+}
+
+void Solution::initializeRandomMCT() {
+	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Aleatoria" << endl;
+
+	int startTask = rand_int(0, _pbm.taskCount() - 1);
+	int direction = rand_int(0, 1);
+	if (direction == 0)
+		direction = -1;
+
+	initializeMCT(startTask, direction);
+}
+
+void Solution::initializeMCT(int startTask, int direction) {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT" << endl;
 
 	vector<double> machineMakespan;
@@ -542,11 +562,6 @@ void Solution::initializeMCT() {
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
-	int startTask = rand_int(0, _pbm.taskCount() - 1);
-	int direction = rand_int(0, 1);
-	if (direction == 0)
-		direction = -1;
-
 	int currentTask;
 	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
 		currentTask = startTask + (direction * taskOffset);
@@ -554,37 +569,37 @@ void Solution::initializeMCT() {
 			currentTask = _pbm.taskCount() + currentTask;
 		currentTask = currentTask % _pbm.taskCount();
 
-		double minCT;
-		minCT = infinity();
+		double minFitness;
+		minFitness = infinity();
 
-		int minCTTaskId;
-		minCTTaskId = -1;
-
-		int minCTMachineId;
-		minCTMachineId = -1;
-
-		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
-		double priorityCoef = _pbm.taskPriority(currentTask) * estimatedSize;
+		int minFitnessMachineId;
+		minFitnessMachineId = -1;
 
 		for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-			if ((machineMakespan[machineId] + _pbm.expectedTimeToCompute(
-					currentTask, machineId)) < minCT) {
-				minCT = machineMakespan[machineId]
-						+ _pbm.expectedTimeToCompute(currentTask, machineId);
-				minCT = minCT + (machineMakespan[machineId] / priorityCoef);
+			double makespan;
+			makespan = (machineMakespan[machineId] + _pbm.expectedTimeToCompute(
+					currentTask, machineId));
+			double awrr;
+			awrr = (machineMakespan[machineId] + _pbm.expectedTimeToCompute(
+					currentTask, machineId)) * (_pbm.taskPriority(currentTask) / 5);
+			double auxFitness;
+			auxFitness = (_pbm.getAWRRWeight()) * awrr + (_pbm.getMakespanWeight() * makespan);
 
-				minCTTaskId = currentTask;
-				minCTMachineId = machineId;
+			if (auxFitness < minFitness) {
+				minFitness = auxFitness;
+				minFitnessMachineId = machineId;
 			}
 		}
 
-		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
-				minCTTaskId, minCTMachineId);
+		machineMakespan[minFitnessMachineId] += _pbm.expectedTimeToCompute(
+				currentTask, minFitnessMachineId);
 
-		_machines[minCTMachineId].addTask(minCTTaskId);
+		_machines[minFitnessMachineId].addTask(currentTask);
 	}
 
 	cout << endl << "MCT fitness: " << fitness() << endl;
+	cout << " AWRR: " << accumulatedWeightedResponseRatio() << endl;
+	cout << " Makespan: " << makespan() << endl;
 }
 
 void Solution::initializeMinMin() {
@@ -805,16 +820,24 @@ void Solution::initialize(const int solutionIndex) {
 	markAsInitialized();
 
 	if (solutionIndex == 0) {
+		// Inicialización usando una versión determinista de la heurística MCT.
+		// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
+		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
+
+		initializeStaticMCT();
+
+		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
+		Solution::_makespan_reference = makespan();
+	} else if (solutionIndex == 1) {
 		// Inicialización usando una heurística "pesada": MIN-MIN.
 		// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 		initializeMinMin();
-	} else if (solutionIndex == 1) {
+	} else if (solutionIndex == 2) {
 		// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 		// Utilizo Sufferage para un único elemento de la población inicial.
 
 		initializeSufferage();
-		//initializeRandom();
 	} else {
 		if (RANDOM_INIT > rand01()) {
 			// Inicialización aleatoria
@@ -824,10 +847,26 @@ void Solution::initialize(const int solutionIndex) {
 			// Inicialización usando una heurística no tan buena y
 			// que permita obtener diferentes soluciones: MCT
 
-			initializeMCT();
+			initializeRandomMCT();
 		}
 	}
 }
+
+//double Problem::getMakespanReferenceValue() const {
+//
+//}
+//
+//void Problem::setMakespanReferenceValue(double value) {
+//
+//}
+//
+//double Problem::getAWRRReferenceValue() const {
+//
+//}
+//
+//void Problem::setAWRRReferenceValue(double value) {
+//
+//}
 
 bool Solution::validate() const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
@@ -901,8 +940,14 @@ double Solution::fitness() {
 		}
 	}
 
-	return (_pbm.getMakespanWeight() * maxMakespan) + (_pbm.getAWRRWeight()
-			* awrr);
+	double normalized_awrr;
+	normalized_awrr = (awrr + Solution::_awrr_reference) / Solution::_awrr_reference;
+
+	double normalized_makespan;
+	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
+
+	return (_pbm.getMakespanWeight() * normalized_makespan) + (_pbm.getAWRRWeight()
+			* normalized_awrr);
 }
 
 double Solution::makespan() {
