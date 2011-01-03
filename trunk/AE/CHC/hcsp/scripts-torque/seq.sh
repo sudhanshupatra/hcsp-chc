@@ -88,6 +88,6 @@ data[23]="B.u_s_lolo"
 for i in {0..0}
 do
 	time(../MainSeq CHC_SEQ.cfg \
-		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]} \
+		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]} \
 		seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
 done
