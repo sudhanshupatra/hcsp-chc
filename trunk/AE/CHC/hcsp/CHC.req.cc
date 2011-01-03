@@ -319,11 +319,19 @@ void SolutionMachine::refresh() {
 
 			double priority_cost;
 			priority_cost = (_pbm.taskPriority(taskId) * rr);
+
 			partial_awrr += priority_cost;
 		}
 
 		_awrr = partial_awrr;
 		_makespan = partial_makespan;
+
+		if (DEBUG) {
+			cout << "[INFO] machine: " << _machineId << endl;
+			cout << "       awrr: " << _awrr << endl;
+			cout << "       makespan: " << _makespan << endl;
+		}
+
 		_fitness = (_pbm.getMakespanWeight() * _makespan) + (_pbm.getAWRRWeight() * _awrr);
 
 		_dirty = false;
@@ -922,6 +930,10 @@ double Solution::accumulatedWeightedResponseRatio() {
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
+
+		if (DEBUG) {
+			cout << "[INFO] machine: " << machineId << " awrr:" << awrr << endl;
+		}
 	}
 
 	return awrr;
