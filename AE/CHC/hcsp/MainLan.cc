@@ -45,7 +45,7 @@ int main (int argc, char** argv)
 		solver.show_state();
 		cout << "Solucion: " << solver.global_best_solution() << endl;
 		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
-		cout << "WQT: " << solver.global_best_solution().wqt() << endl;
+		cout << "AWRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
 		cout << "Priority: " << solver.global_best_solution().fitness() << endl;
 
 		f.getline(&(path[len]),longitud,'\n');
