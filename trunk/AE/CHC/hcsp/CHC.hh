@@ -200,11 +200,7 @@ public:
 
 	bool validate() const;
 
-//	double getMakespanReferenceValue() const;
-//	void setMakespanReferenceValue(double value);
-//
-//	double getAWRRReferenceValue() const;
-//	void setAWRRReferenceValue(double value);
+	void showCustomStatics();
 
 	// =================================
 	// Especificos del problema.
