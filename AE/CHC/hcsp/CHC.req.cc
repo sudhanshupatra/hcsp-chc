@@ -807,11 +807,7 @@ void Solution::initialize(const int solutionIndex) {
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
 		Solution::_makespan_reference = makespan();
 
-		cout << endl << "MCT fitness: " << fitness() << endl;
-		cout << " AWRR: " << accumulatedWeightedResponseRatio() << endl;
-		cout << " AWRR Ratio: " << (accumulatedWeightedResponseRatio() + Solution::_awrr_reference) / Solution::_awrr_reference << endl;
-		cout << " Makespan: " << makespan() << endl;
-		cout << " Makespan Ratio: " << (makespan() + Solution::_makespan_reference) / Solution::_makespan_reference << endl;
+		cout << endl << "MCT reference fitness: " << fitness() << endl;
 	} else if (solutionIndex == 1) {
 		// Inicialización usando una heurística "pesada": MIN-MIN.
 		// Utilizo MIN-MIN para un único elemento de la población inicial.
@@ -891,6 +887,50 @@ bool Solution::validate() const {
 	}
 
 	return true;
+}
+
+void Solution::showCustomStatics() {
+	// Tiempo de respuesta promedio
+	cout << endl << "[= Statics =====================]" << endl;
+	cout << " * Avg. response ratio: " << accumulatedWeightedResponseRatio() / _pbm.taskCount() << endl;
+
+	// Peor tiempo de respuesta
+
+	// Tiempo de respuesta promedio por prioridad
+	cout << " * Avg. response ratio by priority." << endl;
+	for (int priority = 1; priority <= 10; priority++) {
+		cout << "   priority = " << priority;
+
+		int count = 0;
+		double partial_cost = 0.0;
+		double rr_sum = 0.0;
+
+		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				int taskId;
+				taskId = _machines[machineId].getTask(taskPos);
+
+				if (_pbm.taskPriority(taskId) == priority) {
+					count++;
+
+					rr_sum += (partial_cost + _pbm.expectedTimeToCompute(taskId, machineId))
+								/ _pbm.expectedTimeToCompute(taskId, machineId);
+				}
+
+				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
+			}
+		}
+
+		if (count > 0) {
+			cout << " >> avg. rr = " << rr_sum / count << endl;
+			rr_sum = 0.0;
+			count = 0;
+		} else {
+			cout << " N/A" << endl;
+		}
+	}
+
+	cout << "[===============================]" << endl;
 }
 
 // ===================================

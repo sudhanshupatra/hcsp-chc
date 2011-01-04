@@ -36,6 +36,7 @@ int main (int argc, char** argv)
 		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
 		cout << "AWRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
 		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
+		solver.global_best_solution().showCustomStatics();
 		cout << "\n\n :( ---------------------- THE END --------------- :) ";
 
 		ofstream fexit(argv[3]);
