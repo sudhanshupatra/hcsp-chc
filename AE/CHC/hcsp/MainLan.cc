@@ -46,7 +46,8 @@ int main (int argc, char** argv)
 		cout << "Solucion: " << solver.global_best_solution() << endl;
 		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
 		cout << "AWRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
-		cout << "Priority: " << solver.global_best_solution().fitness() << endl;
+		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
+		solver.global_best_solution().showCustomStatics();
 
 		f.getline(&(path[len]),longitud,'\n');
 	  	ofstream fexit(path);
