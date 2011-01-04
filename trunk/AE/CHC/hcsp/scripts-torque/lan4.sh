@@ -91,7 +91,7 @@ data[23]="B.u_s_lolo"
 for i in {0..0}
 do
 	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN4.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> Config_LAN4.cfg
 	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
 	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
 done
