@@ -609,11 +609,7 @@ void Solution::initializeMinMin() {
 		int minCTMachineId;
 		minCTMachineId = -1;
 
-		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
-
 		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
-			double priorityCoef = _pbm.taskPriority(taskId) * estimatedSize;
-
 			if (taskIsUnmapped[taskId]) {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if ((machineMakespan[machineId]
@@ -621,8 +617,6 @@ void Solution::initializeMinMin() {
 							< minCT) {
 						minCT = machineMakespan[machineId]
 								+ _pbm.expectedTimeToCompute(taskId, machineId);
-						minCT = minCT + (machineMakespan[machineId]
-								/ priorityCoef);
 						minCTTaskId = taskId;
 						minCTMachineId = machineId;
 					}
@@ -686,11 +680,7 @@ void Solution::initializeSufferage() {
 		maxSufferageMachineId = -1;
 		maxSufferageValue = 0.0;
 
-		double estimatedSize = _pbm.taskCount() / _pbm.machineCount();
-
 		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
-			double priorityCoef = _pbm.taskPriority(taskId) * estimatedSize;
-
 			if (taskIsUnmapped[taskId]) {
 				int minMakespanMachineId;
 				minMakespanMachineId = -1;
@@ -707,25 +697,17 @@ void Solution::initializeSufferage() {
 
 					currentMakespan = machinesMakespan[machineId]
 							+ _pbm.expectedTimeToCompute(taskId, machineId);
-					currentMakespan = currentMakespan
-							+ (machinesMakespan[machineId] / priorityCoef);
 
 					if (minMakespanMachineId != -1) {
 						minMakespan = machinesMakespan[minMakespanMachineId]
 								+ _pbm.expectedTimeToCompute(taskId,
 										minMakespanMachineId);
-						minMakespan = minMakespan
-								+ (machinesMakespan[minMakespanMachineId]
-										/ priorityCoef);
 					}
 					if (secondMinMakespanMachineId != -1) {
 						secondMinMakespan
 								= machinesMakespan[secondMinMakespanMachineId]
 										+ _pbm.expectedTimeToCompute(taskId,
 												secondMinMakespanMachineId);
-						secondMinMakespan = secondMinMakespan
-								+ (machinesMakespan[secondMinMakespanMachineId]
-										/ priorityCoef);
 					}
 					if (minMakespanMachineId == -1) {
 						minMakespanMachineId = machineId;
@@ -746,17 +728,11 @@ void Solution::initializeSufferage() {
 				minMakespan = machinesMakespan[minMakespanMachineId]
 						+ _pbm.expectedTimeToCompute(taskId,
 								minMakespanMachineId);
-				minMakespan = minMakespan
-						+ (machinesMakespan[minMakespanMachineId]
-								/ priorityCoef);
 
 				secondMinMakespan
 						= machinesMakespan[secondMinMakespanMachineId]
 								+ _pbm.expectedTimeToCompute(taskId,
 										secondMinMakespanMachineId);
-				secondMinMakespan = secondMinMakespan
-						+ (machinesMakespan[secondMinMakespanMachineId]
-								/ priorityCoef);
 
 				sufferageValue = secondMinMakespan - minMakespan;
 
@@ -778,8 +754,6 @@ void Solution::initializeSufferage() {
 				= machinesMakespan[maxSufferageMachineId]
 						+ _pbm.expectedTimeToCompute(maxSufferageTaskId,
 								maxSufferageMachineId);
-		+(machinesMakespan[maxSufferageMachineId] / (_pbm.taskPriority(
-				maxSufferageTaskId) * estimatedSize));
 
 		_machines[maxSufferageMachineId].addTask(maxSufferageTaskId);
 
@@ -937,7 +911,7 @@ void Solution::showCustomStatics() {
 		}
 
 		if (count > 0) {
-			cout << " (" << count << " tasks) ";
+			cout << " (" << count << " tasks)";
 			cout << " >> avg. rr = " << rr_sum / count;
 			cout << ", worst rr = " << rr_worst << endl;
 			rr_sum = 0.0;
