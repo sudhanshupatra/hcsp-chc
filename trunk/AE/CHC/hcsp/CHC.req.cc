@@ -889,22 +889,21 @@ bool Solution::validate() const {
 }
 
 void Solution::showCustomStatics() {
-	// Tiempo de respuesta promedio
 	cout << endl << "[= Statics =====================]" << endl;
-	cout << " * Avg. response ratio: " << accumulatedWeightedResponseRatio() / _pbm.taskCount() << endl;
-
-	// Peor tiempo de respuesta
 
 	// Tiempo de respuesta promedio por prioridad
 	int total_count = 0;
 	double total_rr_sum = 0.0;
+	double total_rr_worst = 0.0;
 
 	cout << " * Avg. response ratio by priority." << endl;
 	for (int priority = 0; priority <= 10; priority++) {
 		cout << "   priority = " << priority;
 
 		int count = 0;
+		double rr_aux = 0.0;
 		double rr_sum = 0.0;
+		double rr_worst = 0.0;
 
 		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 			double partial_cost;
@@ -917,8 +916,13 @@ void Solution::showCustomStatics() {
 				if (_pbm.taskPriority(taskId) == priority) {
 					count++;
 
-					rr_sum += (partial_cost + _pbm.expectedTimeToCompute(taskId, machineId))
+					rr_aux = (partial_cost + _pbm.expectedTimeToCompute(taskId, machineId))
 								/ _pbm.expectedTimeToCompute(taskId, machineId);
+					rr_sum += rr_aux;
+
+					if (rr_worst <= rr_aux) {
+						rr_worst = rr_aux;
+					}
 				}
 
 				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
@@ -928,9 +932,14 @@ void Solution::showCustomStatics() {
 		total_count += count;
 		total_rr_sum += rr_sum;
 
+		if (total_rr_worst <= rr_worst) {
+			total_rr_worst = rr_worst;
+		}
+
 		if (count > 0) {
 			cout << " (" << count << " tasks) ";
-			cout << " >> avg. rr = " << rr_sum / count << endl;
+			cout << " >> avg. rr = " << rr_sum / count;
+			cout << ", worst rr = " << rr_worst << endl;
 			rr_sum = 0.0;
 			count = 0;
 		} else {
@@ -938,10 +947,11 @@ void Solution::showCustomStatics() {
 		}
 	}
 
-	//cout << endl << "Total tasks: " << total_count << endl;
-	//cout << " Total rr: " << total_rr_sum << endl;
-	//cout << " Total avg_rr: " << total_rr_sum / total_count << endl;
+	// Tiempo de respuesta promedio
 	cout << " * Avg. response ratio: " << total_rr_sum / total_count << endl;
+
+	// Peor tiempo de respuesta
+	cout << " * Worst response ratio: " << total_rr_worst << endl;
 
 	cout << "[===============================]" << endl;
 }
