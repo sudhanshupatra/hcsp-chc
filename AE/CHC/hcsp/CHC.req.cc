@@ -897,7 +897,7 @@ void Solution::showCustomStatics() {
 
 	// Tiempo de respuesta promedio por prioridad
 	int total_count = 0;
-	int total_rr_sum = 0.0;
+	double total_rr_sum = 0.0;
 
 	cout << " * Avg. response ratio by priority." << endl;
 	for (int priority = 0; priority <= 10; priority++) {
