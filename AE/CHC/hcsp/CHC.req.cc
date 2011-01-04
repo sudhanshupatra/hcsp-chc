@@ -1307,7 +1307,7 @@ void Solution::mutate() {
 				set<int> taskPosSorteadas;
 				taskPosSorteadas.clear();
 
-				for (int MUT_TASKS_COUNT = 0; MUT_TASKS_COUNT < MUT_TASKS; MUT_TASKS_COUNT++) {
+				for (int mut_tasks_count = 0; mut_tasks_count < MUT_TASKS; mut_tasks_count++) {
 					taskPosSorteadas.insert(roulette.drawOneByIndex());
 				}
 
