@@ -938,9 +938,10 @@ void Solution::showCustomStatics() {
 		}
 	}
 
-	cout << endl << "Total tasks: " << total_count << endl;
-	cout << " Total rr: " << total_rr_sum << endl;
-	cout << " Total avg_rr: " << total_rr_sum / total_count << endl;
+	//cout << endl << "Total tasks: " << total_count << endl;
+	//cout << " Total rr: " << total_rr_sum << endl;
+	//cout << " Total avg_rr: " << total_rr_sum / total_count << endl;
+	cout << " * Avg. response ratio: " << total_rr_sum / total_count << endl;
 
 	cout << "[===============================]" << endl;
 }
@@ -974,11 +975,11 @@ double Solution::fitness() {
 	double normalized_makespan;
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
 
-	if (DEBUG) {
-		cout << endl << "awrr: " << awrr << endl;
-		cout << endl << "normalized_awrr: " << normalized_awrr << endl;
-		cout << endl << "normalized_makespan: " << normalized_makespan << endl;
-	}
+//	if (DEBUG) {
+//		cout << endl << "awrr: " << awrr << endl;
+//		cout << endl << "normalized_awrr: " << normalized_awrr << endl;
+//		cout << endl << "normalized_makespan: " << normalized_makespan << endl;
+//	}
 
 	return (_pbm.getMakespanWeight() * normalized_makespan) + (_pbm.getAWRRWeight()
 			* normalized_awrr);
