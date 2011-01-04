@@ -312,7 +312,6 @@ void SolutionMachine::refresh() {
 
 			double priority_cost;
 			priority_cost = (_pbm.taskPriority(taskId) * rr);
-
 			partial_awrr += priority_cost;
 		}
 
@@ -902,10 +901,12 @@ void Solution::showCustomStatics() {
 		cout << "   priority = " << priority;
 
 		int count = 0;
-		double partial_cost = 0.0;
 		double rr_sum = 0.0;
 
 		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+			double partial_cost;
+			partial_cost = 0.0;
+
 			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
 				int taskId;
 				taskId = _machines[machineId].getTask(taskPos);
@@ -957,6 +958,12 @@ double Solution::fitness() {
 
 	double normalized_makespan;
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
+
+	if (DEBUG) {
+		cout << endl << "awrr: " << awrr << endl;
+		cout << endl << "normalized_awrr: " << normalized_awrr << endl;
+		cout << endl << "normalized_makespan: " << normalized_makespan << endl;
+	}
 
 	return (_pbm.getMakespanWeight() * normalized_makespan) + (_pbm.getAWRRWeight()
 			* normalized_awrr);
