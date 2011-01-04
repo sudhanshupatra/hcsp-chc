@@ -896,6 +896,9 @@ void Solution::showCustomStatics() {
 	// Peor tiempo de respuesta
 
 	// Tiempo de respuesta promedio por prioridad
+	int total_count = 0;
+	int total_rr_sum = 0.0;
+
 	cout << " * Avg. response ratio by priority." << endl;
 	for (int priority = 1; priority <= 10; priority++) {
 		cout << "   priority = " << priority;
@@ -918,11 +921,16 @@ void Solution::showCustomStatics() {
 								/ _pbm.expectedTimeToCompute(taskId, machineId);
 				}
 
+				total_count++;
+				total_rr_sum += (partial_cost + _pbm.expectedTimeToCompute(taskId, machineId))
+									/ _pbm.expectedTimeToCompute(taskId, machineId);
+
 				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
 			}
 		}
 
 		if (count > 0) {
+			cout << " (" << count << " tasks) ";
 			cout << " >> avg. rr = " << rr_sum / count << endl;
 			rr_sum = 0.0;
 			count = 0;
@@ -930,6 +938,10 @@ void Solution::showCustomStatics() {
 			cout << " N/A" << endl;
 		}
 	}
+
+	cout << endl << "Total tasks: " << total_count << endl;
+	cout << " Total rr: " << total_rr_sum << endl;
+	cout << " Total avg_rr: " << total_rr_sum / total_count << endl;
 
 	cout << "[===============================]" << endl;
 }
@@ -954,7 +966,11 @@ double Solution::fitness() {
 	}
 
 	double normalized_awrr;
-	normalized_awrr = (awrr + Solution::_awrr_reference) / Solution::_awrr_reference;
+	if (awrr > 0) {
+		normalized_awrr = (awrr + Solution::_awrr_reference) / Solution::_awrr_reference;
+	} else {
+		normalized_awrr = 0;
+	}
 
 	double normalized_makespan;
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
