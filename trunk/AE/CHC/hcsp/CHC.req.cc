@@ -900,7 +900,7 @@ void Solution::showCustomStatics() {
 	int total_rr_sum = 0.0;
 
 	cout << " * Avg. response ratio by priority." << endl;
-	for (int priority = 1; priority <= 10; priority++) {
+	for (int priority = 0; priority <= 10; priority++) {
 		cout << "   priority = " << priority;
 
 		int count = 0;
@@ -921,13 +921,12 @@ void Solution::showCustomStatics() {
 								/ _pbm.expectedTimeToCompute(taskId, machineId);
 				}
 
-				total_count++;
-				total_rr_sum += (partial_cost + _pbm.expectedTimeToCompute(taskId, machineId))
-									/ _pbm.expectedTimeToCompute(taskId, machineId);
-
 				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
 			}
 		}
+
+		total_count += count;
+		total_rr_sum += rr_sum;
 
 		if (count > 0) {
 			cout << " (" << count << " tasks) ";
