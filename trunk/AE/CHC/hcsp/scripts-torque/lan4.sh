@@ -90,14 +90,14 @@ data[23]="B.u_s_lolo"
 #for i in {0..23}
 for i in {0..0}
 do
-	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/CHC_LAN4.cfg" > /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/Config_LAN4.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/Config_LAN4.cfg
-	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/${data[i]}_LAN4.sol" >> /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/Config_LAN4.cfg
+	echo "CHC_LAN4.cfg" > Config.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> Config.cfg
+	echo "lan4/${data[i]}_LAN4.sol" >> Config.cfg
 	
 	echo "= CHC_LAN4.cfg ======================================="
-	cat /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/CHC_LAN4.cfg
+	cat CHC_LAN4.cfg
 	echo "= Config_LAN4.cfg ===================================="
-	cat /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/Config_LAN4.cfg
+	cat Config.cfg
 	
-	time($EXEC /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/Config_LAN4.cfg > /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/${data[i]}_LAN4.log)        
+	time($EXEC Config.cfg > lan4/${data[i]}_LAN4.log)        
 done
