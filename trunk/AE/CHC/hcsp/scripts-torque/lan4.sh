@@ -7,7 +7,7 @@
 #PBS -l nodes=1:cpu8:ppn=4,walltime=10:00:00
 
 # Cola
-#PBS -q publica
+#PBS -q privada
 
 # Working dir
 #PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
