@@ -20,8 +20,10 @@ int main (int argc, char** argv)
 	cout << "[INFO] argv[0] " << path << endl;
 
 	strcat(path,argv[1]);
-	cout << "[INFO] argv[1] " << path << endl;
-	ifstream f(path);
+	//cout << "[INFO] argv[1] " << path << endl;
+	//ifstream f(path);
+	cout << "[INFO] argv[1] " << argv[1] << endl;
+	ifstream f(argv[1]);
 	if(!f) show_message(10);
 
 	f.getline(&(path[len]),longitud,'\n');
