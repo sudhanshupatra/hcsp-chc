@@ -10,7 +10,7 @@ MALLBA_REP=${MALLBA_DIR}/rep
 MPI_BIN=/home/${whoami}/bin/mpich2-1.2.1p1/bin
 #MPI_BIN=/usr/local/mpich/bin
 
-CXX=$(MPI_BIN)/mpi++
+CXX=$(MPI_BIN)/mpic++
 #CXX=$(MPI_BIN)/mpiCC
 RUN=$(MPI_BIN)/mpirun
 
