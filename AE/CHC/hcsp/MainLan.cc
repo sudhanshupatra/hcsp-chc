@@ -11,28 +11,27 @@ int main (int argc, char** argv)
 	int len;
 	int longitud;
 
-	int clear = system("clear");
+	//int clear = system("clear");
 
-	get_path(argv[0],path);
+	//get_path(argv[0],path);
+	path = "";
 	len = strlen(path);
 	longitud = MAX_BUFFER - len;
 
 	cout << "[INFO] argv[0] " << path << endl;
 
 	strcat(path,argv[1]);
-	//cout << "[INFO] argv[1] " << path << endl;
-	//ifstream f(path);
-	cout << "[INFO] argv[1] " << argv[1] << endl;
-	ifstream f(argv[1]);
+	cout << "[INFO] argv[1] " << path << endl;
+	ifstream f(path);
 	if(!f) show_message(10);
 
 	f.getline(&(path[len]),longitud,'\n');
-	cout << "[INFO] argv[?] " << path << endl;
+	cout << "[INFO] getline " << path << endl;
 	ifstream f1(path);
 	if(!f1)	show_message(11);
 
 	f.getline(&(path[len]),longitud,'\n');
-	cout << "[INFO] argv[?] " << path << endl;
+	cout << "[INFO] getline " << path << endl;
 	ifstream f2(path);
 	if(!f2) show_message(12);
 
