@@ -4,7 +4,7 @@
 #PBS -N ae_seq_1024
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=07:00:00
+#PBS -l nodes=1,walltime=00:20:00
 
 # Cola
 #PBS -q publica
@@ -87,9 +87,9 @@ data[23]="B.u_s_lolo"
 #for i in {0..23}
 for i in {0..0}
 do
-	time(../MainSeq CHC_SEQ.cfg \
-		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]} \
-		seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
+	#time(../MainSeq CHC_SEQ.cfg \
+	#	/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]} \
+	#	seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
 
 	time(../MainSeq CHC_SEQ.cfg \
 		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]} \
