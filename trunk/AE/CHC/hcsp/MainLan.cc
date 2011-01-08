@@ -7,14 +7,13 @@ using namespace std;
 int main (int argc, char** argv)
 {
 	using skeleton CHC;
-	char path[MAX_BUFFER];
+	char path[MAX_BUFFER] = "";
 	int len;
 	int longitud;
 
 	//int clear = system("clear");
 
 	//get_path(argv[0],path);
-	path = "";
 	len = strlen(path);
 	longitud = MAX_BUFFER - len;
 
