@@ -1229,7 +1229,7 @@ void Solution::mutate() {
 	//if (DEBUG)	cout << endl << "[DEBUG] Solution::mutate" << endl;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		if (rand01 <= MUT_MAQ) {
+		if (rand01() <= MUT_MAQ) {
 			if (_machines[machineId].countTasks() == 0) {
 				// Cada máquina sin tareas se le asigna la tarea que
 				// mejor puede ejecutar.
