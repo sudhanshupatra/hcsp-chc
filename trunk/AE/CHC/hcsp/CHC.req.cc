@@ -797,12 +797,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 
 			initializeMinMin();
 			cout << endl << "Min-Min fitness: " << fitness() << endl;
-		} else if (solutionIndex == 2) {
-			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
-			// Utilizo Sufferage para un único elemento de la población inicial.
-
-			initializeSufferage();
-			cout << endl << "Sufferage fitness: " << fitness() << endl;
+//		} else if (solutionIndex == 2) {
+//			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+//			// Utilizo Sufferage para un único elemento de la población inicial.
+//
+//			initializeSufferage();
+//			cout << endl << "Sufferage fitness: " << fitness() << endl;
 		} else {
 			if (RANDOM_INIT > rand01()) {
 				// Inicialización aleatoria
