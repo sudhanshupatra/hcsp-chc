@@ -791,61 +791,30 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 
 		cout << endl << "MCT reference fitness: " << fitness() << endl;
 	} else {
-		int cant_heuristicas = 2;
+		if (solutionIndex == 1) {
+			// Inicialización usando una heurística "pesada": MIN-MIN.
+			// Utilizo MIN-MIN para un único elemento de la población inicial.
 
-		if (pnumber < cant_heuristicas) {
-			if (solutionIndex == 1) {
-				// Inicialización usando una heurística "pesada": MIN-MIN.
-				// Utilizo MIN-MIN para un único elemento de la población inicial.
+			initializeMinMin();
+			cout << endl << "Min-Min fitness: " << fitness() << endl;
+		} else if (solutionIndex == 2) {
+			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+			// Utilizo Sufferage para un único elemento de la población inicial.
 
-				initializeMinMin();
-				cout << endl << "Min-Min fitness: " << fitness() << endl;
-			} else if (solutionIndex == 2) {
-				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
-				// Utilizo Sufferage para un único elemento de la población inicial.
-
-				initializeSufferage();
-				cout << endl << "Sufferage fitness: " << fitness() << endl;
-			} else {
-				if (RANDOM_INIT > rand01()) {
-					// Inicialización aleatoria
-
-					initializeRandom();
-					cout << endl << "Random fitness: " << fitness() << endl;
-				} else {
-					// Inicialización usando una heurística no tan buena y
-					// que permita obtener diferentes soluciones: MCT
-
-					initializeRandomMCT();
-					cout << endl << "Random MCT fitness: " << fitness() << endl;
-				}
-			}
+			initializeSufferage();
+			cout << endl << "Sufferage fitness: " << fitness() << endl;
 		} else {
-			if ((solutionIndex == 1)&&(mypid == 1)) {
-				// Inicialización usando una heurística "pesada": MIN-MIN.
-				// Utilizo MIN-MIN para un único elemento de la población inicial.
+			if (RANDOM_INIT > rand01()) {
+				// Inicialización aleatoria
 
-				initializeMinMin();
-				cout << endl << "Min-Min fitness: " << fitness() << endl;
-			} else if ((solutionIndex == 1)&&(mypid == 2)) {
-				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
-				// Utilizo Sufferage para un único elemento de la población inicial.
-
-				initializeSufferage();
-				cout << endl << "Sufferage fitness: " << fitness() << endl;
+				initializeRandom();
+				cout << endl << "Random fitness: " << fitness() << endl;
 			} else {
-				if (RANDOM_INIT > rand01()) {
-					// Inicialización aleatoria
+				// Inicialización usando una heurística no tan buena y
+				// que permita obtener diferentes soluciones: MCT
 
-					initializeRandom();
-					cout << endl << "Random fitness: " << fitness() << endl;
-				} else {
-					// Inicialización usando una heurística no tan buena y
-					// que permita obtener diferentes soluciones: MCT
-
-					initializeRandomMCT();
-					cout << endl << "Random MCT fitness: " << fitness() << endl;
-				}
+				initializeRandomMCT();
+				cout << endl << "Random MCT fitness: " << fitness() << endl;
 			}
 		}
 	}
