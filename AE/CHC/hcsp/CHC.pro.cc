@@ -361,7 +361,6 @@ Population::Population(const Problem& pbm, const SetUpParams& setup) :
 	}
 	for (int i = 0; i < _offsprings.size(); i++)
 		_offsprings[i] = new Solution(pbm);
-
 }
 
 void Population::Evaluate(Solution* sols, struct individual &_f) {
@@ -402,9 +401,9 @@ const SetUpParams& Population::setup() const {
 	return _setup;
 }
 
-void Population::initialize() {
+void Population::initialize(int mypid, int pnumber) {
 	for (int i = 0; i < _parents.size(); i++) {
-		_parents[i]->initialize(i);
+		_parents[i]->initialize(mypid, pnumber, i);
 		_fitness_values[i].index = i;
 		_fitness_values[i].change = true;
 	}
@@ -2315,7 +2314,7 @@ Solver_Seq::~Solver_Seq() {
 
 void Solver_Seq::StartUp() {
 	Population pop(problem, params);
-	pop.initialize();
+	pop.initialize(0,1); //Proceso 0, cantidad de procesos 1
 	StartUp(pop);
 }
 
@@ -2447,8 +2446,11 @@ NetStream& Solver_Lan::netstream() {
 }
 
 void Solver_Lan::StartUp() {
+	//int my_pid = _netstream.my_pid();
+	int pnumber = _netstream.pnumber();
+
 	Population pop(problem, params);
-	pop.initialize();
+	pop.initialize(pid(), pnumber);
 	StartUp(pop);
 }
 
@@ -2780,7 +2782,7 @@ NetStream& Solver_Wan::netstream() {
 
 void Solver_Wan::StartUp() {
 	Population pop(problem, params);
-	pop.initialize();
+	pop.initialize(0, 1); // Proceso ID 0, cantidad de procesos 1
 	StartUp(pop);
 }
 

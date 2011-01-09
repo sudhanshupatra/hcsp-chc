@@ -170,7 +170,7 @@ public:
 	char *to_String() const;
 	void to_Solution(char *_cadena_);
 
-	void initialize(const int solutionIndex);
+	void initialize(int mypid, int pnumber, const int solutionIndex);
 	bool isInitilized() const;
 	void markAsInitialized();
 
@@ -497,7 +497,7 @@ public:
 	Population& operator=(const Population& pop);
 	const SetUpParams& setup() const;
 	const Problem& pbm() const;
-	void initialize();
+	void initialize(int mypid, int pnumber);
 
 	// Generate a new pool of individuals in population
 	void evolution();
