@@ -665,6 +665,14 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				sol1.swapTasks(sol2, i);
 			}
 		}
+
+		if (rand01() <= 0.1) {
+			sol1.doLocalSearch();
+		}
+
+		if (rand01() <= 0.1) {
+			sol2.doLocalSearch();
+		}
 	}
 }
 
@@ -771,15 +779,15 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			<< mutationProbability << ")"<< endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (i != bestSolutionIndex) {
+		//if (i != bestSolutionIndex) {
 			if (rand01() <= mutationProbability) {
 				sols[i]->mutate();
 			}
-		}
+		//}
 
-		if (i == bestSolutionIndex) {
-			sols[i]->doLocalSearch();
-		}
+//		if (i == bestSolutionIndex) {
+//			sols[i]->doLocalSearch();
+//		}
 	}
 }
 
