@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq_1024
+#PBS -N ae_seq
 
 # Requerimientos
 #PBS -l nodes=1,walltime=00:20:00
