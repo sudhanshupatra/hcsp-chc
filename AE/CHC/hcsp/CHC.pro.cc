@@ -771,11 +771,11 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			<< mutationProbability << ")"<< endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		//if (i != bestSolutionIndex) {
+		if (i != bestSolutionIndex) {
 			if (rand01() <= mutationProbability) {
 				sols[i]->mutate();
 			}
-		//}
+		}
 
 		if (i == bestSolutionIndex) {
 			sols[i]->doLocalSearch();

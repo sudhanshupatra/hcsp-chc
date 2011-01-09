@@ -1686,9 +1686,9 @@ ostream& operator<<(ostream& os, const UserStatistics& userstat) {
 	os << "------------------------------------------------------------------"
 			<< endl;
 
-	os << endl << "trial\t" << "best_cost_trial\t\t"
-			<< "worst_cost_trial\t\t\t" << "evaluation_best_found" << "\t\t\t"
-			<< "iteration_best_found" << "\t\t\t" << "time_best_found"
+	os << endl << "trial\t" << "best\t\t"
+			<< "worst\t\t\t" << "eval_best_found" << "\t\t\t"
+			<< "iter_best_found" << "\t\t\t" << "time_best_found"
 			<< "\t\t" << "time_spent_trial";
 
 	for (int i = 0; i < userstat.result_trials.size(); i++) {
