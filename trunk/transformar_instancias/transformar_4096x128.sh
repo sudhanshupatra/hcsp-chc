@@ -1,8 +1,8 @@
 #!/bin/bash
 
 seed="1"
-input_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/2048x64/"
-output_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/2048x64.CPrio/"
+input_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/4096x128/"
+output_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/4096x128.CPrio/"
 min="1"
 max="10"
 
@@ -31,7 +31,8 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for dataIndex in {0..23}
+#for dataIndex in {0..23}
+for dataIndex in {0..0}
 do
 	Debug/transformar_instancias $input_path${data[dataIndex]} $output_path${data[dataIndex]} $seed $min $max
 done
