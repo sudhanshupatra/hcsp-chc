@@ -92,6 +92,6 @@ do
 	#	seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
 
 	time(../MainSeq CHC_SEQ.cfg \
-		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]} \
+		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]} \
 		seq/${data[i]}_SEQ.cprio.sol > seq/${data[i]}_SEQ.cprio.log)
 done
