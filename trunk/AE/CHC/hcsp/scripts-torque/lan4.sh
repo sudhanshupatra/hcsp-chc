@@ -94,10 +94,5 @@ do
 	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> Config_LAN4.cfg
 	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
 	
-	echo "= CHC_LAN4.cfg ======================================="
-	cat CHC_LAN4.cfg
-	echo "= Config_LAN4.cfg ===================================="
-	cat Config_LAN4.cfg
-	
 	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
 done
