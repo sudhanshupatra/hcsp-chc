@@ -1384,26 +1384,28 @@ void Solution::swapTasks(Solution& solution, const int taskId) {
 	assert(sol1.findTask(taskId, machine1, taskPos1));
 	assert(sol2.findTask(taskId, machine2, taskPos2));
 
-	// Modifico la solución 1.
-	// Borro la tarea de la ubicación original.
-	sol1._machines[machine1].removeTask(taskPos1);
+	if ((machine1 != machine2) || (taskPos1 != taskPos2)) {
+		// Modifico la solución 1.
+		// Borro la tarea de la ubicación original.
+		sol1._machines[machine1].removeTask(taskPos1);
 
-	// Inserto la tarea en la nueva ubicación.
-	if (taskPos2 < sol1._machines[machine2].countTasks()) {
-		sol1._machines[machine2].insertTask(taskId, taskPos2);
-	} else {
-		sol1._machines[machine2].addTask(taskId);
-	}
+		// Inserto la tarea en la nueva ubicación.
+		if (taskPos2 < sol1._machines[machine2].countTasks()) {
+			sol1._machines[machine2].insertTask(taskId, taskPos2);
+		} else {
+			sol1._machines[machine2].addTask(taskId);
+		}
 
-	// Modifico la solución 2.
-	// Borro la tarea de la ubicación original.
-	sol2._machines[machine2].removeTask(taskPos2);
+		// Modifico la solución 2.
+		// Borro la tarea de la ubicación original.
+		sol2._machines[machine2].removeTask(taskPos2);
 
-	// Inserto la tarea en la nueva ubicación.
-	if (taskPos1 < sol2._machines[machine1].countTasks()) {
-		sol2._machines[machine1].insertTask(taskId, taskPos1);
-	} else {
-		sol2._machines[machine1].addTask(taskId);
+		// Inserto la tarea en la nueva ubicación.
+		if (taskPos1 < sol2._machines[machine1].countTasks()) {
+			sol2._machines[machine1].insertTask(taskId, taskPos1);
+		} else {
+			sol2._machines[machine1].addTask(taskId);
+		}
 	}
 }
 

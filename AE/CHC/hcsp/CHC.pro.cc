@@ -661,7 +661,7 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 	//if ((dh / 2) > probability[0]) {
 	if (dh > probability[0]) {
 		for (int i = 0; i < sol1.length(); i++) {
-			if (0.5 <= rand01()) {
+			if (rand01() <= CROSS_TASK) {
 				sol1.swapTasks(sol2, i);
 			}
 		}
