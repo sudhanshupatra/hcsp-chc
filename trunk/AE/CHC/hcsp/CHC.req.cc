@@ -1233,128 +1233,91 @@ void Solution::mutate() {
 			if (_machines[machineId].countTasks() == 0) {
 				// Cada máquina sin tareas se le asigna la tarea que
 				// mejor puede ejecutar.
-				//if (rand01() >= 0.5) {
-					{
-						int bestTaskIdForMachine;
-						bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(
-								machineId);
+				{
+					int bestTaskIdForMachine;
+					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(
+							machineId);
 
-						int origenMachineId, origenTaskPos;
-						assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
+					int origenMachineId, origenTaskPos;
+					assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
 
-						if (_machines[origenMachineId].countTasks() > 1) {
-							if (_pbm.getBestTaskIdForMachine(origenMachineId)
-									!= bestTaskIdForMachine) {
-								_machines[origenMachineId].removeTask(
-										origenTaskPos);
-								_machines[machineId].addTask(
-										bestTaskIdForMachine);
-							}
-						}
-					}
-
-					{
-						if (_machines[machineId].countTasks() == 0) {
-							int mostLoadedMachineId = getMaxCostMachineId();
-
-							int bestTaskPosForMachine;
-							bestTaskPosForMachine
-									= getMinDestinationCostTaskPosByMachine(
-											mostLoadedMachineId, machineId);
-
-							int bestTaskIdForMachine;
-							bestTaskIdForMachine
-									= _machines[mostLoadedMachineId].getTask(
-											bestTaskPosForMachine);
-
-							_machines[mostLoadedMachineId].removeTask(
-									bestTaskPosForMachine);
+					if (_machines[origenMachineId].countTasks() > 1) {
+						if (_pbm.getBestTaskIdForMachine(origenMachineId)
+								!= bestTaskIdForMachine) {
+							_machines[origenMachineId].removeTask(origenTaskPos);
 							_machines[machineId].addTask(bestTaskIdForMachine);
 						}
 					}
-				//}
+				}
+
+				if (_machines[machineId].countTasks() == 0) {
+					int mostLoadedMachineId = getMaxCostMachineId();
+
+					int bestTaskPosForMachine;
+					bestTaskPosForMachine
+							= getMinDestinationCostTaskPosByMachine(
+									mostLoadedMachineId, machineId);
+
+					int bestTaskIdForMachine;
+					bestTaskIdForMachine
+							= _machines[mostLoadedMachineId].getTask(
+									bestTaskPosForMachine);
+
+					_machines[mostLoadedMachineId].removeTask(
+							bestTaskPosForMachine);
+					_machines[machineId].addTask(bestTaskIdForMachine);
+				}
 			} else if (_machines[machineId].countTasks() > 0) {
-				{
-					vector<double> costsByTaskPos;
-					costsByTaskPos.reserve(_machines[machineId].countTasks());
-					costsByTaskPos.clear();
+				for (int selectedTaskPos = 0; selectedTaskPos
+						< _machines[machineId].countTasks(); selectedTaskPos++) {
 
-					for (int taskPos = 0; taskPos
-							< _machines[machineId].countTasks(); taskPos++) {
-						// Inicializo el vector de costos de las tareas de la máquina actual
-						// para sortear una tarea.
-						int taskId;
-						taskId = _machines[machineId].getTask(taskPos);
+					if (rand01() >= 0.5) {
+						// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+						// intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
+						// la máquina en la que mejor puede ejecutarse la tarea sorteada.
 
-						double taskCost;
-						taskCost
-								= _pbm.expectedTimeToCompute(taskId, machineId);
+						// Obtengo la máquina que que mejor puede ejecutar la tarea.
+						int bestMachineId;
+						bestMachineId = _pbm.getBestMachineForTaskId(
+								_machines[machineId].getTask(selectedTaskPos));
 
-						costsByTaskPos.push_back(taskCost);
-					}
-
-					RouletteWheel roulette(costsByTaskPos, true);
-
-					set<int> taskPosSorteadas;
-					taskPosSorteadas.clear();
-
-					for (int mut_tasks_count = 0; mut_tasks_count < MUT_TASKS; mut_tasks_count++) {
-						taskPosSorteadas.insert(roulette.drawOneByIndex());
-					}
-
-					for (int selectedTaskPos = 0; selectedTaskPos
-							< taskPosSorteadas.size(); selectedTaskPos++) {
-						if (rand01() >= 0.5) {
-							// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-							// intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
-							// la máquina en la que mejor puede ejecutarse la tarea sorteada.
-
-							// Obtengo la máquina que que mejor puede ejecutar la tarea.
-							int bestMachineId;
-							bestMachineId = _pbm.getBestMachineForTaskId(
-									_machines[machineId].getTask(
-											selectedTaskPos));
-
-							if (bestMachineId != machineId) {
-								if (_machines[bestMachineId].countTasks() > 0) {
-									// Si la máquina destino tiene al menos una tarea, obtengo la tarea
-									// con menor costo de ejecución en la máquina sorteada.
-									int minCostTaskPosOnMachine;
-									minCostTaskPosOnMachine
-											= getMinDestinationCostTaskPosByMachine(
-													bestMachineId, machineId);
-
-									// Hago un swap entre las tareas de las máquinas.
-									swapTasks(machineId, selectedTaskPos,
-											bestMachineId,
-											minCostTaskPosOnMachine);
-								}
-							}
-						}
-
-						if (rand01() >= 0.5) {
-							// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-							// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
-							// más eficientemente en la máquina actual.
-
-							// Obtengo la máquina que aporta un menor costo al total de la solución.
-							int minCostMachineId;
-							minCostMachineId = getMinCostMachineId();
-
-							if (_machines[minCostMachineId].countTasks() > 0) {
+						if (bestMachineId != machineId) {
+							if (_machines[bestMachineId].countTasks() > 0) {
 								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 								// con menor costo de ejecución en la máquina sorteada.
-
 								int minCostTaskPosOnMachine;
 								minCostTaskPosOnMachine
 										= getMinDestinationCostTaskPosByMachine(
-												minCostMachineId, machineId);
+												bestMachineId, machineId);
 
 								// Hago un swap entre las tareas de las máquinas.
 								swapTasks(machineId, selectedTaskPos,
-										minCostMachineId,
-										minCostTaskPosOnMachine);
+										bestMachineId, minCostTaskPosOnMachine);
 							}
+						}
+					}
+
+					if (rand01() >= 0.5) {
+						// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
+						// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+						// más eficientemente en la máquina actual.
+
+						// Obtengo la máquina que aporta un menor costo al total de la solución.
+						int minCostMachineId;
+						minCostMachineId = getMinCostMachineId();
+
+						if (_machines[minCostMachineId].countTasks() > 0) {
+							// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+							// con menor costo de ejecución en la máquina sorteada.
+
+							int minCostTaskPosOnMachine;
+							minCostTaskPosOnMachine
+									= getMinDestinationCostTaskPosByMachine(
+											minCostMachineId, machineId);
+
+							// Hago un swap entre las tareas de las máquinas.
+							swapTasks(machineId, selectedTaskPos,
+									minCostMachineId, minCostTaskPosOnMachine);
 						}
 					}
 				}
@@ -1363,8 +1326,6 @@ void Solution::mutate() {
 					// Se selecciona una tarea T según su función de PRIORIDAD y se
 					// adelanta si lugar en la cola de ejecución.
 
-					//				for (int taskPos = _machines[machineId].countTasks() - 1;
-					//						taskPos > 0; taskPos--) {
 					for (int taskPos = 1; taskPos
 							< _machines[machineId].countTasks(); taskPos++) {
 
@@ -1686,9 +1647,8 @@ ostream& operator<<(ostream& os, const UserStatistics& userstat) {
 	os << "------------------------------------------------------------------"
 			<< endl;
 
-	os << endl << "trial\t" << "best\t\t"
-			<< "worst\t\t\t" << "eval_best_found" << "\t\t\t"
-			<< "iter_best_found" << "\t\t\t" << "time_best_found"
+	os << endl << "trial\t" << "best\t\t" << "worst\t\t\t" << "eval_best_found"
+			<< "\t\t\t" << "iter_best_found" << "\t\t\t" << "time_best_found"
 			<< "\t\t" << "time_spent_trial";
 
 	for (int i = 0; i < userstat.result_trials.size(); i++) {

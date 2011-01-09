@@ -27,7 +27,7 @@ skeleton CHC {
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.8
 // Distancia minima para permitir el crossover (1/4).
-#define CROSSOVER_DISTANCE 4
+#define CROSSOVER_DISTANCE 8
 // Propiedades del PALS.
 #define PALS_MAQ 1 //3
 #define PALS_MAX_INTENTOS 3
