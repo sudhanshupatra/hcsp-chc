@@ -4,13 +4,13 @@
 #PBS -N ae_lan8
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=8,walltime=10:00:00
+#PBS -l nodes=6,walltime=00:30:00
 
 # Cola
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/
+#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/lan8/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/lan8/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan8/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan8/
 
 #PBS -V
 
@@ -86,10 +86,12 @@ data[21]="B.u_s_hilo"
 data[22]="B.u_s_lohi"
 data[23]="B.u_s_lolo"
 
-for i in {0..23}
+#for i in {0..23}
+for i in {0..0}
 do
 	echo "CHC_LAN8.cfg" > Config_LAN8.cfg
-	echo "../../ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN8.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]}" >> Config_LAN8.cfg
 	echo "lan8/${data[i]}_LAN8.sol" >> Config_LAN8.cfg
+	
 	time($EXEC Config_LAN8.cfg > lan8/${data[i]}_LAN8.log)        
 done
