@@ -4,7 +4,7 @@
 #PBS -N ae_lan8
 
 # Requerimientos
-#PBS -l nodes=6,walltime=00:30:00
+#PBS -l nodes=6,walltime=00:20:00
 
 # Cola
 #PBS -q publica
@@ -90,7 +90,7 @@ data[23]="B.u_s_lolo"
 for i in {0..0}
 do
 	echo "CHC_LAN8.cfg" > Config_LAN8.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> Config_LAN8.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN8.cfg
 	echo "lan8/${data[i]}_LAN8.sol" >> Config_LAN8.cfg
 	
 	time($EXEC Config_LAN8.cfg > lan8/${data[i]}_LAN8.log)        
