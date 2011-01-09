@@ -22,7 +22,7 @@ using std::set;
 skeleton CHC {
 
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 8 //5
+#define MUT_MAQ 0.8
 #define MUT_TASKS 512 //32
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.8
