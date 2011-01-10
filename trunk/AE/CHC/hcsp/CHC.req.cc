@@ -1336,31 +1336,28 @@ void Solution::mutate() {
 									minCostMachineId, minCostTaskPosOnMachine);
 						}
 					}
-				}
 
-				if (rand01() >= 0.5) {
-					// Se selecciona una tarea T según su función de PRIORIDAD y se
-					// adelanta si lugar en la cola de ejecución.
+					if (rand01() >= 0.5) {
+						// Se selecciona una tarea T según su función de PRIORIDAD y se
+						// adelanta si lugar en la cola de ejecución.
+						for (int taskPos = selectedTaskPos; taskPos >= 1; taskPos--) {
+							int taskId;
+							taskId = _machines[machineId].getTask(taskPos);
 
-					for (int taskPos = 1; taskPos
-							< _machines[machineId].countTasks(); taskPos++) {
+							int taskPriority;
+							taskPriority = _pbm.taskPriority(taskId);
 
-						int taskId;
-						taskId = _machines[machineId].getTask(taskPos);
+							int anteriorTaskId;
+							anteriorTaskId = _machines[machineId].getTask(taskPos
+									- 1);
 
-						int taskPriority;
-						taskPriority = _pbm.taskPriority(taskId);
+							int anteriorTaskPriority;
+							anteriorTaskPriority
+									= _pbm.taskPriority(anteriorTaskId);
 
-						int anteriorTaskId;
-						anteriorTaskId = _machines[machineId].getTask(taskPos
-								- 1);
-
-						int anteriorTaskPriority;
-						anteriorTaskPriority
-								= _pbm.taskPriority(anteriorTaskId);
-
-						if (taskPriority < anteriorTaskPriority) {
-							_machines[machineId].swapTasks(taskPos, taskPos - 1);
+							if (taskPriority < anteriorTaskPriority) {
+								_machines[machineId].swapTasks(taskPos, taskPos - 1);
+							}
 						}
 					}
 				}
