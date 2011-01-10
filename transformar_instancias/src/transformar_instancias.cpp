@@ -102,6 +102,8 @@ int main(int argc, char** argv) {
 		inputFileStream >> aux_line;
 
 		while (inputFileStream.good()) {
+			//cout << "[ESTADO " << estado << "] " << aux_line << endl;
+
 			switch (estado) {
 			case 0:
 				// Leo la información global del taskCount.
@@ -109,6 +111,7 @@ int main(int argc, char** argv) {
 				outputFileStream << aux_line << " ";
 
 				estado = 1;
+				inputFileStream >> aux_line;
 
 				break;
 			case 1:
@@ -117,6 +120,7 @@ int main(int argc, char** argv) {
 				outputFileStream << aux_line << endl;
 
 				estado = 2;
+				inputFileStream >> aux_line;
 
 				break;
 			case 2:
@@ -135,11 +139,10 @@ int main(int argc, char** argv) {
 			case 3:
 				// Copio los costos de ejecución de cada tareas en las máquinas.
 				outputFileStream << aux_line << endl;
+				inputFileStream >> aux_line;
 
 				break;
 			}
-
-			inputFileStream >> aux_line;
 		}
 	}
 
