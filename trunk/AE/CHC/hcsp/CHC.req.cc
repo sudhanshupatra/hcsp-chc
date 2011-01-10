@@ -43,6 +43,8 @@ istream& operator>>(istream& input, Problem& pbm) {
 		input.getline(buffer, MAX_BUFFER, '\n');
 		sscanf(buffer, "%d", &taskPriority);
 
+		assert(taskPriority > 0);
+
 		pbm._tasksPriorities.push_back(taskPriority);
 	}
 
@@ -70,6 +72,8 @@ istream& operator>>(istream& input, Problem& pbm) {
 			input.getline(buffer, MAX_BUFFER, '\n');
 			sscanf(buffer, "%f",
 					&pbm._expectedTimeToCompute[taskPos][machinePos]);
+
+			assert(pbm._expectedTimeToCompute[taskPos][machinePos] > 0);
 		}
 	}
 
@@ -306,6 +310,12 @@ void SolutionMachine::refresh() {
 			double compute_cost;
 			compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
 			partial_makespan += compute_cost;
+
+			if (compute_cost <= 0) {
+				cout << "[ERROR] machineId = " << machineId() << endl;
+				cout << "[ERROR] taskId = " << taskId << endl;
+			}
+			assert(compute_cost > 0);
 
 			double rr;
 			rr = (partial_makespan + compute_cost) / compute_cost;
@@ -945,9 +955,7 @@ void Solution::showCustomStatics() {
 // Fitness de la solución.
 // ===================================
 double Solution::fitness() {
-	if (!_initialized) {
-		assert(_initialized);
-	}
+	assert(_initialized);
 
 	double maxMakespan = 0.0;
 	double awrr = 0.0;
@@ -975,6 +983,9 @@ double Solution::fitness() {
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
 			+ (_pbm.getAWRRWeight() * normalized_awrr);
+
+	assert(!(fitness == INFINITY));
+	assert(!(fitness == NAN));
 
 	return fitness;
 }
