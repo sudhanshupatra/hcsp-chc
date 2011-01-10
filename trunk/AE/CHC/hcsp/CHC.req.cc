@@ -788,7 +788,6 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
 		Solution::_makespan_reference = makespan();
-
 		cout << endl << "MCT reference fitness: " << fitness() << endl;
 	} else {
 		if (solutionIndex == 1) {
@@ -947,7 +946,7 @@ void Solution::showCustomStatics() {
 // ===================================
 double Solution::fitness() {
 	if (!_initialized) {
-		return infinity();
+		assert(_initialized);
 	}
 
 	double maxMakespan = 0.0;
@@ -973,14 +972,11 @@ double Solution::fitness() {
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
 
-	//	if (DEBUG) {
-	//		cout << endl << "awrr: " << awrr << endl;
-	//		cout << endl << "normalized_awrr: " << normalized_awrr << endl;
-	//		cout << endl << "normalized_makespan: " << normalized_makespan << endl;
-	//	}
-
-	return (_pbm.getMakespanWeight() * normalized_makespan)
+	double fitness;
+	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
 			+ (_pbm.getAWRRWeight() * normalized_awrr);
+
+	return fitness;
 }
 
 double Solution::makespan() {
