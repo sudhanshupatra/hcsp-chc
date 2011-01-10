@@ -31,7 +31,7 @@ skeleton CHC {
 // CROSS
 #define CROSS_TASK 0.3
 // Distancia minima para permitir el crossover (1/4).
-#define CROSSOVER_DISTANCE 8
+#define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
 #define PALS_MAQ 1 //3
@@ -201,6 +201,7 @@ public:
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 	double getMachineFitness(int machineId);
+	int getMinAWRRMachine();
 
 	bool validate() const;
 
