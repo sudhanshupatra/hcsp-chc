@@ -766,8 +766,8 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
-			<< mutationProbability << ")"<< endl;
+//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
+//			<< mutationProbability << ")"<< endl;
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (i != bestSolutionIndex) {
