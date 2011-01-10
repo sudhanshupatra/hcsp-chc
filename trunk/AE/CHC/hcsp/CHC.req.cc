@@ -1360,6 +1360,40 @@ void Solution::mutate() {
 							}
 						}
 					}
+
+					if (rand01() >= 0.5) {
+						int minAWRRMachineId = getMinAWRRMachine();
+						if (minAWRRMachineId != machineId) {
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(selectedTaskPos);
+
+							_machines[minAWRRMachineId].addTask(selectedTaskId);
+							_machines[machineId].removeTask(selectedTaskPos);
+
+							// Se selecciona una tarea T según su función de PRIORIDAD y se
+							// adelanta si lugar en la cola de ejecución.
+							for (int taskPos = _machines[minAWRRMachineId].countTasks() - 1;
+									taskPos >= 1; taskPos--) {
+								int taskId;
+								taskId = _machines[minAWRRMachineId].getTask(taskPos);
+
+								int taskPriority;
+								taskPriority = _pbm.taskPriority(taskId);
+
+								int anteriorTaskId;
+								anteriorTaskId = _machines[minAWRRMachineId].getTask(taskPos
+										- 1);
+
+								int anteriorTaskPriority;
+								anteriorTaskPriority
+										= _pbm.taskPriority(anteriorTaskId);
+
+								if (taskPriority < anteriorTaskPriority) {
+									_machines[minAWRRMachineId].swapTasks(taskPos, taskPos - 1);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1504,6 +1538,23 @@ void Solution::to_Solution(char *_string_) {
 
 const vector<struct SolutionMachine>& Solution::machines() const {
 	return _machines;
+}
+
+int Solution::getMinAWRRMachine() {
+	int minAWRRMachineId = 0;
+	double minAWRRValue = infinity();
+
+	for (int machineId = 1; machineId < _machines.size(); machineId++) {
+		double aux;
+		aux = _machines[machineId].getAccumulatedWeightedResponseRatio();
+
+		if (aux <= minAWRRValue) {
+			minAWRRMachineId = machineId;
+			minAWRRValue = aux;
+		}
+	}
+
+	return minAWRRMachineId;
 }
 
 int Solution::getBestFitnessMachineId() {
