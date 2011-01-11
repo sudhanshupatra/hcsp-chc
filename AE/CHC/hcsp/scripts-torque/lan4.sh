@@ -4,7 +4,7 @@
 #PBS -N ae_lan4
 
 # Requerimientos
-#PBS -l nodes=4,walltime=00:20:00
+#PBS -l nodes=4:cpu8:ppn=4,walltime=00:20:00
 
 # Cola
 #PBS -q publica
@@ -92,7 +92,7 @@ for i in {0..0}
 do
 	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
 	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN4.cfg
-	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
+	echo "lan4/${data[i]}_LAN4_2048.sol" >> Config_LAN4.cfg
 	
-	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
+	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4_2048.log)        
 done

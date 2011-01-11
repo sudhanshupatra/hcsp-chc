@@ -70,7 +70,6 @@ Poblacion[0]=5
 Poblacion[1]=10
 Poblacion[2]=15
 Poblacion[3]=20
-Poblacion[4]=30
 
 Cruzamiento[0]=0.7
 Cruzamiento[1]=0.8
@@ -82,7 +81,7 @@ Mutacion[1]=0.7
 Mutacion[2]=0.9
 Mutacion[3]=1.0
 
-for indexP in {0..4}
+for indexP in {0..3}
 do
 	for indexC in {0..3}
 	do
@@ -95,12 +94,12 @@ do
 			for i in {0..5}
 			do
 				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
+				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 				OutputFile="calibracion/seq/${data[i]}_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
-				time(../MainSeq $CfgFile $DataFile calibracion/seq/$OutputFile.sol > calibracion/seq/$OutputFile.log)    
+				time(./MainSeq $CfgFile $DataFile calibracion/seq/$OutputFile.sol > calibracion/seq/$OutputFile.log)    
 			done
 		done
 	done

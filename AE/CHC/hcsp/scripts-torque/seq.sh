@@ -87,11 +87,7 @@ data[23]="B.u_s_lolo"
 #for i in {0..23}
 for i in {0..0}
 do
-	#time(../MainSeq CHC_SEQ.cfg \
-	#	/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.mod/${data[i]} \
-	#	seq/${data[i]}_SEQ.sol > seq/${data[i]}_SEQ.log)    
-
 	time(../MainSeq CHC_SEQ.cfg \
 		/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]} \
-		seq/${data[i]}_SEQ.cprio.sol > seq/${data[i]}_SEQ.cprio.log)
+		seq/${data[i]}_SEQ_2048.sol > seq/${data[i]}_SEQ_2048.log)
 done
