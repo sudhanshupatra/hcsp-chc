@@ -87,19 +87,19 @@ do
 	do
 		for indexM in {0..3}
 		do
-			echo "Población ${Poblacion[indexP]}"
+			echo "Poblacion ${Poblacion[indexP]}"
 			echo "Cruzamiento ${Cruzamiento[indexC]}"
-			echo "Mutación ${Mutacion[indexM]}"
+			echo "Mutacion ${Mutacion[indexM]}"
 
 			for i in {0..5}
 			do
-				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
+				CfgFile="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-				OutputFile="calibracion/seq/${data[i]}_$CfgFile"
+				OutputFile="calibracion/seq/${data[i]}_${CfgFile}"
 				
-				echo "Datos $DataFile"
+				echo "Datos ${DataFile}"
 				
-				time(./MainSeq $CfgFile $DataFile calibracion/seq/$OutputFile.sol > calibracion/seq/$OutputFile.log)    
+				time(./MainSeq scripts_calibracion/${CfgFile} ${DataFile} ${OutputFile}.sol > ${OutputFile}.log)    
 			done
 		done
 	done

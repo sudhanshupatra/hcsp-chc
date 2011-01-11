@@ -90,23 +90,23 @@ do
 	do
 		for indexM in {0..3}
 		do
-			echo "Población ${Poblacion[indexP]}"
+			echo "Poblacion ${Poblacion[indexP]}"
 			echo "Cruzamiento ${Cruzamiento[indexC]}"
-			echo "Mutación ${Mutacion[indexM]}"
+			echo "Mutacion ${Mutacion[indexM]}"
 
 			for i in {0..5}
 			do
-				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
+				CfgFile="chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
 				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 				OutputFile="calibracion/lan4/${data[i]}_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
-				echo "$CfgFile" > Config_LAN4_cal.cfg
-				echo "$DataFile" >> Config_LAN4_cal.cfg
-				echo "$OutputFile.sol" >> Config_LAN4_cal.cfg
+				echo "scripts_calibracion/${CfgFile}" > Config_LAN4_cal.cfg
+				echo "${DataFile}" >> Config_LAN4_cal.cfg
+				echo "${OutputFile}.sol" >> Config_LAN4_cal.cfg
 				
-				time($EXEC Config_LAN4_cal.cfg > $OutputFile.log)
+				time($EXEC Config_LAN4_cal.cfg > ${OutputFile}.log)
 			done
 		done
 	done
