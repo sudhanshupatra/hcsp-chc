@@ -810,12 +810,12 @@ void Solution::markAsInitialized() {
 }
 
 void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
-	if (DEBUG) {
-		cout << "[DEBUG] Solution::initialize" << endl;
-		cout << "pypid: " << mypid << endl;
-		cout << "pnumber: " << pnumber << endl;
-		cout << "solutionIndex: " << pnumber << endl;
-	}
+//	if (DEBUG) {
+//		cout << "[DEBUG] Solution::initialize" << endl;
+//		cout << "pypid: " << mypid << endl;
+//		cout << "pnumber: " << pnumber << endl;
+//		cout << "solutionIndex: " << pnumber << endl;
+//	}
 
 	markAsInitialized();
 
@@ -831,18 +831,42 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		Solution::_makespan_reference = makespan();
 		cout << endl << "MCT reference fitness: " << fitness() << endl;
 	} else {
-		if (solutionIndex == 1) {
-			// Inicialización usando una heurística "pesada": MIN-MIN.
-			// Utilizo MIN-MIN para un único elemento de la población inicial.
+		int cant_heuristicas = 2;
+		int cant_procesos = pnumber;
+		int proceso_actual = mypid;
 
-			initializeMinMin();
-			cout << endl << "Min-Min fitness: " << fitness() << endl;
-			//		} else if (solutionIndex == 2) {
-			//			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
-			//			// Utilizo Sufferage para un único elemento de la población inicial.
-			//
-			//			initializeSufferage();
-			//			cout << endl << "Sufferage fitness: " << fitness() << endl;
+		double heuristicas_por_proceso = ceil(cant_heuristicas / cant_procesos);
+		int offset_heuristica_actual = proceso_actual * heuristicas_por_proceso + solutionIndex - 1;
+
+		cout << "Cant. heuristicas por proceso = " << heuristicas_por_proceso << endl;
+
+		if (solutionIndex <= heuristicas_por_proceso) {
+			if (offset_heuristica_actual % cant_heuristicas == 0) {
+				// Inicialización usando una heurística "pesada": MIN-MIN.
+				// Utilizo MIN-MIN para un único elemento de la población inicial.
+
+				initializeMinMin();
+				cout << endl << "Min-Min fitness: " << fitness() << endl;
+			} else if (offset_heuristica_actual % cant_heuristicas == 1) {
+				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+				// Utilizo Sufferage para un único elemento de la población inicial.
+
+				initializeSufferage();
+				cout << endl << "Sufferage fitness: " << fitness() << endl;
+			} else {
+				if (RANDOM_INIT > rand01()) {
+					// Inicialización aleatoria
+
+					initializeRandom();
+					cout << endl << "Random fitness: " << fitness() << endl;
+				} else {
+					// Inicialización usando una heurística no tan buena y
+					// que permita obtener diferentes soluciones: MCT
+
+					initializeRandomMCT();
+					cout << endl << "Random MCT fitness: " << fitness() << endl;
+				}
+			}
 		} else {
 			if (RANDOM_INIT > rand01()) {
 				// Inicialización aleatoria
