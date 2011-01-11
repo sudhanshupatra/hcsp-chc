@@ -26,7 +26,8 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.8
+#define MUT_MAQ 0.5
+#define MUT_TASK 0.5
 
 // CROSS
 #define CROSS_TASK 0.3
@@ -133,6 +134,7 @@ public:
 	void addTask(const int taskId);
 	void setTask(const int taskId, const int taskPos);
 	void insertTask(const int taskId, const int taskPos);
+	int safeInsertTask(const int taskId, const int taskPos);
 	void removeTask(const int taskPos);
 	void swapTasks(const int taskPos1, const int taskPos2);
 	void emptyTasks();
@@ -144,6 +146,7 @@ public:
 
 	double getMakespan();
 	double getAccumulatedWeightedResponseRatio();
+	double getWeightedResponseRatio(int taskPos);
 
 	int machineId() const;
 
@@ -207,10 +210,8 @@ public:
 
 	void showCustomStatics();
 
-	// =================================
-	// Especificos del problema.
-	// =================================
 	const vector<struct SolutionMachine>& machines() const;
+	vector<struct SolutionMachine>& getMachines(); //Hack feo
 private:
 	const Problem& _pbm;
 	bool _initialized;
