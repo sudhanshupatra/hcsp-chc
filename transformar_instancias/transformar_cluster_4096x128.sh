@@ -1,8 +1,8 @@
 #!/bin/bash
 
 seed="1"
-input_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/4096x128/"
-output_path="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/4096x128.CPrio/"
+input_path="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128/"
+output_path="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/"
 min="1"
 max="10"
 
