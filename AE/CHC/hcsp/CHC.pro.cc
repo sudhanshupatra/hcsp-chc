@@ -650,18 +650,73 @@ Crossover::Crossover() :
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
 	//if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
+	int cant_tasks = sol1.length();
+
+	float distancia_minima;
+	distancia_minima = cant_tasks / CROSSOVER_DISTANCE;
 
 	if (probability[0] <= 0.0) {
-		probability[0] = sol1.length() / CROSSOVER_DISTANCE;
+		probability[0] = distancia_minima;
 	}
 
-	int dh = sol1.distanceTo(sol2);
+	int distancia = sol1.distanceTo(sol2);
 
-	//if ((dh / 2) > probability[0]) {
-	if (dh > probability[0]) {
-		for (int i = 0; i < sol1.length(); i++) {
+	if (distancia > distancia_minima) {
+		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
-				sol1.swapTasks(sol2, i);
+				bool modificado;
+				int taskPosSol1, machineIdSol1;
+				int taskPosSol2, machineIdSol2;
+
+				modificado = false;
+
+				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
+				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
+
+				if ((machineIdSol1 != machineIdSol2)||(taskPosSol1 != taskPosSol2)) {
+					if (rand01() <= 0.5) {
+						// Intento mejorar metrica de makespan en la solución
+						if (machineIdSol1 != machineIdSol2) {
+							if (sol1.getMachines()[machineIdSol1].getMakespan() <
+									sol2.getMachines()[machineIdSol2].getMakespan()) {
+								// Sol1 es mejor que Sol2
+								sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
+								sol2.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol1);
+							} else {
+								sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
+								sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+							}
+
+							modificado = true;
+						}
+					}
+
+					if ((!modificado)&&(rand01() <= 0.5)) {
+						// Intento mejorar metrica de wrr en la solución
+						if (sol1.getMachines()[machineIdSol1].getWeightedResponseRatio(taskPosSol1) <
+								sol2.getMachines()[machineIdSol2].getWeightedResponseRatio(taskPosSol2)) {
+							// Sol1 es mejor que Sol2
+							sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
+							sol2.getMachines()[machineIdSol1].safeInsertTask(taskId, taskPosSol1);
+						} else {
+							sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
+							sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+						}
+
+						modificado = true;
+					}
+
+
+					if (!modificado) {
+						if (rand01() <= 0.5) {
+							sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
+							sol2.getMachines()[machineIdSol1].safeInsertTask(taskId, taskPosSol1);
+						} else {
+							sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
+							sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+						}
+					}
+				}
 			}
 		}
 	}
