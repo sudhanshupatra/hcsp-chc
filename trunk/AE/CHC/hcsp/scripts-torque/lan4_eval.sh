@@ -94,51 +94,58 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-#for i in {0..23}
-for i in {0..0}
-do
-	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN4.cfg
-	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
-	
-	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
-done
-
 for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="evaluacion/seq_cprio/Braun_et_al.CPrio/${data[i]}"
+	OutputFile="evaluacion/lan4/Braun_et_al.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 		
-	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
-	
 	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN4_eval.cfg
-	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4_eval.cfg
+	echo "$DataFile" >> Config_LAN4_eval.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
 	
-	time($EXEC Config_LAN4_eval.cfg > lan4/${data[i]}_LAN4.log) 
+	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
 done
 
 for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
-	OutputFile="evaluacion/seq_cprio/1024x32.CPrio/${data[i]}"
+	OutputFile="evaluacion/lan4/1024x32.CPrio/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
-	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
+	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
+	echo "$DataFile" >> Config_LAN4_eval.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
+	
+	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
 done
 
 for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
-	OutputFile="evaluacion/seq_cprio/2048x64.CPrio/${data[i]}"
+	OutputFile="evaluacion/lan4/2048x64.CPrio/${data[i]}"
 	
-	echo "Datos $DataFile"
+	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
+	echo "$DataFile" >> Config_LAN4_eval.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
 	
-	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
+	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
+done
+
+for i in {6..29}
+do
+	CfgFile="scripts_evaluacion/chc.cfg"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/${data[i]}"
+	OutputFile="evaluacion/lan4/4096x128.CPrio/${data[i]}"
+	
+	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
+	echo "$DataFile" >> Config_LAN4_eval.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
+	
+	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
 done
