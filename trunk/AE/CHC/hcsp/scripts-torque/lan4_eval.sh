@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq_cprio_eval
+#PBS -N ae_lan4_eval
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=30:00:00
+#PBS -l nodes=4:cpu8:ppn=4,walltime=30:00:00
 
 # Cola
 #PBS -q publica
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/seq_cprio/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/seq_cprio/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
 
 #PBS -V
 
@@ -59,6 +59,9 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+#EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
+
 data[0]="u_c_hihi.0"
 data[1]="u_c_lolo.0"
 data[2]="u_s_hihi.0"
@@ -91,6 +94,16 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
+#for i in {0..23}
+for i in {0..0}
+do
+	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN4.cfg
+	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
+	
+	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
+done
+
 for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
@@ -100,6 +113,12 @@ do
 	echo "Datos $DataFile"
 		
 	time(../MainSeq $CfgFile $DataFile evaluacion/seq_cprio/$OutputFile.sol > evaluacion/seq_cprio/$OutputFile.log)    
+	
+	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}" >> Config_LAN4_eval.cfg
+	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4_eval.cfg
+	
+	time($EXEC Config_LAN4_eval.cfg > lan4/${data[i]}_LAN4.log) 
 done
 
 for i in {6..29}

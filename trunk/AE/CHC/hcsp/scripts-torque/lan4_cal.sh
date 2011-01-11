@@ -70,7 +70,6 @@ Poblacion[0]=5
 Poblacion[1]=10
 Poblacion[2]=15
 Poblacion[3]=20
-Poblacion[4]=30
 
 Cruzamiento[0]=0.7
 Cruzamiento[1]=0.8
@@ -85,7 +84,7 @@ Mutacion[3]=1.0
 #EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
-for indexP in {0..4}
+for indexP in {0..3}
 do
 	for indexC in {0..3}
 	do
@@ -98,16 +97,16 @@ do
 			for i in {0..5}
 			do
 				CfgFile="scripts_calibracion/chc_${Poblacion[indexP]}_${Cruzamiento[indexC]}_${Mutacion[indexM]}.cfg"
-				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.mod/${data[i]}"
+				DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 				OutputFile="calibracion/lan4/${data[i]}_$CfgFile"
 				
 				echo "Datos $DataFile"
 				
-				echo "$CfgFile" > Config_LAN4.cfg
-				echo "$DataFile" >> Config_LAN4.cfg
-				echo "calibracion/lan4/$OutputFile.sol" >> Config_LAN4.cfg
+				echo "$CfgFile" > Config_LAN4_cal.cfg
+				echo "$DataFile" >> Config_LAN4_cal.cfg
+				echo "$OutputFile.sol" >> Config_LAN4_cal.cfg
 				
-				time($EXEC Config_LAN4.cfg > calibracion/lan4/$OutputFile.log)    
+				time($EXEC Config_LAN4_cal.cfg > $OutputFile.log)
 			done
 		done
 	done
