@@ -10,7 +10,6 @@ Poblacion[0]=5
 Poblacion[1]=10
 Poblacion[2]=15
 Poblacion[3]=20
-Poblacion[4]=30
 
 Cruzamiento[0]=0.7
 Cruzamiento[1]=0.8
@@ -22,7 +21,7 @@ Mutacion[1]=0.7
 Mutacion[2]=0.9
 Mutacion[3]=1.0
 
-for indexP in {0..4}
+for indexP in {0..3}
 do
 	for indexC in {0..3}
 	do
@@ -43,17 +42,17 @@ do
 			echo "${Poblacion[indexP]}			// number of individuals" >> $Filename
 			echo "0				// display state ?" >> $Filename
 			echo "0				// seed, 0 = aleatorio" >> $Filename
-			echo "1.0 1.0				// peso makespan, peso wqt" >> $Filename
+			echo "1.0 1.0				// peso makespan, peso wrr" >> $Filename
 			echo "Selection-Parameters	// selections to apply" >> $Filename
 			echo "0.9 1 ${Mutacion[indexM]}			// selection parameter, diverge operator & its probability" >> $Filename
 			echo "Intra-Operators		// operators to apply in the population" >> $Filename
 			echo "0 ${Cruzamiento[indexC]}			// crossover & its probability" >> $Filename
 			echo "Inter-Operators  		// operators to apply between this population and anothers" >> $Filename
-			echo "0 50 5 1 3 1 5		// operator number, operator rate, number of individuals, selection of individual to send and remplace" >> $Filename
+			echo "0 50 3 1 2 1 3		// operator number, operator rate, number of individuals, selection of individual to send and remplace" >> $Filename
 			echo "LAN-configuration" >> $Filename
-			echo "1001			// refresh global state" >> $Filename
+			echo "51			// refresh global state" >> $Filename
 			echo "0				// 0: running in asynchronized mode / 1: running in synchronized mode" >> $Filename
-			echo "1				// interval of generations to check solutions from other populations" >> $Filename
+			echo "10				// interval of generations to check solutions from other populations" >> $Filename
 		done
 	done	
 done	
