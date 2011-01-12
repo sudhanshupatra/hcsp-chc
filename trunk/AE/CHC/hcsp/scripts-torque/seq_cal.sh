@@ -99,7 +99,7 @@ do
 				
 				echo "Datos ${DataFile}"
 				
-				time(./MainSeq scripts_calibracion/${CfgFile} ${DataFile} ${OutputFile}.sol > ${OutputFile}.log)    
+				time(/home/siturria/AE/trunk/AE/CHC/hcsp/MainSeq scripts_calibracion/${CfgFile} ${DataFile} ${OutputFile}.sol > ${OutputFile}.log)    
 			done
 		done
 	done
