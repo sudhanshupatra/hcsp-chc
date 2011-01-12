@@ -81,8 +81,8 @@ Mutacion[1]=0.7
 Mutacion[2]=0.9
 Mutacion[3]=1.0
 
-#EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
-EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+#EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 for indexP in {0..3}
 do
