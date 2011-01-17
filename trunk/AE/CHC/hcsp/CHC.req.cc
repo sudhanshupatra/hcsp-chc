@@ -1346,10 +1346,11 @@ void Solution::mutate() {
 							// la máquina en la que mejor puede ejecutarse.
 
 							// Obtengo la máquina que que mejor puede ejecutar la tarea.
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(selectedTaskPos);
+
 							int bestMachineId;
-							bestMachineId = _pbm.getBestMachineForTaskId(
-									_machines[machineId].getTask(
-											selectedTaskPos));
+							bestMachineId = _pbm.getBestMachineForTaskId(selectedTaskId);
 
 							if (bestMachineId != machineId) {
 								if (_machines[bestMachineId].countTasks() > 0) {
@@ -1364,23 +1365,27 @@ void Solution::mutate() {
 									swapTasks(machineId, selectedTaskPos,
 											bestMachineId,
 											minCostTaskPosOnMachine);
+								} else {
+									_machines[bestMachineId].addTask(selectedTaskId);
+									_machines[machineId].removeTask(selectedTaskPos);
 								}
 							}
 						}
 
 						if (neighbourhood == 1) {
-							// Se selecciona una tarea T según rueda de ruleta por su COSTO y se
-							// intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+							// Se intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
 							// más eficientemente en la máquina actual.
 
 							// Obtengo la máquina que aporta un menor costo al total de la solución.
 							int minCostMachineId;
 							minCostMachineId = getMinCostMachineId();
 
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(selectedTaskPos);
+
 							if (_machines[minCostMachineId].countTasks() > 0) {
 								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 								// con menor costo de ejecución en la máquina sorteada.
-
 								int minCostTaskPosOnMachine;
 								minCostTaskPosOnMachine
 										= getMinDestinationCostTaskPosByMachine(
@@ -1390,12 +1395,15 @@ void Solution::mutate() {
 								swapTasks(machineId, selectedTaskPos,
 										minCostMachineId,
 										minCostTaskPosOnMachine);
+							} else {
+								_machines[minCostMachineId].addTask(selectedTaskId);
+								_machines[machineId].removeTask(selectedTaskPos);
 							}
 						}
 
 						if (neighbourhood == 2) {
-							// Se selecciona una tarea T según su función de PRIORIDAD y se
-							// adelanta si lugar en la cola de ejecución.
+							// Se adelanta la posición en la cola de la tarea siempre y cuando la tarea
+							// que le preceda tenga menor prioridad.
 							for (int taskPos = selectedTaskPos; taskPos >= 1; taskPos--) {
 								int taskId;
 								taskId = _machines[machineId].getTask(taskPos);
