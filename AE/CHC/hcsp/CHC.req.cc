@@ -604,13 +604,8 @@ void Solution::initializeMCT(int startTask, int direction) {
 			double makespan;
 			makespan = (machineMakespan[machineId]
 					+ _pbm.expectedTimeToCompute(currentTask, machineId));
-			double awrr;
-			awrr = (machineMakespan[machineId] + _pbm.expectedTimeToCompute(
-					currentTask, machineId)) * (_pbm.taskPriority(currentTask)
-					/ 5);
 			double auxFitness;
-			auxFitness = (_pbm.getAWRRWeight()) * awrr
-					+ (_pbm.getMakespanWeight() * makespan);
+			auxFitness = _pbm.getMakespanWeight() * makespan;
 
 			if (auxFitness < minFitness) {
 				minFitness = auxFitness;
