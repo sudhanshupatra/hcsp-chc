@@ -1419,7 +1419,7 @@ void Solution::mutate() {
 								anteriorTaskPriority = _pbm.taskPriority(
 										anteriorTaskId);
 
-								if (taskPriority < anteriorTaskPriority) {
+								if (taskPriority > anteriorTaskPriority) {
 									_machines[machineId].swapTasks(taskPos,
 											taskPos - 1);
 								}
@@ -1455,9 +1455,15 @@ void Solution::mutate() {
 									anteriorTaskPriority = _pbm.taskPriority(
 											anteriorTaskId);
 
-									if (taskPriority < anteriorTaskPriority) {
+									if (taskPriority > anteriorTaskPriority) {
 										_machines[minAWRRMachineId].swapTasks(
 												taskPos, taskPos - 1);
+									} if (taskPriority == anteriorTaskPriority) {
+										if (_pbm.expectedTimeToCompute(taskId, minAWRRMachineId)
+												< _pbm.expectedTimeToCompute(anteriorTaskId, minAWRRMachineId)) {
+											_machines[minAWRRMachineId].swapTasks(
+														taskPos, taskPos - 1);
+										}
 									}
 								}
 							}
