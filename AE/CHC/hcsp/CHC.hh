@@ -146,7 +146,7 @@ public:
 
 	double getMakespan();
 	double getAccumulatedWeightedResponseRatio();
-	double getWeightedResponseRatio(int taskPos);
+	double getWeightedResponseRatio(const int taskPos) const;
 
 	int machineId() const;
 
@@ -227,9 +227,12 @@ private:
 	void initializeMCT(int startTask, int direction);
 	void initializeStaticMCT();
 	void initializeRandomMCT();
+	void initializeMinWRR0();
 	void initializeMinWRR4();
 	void initializeMinWRR5();
-	void initializeMinWRR6();
+	void initializeMinWRR60();
+	void initializeMinWRR61();
+	void initializeMinWRR62();
 };
 
 // UserStatistics ----------------------------------------------------------------------------

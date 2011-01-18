@@ -307,12 +307,12 @@ double SolutionMachine::getAccumulatedWeightedResponseRatio() {
 	return _awrr;
 }
 
-double SolutionMachine::getWeightedResponseRatio(int taskPos) {
-	double wait_time = 0.0;
+double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
+	float wait_time = 0.0;
 
 	for (int currentTaskPos = 0; currentTaskPos < taskPos; currentTaskPos++) {
 		int currentTaskId;
-		currentTaskId = getTask(taskPos);
+		currentTaskId = getTask(currentTaskPos);
 
 		wait_time += _pbm.expectedTimeToCompute(currentTaskId, machineId());
 	}
@@ -320,16 +320,20 @@ double SolutionMachine::getWeightedResponseRatio(int taskPos) {
 	int taskId;
 	taskId = getTask(taskPos);
 
-	double compute_cost;
+	float compute_cost;
 	compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
 
-	double rr;
-	rr = (wait_time + compute_cost) / compute_cost;
+	if (wait_time == 0.0) {
+		return (double)_pbm.taskPriority(taskId);
+	} else {
+		float rr;
+		rr = (wait_time + compute_cost) / compute_cost;
 
-	double wrr;
-	wrr = (_pbm.taskPriority(taskId) * rr);
+		float wrr;
+		wrr = (_pbm.taskPriority(taskId) * rr);
 
-	return wrr;
+		return wrr;
+	}
 }
 
 void SolutionMachine::refresh() {
@@ -337,6 +341,8 @@ void SolutionMachine::refresh() {
 	if (_dirty) {
 		double partial_makespan = 0.0;
 		double partial_awrr = 0.0;
+
+//		cout << endl << "Machine: " << machineId() << endl;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
@@ -355,8 +361,12 @@ void SolutionMachine::refresh() {
 				priority_cost = (_pbm.taskPriority(taskId) * rr);
 			}
 
+//			cout << "  TaskPos: " << taskPos << ", TaskId: " << taskId << ", ETC: " << compute_cost <<
+//					", Wait: " << partial_makespan << ", WRR: " << priority_cost << endl;
+
 			partial_makespan += compute_cost;
 			partial_awrr += priority_cost;
+
 		}
 
 		_awrr = partial_awrr;
@@ -414,8 +424,8 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
 				os << "  taskPos: " << i;
 				os << " taskId: " << sol.machines()[machineId].getTask(i);
-				os << " ETC: " << sol.pbm().expectedTimeToCompute(
-						sol.machines()[machineId].getTask(i), machineId);
+				fprintf(stdout, " ETC: %f ", sol.pbm().expectedTimeToCompute(sol.machines()[machineId].getTask(i), machineId));
+				fprintf(stdout, " WRR: %f ", sol.machines()[machineId].getWeightedResponseRatio(i));
 				os << " priority: " << sol.pbm().taskPriority(
 						sol.machines()[machineId].getTask(i));
 				os << endl;
@@ -691,66 +701,67 @@ void Solution::initializeMinWRR5() {
 
 	int unmappedTasksCount = _pbm.taskCount();
 
-	float min_warr;
-	float min_warr_for_task;
-	float min_ct;
-	float min_ct_for_task;
-	int best_machine;
-	int best_machine_for_task;
-	int best_task;
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
 
 	while (unmappedTasksCount > 0) {
-		best_task = -1;
-		best_machine = -1;
-		min_ct = FLT_MAX;
-		min_warr = FLT_MAX;
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
 
 		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
-			min_warr_for_task = FLT_MAX;
-			min_ct_for_task = FLT_MAX;
-			best_machine_for_task = -1;
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
 
 			if (taskIsUnmapped[taskId]) {
-				float ct = 0.0;
+				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-					ct = machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId);
+					first_aux = machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId);
 
-					if (ct <= min_ct_for_task) {
-						min_ct_for_task = ct;
-						best_machine_for_task = machineId;
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
 					}
 				}
 
-				if (machineMakespan[best_machine_for_task] == 0) {
-					min_warr_for_task = _pbm.expectedTimeToCompute(taskId, best_machine_for_task) / _pbm.taskPriority(taskId);
+				if (machineMakespan[first_best_machineId] > 0) {
+					float rr;
+					rr = (machineMakespan[first_best_machineId] + _pbm.expectedTimeToCompute(taskId, first_best_machineId))
+							/ _pbm.expectedTimeToCompute(taskId, first_best_machineId);
+					second_aux = rr / _pbm.taskPriority(taskId);
 				} else {
-					double rr;
-					rr = (machineMakespan[best_machine_for_task] + _pbm.expectedTimeToCompute(taskId, best_machine_for_task))
-								/ _pbm.expectedTimeToCompute(taskId, best_machine_for_task);
-					min_warr_for_task = _pbm.taskPriority(taskId) * rr;
+					float aux;
+					aux = _pbm.expectedTimeToCompute(taskId, first_best_machineId) / _pbm.taskPriority(taskId);
+					second_aux = aux / aux + 1;
 				}
 
-				if (min_warr_for_task <= min_warr) {
-					min_ct = min_ct_for_task;
-					min_warr = min_warr_for_task;
+				if (second_aux <= second_min) {
+					second_min = second_aux;
 
-					best_task = taskId;
-					best_machine = best_machine_for_task;
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
 				}
 			}
 		}
 
 		unmappedTasksCount--;
-		taskIsUnmapped[best_task] = false;
-		machineMakespan[best_machine] += _pbm.expectedTimeToCompute(
-				best_task, best_machine);
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
 
-		_machines[best_machine].addTask(best_task);
+		_machines[second_best_machineId].addTask(second_best_taskId);
 	}
 }
 
-void Solution::initializeMinWRR6() {
+void Solution::initializeMinWRR60() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
@@ -767,62 +778,276 @@ void Solution::initializeMinWRR6() {
 
 	int unmappedTasksCount = _pbm.taskCount();
 
-	float min_warr;
-	float min_warr_task;
-	float min_ct;
-	float min_ct_task;
-	int best_machine;
-	int best_machine_task;
-	int best_task;
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
 
 	while (unmappedTasksCount > 0) {
-		best_task = -1;
-		best_machine = -1;
-		min_ct = FLT_MAX;
-		min_warr = FLT_MAX;
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
 
 		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
-			min_warr_task = FLT_MAX;
-			min_ct_task = FLT_MAX;
-			best_machine_task = -1;
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
 
 			if (taskIsUnmapped[taskId]) {
-				float warr = 0.0;
+				first_aux = 0.0;
+
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					if (machineMakespan[machineId] > 0) {
+						first_aux = (machineMakespan[machineId] / _pbm.taskPriority(taskId)) * (_machines[machineId].countTasks() + 1);
+					} else {
+						first_aux = 1 / _pbm.taskPriority(taskId);
+					}
+
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
+					}
+				}
+
+				second_aux = (machineMakespan[first_best_machineId] + _pbm.expectedTimeToCompute(taskId, first_best_machineId)) /_pbm.taskPriority(taskId);
+
+				if (second_aux <= second_min) {
+					second_min = second_aux;
+
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
+
+		_machines[second_best_machineId].addTask(second_best_taskId);
+	}
+}
+
+void Solution::initializeMinWRR61() {
+	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount = _pbm.taskCount();
+
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
+
+	while (unmappedTasksCount > 0) {
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
+
+		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
+
+			if (taskIsUnmapped[taskId]) {
+				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if (machineMakespan[machineId] > 0) {
 						float rr;
 						rr = (machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
 								/ _pbm.expectedTimeToCompute(taskId, machineId);
-						warr = _pbm.taskPriority(taskId) * rr;
+						first_aux = rr / _pbm.taskPriority(taskId);
 					} else {
-						warr = _pbm.expectedTimeToCompute(taskId, machineId) / _pbm.taskPriority(taskId);
+						first_aux = 1 / _pbm.taskPriority(taskId);
 					}
 
-					if (warr < min_warr_task) {
-						min_warr_task = warr;
-						best_machine_task = machineId;
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
 					}
 				}
 
-				min_ct_task = machineMakespan[best_machine_task] * _pbm.taskPriority(taskId);
+				second_aux = machineMakespan[first_best_machineId] / _pbm.taskPriority(taskId);
 
-				if (min_ct_task <= min_ct) {
-					min_ct = min_ct_task;
-					min_warr = min_warr_task;
+				if (second_aux <= second_min) {
+					second_min = second_aux;
 
-					best_task = taskId;
-					best_machine = best_machine_task;
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
 				}
 			}
 		}
 
 		unmappedTasksCount--;
-		taskIsUnmapped[best_task] = false;
-		machineMakespan[best_machine] += _pbm.expectedTimeToCompute(
-				best_task, best_machine);
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
 
-		_machines[best_machine].addTask(best_task);
+		_machines[second_best_machineId].addTask(second_best_taskId);
+	}
+}
+
+void Solution::initializeMinWRR62() {
+	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount = _pbm.taskCount();
+
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
+
+	while (unmappedTasksCount > 0) {
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
+
+		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
+
+			if (taskIsUnmapped[taskId]) {
+				first_aux = 0.0;
+
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					if (machineMakespan[machineId] > 0) {
+						first_aux = machineMakespan[machineId] / _pbm.taskPriority(taskId);
+					} else {
+						first_aux = 1 / _pbm.taskPriority(taskId);
+					}
+
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
+					}
+				}
+
+				second_aux = _pbm.expectedTimeToCompute(taskId, first_best_machineId) / _pbm.taskPriority(taskId);
+
+				if (second_aux <= second_min) {
+					second_min = second_aux;
+
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
+
+		_machines[second_best_machineId].addTask(second_best_taskId);
+	}
+}
+
+void Solution::initializeMinWRR0() {
+	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount = _pbm.taskCount();
+
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
+
+	while (unmappedTasksCount > 0) {
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
+
+		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
+
+			if (taskIsUnmapped[taskId]) {
+				first_aux = 0.0;
+
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					first_aux = machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId);
+					if (first_aux > 0) {
+						first_aux += (machineMakespan[machineId] / (_pbm.taskPriority(taskId) * (_machines[machineId].countTasks()+1)));
+					}
+
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
+					}
+				}
+
+				second_aux = first_min;
+
+				if (second_aux <= second_min) {
+					second_min = second_aux;
+
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
+
+		_machines[second_best_machineId].addTask(second_best_taskId);
 	}
 }
 
@@ -843,62 +1068,63 @@ void Solution::initializeMinWRR4() {
 
 	int unmappedTasksCount = _pbm.taskCount();
 
-	float min_warr;
-	float min_warr_task;
-	float min_ct;
-	float min_ct_task;
-	int best_machine;
-	int best_machine_task;
-	int best_task;
+	float first_min;
+	float first_aux;
+	int first_best_machineId;
+
+	float second_min;
+	float second_aux;
+	int second_best_machineId;
+	int second_best_taskId;
 
 	while (unmappedTasksCount > 0) {
-		best_task = -1;
-		best_machine = -1;
-		min_ct = FLT_MAX;
-		min_warr = FLT_MAX;
+		second_best_taskId = -1;
+		second_best_machineId = -1;
+		second_min = FLT_MAX;
 
 		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
-			min_warr_task = FLT_MAX;
-			min_ct_task = FLT_MAX;
-			best_machine_task = -1;
+			first_min = FLT_MAX;
+			second_aux = FLT_MAX;
+			first_best_machineId = -1;
 
 			if (taskIsUnmapped[taskId]) {
-				float warr = 0.0;
+				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if (machineMakespan[machineId] > 0) {
 						float rr;
 						rr = (machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId))
 								/ _pbm.expectedTimeToCompute(taskId, machineId);
-						warr = _pbm.taskPriority(taskId) * rr;
+						first_aux = rr / _pbm.taskPriority(taskId);
 					} else {
-						warr = _pbm.expectedTimeToCompute(taskId, machineId) / _pbm.taskPriority(taskId);
+						float aux;
+						aux = _pbm.expectedTimeToCompute(taskId, machineId) / _pbm.taskPriority(taskId);
+						first_aux = aux / aux + 1;
 					}
 
-					if (warr < min_warr_task) {
-						min_warr_task = warr;
-						best_machine_task = machineId;
+					if (first_aux < first_min) {
+						first_min = first_aux;
+						first_best_machineId = machineId;
 					}
 				}
 
-				min_ct_task = machineMakespan[best_machine_task] + _pbm.expectedTimeToCompute(taskId, best_machine_task);
+				second_aux = machineMakespan[first_best_machineId] + _pbm.expectedTimeToCompute(taskId, first_best_machineId);
 
-				if (min_ct_task <= min_ct) {
-					min_ct = min_ct_task;
-					min_warr = min_warr_task;
+				if (second_aux <= second_min) {
+					second_min = second_aux;
 
-					best_task = taskId;
-					best_machine = best_machine_task;
+					second_best_taskId = taskId;
+					second_best_machineId = first_best_machineId;
 				}
 			}
 		}
 
 		unmappedTasksCount--;
-		taskIsUnmapped[best_task] = false;
-		machineMakespan[best_machine] += _pbm.expectedTimeToCompute(
-				best_task, best_machine);
+		taskIsUnmapped[second_best_taskId] = false;
+		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+				second_best_taskId, second_best_machineId);
 
-		_machines[best_machine].addTask(best_task);
+		_machines[second_best_machineId].addTask(second_best_taskId);
 	}
 }
 
@@ -1061,7 +1287,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			cout << endl << "             makespan: " << makespan() << endl;
 		}
 	} else {
-		int cant_heuristicas = 5;
+		int cant_heuristicas = 8;
 		int cant_procesos = pnumber;
 		int proceso_actual = mypid;
 
@@ -1107,9 +1333,30 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << endl << "  makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual % cant_heuristicas == 4) {
-				initializeMinWRR6();
+				initializeMinWRR60();
 				if (DEBUG) {
-					cout << endl << "MinMinWRR6: " << fitness() << endl;
+					cout << endl << "MinMinWRR60: " << fitness() << endl;
+					cout << endl << "       wrr: " << accumulatedWeightedResponseRatio();
+					cout << endl << "  makespan: " << makespan() << endl;
+				}
+			} else if (offset_heuristica_actual % cant_heuristicas == 5) {
+				initializeMinWRR61();
+				if (DEBUG) {
+					cout << endl << "MinMinWRR61: " << fitness() << endl;
+					cout << endl << "       wrr: " << accumulatedWeightedResponseRatio();
+					cout << endl << "  makespan: " << makespan() << endl;
+				}
+			} else if (offset_heuristica_actual % cant_heuristicas == 6) {
+				initializeMinWRR62();
+				if (DEBUG) {
+					cout << endl << "MinMinWRR62: " << fitness() << endl;
+					cout << endl << "       wrr: " << accumulatedWeightedResponseRatio();
+					cout << endl << "  makespan: " << makespan() << endl;
+				}
+			} else if (offset_heuristica_actual % cant_heuristicas == 7) {
+				initializeMinWRR0();
+				if (DEBUG) {
+					cout << endl << "MinMinWRR0: " << fitness() << endl;
 					cout << endl << "       wrr: " << accumulatedWeightedResponseRatio();
 					cout << endl << "  makespan: " << makespan() << endl;
 				}
