@@ -227,6 +227,9 @@ private:
 	void initializeMCT(int startTask, int direction);
 	void initializeStaticMCT();
 	void initializeRandomMCT();
+	void initializeMinWRR4();
+	void initializeMinWRR5();
+	void initializeMinWRR6();
 };
 
 // UserStatistics ----------------------------------------------------------------------------
