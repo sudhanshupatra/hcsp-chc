@@ -1288,20 +1288,20 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			cout << ", Makespan: " << makespan() << endl;
 		}
 	} else {
-		int max_heuristicas_per_proc = 2;
 		int cant_heuristicas = 8;
 		int cant_procesos = pnumber;
 		int proceso_actual = mypid;
 
-		double heuristicas_por_proceso = ceil(cant_heuristicas / cant_procesos);
+		int heuristicas_por_proceso = int(ceil(cant_heuristicas / cant_procesos));
+		if (heuristicas_por_proceso < 1) heuristicas_por_proceso = 1;
 		if (heuristicas_por_proceso > 2) heuristicas_por_proceso = 2;
 
-		int offset_heuristica_actual = proceso_actual * heuristicas_por_proceso + solutionIndex - 1;
+		int offset_heuristica_actual = (proceso_actual * heuristicas_por_proceso) + solutionIndex - 1;
 
 		cout << "Cant. heuristicas por proceso = " << heuristicas_por_proceso << endl;
 
 		if (solutionIndex <= heuristicas_por_proceso) {
-			if (offset_heuristica_actual % cant_heuristicas == 0) {
+			if (offset_heuristica_actual == 0) {
 				// Inicialización usando una heurística "pesada": MIN-MIN.
 				// Utilizo MIN-MIN para un único elemento de la población inicial.
 
@@ -1312,7 +1312,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 1) {
+			} else if (offset_heuristica_actual == 1) {
 				initializeMinWRR0();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1320,7 +1320,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 2) {
+			} else if (offset_heuristica_actual == 2) {
 				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 				// Utilizo Sufferage para un único elemento de la población inicial.
 
@@ -1331,7 +1331,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 3) {
+			} else if (offset_heuristica_actual == 3) {
 				initializeMinWRR4();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1339,7 +1339,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 4) {
+			} else if (offset_heuristica_actual == 4) {
 				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 				initializeMinWRR5();
 				if (DEBUG) {
@@ -1348,7 +1348,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 5) {
+			} else if (offset_heuristica_actual == 5) {
 				initializeMinWRR60();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1356,7 +1356,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 6) {
+			} else if (offset_heuristica_actual == 6) {
 				initializeMinWRR61();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1364,7 +1364,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual % cant_heuristicas == 7) {
+			} else if (offset_heuristica_actual == 7) {
 				initializeMinWRR62();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
