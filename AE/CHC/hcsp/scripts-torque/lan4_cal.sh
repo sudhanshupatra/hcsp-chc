@@ -66,29 +66,26 @@ data[3]="u_s_lohi.0"
 data[4]="u_i_hilo.0"
 data[5]="u_i_lohi.0"
 
-Poblacion[0]=5
-Poblacion[1]=10
-Poblacion[2]=15
-Poblacion[3]=20
+Poblacion[0]=10
+Poblacion[1]=15
+Poblacion[2]=20
 
-Cruzamiento[0]=0.7
-Cruzamiento[1]=0.8
-Cruzamiento[2]=0.9
-Cruzamiento[3]=1.0
+Cruzamiento[0]=0.8
+Cruzamiento[1]=0.9
+Cruzamiento[2]=1.0
 
-Mutacion[0]=0.5
-Mutacion[1]=0.7
-Mutacion[2]=0.9
-Mutacion[3]=1.0
+Mutacion[0]=0.7
+Mutacion[1]=0.9
+Mutacion[2]=1.0
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
-#EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
+##EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="mpiexec -mpich-p4-no-shmem /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
-for indexP in {0..3}
+for indexP in {0..2}
 do
-	for indexC in {0..3}
+	for indexC in {0..2}
 	do
-		for indexM in {0..3}
+		for indexM in {0..2}
 		do
 			echo "Poblacion ${Poblacion[indexP]}"
 			echo "Cruzamiento ${Cruzamiento[indexC]}"
