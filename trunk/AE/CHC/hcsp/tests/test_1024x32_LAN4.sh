@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones
+
 #EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 EXEC="mpiexec -mpich-p4-no-shmem /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
@@ -31,8 +33,8 @@ data[23]="B.u_s_lolo"
 #for i in {0..23}
 for i in {0..0}
 do
-	echo "CHC_LAN4.cfg" > Config_LAN4.cfg
-	echo "../../ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> Config_LAN4.cfg
-	echo "lan4/${data[i]}_LAN4.sol" >> Config_LAN4.cfg
-	time($EXEC Config_LAN4.cfg > lan4/${data[i]}_LAN4.log)        
+	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/CHC_LAN4.cfg" > /home/siturria/AE/trunk/AE/CHC/hcsp/tests/Config_LAN4_Test.cfg
+	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}" >> /home/siturria/AE/trunk/AE/CHC/hcsp/tests/Config_LAN4_Test.cfg
+	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/${data[i]}_LAN4.sol" >> /home/siturria/AE/trunk/AE/CHC/hcsp/tests/Config_LAN4_Test.cfg
+	time($EXEC /home/siturria/AE/trunk/AE/CHC/hcsp/tests/Config_LAN4_Test.cfg > /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/lan4/${data[i]}_LAN4.log)        
 done
