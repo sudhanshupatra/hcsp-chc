@@ -52,9 +52,9 @@ class Transformar2CSV(object):
                         dataLine = itemFile.readline()
                         splittedDataLine = dataLine.split('\t')
                         
-                        bestValue = splittedDataLine[1]
-                        bestValueIterationFound = splittedDataLine[9]
-                        bestValueTimeFound = splittedDataLine[12]
+                        bestValue = float(splittedDataLine[1])
+                        bestValueIterationFound = int(splittedDataLine[9])
+                        bestValueTimeFound = float(splittedDataLine[12])
                         
                         csv.write(';%s;%s;%s\n' % (bestValue, bestValueIterationFound, bestValueTimeFound))
                                 
