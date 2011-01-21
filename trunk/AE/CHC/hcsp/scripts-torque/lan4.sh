@@ -4,7 +4,7 @@
 #PBS -N ae_lan4
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=00:20:00
+#PBS -l nodes=3,walltime=00:20:00
 
 # Cola
 #PBS -q publica
@@ -59,8 +59,8 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
-#EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
+#EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="mpiexec -mpich-p4-no-shmem /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
 data[0]="A.u_c_hihi"
 data[1]="A.u_c_hilo"
