@@ -45,7 +45,7 @@ class TransformarEval2CSV(object):
 
                     csv.write('%s;;;\n' % relativeItem)
                     
-                    for omit in range(5): itemFile.readline()
+                    for omit in range(6): itemFile.readline()
                     
                     for data in range(20):
                         dataLine = itemFile.readline()
