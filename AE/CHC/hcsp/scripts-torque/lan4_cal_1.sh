@@ -4,7 +4,7 @@
 #PBS -N ae_lan4_cal
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=250:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=150:00:00
 
 # Cola
 #PBS -q publica
@@ -81,7 +81,7 @@ Mutacion[2]=1.0
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 #EXEC="mpiexec -mpich-p4-no-shmem /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
-for indexP in {0..2}
+for indexP in {0..0}
 do
 	for indexC in {0..2}
 	do
