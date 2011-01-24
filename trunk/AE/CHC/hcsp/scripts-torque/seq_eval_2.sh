@@ -93,9 +93,9 @@ data[29]="B.u_s_lolo"
 
 for i in {6..29}
 do
-	CfgFile="scripts_evaluacion/chc.cfg"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
-	OutputFile="evaluacion/seq/1024x32.CPrio/${data[i]}"
+	OutputFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/seq/1024x32/${data[i]}"
 	
 	echo "Datos $DataFile"
 	
