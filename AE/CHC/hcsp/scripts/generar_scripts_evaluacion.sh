@@ -6,8 +6,8 @@ if [ $? != 0 ]; then
 	exit $?
 fi
 
-Poblacion="15"
-Cruzamiento="0.8"
+Poblacion="10"
+Cruzamiento="1.0"
 Mutacion="0.9"
 Pesos="1.0 1.0"
 
