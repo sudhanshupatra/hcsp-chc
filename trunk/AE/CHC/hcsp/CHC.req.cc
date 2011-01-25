@@ -1312,6 +1312,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
+
+				showCustomStatics();
 			} else if (offset_heuristica_actual == 1) {
 				initializeMinWRR0();
 				if (DEBUG) {
@@ -1423,6 +1425,108 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 	}
 }
 
+//void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
+//	markAsInitialized();
+//
+//	if (solutionIndex == 0) {
+//		// Inicialización usando una versión determinista de la heurística MCT.
+//		// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
+//		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
+//
+//		initializeStaticMCT();
+//
+//		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
+//		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
+//		Solution::_makespan_reference = makespan();
+//		if (DEBUG) {
+//			cout << endl << "[proc " << mypid << "] ";
+//			cout << "MCT reference fitness: " << fitness();
+//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//			cout << ", Makespan: " << makespan() << endl;
+//		}
+//	} else {
+//		int proceso_actual = mypid;
+//		int offset_heuristica_actual = solutionIndex - 1;
+//
+//		if (offset_heuristica_actual == 0) {
+//			// Inicialización usando una heurística "pesada": MIN-MIN.
+//			// Utilizo MIN-MIN para un único elemento de la población inicial.
+//
+//			initializeMinMin();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "Min-Min fitness: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//
+//			showCustomStatics();
+//		} else if (offset_heuristica_actual == 1) {
+//			initializeMinWRR0();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR0: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 2) {
+//			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+//			// Utilizo Sufferage para un único elemento de la población inicial.
+//
+//			initializeSufferage();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "Sufferage fitness: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 3) {
+//			initializeMinWRR4();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR4: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 4) {
+//			// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+//			initializeMinWRR5();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR5: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 5) {
+//			initializeMinWRR60();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR60: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 6) {
+//			initializeMinWRR61();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR61: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//		} else if (offset_heuristica_actual == 7) {
+//			initializeMinWRR62();
+//			if (DEBUG) {
+//				cout << endl << "[proc " << proceso_actual << "] ";
+//				cout << "MinMinWRR62: " << fitness();
+//				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//				cout << ", Makespan: " << makespan() << endl;
+//			}
+//
+//			exit(-1);
+//		}
+//	}
+//}
+
 bool Solution::validate() const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
 	if (true) {
@@ -1477,7 +1581,7 @@ bool Solution::validate() const {
 }
 
 void Solution::showCustomStatics() {
-	cout << endl << "[= Statics =====================]" << endl;
+	cout << endl << "[= Statics RR ==================]" << endl;
 
 	// Tiempo de respuesta promedio por prioridad
 	int total_count = 0;
@@ -1541,6 +1645,12 @@ void Solution::showCustomStatics() {
 
 	// Peor tiempo de respuesta
 	cout << " * Worst response ratio: " << total_rr_worst << endl;
+
+	cout << endl << "[= Statics Makespan ============]" << endl;
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		cout << "Machine " << machineId << ": " << _machines[machineId].getMakespan() << endl;
+	}
 
 	cout << "[===============================]" << endl;
 }
