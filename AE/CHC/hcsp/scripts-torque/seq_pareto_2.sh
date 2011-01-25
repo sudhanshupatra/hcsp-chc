@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_seq_cprio_pareto
+#PBS -N ae_seq_fp2
 
 # Requerimientos
 #PBS -l nodes=1:cpu8,walltime=01:00:00
