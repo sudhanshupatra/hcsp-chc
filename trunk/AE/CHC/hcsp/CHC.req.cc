@@ -1312,8 +1312,6 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-
-				showCustomStatics();
 			} else if (offset_heuristica_actual == 1) {
 				initializeMinWRR0();
 				if (DEBUG) {
