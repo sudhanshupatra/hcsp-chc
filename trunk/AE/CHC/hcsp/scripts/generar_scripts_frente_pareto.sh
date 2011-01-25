@@ -10,13 +10,15 @@ Poblacion="15"
 Cruzamiento="0.8"
 Mutacion="0.9"
 
-Pesos[0]="0.10 0.90"
-Pesos[1]="0.25 0.75"
-Pesos[2]="0.5 0.5"
-Pesos[3]="0.75 0.25"
-Pesos[4]="0.90 0.10"
+Pesos[0]="0.0 1.0"
+Pesos[1]="0.10 0.90"
+Pesos[2]="0.25 0.75"
+Pesos[3]="0.5 0.5"
+Pesos[4]="0.75 0.25"
+Pesos[5]="0.90 0.10"
+Pesos[6]="1.0 0.0"
 
-for indexP in {0..4}
+for indexP in {0..6}
 do
 	echo "Población $Poblacion"
 	echo "Cruzamiento $Cruzamiento"

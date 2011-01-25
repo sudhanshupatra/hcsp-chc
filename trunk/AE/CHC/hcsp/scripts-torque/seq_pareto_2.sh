@@ -4,7 +4,7 @@
 #PBS -N ae_seq_cprio_pareto
 
 # Requerimientos
-#PBS -l nodes=1:cpu8,walltime=10:00:00
+#PBS -l nodes=1:cpu8,walltime=01:00:00
 
 # Cola
 #PBS -q publica
@@ -61,7 +61,7 @@ echo
 
 Data="u_s_hilo.0"
 
-for index in {0..6}
+for index in {2..2}
 do
 	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/chc_$index.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/$Data"
