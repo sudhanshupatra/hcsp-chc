@@ -138,8 +138,8 @@ int main(int argc, char** argv) {
 				break;
 			case 3:
 				// Copio los costos de ejecución de cada tareas en las máquinas.
-				outputFileStream << aux_line << endl;
 				inputFileStream >> aux_line;
+				if (!inputFileStream.eof()) outputFileStream << aux_line << endl;
 
 				break;
 			}
