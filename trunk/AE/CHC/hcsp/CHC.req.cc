@@ -70,10 +70,11 @@ istream& operator>>(istream& input, Problem& pbm) {
 		// Cargo el ETC de cada tarea en cada una de las máquinas.
 		for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
 			input.getline(buffer, MAX_BUFFER, '\n');
+
 			sscanf(buffer, "%f",
 					&pbm._expectedTimeToCompute[taskPos][machinePos]);
 
-			assert(pbm._expectedTimeToCompute[taskPos][machinePos] > 0);
+			assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
 		}
 	}
 
@@ -323,16 +324,20 @@ double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
 	float compute_cost;
 	compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
 
-	if (wait_time == 0.0) {
-		return (double)_pbm.taskPriority(taskId);
+	if (compute_cost == 0.0) {
+		return 0.0;
 	} else {
-		float rr;
-		rr = (wait_time + compute_cost) / compute_cost;
+		if (wait_time == 0.0) {
+			return (double)_pbm.taskPriority(taskId);
+		} else {
+			float rr;
+			rr = (wait_time + compute_cost) / compute_cost;
 
-		float wrr;
-		wrr = (_pbm.taskPriority(taskId) * rr);
+			float wrr;
+			wrr = (_pbm.taskPriority(taskId) * rr);
 
-		return wrr;
+			return wrr;
+		}
 	}
 }
 
@@ -342,27 +347,26 @@ void SolutionMachine::refresh() {
 		double partial_makespan = 0.0;
 		double partial_awrr = 0.0;
 
-//		cout << endl << "Machine: " << machineId() << endl;
-
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
 			taskId = getTask(taskPos);
 
 			double compute_cost;
 			compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
-			assert(compute_cost > 0);
+			assert(compute_cost >= 0);
 
 			double priority_cost;
-			if (partial_makespan == 0.0) {
-				priority_cost = _pbm.taskPriority(taskId);
+			if (compute_cost == 0.0) {
+				priority_cost = 0.0;
 			} else {
-				double rr;
-				rr = (partial_makespan + compute_cost) / compute_cost;
-				priority_cost = (_pbm.taskPriority(taskId) * rr);
+				if (partial_makespan == 0.0) {
+					priority_cost = _pbm.taskPriority(taskId);
+				} else {
+					double rr;
+					rr = (partial_makespan + compute_cost) / compute_cost;
+					priority_cost = (_pbm.taskPriority(taskId) * rr);
+				}
 			}
-
-//			cout << "  TaskPos: " << taskPos << ", TaskId: " << taskId << ", ETC: " << compute_cost <<
-//					", Wait: " << partial_makespan << ", WRR: " << priority_cost << endl;
 
 			partial_makespan += compute_cost;
 			partial_awrr += priority_cost;
@@ -1606,9 +1610,13 @@ void Solution::showCustomStatics() {
 				if (_pbm.taskPriority(taskId) == priority) {
 					count++;
 
-					rr_aux = (partial_cost + _pbm.expectedTimeToCompute(taskId,
-							machineId)) / _pbm.expectedTimeToCompute(taskId,
-							machineId);
+					if (_pbm.expectedTimeToCompute(taskId,machineId) == 0.0) {
+						rr_aux = 0.0;
+					} else {
+						rr_aux = (partial_cost + _pbm.expectedTimeToCompute(taskId,
+								machineId)) / _pbm.expectedTimeToCompute(taskId,
+								machineId);
+					}
 					rr_sum += rr_aux;
 
 					if (rr_worst <= rr_aux) {
