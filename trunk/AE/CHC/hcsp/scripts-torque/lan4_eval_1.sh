@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan4_eval
+#PBS -N ae_lan4_eval1
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=30:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=05:00:00
 
 # Cola
 #PBS -q publica
@@ -98,54 +98,13 @@ for i in {0..5}
 do
 	CfgFile="scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/Braun_et_al.CPrio/${data[i]}"
+	OutputFile="evaluacion/lan4/Braun_et_al/${data[i]}"
 	
 	echo "Datos $DataFile"
 		
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
-	echo "$DataFile" >> Config_LAN4_eval.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
+	echo "CHC_LAN4.cfg" > Config_LAN4_eval1.cfg
+	echo "$DataFile" >> Config_LAN4_eval1.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval1.cfg
 	
-	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
-done
-
-for i in {6..29}
-do
-	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/1024x32.CPrio/${data[i]}"
-	
-	echo "Datos $DataFile"
-	
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
-	echo "$DataFile" >> Config_LAN4_eval.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
-	
-	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
-done
-
-for i in {6..29}
-do
-	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/2048x64.CPrio/${data[i]}"
-	
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
-	echo "$DataFile" >> Config_LAN4_eval.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
-	
-	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
-done
-
-for i in {6..29}
-do
-	CfgFile="scripts_evaluacion/chc.cfg"
-	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/4096x128.CPrio/${data[i]}"
-	
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval.cfg
-	echo "$DataFile" >> Config_LAN4_eval.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval.cfg
-	
-	time($EXEC Config_LAN4_eval.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN4_eval1.cfg > $OutputFile.log) 
 done

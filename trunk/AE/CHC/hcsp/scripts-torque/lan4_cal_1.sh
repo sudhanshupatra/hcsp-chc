@@ -99,11 +99,11 @@ do
 				
 				echo "Datos $DataFile"
 				
-				echo "scripts_calibracion/${CfgFile}" > Config_LAN4_cal.cfg
-				echo "${DataFile}" >> Config_LAN4_cal.cfg
-				echo "${OutputFile}.sol" >> Config_LAN4_cal.cfg
+				echo "scripts_calibracion/${CfgFile}" > Config_LAN4_cal1.cfg
+				echo "${DataFile}" >> Config_LAN4_cal1.cfg
+				echo "${OutputFile}.sol" >> Config_LAN4_cal1.cfg
 				
-				time($EXEC Config_LAN4_cal.cfg > ${OutputFile}.log)
+				time($EXEC Config_LAN4_cal1.cfg > ${OutputFile}.log)
 			done
 		done
 	done
