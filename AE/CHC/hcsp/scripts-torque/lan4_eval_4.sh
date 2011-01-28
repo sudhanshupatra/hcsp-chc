@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan4_eval1
+#PBS -N ae_lan4_eval4
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=30:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=12:00:00
 
 # Cola
 #PBS -q publica
