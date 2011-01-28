@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan4_eval1
+#PBS -N ae_lan4_eval2
 
 # Requerimientos
 #PBS -l nodes=1:cpu8:ppn=4,walltime=12:00:00
