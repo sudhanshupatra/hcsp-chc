@@ -7,7 +7,7 @@ if [ $? != 0 ]; then
 fi
 
 Poblacion="10"
-Cruzamiento="1.0"
+Cruzamiento="0.9"
 Mutacion="0.9"
 Pesos="1.0 1.0"
 
