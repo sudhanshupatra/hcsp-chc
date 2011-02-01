@@ -664,7 +664,7 @@ void Solution::initializeMinMin() {
 		int minCTMachineId;
 		minCTMachineId = -1;
 
-		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
 			if (taskIsUnmapped[taskId]) {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if ((machineMakespan[machineId]
@@ -681,9 +681,9 @@ void Solution::initializeMinMin() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[minCTTaskId] = false;
+
 		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
 				minCTTaskId, minCTMachineId);
-
 		_machines[minCTMachineId].addTask(minCTTaskId);
 	}
 }
@@ -719,7 +719,7 @@ void Solution::initializeMinWRR5() {
 		second_best_machineId = -1;
 		second_min = FLT_MAX;
 
-		for (int taskId = 0; taskId < taskIsUnmapped.size(); taskId++) {
+		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
 			first_min = FLT_MAX;
 			second_aux = FLT_MAX;
 			first_best_machineId = -1;
@@ -727,20 +727,24 @@ void Solution::initializeMinWRR5() {
 			if (taskIsUnmapped[taskId]) {
 				first_aux = 0.0;
 
-				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+				for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 					first_aux = machineMakespan[machineId] + _pbm.expectedTimeToCompute(taskId, machineId);
 
-					if (first_aux < first_min) {
+					if (first_aux <= first_min) {
 						first_min = first_aux;
 						first_best_machineId = machineId;
 					}
 				}
 
 				if (machineMakespan[first_best_machineId] > 0) {
-					float rr;
-					rr = (machineMakespan[first_best_machineId] + _pbm.expectedTimeToCompute(taskId, first_best_machineId))
-							/ _pbm.expectedTimeToCompute(taskId, first_best_machineId);
-					second_aux = rr / _pbm.taskPriority(taskId);
+					if (_pbm.expectedTimeToCompute(taskId, first_best_machineId) == 0) {
+						second_aux = machineMakespan[first_best_machineId] / _pbm.taskPriority(taskId);
+					} else {
+						float rr;
+						rr = (machineMakespan[first_best_machineId] + _pbm.expectedTimeToCompute(taskId, first_best_machineId))
+								/ _pbm.expectedTimeToCompute(taskId, first_best_machineId);
+						second_aux = rr / _pbm.taskPriority(taskId);
+					}
 				} else {
 					float aux;
 					aux = _pbm.expectedTimeToCompute(taskId, first_best_machineId) / _pbm.taskPriority(taskId);
@@ -1317,6 +1321,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", Makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual == 1) {
+
 				initializeMinWRR0();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1336,7 +1341,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", Makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual == 3) {
-				initializeMinWRR4();
+
+				initializeRandomMCT();
+				//initializeMinWRR4();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "MinMinWRR4: " << fitness();
@@ -1345,6 +1352,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 				}
 			} else if (offset_heuristica_actual == 4) {
 				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+
+				//initializeRandomMCT();
 				initializeMinWRR5();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1353,6 +1362,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", Makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual == 5) {
+
 				initializeMinWRR60();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1361,6 +1371,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", Makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual == 6) {
+
 				initializeMinWRR61();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
@@ -1369,6 +1380,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", Makespan: " << makespan() << endl;
 				}
 			} else if (offset_heuristica_actual == 7) {
+
 				initializeMinWRR62();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
