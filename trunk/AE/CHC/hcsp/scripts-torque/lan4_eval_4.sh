@@ -96,9 +96,13 @@ data[29]="B.u_s_lolo"
 
 for i in {6..29}
 do
-	CfgFile="scripts_evaluacion/chc.cfg"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/${data[i]}"
 	OutputFile="evaluacion/lan4/4096x128/${data[i]}"
+	
+	echo "Datos $DataFile"
+	echo "CfgFile $CfgFile"
+	cat $CfgFile
 	
 	echo "${CfgFile}" > Config_LAN4_eval4.cfg
 	echo "$DataFile" >> Config_LAN4_eval4.cfg
