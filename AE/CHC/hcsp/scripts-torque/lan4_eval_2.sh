@@ -102,7 +102,7 @@ do
 	
 	echo "Datos $DataFile"
 	
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval2.cfg
+	echo "${CfgFile}" > Config_LAN4_eval2.cfg
 	echo "$DataFile" >> Config_LAN4_eval2.cfg
 	echo "$OutputFile.sol" >> Config_LAN4_eval2.cfg
 	

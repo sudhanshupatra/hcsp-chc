@@ -100,7 +100,7 @@ do
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="evaluacion/lan4/2048x64/${data[i]}"
 	
-	echo "CHC_LAN4.cfg" > Config_LAN4_eval3.cfg
+	echo "${CfgFile}" > Config_LAN4_eval3.cfg
 	echo "$DataFile" >> Config_LAN4_eval3.cfg
 	echo "$OutputFile.sol" >> Config_LAN4_eval3.cfg
 	
