@@ -15,6 +15,7 @@ RUN=$(MPI_BIN)/mpirun
 
 #other options: -g for debugging and -pg for profiling
 #CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -I/home/siturria/bin/mpich2-1.2.1p1/include -L/home/siturria/bin/mpich2-1.2.1p1/lib -g
+#CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -g -I$(MPI_BIN)/include -L$(MPI_BIN)/lib
 CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -g
 LDFLAGS=-L$(MALLBA_LIB)
 LOADLIBES=-lmallba  -lm

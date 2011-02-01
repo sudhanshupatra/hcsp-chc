@@ -20,7 +20,7 @@ Run_LAN8:
 	$(RUN) -np 8 $(BIN_PATH)/MainLan $(BIN_PATH)/ejecuciones/Config_LAN8.cfg
 
 Run_LAN4:
-	$(RUN) -np 4 $(BIN_PATH)/MainLan $(BIN_PATH)/ejecuciones/Config_LAN4.cfg
+	$(RUN) -np 3 $(BIN_PATH)/MainLan $(BIN_PATH)/ejecuciones/Ske_LAN4.cfg
 
 Run_SEQ:
 	$(BIN_PATH)/MainSeq $(BIN_PATH)/ejecuciones/CHC_SEQ.cfg \
