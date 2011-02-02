@@ -1003,8 +1003,20 @@ void Migration::execute(Population& pop,const unsigned long current_generation,N
 		if (synchronized)    // synchronous mode: blocked until data are received
 		{
 			pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
-			_netstream << wait(packed);
+
+            /* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
+			/*_netstream << set_source(MPI_ANY_SOURCE);
+			int tipo = 0;
+			_netstream._wait2(any,tipo);
+
+			if (tipo == 1){
+				return;
+			}*/
+			/* Fin Ruso */
+
+ 			_netstream << wait(packed);
 			_netstream << pack_begin;
+
 		 	for (int i=0;i<migration_size;i++)
 			{
                 // select individual to be remplaced
@@ -2301,6 +2313,7 @@ void Solver::UpdateFromCfgState() {
 }
 
 void Solver::show_state() const {
+if (!(current_iteration() % 100)){
 	cout << endl
 			<< " Current State ---------------------------------------------"
 			<< endl;
@@ -2342,6 +2355,7 @@ void Solver::show_state() const {
 	//		cout << endl << endl << "Best Solution: " << endl << global_best_solution();
 	cout << endl << endl << "Current time spent (so far): "
 			<< current_time_spent() << endl;
+}
 }
 
 Solver::~Solver() {
