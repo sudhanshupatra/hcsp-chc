@@ -1309,7 +1309,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		cout << "Cant. heuristicas por proceso = " << heuristicas_por_proceso << endl;
 
 		if (solutionIndex <= heuristicas_por_proceso) {
-			if (offset_heuristica_actual == 0) {
+			if (offset_heuristica_actual == 3) {
 				// Inicialización usando una heurística "pesada": MIN-MIN.
 				// Utilizo MIN-MIN para un único elemento de la población inicial.
 
@@ -1320,7 +1320,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual == 1) {
+			} else if (offset_heuristica_actual == 2) {
 
 				initializeMinWRR0();
 				if (DEBUG) {
@@ -1329,7 +1329,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual == 2) {
+			} else if (offset_heuristica_actual == 1) {
 				// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 				// Utilizo Sufferage para un único elemento de la población inicial.
 
@@ -1340,7 +1340,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (offset_heuristica_actual == 3) {
+			} else if (offset_heuristica_actual == 0) {
 
 				initializeRandomMCT();
 				//initializeMinWRR4();
