@@ -1,0 +1,21 @@
+# Mallba Configuration.
+whoami=santiago
+
+MALLBA_DIR=/home/${whoami}/bin/Mallba
+MALLBA_INC=${MALLBA_DIR}/inc
+MALLBA_LIB=${MALLBA_DIR}/lib
+MALLBA_SRC=${MALLBA_DIR}/src
+MALLBA_REP=${MALLBA_DIR}/rep
+
+#MPI_BIN=/home/${whoami}/bin/mpich2-1.2.1p1/bin
+MPI_BIN=/usr/bin
+
+CXX=$(MPI_BIN)/mpic++
+RUN=$(MPI_BIN)/mpirun
+
+#other options: -g for debugging and -pg for profiling
+#CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -I/home/siturria/bin/mpich2-1.2.1p1/include -L/home/siturria/bin/mpich2-1.2.1p1/lib -g
+#CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -g -I$(MPI_BIN)/include -L$(MPI_BIN)/lib
+CPPFLAGS=-I$(MALLBA_INC) -Wall -O3 -g
+LDFLAGS=-L$(MALLBA_LIB)
+LOADLIBES=-lmallba  -lm
