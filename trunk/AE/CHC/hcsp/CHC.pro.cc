@@ -1005,13 +1005,13 @@ void Migration::execute(Population& pop,const unsigned long current_generation,N
 			pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
 
             /* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
-			/*_netstream << set_source(MPI_ANY_SOURCE);
+			_netstream << set_source(MPI_ANY_SOURCE);
 			int tipo = 0;
 			_netstream._wait2(any,tipo);
 
 			if (tipo == 1){
 				return;
-			}*/
+			}
 			/* Fin Ruso */
 
  			_netstream << wait(packed);
