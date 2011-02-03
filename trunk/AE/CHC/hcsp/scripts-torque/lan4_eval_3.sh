@@ -96,7 +96,7 @@ data[29]="B.u_s_lolo"
 
 for i in {6..29}
 do
-	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc.cfg"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="evaluacion/lan4/2048x64/${data[i]}"
 	
