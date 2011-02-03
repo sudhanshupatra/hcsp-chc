@@ -4,7 +4,7 @@
 #PBS -N ae_lan4_eval3_2
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=03:00:00
+#PBS -l nodes=1:cpu8:ppn=4,walltime=12:00:00
 
 # Cola
 #PBS -q publica
