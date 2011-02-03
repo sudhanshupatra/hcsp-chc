@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan8/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan8/
 
 #PBS -V
 
@@ -98,11 +98,11 @@ for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc_lan.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/2048x64/${data[i]}"
+	OutputFile="evaluacion/lan8/2048x64/${data[i]}"
 	
-	echo "${CfgFile}" > Config_LAN4_eval3_2.cfg
-	echo "$DataFile" >> Config_LAN4_eval3_2.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval3_2.cfg
+	echo "${CfgFile}" > Config_LAN4_eval3_3.cfg
+	echo "$DataFile" >> Config_LAN4_eval3_3.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval3_3.cfg
 	
-	time($EXEC Config_LAN4_eval3_2.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN4_eval3_3.cfg > $OutputFile.log) 
 done
