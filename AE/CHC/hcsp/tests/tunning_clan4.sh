@@ -2,8 +2,7 @@ data[6]="A.u_c_hihi"
 
 for i in {6..6}
 do
-/home/siturria/AE/trunk/AE/CHC/hcsp/
-	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp//tests/chc_lan.cfg"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/tests/chc_lan.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="/home/siturria/AE/trunk/AE/CHC/hcsp/tests/resultados/tunning_lan_${data[i]}"
 	
