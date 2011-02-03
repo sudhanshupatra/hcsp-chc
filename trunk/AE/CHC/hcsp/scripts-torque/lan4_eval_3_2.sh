@@ -94,16 +94,15 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-#for i in {6..29}
-for i in {6..7}
+for i in {6..29}
 do
 	CfgFile="scripts_evaluacion/chc_lan.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	OutputFile="evaluacion/lan4/2048x64/${data[i]}"
 	
-	echo "${CfgFile}" > Config_LAN4_eval3.cfg
-	echo "$DataFile" >> Config_LAN4_eval3.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval3.cfg
+	echo "${CfgFile}" > Config_LAN4_eval3_2.cfg
+	echo "$DataFile" >> Config_LAN4_eval3_2.cfg
+	echo "$OutputFile.sol" >> Config_LAN4_eval3_2.cfg
 	
-	time($EXEC Config_LAN4_eval3.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN4_eval3_2.cfg > $OutputFile.log) 
 done
