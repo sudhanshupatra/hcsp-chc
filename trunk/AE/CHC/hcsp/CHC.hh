@@ -22,7 +22,7 @@ using std::set;
 skeleton CHC {
 
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
-#define RANDOM_INIT 0.8
+#define RANDOM_INIT 0.4
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
