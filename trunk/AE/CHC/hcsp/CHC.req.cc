@@ -895,17 +895,21 @@ void Solution::initializeMinWRR61() {
 				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-					if (machineMakespan[machineId] > 0) {
-						float rr;
-						rr
-								= (machineMakespan[machineId]
-										+ _pbm.expectedTimeToCompute(taskId,
-												machineId))
-										/ _pbm.expectedTimeToCompute(taskId,
-												machineId);
-						first_aux = rr / _pbm.taskPriority(taskId);
+					if (_pbm.expectedTimeToCompute(taskId,machineId)==0) {
+						first_aux = 0.0;
 					} else {
-						first_aux = 1 / _pbm.taskPriority(taskId);
+						if (machineMakespan[machineId] > 0) {
+							float rr;
+							rr
+									= (machineMakespan[machineId]
+											+ _pbm.expectedTimeToCompute(taskId,
+													machineId))
+											/ _pbm.expectedTimeToCompute(taskId,
+													machineId);
+							first_aux = rr / _pbm.taskPriority(taskId);
+						} else {
+							first_aux = 1 / _pbm.taskPriority(taskId);
+						}
 					}
 
 					if (first_aux < first_min) {
@@ -1457,7 +1461,6 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 						// Utilizo Sufferage para un único elemento de la población inicial.
 
-						//initializeRandomMCT();
 						initializeSufferage();
 						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
