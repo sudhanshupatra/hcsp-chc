@@ -73,7 +73,7 @@ istream& operator>>(istream& is, SetUpParams& setup) {
 				setup.seed(op);
 				break;
 			case 5:
-				setup.obj_weight(buffer);
+				//setup.obj_weight(buffer);
 				break;
 			}
 			nb_param++;
@@ -193,17 +193,17 @@ void SetUpParams::seed(const unsigned long val) {
 	_seed = val;
 }
 
-void SetUpParams::obj_weight(const char* buffer) {
-	sscanf(buffer, " %f %f %*s ", &_makespan_weight, &_awrr_weight);
-
-	if (DEBUG) {
-		cout << "[DEBUG] Makespan weight: " << _makespan_weight << "\n";
-		cout << "[DEBUG] AWRR weight: " << _awrr_weight << "\n";
-	}
-
-	_pbm.setMakespanWeight(_makespan_weight);
-	_pbm.setAWRRWeight(_awrr_weight);
-}
+//void SetUpParams::obj_weight(const char* buffer) {
+//	sscanf(buffer, " %f %f %*s ", &_makespan_weight, &_awrr_weight);
+//
+////	if (DEBUG) {
+////		cout << "[DEBUG] Makespan weight: " << _makespan_weight << "\n";
+////		cout << "[DEBUG] AWRR weight: " << _awrr_weight << "\n";
+////	}
+//
+////	_pbm.setMakespanWeight(_makespan_weight);
+////	_pbm.setAWRRWeight(_awrr_weight);
+//}
 
 const unsigned long SetUpParams::seed() const {
 	return _seed;
@@ -2484,7 +2484,7 @@ void Solver_Seq::run(const Population& pop,
 
 // Solver LAN ------------------------------------------------------------
 
-Solver_Lan::Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
+Solver_Lan::Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
 		char **argv) :
 	_best_solution_trial(pbm), Solver(pbm, setup), _netstream(),
 	// Termination phase //
@@ -2492,6 +2492,7 @@ Solver_Lan::Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
 
 	NetStream::init(argc, argv);
 	mypid = _netstream.my_pid();
+	pbm.setPId(mypid);
 
 	if (setup.seed() > 0) {
 		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() + (mypid + 1) << "." << endl;

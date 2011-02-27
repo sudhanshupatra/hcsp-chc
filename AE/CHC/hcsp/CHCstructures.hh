@@ -22,7 +22,7 @@
 #define inherits typedef
 #define as
 
-#define DEBUG true
+#define DEBUG false
 
 struct individual // index of a individual in the population and its fitness
 {
