@@ -98,15 +98,17 @@ public:
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
 
-	float getAWRRWeight() const;
-	void setAWRRWeight(const float weight);
-
-	float getMakespanWeight() const;
-	void setMakespanWeight(const float weight);
+	void setPId(const int pid);
+	double getWRRWeight() const;
+	double getWRRWeight(const int pid) const;
+	double getMakespanWeight() const;
+	double getMakespanWeight(const int pid) const;
+	void loadWeights(const vector<double> weights);
 private:
-	float _awrr_weight;
-	float _makespan_weight;
+	vector<double> _wrr_weights;
+	vector<double> _makespan_weights;
 
+	int _mypid;
 	int _taskCount;
 	int _machineCount;
 	vector<int> _tasksPriorities;
@@ -1016,7 +1018,7 @@ private:
 	int acum_iterations;
 
 public:
-	Solver_Lan(const Problem& pbm, const SetUpParams& setup, int argc,
+	Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
 			char **argv);
 	virtual ~Solver_Lan();
 	virtual int pid() const;
