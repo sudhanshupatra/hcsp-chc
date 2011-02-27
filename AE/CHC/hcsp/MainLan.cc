@@ -75,7 +75,6 @@ int main(int argc, char** argv) {
 
 	if (solver.pid()!=0)
 	{
-
 		char str_pid[100];
 		sprintf(str_pid, "%d", solver.pid());
 
