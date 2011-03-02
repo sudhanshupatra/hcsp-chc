@@ -113,10 +113,12 @@ int main(int argc, char** argv) {
 		//		cout << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
 		//		cout << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
 
-		fexit << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
-		fexit << "[pid:" << solver.pid() << "] Makespan: " << solver.best_solution_trial().makespan() << endl;
-		fexit << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
-		fexit << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
+//		fexit << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
+//		fexit << "[pid:" << solver.pid() << "] Makespan: " << solver.best_solution_trial().makespan() << endl;
+//		fexit << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
+//		fexit << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
+
+		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " 1.0" << endl;
 
 		//fexit << solver.best_solution_trial();
 
