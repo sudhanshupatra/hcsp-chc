@@ -2,7 +2,7 @@ data[0]="A.u_c_lolo"
 
 for i in {0..0}
 do
-	PesosFile="/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/pesos.txt"
+	PesosFile="/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/ejecuciones/pesos.txt"
 	CfgFile="/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/tests/chc_lan.cfg"
 	DataFile="/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP/1024x32.CPrio/${data[i]}"
 	OutputFile="/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/tests/resultados/tunning_lan_${data[i]}"
