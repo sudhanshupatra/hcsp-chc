@@ -49,19 +49,20 @@ int main(int argc, char** argv) {
 	vector<double> pesos;
 	string linea_pesos;
 
+	f3 >> linea_pesos;
 	while (f3.good()) {
-		f3 >> linea_pesos;
 		if (linea_pesos.length() > 0) {
 			//cout << linea_pesos << endl;
 			pesos.push_back(atof(linea_pesos.data()));
 		}
+		f3 >> linea_pesos;
 	}
 	f3.close();
 
-	//	cout << "Cantidad: " << pesos.size() << endl;
-	//	for (int i = 0; i < pesos.size(); i++) {
-	//		cout << pesos[i] << endl;
-	//	}
+		cout << "Cantidad: " << pesos.size() << endl;
+		for (int i = 0; i < pesos.size(); i++) {
+			cout << "'" << pesos[i] << "'" << endl;
+		}
 	assert(pesos.size() % 2 == 0);
 
 	pbm.loadWeights(pesos);
