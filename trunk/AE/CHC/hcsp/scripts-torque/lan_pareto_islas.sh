@@ -61,7 +61,8 @@ echo
 
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
-Data="u_s_hilo.0"
+#Data="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/u_s_hilo.0"
+Data="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/B.u_s_hilo"
 echo "==========================================================="
 echo "Datos $DataFile"
 echo "==========================================================="
@@ -74,7 +75,7 @@ do
 	mkdir -p ${DEST_FOLDER} 
 
 	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/islas.cfg" > Config_LAN_FP_ISLAS.cfg
-	echo "/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/$Data" >> Config_LAN_FP_ISLAS.cfg
+	echo "${Data}" >> Config_LAN_FP_ISLAS.cfg
 	echo "${DEST_FOLDER}/${i}.sol" >> Config_LAN_FP_ISLAS.cfg
 	echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos.txt" >> Config_LAN_FP_ISLAS.cfg
 
