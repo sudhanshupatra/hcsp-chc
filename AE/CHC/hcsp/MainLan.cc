@@ -125,6 +125,9 @@ int main(int argc, char** argv) {
 		//fexit << solver.best_solution_trial();
 
 		//cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;
+	} else {
+		cout << solver.userstatistics();
+		solver.show_state();
 	}
 	return(0);
 }
