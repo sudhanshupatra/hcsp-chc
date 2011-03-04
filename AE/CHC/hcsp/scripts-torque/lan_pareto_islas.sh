@@ -4,7 +4,7 @@
 #PBS -N ae_islas_fp
 
 # Requerimientos
-#PBS -l nodes=17,walltime=20:00:00
+#PBS -l nodes=17,walltime=00:40:00
 
 # Cola
 #PBS -q publica

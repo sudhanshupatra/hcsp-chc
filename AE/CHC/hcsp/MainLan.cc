@@ -119,7 +119,8 @@ int main(int argc, char** argv) {
 //		fexit << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
 //		fexit << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
 
-		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " 1.0" << endl;
+		cout << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
+		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
 
 		//fexit << solver.best_solution_trial();
 
