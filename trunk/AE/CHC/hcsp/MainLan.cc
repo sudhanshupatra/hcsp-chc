@@ -122,6 +122,14 @@ int main(int argc, char** argv) {
 		cout << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
 		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
 
+		for (int i = 0; i < solver.population().parents().size(); i++) {
+			fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
+		}
+
+		for (int i = 0; i < solver.population().offsprings().size(); i++) {
+			fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
+		}
+
 		//fexit << solver.best_solution_trial();
 
 		//cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;

@@ -12,6 +12,10 @@ mkdir -p calibracion/lan8
 mkdir -p frente_pareto/seq
 mkdir -p frente_pareto/lan4
 mkdir -p frente_pareto/islas
+mkdir -p frente_pareto/barca/1
+mkdir -p frente_pareto/barca/2
+mkdir -p frente_pareto/barca/3
+mkdir -p frente_pareto/barca/4
 mkdir -p evaluacion/seq/Braun_et_al
 mkdir -p evaluacion/seq/1024x32
 mkdir -p evaluacion/seq/2048x64
@@ -45,7 +49,11 @@ rm evaluacion/lan8/2048x64/*
 rm evaluacion/lan8/4096x128/*
 rm frente_pareto/seq/*
 rm frente_pareto/lan4/*
-rm frente_pareto/islas
+rm frente_pareto/islas/*
+rm frente_pareto/barca/1/*
+rm frente_pareto/barca/2/*
+rm frente_pareto/barca/3/*
+rm frente_pareto/barca/4/*
 rm seq/*
 rm lan4/*
 rm lan8/*
