@@ -83,7 +83,7 @@ do
 	
 	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 	
-	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/islas/1/${data[i]}"
+	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/1/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
 	
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
@@ -105,6 +105,6 @@ do
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${i}.log"
 		
-		time($EXEC ${CONFIG_FILE} > ${OUTPUT_FILE})		
+		time(${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE})		
 	done
 done
