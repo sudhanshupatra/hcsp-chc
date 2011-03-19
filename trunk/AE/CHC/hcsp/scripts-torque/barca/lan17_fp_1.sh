@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_islas_fp
+#PBS -N ae_17_fp_1
 
 # Requerimientos
 #PBS -l nodes=17,walltime=12:00:00
