@@ -1,4 +1,4 @@
-data[6]="u_c_hihi"
+data[6]="u_c_hihi.0"
 
 for i in {6..6}
 do
