@@ -2095,7 +2095,7 @@ void Solution::doLocalSearch() {
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
-				//				finBusqMaquina = true;
+								finBusqMaquina = true;
 			}
 		}
 
