@@ -12,6 +12,6 @@ do
 	echo "$OutputFile.sol" >> /home/siturria/AE/trunk/AE/CHC/hcsp/tests/resultados/prueba_lan.cfg
 	echo "$PesosFile" >> /home/siturria/AE/trunk/AE/CHC/hcsp/tests/resultados/prueba_lan.cfg
 	
-	time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 8 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan \
+	time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 16 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan \
 		/home/siturria/AE/trunk/AE/CHC/hcsp/tests/resultados/prueba_lan.cfg > $OutputFile.log) 
 done
