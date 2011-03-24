@@ -11,8 +11,7 @@ skeleton CHC {
 
 Problem::Problem() :
 	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL),
-			_wrr_weights(), _makespan_weights(), _tasksPriorities(),
-			_mypid(-1) {
+			_wrr_weights(), _makespan_weights(), _tasksPriorities(), _mypid(-1) {
 }
 
 // ===================================
@@ -33,8 +32,8 @@ istream& operator>>(istream& input, Problem& pbm) {
 	input.getline(buffer, MAX_BUFFER, '\n');
 	sscanf(buffer, "%d %d", &pbm._taskCount, &pbm._machineCount);
 
-//	cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
-//	cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
+	//	cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
+	//	cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
 
 	// Inicializo las prioridades de las tareas.
 	pbm._tasksPriorities.reserve(pbm._taskCount);
@@ -156,7 +155,7 @@ void Problem::loadWeights(const vector<double> weights) {
 
 	for (unsigned int i = 0; i < weights.size(); i = i + 2) {
 		_makespan_weights.push_back(weights[i]);
-		_wrr_weights.push_back(weights[i+1]);
+		_wrr_weights.push_back(weights[i + 1]);
 	}
 }
 
@@ -174,7 +173,7 @@ double Problem::getWRRWeight(const int pid) const {
 	if (pid == 0) {
 		return _wrr_weights[0];
 	} else {
-		int index = (pid-1) % _wrr_weights.size();
+		int index = (pid - 1) % _wrr_weights.size();
 		return _wrr_weights[index];
 	}
 }
@@ -183,7 +182,7 @@ double Problem::getMakespanWeight(const int pid) const {
 	if (pid == 0) {
 		_makespan_weights[0];
 	} else {
-		int index = (pid-1) % _makespan_weights.size();
+		int index = (pid - 1) % _makespan_weights.size();
 		return _makespan_weights[index];
 	}
 }
@@ -411,6 +410,14 @@ void SolutionMachine::refresh() {
 
 double Solution::_awrr_reference = 1.0;
 double Solution::_makespan_reference = 1.0;
+
+double Solution::getWRR_reference() {
+	return Solution::_awrr_reference;
+}
+
+double Solution::getMakespan_reference() {
+	return Solution::_makespan_reference;
+}
 
 Solution::Solution(const Problem& pbm) :
 	_pbm(pbm), _machines(), _initialized(false) {
@@ -922,17 +929,16 @@ void Solution::initializeMinWRR61() {
 				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-					if (_pbm.expectedTimeToCompute(taskId,machineId)==0) {
+					if (_pbm.expectedTimeToCompute(taskId, machineId) == 0) {
 						first_aux = 0.0;
 					} else {
 						if (machineMakespan[machineId] > 0) {
 							float rr;
-							rr
-									= (machineMakespan[machineId]
-											+ _pbm.expectedTimeToCompute(taskId,
-													machineId))
-											/ _pbm.expectedTimeToCompute(taskId,
-													machineId);
+							rr = (machineMakespan[machineId]
+									+ _pbm.expectedTimeToCompute(taskId,
+											machineId))
+									/ _pbm.expectedTimeToCompute(taskId,
+											machineId);
 							first_aux = rr / _pbm.taskPriority(taskId);
 						} else {
 							first_aux = 1 / _pbm.taskPriority(taskId);
@@ -1352,14 +1358,22 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
 		Solution::_makespan_reference = makespan();
-		if (DEBUG) {
-			cout << endl << "[proc " << mypid << "] ";
+
+		if (mypid == 0) {
 			cout << "MCT reference fitness: " << fitness();
 			cout << ", WRR: " << accumulatedWeightedResponseRatio();
-			cout << ", Makespan: " << makespan() << endl;
+			cout << ", Makespan: " << makespan() << endl << endl;
+		} else {
+			if (DEBUG) {
+				cout << endl << "[proc " << mypid << "] ";
+				cout << "MCT reference fitness: " << fitness();
+				cout << ", WRR: " << accumulatedWeightedResponseRatio();
+				cout << ", Makespan: " << makespan() << endl;
+			}
 		}
 		if (DEBUG) {
-			cout << "[DEBUG] Makespan weight: " << _pbm.getMakespanWeight() << "\n";
+			cout << "[DEBUG] Makespan weight: " << _pbm.getMakespanWeight()
+					<< "\n";
 			cout << "[DEBUG] AWRR weight: " << _pbm.getWRRWeight() << "\n";
 		}
 	} else {
@@ -1416,13 +1430,13 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 				initializeRandom();
 			} else {
 				int heuristicas_por_proceso = int(ceil(cant_heuristicas
-						/ (cant_procesos-1)));
+						/ (cant_procesos - 1)));
 				if (heuristicas_por_proceso < 1)
 					heuristicas_por_proceso = 1;
 				if (heuristicas_por_proceso > 2)
 					heuristicas_por_proceso = 2;
 
-				int offset_heuristica_actual = ((proceso_actual-1)
+				int offset_heuristica_actual = ((proceso_actual - 1)
 						* heuristicas_por_proceso) + solutionIndex - 1;
 
 				if (DEBUG) {
@@ -1825,6 +1839,9 @@ double Solution::fitness() {
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
 
+//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
+//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
+
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
 			+ (_pbm.getWRRWeight() * normalized_awrr);
@@ -1956,8 +1973,8 @@ void Solution::doLocalSearch() {
 	double fitnessInicial = this->fitness();
 	bool solucionAceptada = false;
 
-	for (unsigned int machinePos = 0; (machinePos < maquinasSeleccionadas.size())
-			&& !solucionAceptada; machinePos++) {
+	for (unsigned int machinePos = 0; (machinePos
+			< maquinasSeleccionadas.size()) && !solucionAceptada; machinePos++) {
 
 		int machineId;
 		machineId = maquinasSeleccionadas[machinePos];
@@ -2078,7 +2095,7 @@ void Solution::doLocalSearch() {
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
-//				finBusqMaquina = true;
+				//				finBusqMaquina = true;
 			}
 		}
 

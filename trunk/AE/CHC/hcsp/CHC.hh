@@ -216,6 +216,9 @@ public:
 
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo
+
+	static double getWRR_reference();
+	static double getMakespan_reference();
 private:
 	const Problem& _pbm;
 	bool _initialized;
