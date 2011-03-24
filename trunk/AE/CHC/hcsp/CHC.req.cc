@@ -1942,7 +1942,7 @@ void Solution::doLocalSearch() {
 
 	vector<double> fitnessByMachine;
 
-	for (int machineId = 0; machineId < this->machines().size(); machineId++) {
+	for (unsigned int machineId = 0; machineId < this->machines().size(); machineId++) {
 		fitnessByMachine.push_back(getMachineFitness(machineId));
 	}
 
@@ -1956,7 +1956,7 @@ void Solution::doLocalSearch() {
 	double fitnessInicial = this->fitness();
 	bool solucionAceptada = false;
 
-	for (int machinePos = 0; (machinePos < maquinasSeleccionadas.size())
+	for (unsigned int machinePos = 0; (machinePos < maquinasSeleccionadas.size())
 			&& !solucionAceptada; machinePos++) {
 
 		int machineId;
@@ -2078,7 +2078,7 @@ void Solution::doLocalSearch() {
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
-				finBusqMaquina = true;
+//				finBusqMaquina = true;
 			}
 		}
 
