@@ -9,7 +9,7 @@ fi
 Poblacion="10"
 Cruzamiento="0.9"
 Mutacion="0.9"
-Pesos="1.0 1.0"
+Tiempo="60"
 
 echo "Población $Poblacion"
 echo "Cruzamiento $Cruzamiento"
@@ -22,7 +22,7 @@ echo "100000                // number of generations" >> $Filename
 echo "$Poblacion            // number of individuals" >> $Filename
 echo "0                     // display state ?" >> $Filename
 echo "0                     // seed, 0 = aleatorio" >> $Filename
-echo "${Pesos[indexP]}      // peso makespan, peso wqt" >> $Filename
+echo "${Tiempo}			    // tiempo máximo" >> $Filename
 echo "Selection-Parameters  // selections to apply" >> $Filename
 echo "0.9 1 $Mutacion       // selection parameter, diverge operator & its probability" >> $Filename
 echo "Intra-Operators       // operators to apply in the population" >> $Filename

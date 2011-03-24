@@ -404,8 +404,7 @@ private:
 
 	Problem& _pbm;
 	unsigned long _seed;
-	float _awrr_weight;
-	float _makespan_weight;
+	float _timeout;
 
 public:
 	SetUpParams(Operator_Pool& pool, Problem& pbm);
@@ -450,9 +449,8 @@ public:
 	const unsigned long seed() const;
 	void seed(const unsigned long val);
 
-	const float awrr_weight() const;
-	const float makespan_weight() const;
-	void obj_weight(const char* buffer);
+	float timeout() const;
+	void timeout(const char* buffer);
 
 	~SetUpParams();
 };

@@ -2700,7 +2700,7 @@ StopCondition_1::StopCondition_1() :
 bool StopCondition_1::EvaluateCondition(const Problem& pbm,
 		const Solver& solver, const SetUpParams& setup) {
 
-	if (solver.time_spent_trial() >= 9.0e+07) {
+	if (solver.time_spent_trial() >= (setup.timeout() * 1.0e+06)) {
 		return true;
 	} else {
 		return false;

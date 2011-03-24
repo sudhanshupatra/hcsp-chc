@@ -14,7 +14,7 @@ StopCondition::~StopCondition() {
 // SetUpParams -----------------------------------------------------------
 
 SetUpParams::SetUpParams(Operator_Pool& pool, Problem& pbm) :
-	_seed(0), _awrr_weight(1.0), _makespan_weight(1.0), _pbm(pbm),
+	_seed(0), _timeout(60.0), _pbm(pbm),
 	_independent_runs(0), _nb_evolution_steps(0),
 	_population_size(0),
 	_select_parents(6), // Selection of parents: Select all individuals. (fixed)
@@ -73,7 +73,7 @@ istream& operator>>(istream& is, SetUpParams& setup) {
 				setup.seed(op);
 				break;
 			case 5:
-				//setup.obj_weight(buffer);
+				setup.timeout(buffer);
 				break;
 			}
 			nb_param++;
@@ -131,14 +131,14 @@ ostream& operator<<(ostream& os, const SetUpParams& setup) {
 			setup.select_offsprings()) << endl << "\t" << "Intra_Operators: "
 			<< endl << "\t" << "-----------" << endl << endl;
 
-	for (int i = 0; i < setup.intra_operators_size(); i++)
+	for (uint i = 0; i < setup.intra_operators_size(); i++)
 		os << "\t" << (setup.pool().intra_operator(
 				setup.intra_operator_index(i))) << endl;
 
 	os << endl << "\t" << "Inter_Operators: " << endl << "\t" << "-----------"
 			<< endl << endl;
 
-	for (int i = 0; i < setup.inter_operators_size(); i++)
+	for (uint i = 0; i < setup.inter_operators_size(); i++)
 		os << "\t" << "Operator: " << setup.pool().inter_operator(
 				setup.inter_operator_index(i)) << endl;
 
@@ -154,10 +154,12 @@ ostream& operator<<(ostream& os, const SetUpParams& setup) {
 	os << "\t" << "Interval for checking asynchronous receptions: "
 			<< setup.check_asynchronous() << endl << endl;
 
+	os << "\t" << "Timeout: " << setup.timeout() << endl << endl;
+
 	os << endl << endl
 			<< "END CONFIGURATION -------------------------------------------"
 			<< endl << endl;
-	continue_question();
+//	continue_question();
 	return os;
 }
 
@@ -193,17 +195,13 @@ void SetUpParams::seed(const unsigned long val) {
 	_seed = val;
 }
 
-//void SetUpParams::obj_weight(const char* buffer) {
-//	sscanf(buffer, " %f %f %*s ", &_makespan_weight, &_awrr_weight);
-//
-////	if (DEBUG) {
-////		cout << "[DEBUG] Makespan weight: " << _makespan_weight << "\n";
-////		cout << "[DEBUG] AWRR weight: " << _awrr_weight << "\n";
-////	}
-//
-////	_pbm.setMakespanWeight(_makespan_weight);
-////	_pbm.setAWRRWeight(_awrr_weight);
-//}
+float SetUpParams::timeout() const {
+	return _timeout;
+}
+
+void SetUpParams::timeout(const char* buffer) {
+	sscanf(buffer, " %f %*s ", &_timeout);
+}
 
 const unsigned long SetUpParams::seed() const {
 	return _seed;

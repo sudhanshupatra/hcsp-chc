@@ -11,30 +11,29 @@ int main(int argc, char** argv) {
 	using skeleton CHC;
 	char path[MAX_BUFFER] = "";
 
-	//int clear = system("clear");
+	cout << "[INFO] Exec: " << argv[0] << endl;
 
-	//get_path(argv[0],path);
-	//cout << "[INFO] argv[0] " << path << endl;
-
-	//cout << "[INFO] argv[1] " << path << endl;
 	ifstream f(argv[1]);
 	if(!f) show_message(10);
+	cout << "[INFO] Configuration file: " << argv[1] << endl;
 
+	// Leo desde el configuration file ================================
 	f.getline(path,MAX_BUFFER,'\n');
-	//cout << "[INFO] getline " << path << endl;
+	cout << "[CONFIG] Skeleton file: " << path << endl;
 	ifstream f1(path);
 	if(!f1) show_message(11);
 
 	f.getline(path,MAX_BUFFER,'\n');
-	//cout << "[INFO] getline " << path << endl;
+	cout << "[CONFIG] Instancia: " << path << endl;
 	ifstream f2(path);
 	if(!f2) show_message(12);
 
 	f.getline(path,MAX_BUFFER,'\n'); // sol.txt
 	string out_file(path);
+	cout << "[CONFIG] Summary:" << path << endl;
 
 	f.getline(path,MAX_BUFFER,'\n'); // pesos.txt
-	//out << "[INFO] getline " << path << endl;
+	cout << "[CONFIG] Pesos:" << path << endl;
 	ifstream f3(path);
 	if(!f3) show_message(-1);
 
@@ -44,6 +43,7 @@ int main(int argc, char** argv) {
 	Operator_Pool pool(pbm);
 	SetUpParams cfg(pool, pbm);
 	f1 >> cfg;
+	cout << cfg;
 
 	// ============================================
 	vector<double> pesos;
@@ -59,10 +59,10 @@ int main(int argc, char** argv) {
 	}
 	f3.close();
 
-		cout << "Cantidad: " << pesos.size() << endl;
-		for (int i = 0; i < pesos.size(); i++) {
-			cout << "'" << pesos[i] << "'" << endl;
-		}
+	cout << "Cantidad: " << pesos.size() << endl;
+	for (unsigned int i = 0; i < pesos.size(); i++) {
+		cout << "'" << pesos[i] << "'" << endl;
+	}
 	assert(pesos.size() % 2 == 0);
 
 	pbm.loadWeights(pesos);
@@ -71,71 +71,34 @@ int main(int argc, char** argv) {
 	Solver_Lan solver(pbm,cfg,argc,argv);
 	solver.run();
 
-	//if (solver.pid()==0)
-	//{
-
 	if (solver.pid()!=0)
 	{
 		char str_pid[100];
 		sprintf(str_pid, "%d", solver.pid());
 
-		//f.getline(path,MAX_BUFFER,'\n');
 		out_file = out_file.append("_").append(str_pid);
-		//cout << "Output file: " << out_file << endl;
 		ofstream fexit(out_file.data());
 		if(!fexit) show_message(13);
-		//fexit << solver.userstatistics();
 
-		//solver.show_state();
-		//		cout << "[pid:" << solver.pid() << "] Solucion: " << solver.global_best_solution() << endl;
-		//		cout << "[pid:" << solver.pid() << "] Makespan: " << solver.global_best_solution().makespan() << endl;
-		//		cout << "[pid:" << solver.pid() << "] AWRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
-		//		cout << "[pid:" << solver.pid() << "] Fitness: " << solver.global_best_solution().fitness() << endl;
-		//solver.global_best_solution().showCustomStatics();
-
-		//		cout << "[pid:" << solver.pid() << "] Makespan: " << solver.current_best_solution().makespan() << endl;
-		//		cout << "[pid:" << solver.pid() << "] AWRR: " << solver.current_best_solution().accumulatedWeightedResponseRatio() << endl;
-		//		cout << "[pid:" << solver.pid() << "] Fitness: " << solver.current_best_solution().fitness() << endl;
-
-		//	char salida[5000];
-		//	sprintf(salida, "[pid:%d] Peso Makespan %f // Peso WRR: %f\n", solver.pid(), pbm.getMakespanWeight(), pbm.getWRRWeight());
-		//	cout << salida;
-		//	sprintf(salida, "[pid:%d] Makespan %f\n", solver.pid(), solver.best_solution_trial().makespan());
-		//	cout << salida;
-		//	sprintf(salida, "[pid:%d] WRR %f\n", solver.pid(), solver.best_solution_trial().accumulatedWeightedResponseRatio());
-		//	cout << salida;
-		//	sprintf(salida, "[pid:%d] Fitness %f\n", solver.pid(), solver.best_solution_trial().fitness());
-		//	cout << salida;
-		//	//sprintf(salida, "[pid:%d] Peso Makespan %f // Peso WRR: %f\n[pid:%d] Makespan %f\n[pid:%d] WRR %f\n[pid:%d] Fitness %f\n", solver.pid(), pbm.getMakespanWeight(), pbm.getWRRWeight(), solver.pid(), solver.best_solution_trial().makespan(), solver.pid(), solver.best_solution_trial().accumulatedWeightedResponseRatio(), solver.pid(), solver.best_solution_trial().fitness());
-		//	cout << salida;
-
-		//		cout << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
-		//		cout << "[pid:" << solver.pid() << "] Makespan: " << solver.best_solution_trial().makespan() << endl;
-		//		cout << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
-		//		cout << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
-
-//		fexit << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
-//		fexit << "[pid:" << solver.pid() << "] Makespan: " << solver.best_solution_trial().makespan() << endl;
-//		fexit << "[pid:" << solver.pid() << "] AWRR: " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << endl;
-//		fexit << "[pid:" << solver.pid() << "] Fitness: " << solver.best_solution_trial().fitness() << endl;
-
-		cout << "[pid:" << solver.pid() << "] Peso Makespan " << pbm.getMakespanWeight() << " // Peso WRR: " << pbm.getWRRWeight() << endl;
-		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
+		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 
 		for (int i = 0; i < solver.population().parents().size(); i++) {
-			fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
+			fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 		}
 
 		for (int i = 0; i < solver.population().offsprings().size(); i++) {
-			fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " "  << solver.pid() << endl;
+			fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 		}
-
-		//fexit << solver.best_solution_trial();
-
-		//cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;
 	} else {
-		cout << solver.userstatistics();
 		solver.show_state();
+		cout << "Solucion: " << solver.global_best_solution() << endl;
+		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
+		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
+		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
+
+		solver.global_best_solution().showCustomStatics();
+		cout << solver.userstatistics();
+		cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;
 	}
 	return(0);
 }
