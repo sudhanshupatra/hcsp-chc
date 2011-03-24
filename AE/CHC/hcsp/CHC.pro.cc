@@ -2311,7 +2311,7 @@ void Solver::UpdateFromCfgState() {
 }
 
 void Solver::show_state() const {
-if (!(current_iteration() % 100)){
+//if (!(current_iteration() % 100)){
 	cout << endl
 			<< " Current State ---------------------------------------------"
 			<< endl;
@@ -2350,10 +2350,10 @@ if (!(current_iteration() % 100)){
 	cout << endl << "Trial best found: " << trial_best_found();
 	cout << endl << "Iteration best found: " << iteration_best_found();
 	cout << endl << "Time best found: " << time_best_found();
-	//		cout << endl << endl << "Best Solution: " << endl << global_best_solution();
+	cout << endl << endl << "Best Solution: " << endl << global_best_solution();
 	cout << endl << endl << "Current time spent (so far): "
 			<< current_time_spent() << endl;
-}
+//}
 }
 
 Solver::~Solver() {
