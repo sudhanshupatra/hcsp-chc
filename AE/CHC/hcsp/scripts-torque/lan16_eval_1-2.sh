@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan16_eval1
+#PBS -N ae_lan16_eval1-2
 
 # Requerimientos
 #PBS -l nodes=16,walltime=8:00:00
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16-2/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16-2/
 
 #PBS -V
 
@@ -59,7 +59,7 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan-2"
 #EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 data[0]="u_c_hihi.0"
@@ -79,17 +79,17 @@ for i in {0..11}
 do
 	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan16/Braun_et_al/${data[i]}"
+	OutputFile="evaluacion/lan16-2/Braun_et_al/${data[i]}"
 	PesosFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 	
 	echo "Datos $DataFile"
 	echo "CfgFile $CfgFile"
 	cat $CfgFile
 		
-	echo "${CfgFile}" > Config_LAN16_eval1.cfg
-	echo "${DataFile}" >> Config_LAN16_eval1.cfg
-	echo "${OutputFile}.sol" >> Config_LAN16_eval1.cfg
-	echo "${PesosFile}" >> Config_LAN16_eval1.cfg
+	echo "${CfgFile}" > Config_LAN16_eval1-2.cfg
+	echo "${DataFile}" >> Config_LAN16_eval1-2.cfg
+	echo "${OutputFile}.sol" >> Config_LAN16_eval1-2.cfg
+	echo "${PesosFile}" >> Config_LAN16_eval1-2.cfg
 	
-	time($EXEC Config_LAN16_eval1.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN16_eval1-2.cfg > $OutputFile.log) 
 done

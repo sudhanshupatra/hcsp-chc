@@ -29,6 +29,8 @@ mkdir -p evaluacion/lan8/1024x32
 mkdir -p evaluacion/lan8/2048x64
 mkdir -p evaluacion/lan8/4096x128
 mkdir -p evaluacion/lan16/Braun_et_al
+mkdir -p evaluacion/lan16-1/Braun_et_al
+mkdir -p evaluacion/lan16-2/Braun_et_al
 mkdir -p seq
 mkdir -p lan4
 mkdir -p lan8
