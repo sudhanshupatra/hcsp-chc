@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan16_eval1
+#PBS -N ae_lan16_eval1-1
 
 # Requerimientos
 #PBS -l nodes=16,walltime=8:00:00
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16-1/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16-1/
 
 #PBS -V
 
@@ -77,19 +77,19 @@ data[11]="u_i_lolo.0"
 
 for i in {0..11}
 do
-	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16.cfg"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16-1.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan16/Braun_et_al/${data[i]}"
+	OutputFile="evaluacion/lan16-1/Braun_et_al/${data[i]}"
 	PesosFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 	
 	echo "Datos $DataFile"
 	echo "CfgFile $CfgFile"
 	cat $CfgFile
 		
-	echo "${CfgFile}" > Config_LAN16_eval1.cfg
-	echo "${DataFile}" >> Config_LAN16_eval1.cfg
-	echo "${OutputFile}.sol" >> Config_LAN16_eval1.cfg
-	echo "${PesosFile}" >> Config_LAN16_eval1.cfg
+	echo "${CfgFile}" > Config_LAN16_eval1-1.cfg
+	echo "${DataFile}" >> Config_LAN16_eval1-1.cfg
+	echo "${OutputFile}.sol" >> Config_LAN16_eval1-1.cfg
+	echo "${PesosFile}" >> Config_LAN16_eval1-1.cfg
 	
-	time($EXEC Config_LAN16_eval1.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN16_eval1-1.cfg > $OutputFile.log) 
 done
