@@ -1360,9 +1360,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		Solution::_makespan_reference = makespan();
 
 		if (mypid == 0) {
-			cout << "MCT reference fitness: " << fitness();
-			cout << ", WRR: " << accumulatedWeightedResponseRatio();
-			cout << ", Makespan: " << makespan() << endl << endl;
+//			cout << "MCT reference fitness: " << fitness();
+//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+//			cout << ", Makespan: " << makespan() << endl << endl;
 		} else {
 			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
