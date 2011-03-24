@@ -16,7 +16,7 @@ echo "Cruzamiento $Cruzamiento"
 echo "Mutación $Mutacion"
 echo "Timeout $Timeout"
 
-Filename="scripts_evaluacion/chc_lan16.cfg"
+Filename="scripts_evaluacion/chc_lan16-1.cfg"
 echo "30			// number of independent runs" > $Filename
 
 if [ $? != 0 ]; then
