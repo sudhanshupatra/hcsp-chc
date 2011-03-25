@@ -843,8 +843,8 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			}
 		}
 
-		if (_retryCount < 5) {
-			if (i == bestSolutionIndex) {
+		if (i == bestSolutionIndex) {
+			if (_retryCount < 5) {
 				double current_fitness = sols[i]->fitness();
 
 				sols[i]->doLocalSearch();
@@ -854,9 +854,12 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 				} else {
 					_retryCount++;
 				}
+			} else {
+				cout << "[DEBUG] Se mutó la mejor solución!" << endl;
+
+				_retryCount = 0;
+				sols[i]->mutate();
 			}
-		} else {
-			sols[i]->mutate();
 		}
 	}
 }
