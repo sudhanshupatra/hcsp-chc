@@ -1970,11 +1970,11 @@ void Solution::doLocalSearch() {
 		maquinasSeleccionadas.push_back(roulette.drawOneByIndex());
 	}
 
-	double fitnessInicial = this->fitness();
-	bool solucionAceptada = false;
+//	double fitnessInicial = this->fitness();
+//	bool solucionAceptada = false;
 
 	for (unsigned int machinePos = 0; (machinePos
-			< maquinasSeleccionadas.size()) && !solucionAceptada; machinePos++) {
+			< maquinasSeleccionadas.size()) /*&& !solucionAceptada*/; machinePos++) {
 
 		int machineId;
 		machineId = maquinasSeleccionadas[machinePos];
@@ -1982,14 +1982,14 @@ void Solution::doLocalSearch() {
 		// PALS aleatorio para HCSP.
 		//		if (DEBUG) cout << endl << "[DEBUG] Búsqueda en la máquina " << machineId << endl;
 
-		bool finBusqMaquina;
-		finBusqMaquina = false;
+//		bool finBusqMaquina;
+//		finBusqMaquina = false;
 
-		for (int intento = 0; (intento < PALS_MAX_INTENTOS) && !finBusqMaquina; intento++) {
+//		for (int intento = 0; (intento < PALS_MAX_INTENTOS) && !finBusqMaquina; intento++) {
 			double mejorMovimientoFitness;
 			int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos,
 					mejorMovimientoDestinoMachineId;
-			mejorMovimientoFitness = fitnessInicial;
+			mejorMovimientoFitness = this->fitness();
 			mejorMovimientoTaskPos = -1;
 			mejorMovimientoDestinoTaskPos = -1;
 			mejorMovimientoDestinoMachineId = -1;
@@ -2090,17 +2090,17 @@ void Solution::doLocalSearch() {
 				}
 			}
 
-			if (mejorMovimientoFitness < fitnessInicial) {
+//			if (mejorMovimientoFitness < fitnessInicial) {
 				//				if (DEBUG) cout << endl << "[DEBUG] Se mejoró la solución!" << endl;
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
-								finBusqMaquina = true;
-			}
-		}
+//								finBusqMaquina = true;
+//			}
+//		}
 
-		solucionAceptada = (this->fitness() / fitnessInicial)
-				>= PALS_UMBRAL_MEJORA;
+//		solucionAceptada = (this->fitness() / fitnessInicial)
+//				>= PALS_UMBRAL_MEJORA;
 	}
 }
 
