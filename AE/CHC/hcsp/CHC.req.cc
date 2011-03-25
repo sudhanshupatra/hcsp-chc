@@ -11,7 +11,7 @@ skeleton CHC {
 
 Problem::Problem() :
 	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL),
-			_wrr_weights(), _makespan_weights(), _tasksPriorities(), _mypid(-1) {
+			_wrr_weights(), _makespan_weights(), _tasksPriorities(), _mypid(0) {
 }
 
 // ===================================
@@ -1360,9 +1360,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		Solution::_makespan_reference = makespan();
 
 		if (mypid == 0) {
-//			cout << "MCT reference fitness: " << fitness();
-//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
-//			cout << ", Makespan: " << makespan() << endl << endl;
+			//			cout << "MCT reference fitness: " << fitness();
+			//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+			//			cout << ", Makespan: " << makespan() << endl << endl;
 		} else {
 			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
@@ -1839,8 +1839,8 @@ double Solution::fitness() {
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
 
-//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
-//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
+	//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
+	//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
 
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
@@ -1954,8 +1954,8 @@ double Solution::getMachineFitness(int machineId) {
 }
 
 void Solution::doLocalSearch() {
-	//	if (DEBUG)
-	//		cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
+	//		if (DEBUG)
+	//			cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
 
 	vector<double> fitnessByMachine;
 
@@ -1970,8 +1970,8 @@ void Solution::doLocalSearch() {
 		maquinasSeleccionadas.push_back(roulette.drawOneByIndex());
 	}
 
-//	double fitnessInicial = this->fitness();
-//	bool solucionAceptada = false;
+	//	double fitnessInicial = this->fitness();
+	//	bool solucionAceptada = false;
 
 	for (unsigned int machinePos = 0; (machinePos
 			< maquinasSeleccionadas.size()) /*&& !solucionAceptada*/; machinePos++) {
@@ -1982,126 +1982,128 @@ void Solution::doLocalSearch() {
 		// PALS aleatorio para HCSP.
 		//		if (DEBUG) cout << endl << "[DEBUG] Búsqueda en la máquina " << machineId << endl;
 
-//		bool finBusqMaquina;
-//		finBusqMaquina = false;
+		//		bool finBusqMaquina;
+		//		finBusqMaquina = false;
 
-//		for (int intento = 0; (intento < PALS_MAX_INTENTOS) && !finBusqMaquina; intento++) {
-			double mejorMovimientoFitness;
-			int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos,
-					mejorMovimientoDestinoMachineId;
-			mejorMovimientoFitness = this->fitness();
-			mejorMovimientoTaskPos = -1;
-			mejorMovimientoDestinoTaskPos = -1;
-			mejorMovimientoDestinoMachineId = -1;
+		//		for (int intento = 0; (intento < PALS_MAX_INTENTOS) && !finBusqMaquina; intento++) {
+		double mejorMovimientoFitness;
+		int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos,
+				mejorMovimientoDestinoMachineId;
+		mejorMovimientoFitness = INFINITY;
+		mejorMovimientoTaskPos = -1;
+		mejorMovimientoDestinoTaskPos = -1;
+		mejorMovimientoDestinoMachineId = -1;
 
-			//			if (DEBUG) cout << endl << "[DEBUG] Intento " << intento << endl;
+		//			if (DEBUG) cout << endl << "[DEBUG] Intento " << intento << endl;
 
-			// Itero en las tareas de la máquina actual.
-			int startTaskOffset, endTaskOffset;
-			if (this->machines()[machineId].countTasks() > PALS_TOP_M) {
-				// Si la cantidad de tareas en la máquina actual es mayor que PALS_TOP_M.
+		// Itero en las tareas de la máquina actual.
+		int startTaskOffset, endTaskOffset;
+		if (this->machines()[machineId].countTasks() > PALS_TOP_M) {
+			// Si la cantidad de tareas en la máquina actual es mayor que PALS_TOP_M.
+			double rand;
+			rand = rand01();
+
+			double aux;
+			aux = rand * this->machines()[machineId].countTasks();
+
+			startTaskOffset = (int) aux;
+			endTaskOffset = startTaskOffset + PALS_TOP_M;
+		} else {
+			// Si hay menos o igual cantidad de tareas en la máquina actual que el
+			// tope PALS_TOP_M, las recorro todas.
+			startTaskOffset = 0;
+			endTaskOffset = this->machines()[machineId].countTasks();
+		}
+
+		//			if (DEBUG) cout << endl << "[DEBUG] En la máquina actual hay " << this->machines()[machineId].countTasks()
+		//					<< " tareas, pruebo desde la " << startTaskOffset << " a la " << endTaskOffset << endl;
+
+		for (int taskOffset = startTaskOffset; taskOffset < endTaskOffset; taskOffset++) {
+			int taskPos;
+			taskPos = taskOffset % this->machines()[machineId].countTasks();
+
+			int taskId;
+			taskId = this->machines()[machineId].getTask(taskPos);
+
+			// Itero en las tareas de las otras máquinas.
+			int startSwapTaskOffset, countSwapTaskOffset;
+
+			if ((this->pbm().taskCount() - 1) > PALS_TOP_T) {
+				// Si la cantidad de las tareas del problema menos la tarea que estoy
+				// intentando mover es mayor que PALS_TOP_T.
 				double rand;
 				rand = rand01();
 
 				double aux;
-				aux = rand * this->machines()[machineId].countTasks();
+				aux = rand * this->pbm().taskCount();
 
-				startTaskOffset = (int) aux;
-				endTaskOffset = startTaskOffset + PALS_TOP_M;
+				startSwapTaskOffset = (int) aux;
+				countSwapTaskOffset = PALS_TOP_T;
 			} else {
-				// Si hay menos o igual cantidad de tareas en la máquina actual que el
-				// tope PALS_TOP_M, las recorro todas.
-				startTaskOffset = 0;
-				endTaskOffset = this->machines()[machineId].countTasks();
+				// Si hay menos o igual cantidad de tareas en el problema que el número
+				// PALS_TOP_T las recorro todas menos la que estoy intentando mover.
+				startSwapTaskOffset = 0;
+				countSwapTaskOffset = this->pbm().taskCount() - 1;
 			}
 
-			//			if (DEBUG) cout << endl << "[DEBUG] En la máquina actual hay " << this->machines()[machineId].countTasks()
-			//					<< " tareas, pruebo desde la " << startTaskOffset << " a la " << endTaskOffset << endl;
+			double movimientoFitness;
+			movimientoFitness = 0.0;
 
-			for (int taskOffset = startTaskOffset; taskOffset < endTaskOffset; taskOffset++) {
-				int taskPos;
-				taskPos = taskOffset % this->machines()[machineId].countTasks();
+			//				if (DEBUG) cout << endl << "[DEBUG] En el problema hay " << this->pbm().taskCount()
+			//						<< " tareas, pruebo desde la " << startSwapTaskOffset << endl;
 
-				int taskId;
-				taskId = this->machines()[machineId].getTask(taskPos);
+			for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
+					> 0; swapTaskOffset++) {
+				assert(swapTaskOffset < (2*this->pbm().taskCount()));
 
-				// Itero en las tareas de las otras máquinas.
-				int startSwapTaskOffset, countSwapTaskOffset;
+				int swapTaskId;
+				swapTaskId = swapTaskOffset % this->pbm().taskCount();
 
-				if ((this->pbm().taskCount() - 1) > PALS_TOP_T) {
-					// Si la cantidad de las tareas del problema menos la tarea que estoy
-					// intentando mover es mayor que PALS_TOP_T.
-					double rand;
-					rand = rand01();
+				//					if (DEBUG) cout << endl << "[DEBUG] Intento swapear taskId=" << taskId
+				//							<< "con taskId=" << swapTaskId << endl;
 
-					double aux;
-					aux = rand * this->pbm().taskCount();
+				if (swapTaskId != taskId) {
+					countSwapTaskOffset--;
 
-					startSwapTaskOffset = (int) aux;
-					countSwapTaskOffset = PALS_TOP_T;
-				} else {
-					// Si hay menos o igual cantidad de tareas en el problema que el número
-					// PALS_TOP_T las recorro todas menos la que estoy intentando mover.
-					startSwapTaskOffset = 0;
-					countSwapTaskOffset = this->pbm().taskCount() - 1;
-				}
+					int swapMachineId, swapTaskPos;
+					assert(this->findTask(swapTaskId, swapMachineId, swapTaskPos));
 
-				double movimientoFitness;
-				movimientoFitness = 0.0;
+					//==============================================================
+					//TODO: Optimizar!!!
+					//==============================================================
+					this->swapTasks(machineId, taskPos, swapMachineId,
+							swapTaskPos);
+					movimientoFitness = this->fitness();
+					this->swapTasks(swapMachineId, swapTaskPos, machineId,
+							taskPos);
+					//==============================================================
 
-				//				if (DEBUG) cout << endl << "[DEBUG] En el problema hay " << this->pbm().taskCount()
-				//						<< " tareas, pruebo desde la " << startSwapTaskOffset << endl;
+					if (movimientoFitness < mejorMovimientoFitness) {
+						//							cout << endl << "Mejora parcial " << movimientoFitness - mejorMovimientoFitness << endl;
 
-				for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
-						> 0; swapTaskOffset++) {
-					assert(swapTaskOffset < (2*this->pbm().taskCount()));
-
-					int swapTaskId;
-					swapTaskId = swapTaskOffset % this->pbm().taskCount();
-
-					//					if (DEBUG) cout << endl << "[DEBUG] Intento swapear taskId=" << taskId
-					//							<< "con taskId=" << swapTaskId << endl;
-
-					if (swapTaskId != taskId) {
-						countSwapTaskOffset--;
-
-						int swapMachineId, swapTaskPos;
-						assert(this->findTask(swapTaskId, swapMachineId, swapTaskPos));
-
-						//==============================================================
-						//TODO: Optimizar!!!
-						//==============================================================
-						this->swapTasks(machineId, taskPos, swapMachineId,
-								swapTaskPos);
-						movimientoFitness = this->fitness();
-						this->swapTasks(swapMachineId, swapTaskPos, machineId,
-								taskPos);
-						//==============================================================
-
-						if (movimientoFitness < mejorMovimientoFitness) {
-							//							cout << endl << "Mejora parcial " << movimientoFitness - mejorMovimientoFitness << endl;
-
-							mejorMovimientoFitness = movimientoFitness;
-							mejorMovimientoTaskPos = taskPos;
-							mejorMovimientoDestinoMachineId = swapMachineId;
-							mejorMovimientoDestinoTaskPos = swapTaskPos;
-						}
+						mejorMovimientoFitness = movimientoFitness;
+						mejorMovimientoTaskPos = taskPos;
+						mejorMovimientoDestinoMachineId = swapMachineId;
+						mejorMovimientoDestinoTaskPos = swapTaskPos;
 					}
 				}
 			}
+		}
 
-//			if (mejorMovimientoFitness < fitnessInicial) {
-				//				if (DEBUG) cout << endl << "[DEBUG] Se mejoró la solución!" << endl;
-				this->swapTasks(machineId, mejorMovimientoTaskPos,
-						mejorMovimientoDestinoMachineId,
-						mejorMovimientoDestinoTaskPos);
-//								finBusqMaquina = true;
-//			}
-//		}
+		//			if (mejorMovimientoFitness < fitnessInicial) {
+		//				if (DEBUG) cout << endl << "[DEBUG] Se mejoró la solución!" << endl;
+		this->swapTasks(machineId, mejorMovimientoTaskPos,
+				mejorMovimientoDestinoMachineId, mejorMovimientoDestinoTaskPos);
+		//								finBusqMaquina = true;
+		//			}
+		//		}
 
-//		solucionAceptada = (this->fitness() / fitnessInicial)
-//				>= PALS_UMBRAL_MEJORA;
+		//		solucionAceptada = (this->fitness() / fitnessInicial)
+		//				>= PALS_UMBRAL_MEJORA;
 	}
+
+	//	if (DEBUG)
+	//		cout << endl << "[DEBUG] Solution::doLocalSearch end" << endl;
 }
 
 void Solution::mutate() {
