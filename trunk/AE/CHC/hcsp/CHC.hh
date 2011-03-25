@@ -26,8 +26,8 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 1.0
-#define MUT_TASK 1.0
+#define MUT_MAQ 0.5
+#define MUT_TASK 0.5
 
 // CROSS
 #define CROSS_TASK 0.5
@@ -37,12 +37,11 @@ skeleton CHC {
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
-#define PALS_MAQ 16 //3
-#define PALS_MAX_INTENTOS 1
+#define PALS_MAQ 5
+#define PALS_MAX_INTENTOS 3
 #define PALS_UMBRAL_MEJORA 1.0
 #define PALS_TOP_M 16 //8
 #define PALS_TOP_T 512 //256
-
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
 
@@ -343,6 +342,9 @@ public:
 
 	virtual void RefreshState(const StateCenter& _sc) const;
 	virtual void UpdateFromState(const StateCenter& _sc);
+
+private:
+	int _retryCount;
 };
 
 // User_Operator ----------------------------------------------------------------------------------
