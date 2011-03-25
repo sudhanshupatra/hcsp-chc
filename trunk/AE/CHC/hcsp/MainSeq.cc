@@ -8,7 +8,7 @@ int main (int argc, char** argv)
 {
 	using skeleton CHC;
 
-	int clear = system("clear");
+//	int clear = system("clear");
 
 	if(argc < 4)
 		show_message(1);
@@ -26,6 +26,11 @@ int main (int argc, char** argv)
 	SetUpParams cfg(pool, pbm);
 	f1 >> cfg;
 
+	vector<double> pesos;
+	pesos.push_back(1.0);
+	pesos.push_back(1.0);
+	pbm.loadWeights(pesos);
+
 	Solver_Seq solver(pbm,cfg);
 	solver.run();
 
@@ -34,7 +39,7 @@ int main (int argc, char** argv)
 		solver.show_state();
 		cout << "Solution" << solver.global_best_solution() << endl;
 		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
-		cout << "AWRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
+		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
 		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
 		solver.global_best_solution().showCustomStatics();
 
