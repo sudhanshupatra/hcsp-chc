@@ -334,7 +334,7 @@ public:
 
 	void diverge(Solution& s) const;
 	void diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
-			float mutationProbability) const;
+			float mutationProbability);
 
 	// applies mutation over all solutions in array sols
 	virtual void execute(Rarray<Solution*>& sols) const;

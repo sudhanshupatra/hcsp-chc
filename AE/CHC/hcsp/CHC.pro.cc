@@ -831,7 +831,7 @@ Diverge::Diverge() :
 }
 
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
-		float mutationProbability) const {
+		float mutationProbability) {
 
 	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
 	//			<< mutationProbability << ")"<< endl;
@@ -843,7 +843,7 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			}
 		}
 
-		if (retry_count < 3) {
+		if (_retryCount < 5) {
 			if (i == bestSolutionIndex) {
 				double current_fitness = sols[i]->fitness();
 
@@ -862,7 +862,9 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {
-	diverge(sols, -1, 1.0);
+	//diverge(sols, -1, 1.0);
+	assert(false);
+	exit(-1);
 }
 
 ostream& operator<<(ostream& os, const Diverge& diverge) {
@@ -1047,7 +1049,7 @@ void Migration::execute(Population& pop,
 			_netstream << wait(packed);
 			_netstream << pack_begin;
 
-			for (int i = 0; i < migration_size; i++) {
+			for (uint i = 0; i < migration_size; i++) {
 				// select individual to be remplaced
 				struct individual ind;
 				ind
