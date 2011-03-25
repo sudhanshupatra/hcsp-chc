@@ -14,13 +14,13 @@ StopCondition::~StopCondition() {
 // SetUpParams -----------------------------------------------------------
 
 SetUpParams::SetUpParams(Operator_Pool& pool, Problem& pbm) :
-	_seed(0), _timeout(60.0), _pbm(pbm),
-	_independent_runs(0), _nb_evolution_steps(0),
-	_population_size(0),
-	_select_parents(6), // Selection of parents: Select all individuals. (fixed)
-	_select_offsprings(7), // Selection of offspring : Select the best individuals. (fixed)
-	_inter_operators(), _intra_operators(), _refresh_global_state(1),
-	_synchronized(0), _check_asynchronous(1), _display_state(0), _pool(pool) {
+	_seed(0), _timeout(60.0), _pbm(pbm), _independent_runs(0),
+			_nb_evolution_steps(0), _population_size(0),
+			_select_parents(6), // Selection of parents: Select all individuals. (fixed)
+			_select_offsprings(7), // Selection of offspring : Select the best individuals. (fixed)
+			_inter_operators(), _intra_operators(), _refresh_global_state(1),
+			_synchronized(0), _check_asynchronous(1), _display_state(0), _pool(
+					pool) {
 }
 
 Operator_Pool& SetUpParams::pool() const {
@@ -159,7 +159,7 @@ ostream& operator<<(ostream& os, const SetUpParams& setup) {
 	os << endl << endl
 			<< "END CONFIGURATION -------------------------------------------"
 			<< endl << endl;
-//	continue_question();
+	//	continue_question();
 	return os;
 }
 
@@ -671,47 +671,61 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
 				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
 
-				if ((machineIdSol1 != machineIdSol2)||(taskPosSol1 != taskPosSol2)) {
+				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
+						!= taskPosSol2)) {
 					if (rand01() <= 0.5) {
 						// Intento mejorar metrica de makespan en la solución
 						if (machineIdSol1 != machineIdSol2) {
-							if (sol1.getMachines()[machineIdSol1].getMakespan() <
-									sol2.getMachines()[machineIdSol2].getMakespan()) {
+							if (sol1.getMachines()[machineIdSol1].getMakespan()
+									< sol2.getMachines()[machineIdSol2].getMakespan()) {
 								// Sol1 es mejor que Sol2
-								sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
-								sol2.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol1);
+								sol2.getMachines()[machineIdSol2].removeTask(
+										taskPosSol2);
+								sol2.getMachines()[machineIdSol2].safeInsertTask(
+										taskId, taskPosSol1);
 							} else {
-								sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
-								sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+								sol1.getMachines()[machineIdSol1].removeTask(
+										taskPosSol1);
+								sol1.getMachines()[machineIdSol2].safeInsertTask(
+										taskId, taskPosSol2);
 							}
 
 							modificado = true;
 						}
 					}
 
-					if ((!modificado)&&(rand01() <= 0.5)) {
+					if ((!modificado) && (rand01() <= 0.5)) {
 						// Intento mejorar metrica de wrr en la solución
-						if (sol1.getMachines()[machineIdSol1].getWeightedResponseRatio(taskPosSol1) <
-								sol2.getMachines()[machineIdSol2].getWeightedResponseRatio(taskPosSol2)) {
+						if (sol1.getMachines()[machineIdSol1].getWeightedResponseRatio(
+								taskPosSol1)
+								< sol2.getMachines()[machineIdSol2].getWeightedResponseRatio(
+										taskPosSol2)) {
 							// Sol1 es mejor que Sol2
-							sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
-							sol2.getMachines()[machineIdSol1].safeInsertTask(taskId, taskPosSol1);
+							sol2.getMachines()[machineIdSol2].removeTask(
+									taskPosSol2);
+							sol2.getMachines()[machineIdSol1].safeInsertTask(
+									taskId, taskPosSol1);
 						} else {
-							sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
-							sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+							sol1.getMachines()[machineIdSol1].removeTask(
+									taskPosSol1);
+							sol1.getMachines()[machineIdSol2].safeInsertTask(
+									taskId, taskPosSol2);
 						}
 
 						modificado = true;
 					}
 
-
 					if (!modificado) {
 						if (rand01() <= 0.5) {
-							sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
-							sol2.getMachines()[machineIdSol1].safeInsertTask(taskId, taskPosSol1);
+							sol2.getMachines()[machineIdSol2].removeTask(
+									taskPosSol2);
+							sol2.getMachines()[machineIdSol1].safeInsertTask(
+									taskId, taskPosSol1);
 						} else {
-							sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
-							sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+							sol1.getMachines()[machineIdSol1].removeTask(
+									taskPosSol1);
+							sol1.getMachines()[machineIdSol2].safeInsertTask(
+									taskId, taskPosSol2);
 						}
 					}
 				}
@@ -812,15 +826,15 @@ int RouletteWheel::drawOneByIndex() const {
 }
 
 Diverge::Diverge() :
-	Intra_Operator(1) {
+	Intra_Operator(1), _retryCount(0) {
 	probability = new float[1];
 }
 
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) const {
 
-//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
-//			<< mutationProbability << ")"<< endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
+	//			<< mutationProbability << ")"<< endl;
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (i != bestSolutionIndex) {
@@ -829,8 +843,20 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			}
 		}
 
-		if (i == bestSolutionIndex) {
-			sols[i]->doLocalSearch();
+		if (retry_count < 3) {
+			if (i == bestSolutionIndex) {
+				double current_fitness = sols[i]->fitness();
+
+				sols[i]->doLocalSearch();
+
+				if (sols[i]->fitness() < current_fitness) {
+					_retryCount = 0;
+				} else {
+					_retryCount++;
+				}
+			}
+		} else {
+			sols[i]->mutate();
 		}
 	}
 }
@@ -959,138 +985,149 @@ Migration::Migration(const Direction dir) :
 	Inter_Operator(0, dir) {
 }
 
-void Migration::execute(Population& pop,const unsigned long current_generation,NetStream& _netstream,const bool synchronized,const unsigned int check_asynchronous) const
-{
+void Migration::execute(Population& pop,
+		const unsigned long current_generation, NetStream& _netstream,
+		const bool synchronized, const unsigned int check_asynchronous) const {
 
 	Solution* solution_to_send;
 	Solution* solution_received;
 	Solution* solution_to_remplace;
-	bool need_to_revaluate=false;
+	bool need_to_revaluate = false;
 	int mypid;
 
-	int nb_proc=_netstream.pnumber();	// Get the number of processes running
+	int nb_proc = _netstream.pnumber(); // Get the number of processes running
 
-	mypid=_netstream.my_pid();
+	mypid = _netstream.my_pid();
 
-	int to   = (mypid + 1) % nb_proc;		     // Source (from) and Target (to) of processes
+	int to = (mypid + 1) % nb_proc; // Source (from) and Target (to) of processes
 	int from = (nb_proc + mypid - 1) % nb_proc;
 
 	// process number 0 is only to store the global state
- 	if (to==0) to=1;
-	if (from==0) from=nb_proc - 1;
+	if (to == 0)
+		to = 1;
+	if (from == 0)
+		from = nb_proc - 1;
 
-	_netstream << set_target(to)  << set_source(from)
-		       << get_target(&to) << get_source(&from);
+	_netstream << set_target(to) << set_source(from) << get_target(&to)
+			<< get_source(&from);
 
-	if ( (current_generation % migration_rate) == 0
-	  && (current_generation!=pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
+	if ((current_generation % migration_rate) == 0 && (current_generation
+			!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
 	{
-		pop.setup().pool().selector(migration_selection_1).prepare(pop.fitness_values(),false);
+		pop.setup().pool().selector(migration_selection_1).prepare(
+				pop.fitness_values(), false);
 
 		_netstream << pack_begin;
-		for (int i=0;i<migration_size;i++)
-		{
+		for (int i = 0; i < migration_size; i++) {
 			// select individual to send
-			solution_to_send = pop.parents()[pop.setup().pool().selector(migration_selection_1).select_one(
-			pop.parents(),pop.offsprings(),pop.fitness_values(),migration_selection_conf_1,false).index];
+			solution_to_send = pop.parents()[pop.setup().pool().selector(
+					migration_selection_1).select_one(pop.parents(),
+					pop.offsprings(), pop.fitness_values(),
+					migration_selection_conf_1, false).index];
 
 			_netstream << *solution_to_send;
 		}
 		_netstream << pack_end;
 
-		if (synchronized)    // synchronous mode: blocked until data are received
+		if (synchronized) // synchronous mode: blocked until data are received
 		{
-			pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
+			pop.setup().pool().selector(migration_selection_2).prepare(
+					pop.fitness_values(), true);
 
-            /* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
+			/* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
 			_netstream << set_source(MPI_ANY_SOURCE);
 			int tipo = 0;
-			_netstream._wait2(any,tipo);
+			_netstream._wait2(any, tipo);
 
-			if (tipo == 1){
+			if (tipo == 1) {
 				return;
 			}
 			/* Fin Ruso */
 
- 			_netstream << wait(packed);
+			_netstream << wait(packed);
 			_netstream << pack_begin;
 
-		 	for (int i=0;i<migration_size;i++)
-			{
-                // select individual to be remplaced
+			for (int i = 0; i < migration_size; i++) {
+				// select individual to be remplaced
 				struct individual ind;
-				ind = pop.setup().pool().selector(migration_selection_2).select_one(
-				pop.parents(),pop.offsprings(),pop.fitness_values(),migration_selection_conf_2,true);
+				ind
+						= pop.setup().pool().selector(migration_selection_2).select_one(
+								pop.parents(), pop.offsprings(),
+								pop.fitness_values(),
+								migration_selection_conf_2, true);
 				solution_to_remplace = pop.parents()[ind.index];
-				solution_received=new Solution(solution_to_remplace->pbm());
+				solution_received = new Solution(solution_to_remplace->pbm());
 				_netstream >> *solution_received;
 
 				// remplace policy
-				if ((solution_received->fitness()<=solution_to_remplace->fitness() && direction==minimize)
-				 || (solution_received->fitness()>=solution_to_remplace->fitness() && direction==maximize))
-				{
-					need_to_revaluate=true;
-					for(int j = 0; j < pop.parents().size(); j++)
-					{
-						if(pop.fitness_values()[j].index == ind.index)
-						{
+				if ((solution_received->fitness()
+						<= solution_to_remplace->fitness() && direction
+						== minimize) || (solution_received->fitness()
+						>= solution_to_remplace->fitness() && direction
+						== maximize)) {
+					need_to_revaluate = true;
+					for (int j = 0; j < pop.parents().size(); j++) {
+						if (pop.fitness_values()[j].index == ind.index) {
 							pop.fitness_values()[j].change = true;
 							*pop.parents()[ind.index] = *solution_received;
 						}
 					}
 				}
-				delete(solution_received);
+				delete (solution_received);
 			}
 			_netstream << pack_end;
 
 		}
 	} // end if
 
-	if (!synchronized && ((current_generation % check_asynchronous) ==0))
-	{ // asynchronous mode: if there are not data, continue;
-	  // but, if there are data, i have to receive it
-		int pending=false;
-		_netstream._probe(packed,pending);
-		if (pending)
-		{
-			pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
+	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
+		// but, if there are data, i have to receive it
+		int pending = false;
+		_netstream._probe(packed, pending);
+		if (pending) {
+			pop.setup().pool().selector(migration_selection_2).prepare(
+					pop.fitness_values(), true);
 
 			_netstream << pack_begin;
-			for (int i=0;i<migration_size;i++)
-			{
-				pending=false;
-		   		_netstream._probe(regular,pending);
-				if (!pending) break;
+			for (int i = 0; i < migration_size; i++) {
+				pending = false;
+				_netstream._probe(regular, pending);
+				if (!pending)
+					break;
 
 				// select individual to be remplaced
 				struct individual ind;
-				ind = pop.setup().pool().selector(migration_selection_2).select_one(
-				pop.parents(),pop.offsprings(),pop.fitness_values(),migration_selection_conf_2,true);
+				ind
+						= pop.setup().pool().selector(migration_selection_2).select_one(
+								pop.parents(), pop.offsprings(),
+								pop.fitness_values(),
+								migration_selection_conf_2, true);
 				solution_to_remplace = pop.parents()[ind.index];
-				solution_received=new Solution(solution_to_remplace->pbm());
+				solution_received = new Solution(solution_to_remplace->pbm());
 				_netstream >> *solution_received;
 
 				// remplace policy
-				if ((solution_received->fitness()<=solution_to_remplace->fitness() && direction==minimize)
-				 || (solution_received->fitness()>=solution_to_remplace->fitness() && direction==maximize))
-				{
-					need_to_revaluate=true;
-					for(int j = 0; j < pop.parents().size(); j++)
-					{
-						if(pop.fitness_values()[j].index == ind.index)
-						{
+				if ((solution_received->fitness()
+						<= solution_to_remplace->fitness() && direction
+						== minimize) || (solution_received->fitness()
+						>= solution_to_remplace->fitness() && direction
+						== maximize)) {
+					need_to_revaluate = true;
+					for (int j = 0; j < pop.parents().size(); j++) {
+						if (pop.fitness_values()[j].index == ind.index) {
 							pop.fitness_values()[j].change = true;
 							*pop.parents()[ind.index] = *solution_received;
 						}
 					}
 				}
-				delete(solution_received);
+				delete (solution_received);
 			} // end for
 			_netstream << pack_begin;
 		} // end if
 	}
 
-	if (need_to_revaluate) pop.evaluate_parents();
+	if (need_to_revaluate)
+		pop.evaluate_parents();
 }
 
 ostream& operator<<(ostream& os, const Migration& migration) {
@@ -2311,7 +2348,7 @@ void Solver::UpdateFromCfgState() {
 }
 
 void Solver::show_state() const {
-//if (!(current_iteration() % 100)){
+	//if (!(current_iteration() % 100)){
 	cout << endl
 			<< " Current State ---------------------------------------------"
 			<< endl;
@@ -2353,7 +2390,7 @@ void Solver::show_state() const {
 	cout << endl << endl << "Best Solution: " << endl << global_best_solution();
 	cout << endl << endl << "Current time spent (so far): "
 			<< current_time_spent() << endl;
-//}
+	//}
 }
 
 Solver::~Solver() {
@@ -2366,10 +2403,12 @@ Solver_Seq::Solver_Seq(const Problem& pbm, const SetUpParams& setup) :
 	Solver(pbm, setup) {
 
 	if (setup.seed() > 0) {
-		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() << "." << endl;
+		if (DEBUG)
+			cout << endl << "[DEBUG] Seed fijo " << setup.seed() << "." << endl;
 		random_seed(setup.seed());
 	} else {
-		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;
+		if (DEBUG)
+			cout << endl << "[DEBUG] Seed aleatorio." << endl;
 		random_seed(time(0));
 	}
 
@@ -2381,7 +2420,7 @@ Solver_Seq::~Solver_Seq() {
 
 void Solver_Seq::StartUp() {
 	Population pop(problem, params);
-	pop.initialize(0,1); //Proceso 0, cantidad de procesos 1
+	pop.initialize(0, 1); //Proceso 0, cantidad de procesos 1
 	StartUp(pop);
 }
 
@@ -2493,10 +2532,13 @@ Solver_Lan::Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
 	pbm.setPId(mypid);
 
 	if (setup.seed() > 0) {
-		if (DEBUG) cout << endl << "[DEBUG] Seed fijo " << setup.seed() + (mypid + 1) << "." << endl;
+		if (DEBUG)
+			cout << endl << "[DEBUG] Seed fijo " << setup.seed() + (mypid + 1)
+					<< "." << endl;
 		random_seed(setup.seed() + (mypid + 1));
 	} else {
-		if (DEBUG) cout << endl << "[DEBUG] Seed aleatorio." << endl;
+		if (DEBUG)
+			cout << endl << "[DEBUG] Seed aleatorio." << endl;
 		random_seed(time(0) + (mypid + 1));
 	}
 }
@@ -2620,24 +2662,15 @@ void Solver_Lan::DoStep() {
 void Solver_Lan::send_local_state_to(int _mypid) {
 	_netstream << set_target(0);
 
-    _netstream << pack_begin
-               << _mypid
-               << best_solution_trial()
-               << current_best_solution()
+	_netstream << pack_begin << _mypid << best_solution_trial()
+			<< current_best_solution()
 
-               << current_trial()
-               << current_iteration()
-               << current_evaluations()
-               << best_cost_trial()
-               << worst_cost_trial()
-               << time_best_found_trial()
-               << current_best_cost()
-               << current_worst_cost()
-               << current_average_cost()
-               << current_standard_deviation()
-               << iteration_best_found_in_trial()
-               << evaluations_best_found_in_trial()
-               << pack_end;
+	<< current_trial() << current_iteration() << current_evaluations()
+			<< best_cost_trial() << worst_cost_trial()
+			<< time_best_found_trial() << current_best_cost()
+			<< current_worst_cost() << current_average_cost()
+			<< current_standard_deviation() << iteration_best_found_in_trial()
+			<< evaluations_best_found_in_trial() << pack_end;
 }
 
 int Solver_Lan::receive_local_state() {
@@ -2645,24 +2678,14 @@ int Solver_Lan::receive_local_state() {
 
 	_netstream._wait(packed);
 
-    _netstream << pack_begin
-                >> r_pid
-                >> _best_solution_trial
-                >> best_solution
+	_netstream << pack_begin >> r_pid >> _best_solution_trial >> best_solution
 
-                >> _current_trial
-                >> _current_iteration
-                >> _current_evaluations
-                >> _best_cost_trial
-                >> _worst_cost_trial
-                >> _time_best_found_in_trial
-                >> best_cost
-                >> worst_cost
-                >> average_cost
-                >> standard_deviation
-                >> _iteration_best_found_in_trial
-                >> _evaluations_best_found_in_trial
-                << pack_end;
+	>> _current_trial >> _current_iteration >> _current_evaluations
+			>> _best_cost_trial >> _worst_cost_trial
+			>> _time_best_found_in_trial >> best_cost >> worst_cost
+			>> average_cost >> standard_deviation
+			>> _iteration_best_found_in_trial
+			>> _evaluations_best_found_in_trial << pack_end;
 
 	return r_pid;
 }
