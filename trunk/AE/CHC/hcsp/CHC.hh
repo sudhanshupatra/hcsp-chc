@@ -26,8 +26,8 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.5
-#define MUT_TASK 0.5
+#define MUT_MAQ 1.0
+#define MUT_TASK 1.0
 
 // CROSS
 #define CROSS_TASK 0.5
@@ -37,7 +37,7 @@ skeleton CHC {
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
-#define PALS_MAQ 1 //3
+#define PALS_MAQ 16 //3
 #define PALS_MAX_INTENTOS 3
 #define PALS_UMBRAL_MEJORA 1.0
 #define PALS_TOP_M 16 //8
