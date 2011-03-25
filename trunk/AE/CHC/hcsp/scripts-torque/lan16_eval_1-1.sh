@@ -79,7 +79,7 @@ for i in {0..0}
 do
 	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16-1.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan16-1/Braun_et_al/${data[i]}"
+	OutputFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16-1/Braun_et_al/${data[i]}"
 	PesosFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 	
 	echo "Datos $DataFile"
