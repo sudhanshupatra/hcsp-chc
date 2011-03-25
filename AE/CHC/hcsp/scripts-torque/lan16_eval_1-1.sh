@@ -75,7 +75,7 @@ data[9]="u_i_hilo.0"
 data[10]="u_i_lohi.0"
 data[11]="u_i_lolo.0"
 
-for i in {0..11}
+for i in {11..11}
 do
 	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16-1.cfg"
 	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
