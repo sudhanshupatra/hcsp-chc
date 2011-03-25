@@ -29,6 +29,7 @@ mkdir -p evaluacion/lan8/1024x32
 mkdir -p evaluacion/lan8/2048x64
 mkdir -p evaluacion/lan8/4096x128
 mkdir -p evaluacion/lan16/Braun_et_al
+mkdir -p evaluacion/lan16/1024x32
 mkdir -p evaluacion/lan16-1/Braun_et_al
 mkdir -p evaluacion/lan16-2/Braun_et_al
 mkdir -p seq
@@ -51,6 +52,7 @@ rm evaluacion/lan8/1024x32/*
 rm evaluacion/lan8/2048x64/*
 rm evaluacion/lan8/4096x128/*
 rm evaluacion/lan16/Braun_et_al/*
+rm evaluacion/lan16/1024x32/*
 rm frente_pareto/seq/*
 rm frente_pareto/lan4/*
 rm frente_pareto/islas/*
