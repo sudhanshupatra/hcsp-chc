@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 		cout << "[CONFIG] Pesos:" << pesos_file << endl << endl;
 
 		cout << "[CONFIG] Pesos: " << pesos.size() << endl;
-		for (unsigned int i = 0; i < pesos.size() - 1; i++) {
+		for (unsigned int i = 0; i < pesos.size() - 1; i = i + 2) {
 			cout << "(Makespan: " << pesos[i] << ", WRR: " << pesos[i+1] << ")" << endl;
 		}
 		assert(pesos.size() % 2 == 0);

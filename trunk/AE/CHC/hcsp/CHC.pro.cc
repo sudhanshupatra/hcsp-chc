@@ -465,7 +465,7 @@ void Population::evolution() {
 	// Local search
 	if (rand01() < 0.5) {
 		int individual = rand_int(0, _parents.size() - 1);
-		_parents[individual]->fitness();
+		_parents[individual]->doLocalSearch();
 	}
 
 	evaluate_parents(); // calculates fitness of new individuals
