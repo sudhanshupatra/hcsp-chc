@@ -461,6 +461,13 @@ void Population::evolution() {
 
 	evaluate_offsprings();
 	select_offsprings(); // selects new individuals
+
+	// Local search
+	if (rand01() < 0.5) {
+		int individual = rand_int(0, _parents.size() - 1);
+		_parents[individual]->fitness();
+	}
+
 	evaluate_parents(); // calculates fitness of new individuals
 }
 
@@ -837,13 +844,16 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 	//			<< mutationProbability << ")"<< endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (i != bestSolutionIndex) {
-			if (rand01() <= mutationProbability) {
-				sols[i]->mutate();
-			}
+		//		if (i != bestSolutionIndex) {
+		if (rand01() <= mutationProbability) {
+			sols[i]->mutate();
 		}
+		//		}
 
-		if (i == bestSolutionIndex) {
+		//		if (i == bestSolutionIndex) {
+		//			sols[i]->doLocalSearch();
+		//		}
+		/*if (i == bestSolutionIndex) {
 			if (_retryCount < 5) {
 				double current_fitness = sols[i]->fitness();
 
@@ -860,7 +870,7 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 				_retryCount = 0;
 				sols[i]->mutate();
 			}
-		}
+		}*/
 	}
 }
 
