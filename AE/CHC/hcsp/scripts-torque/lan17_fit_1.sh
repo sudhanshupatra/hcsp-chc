@@ -4,7 +4,7 @@
 #PBS -N ae_17_fp_1
 
 # Requerimientos
-#PBS -l nodes=node31.cluster.fing:ppn=17,walltime=20:00:00
+#PBS -l nodes=1:ppn=17:class2,walltime=20:00:00
 
 # Cola
 #PBS -q publica
