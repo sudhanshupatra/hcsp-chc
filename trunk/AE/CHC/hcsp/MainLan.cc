@@ -65,20 +65,38 @@ int main(int argc, char** argv) {
 		char str_pid[100];
 		sprintf(str_pid, "%d", solver.pid());
 
-		solution_file = solution_file.append("_").append(str_pid);
-		ofstream fexit(solution_file.data());
-		if(!fexit) show_message(13);
+		{
+			solution_file = solution_file.append("_").append(str_pid);
+			ofstream fexit(solution_file.data());
+			if(!fexit) show_message(13);
 
-		fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 
-		for (int i = 0; i < solver.population().parents().size(); i++) {
-			fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			for (int i = 0; i < solver.population().parents().size(); i++) {
+				fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			}
+
+			for (int i = 0; i < solver.population().offsprings().size(); i++) {
+				fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			}
 		}
+		{
+			solution_file = solution_file.append("_fit_").append(str_pid);
+			ofstream fexit(solution_file.data());
+			if(!fexit) show_message(13);
 
-		for (int i = 0; i < solver.population().offsprings().size(); i++) {
-			fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			fexit << solver.best_solution_trial().fitness() << " " << solver.pid() << endl;
+
+			for (int i = 0; i < solver.population().parents().size(); i++) {
+				fexit << solver.population().parents()[i]->fitness() << " " << solver.pid() << endl;
+			}
+
+			for (int i = 0; i < solver.population().offsprings().size(); i++) {
+				fexit << solver.population().offsprings()[i]->fitness() << " " << solver.pid() << endl;
+			}
 		}
-	} else {
+	}
+	else {
 		cout << "[INFO] Exec: " << argv[0] << endl;
 		cout << "[INFO] Configuration file: " << argv[1] << endl;
 		cout << "[CONFIG] Skeleton file: " << skeleton_file << endl;
@@ -108,7 +126,7 @@ int main(int argc, char** argv) {
 		for (unsigned int i = 0; i < pesos.size() - 1; i++) {
 			double aux_fitness;
 			aux_fitness = pesos[i]*(Solution::getMakespan_reference()+solver.global_best_solution().makespan())/Solution::getMakespan_reference()
-				+ pesos[i+1]*(Solution::getWRR_reference()+solver.global_best_solution().accumulatedWeightedResponseRatio())/Solution::getWRR_reference();
+			+ pesos[i+1]*(Solution::getWRR_reference()+solver.global_best_solution().accumulatedWeightedResponseRatio())/Solution::getWRR_reference();
 
 			if (aux_fitness < min_fitness) {
 				min_fitness = aux_fitness;
@@ -119,9 +137,9 @@ int main(int argc, char** argv) {
 
 		cout << "Fitness: " << min_fitness << " (" << weight_mks << ", " << weight_wrr << ")" << endl;
 
-	  	ofstream fexit(solution_file.data());
-	  	if(!fexit) show_message(13);
-	  	fexit << solver.userstatistics();
+		ofstream fexit(solution_file.data());
+		if(!fexit) show_message(13);
+		fexit << solver.userstatistics();
 
 		cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;
 	}
