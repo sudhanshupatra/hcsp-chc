@@ -79,10 +79,12 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
 				fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 			}
+
+			fexit.close();
 		}
 		{
-			solution_file = solution_file.append("_fit_").append(str_pid);
-			ofstream fexit(solution_file.data());
+			string fit_solution_file = solution_file.append("_fit");
+			ofstream fexit(fit_solution_file.data());
 			if(!fexit) show_message(13);
 
 			fexit << solver.best_solution_trial().fitness() << " " << solver.pid() << endl;
@@ -94,6 +96,20 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
 				fexit << solver.population().offsprings()[i]->fitness() << " " << solver.pid() << endl;
 			}
+
+			fexit.close();
+		}
+
+		{
+			string meta_solution_file = solution_file.append("_meta");
+			ofstream fexit(meta_solution_file.data());
+			if(!fexit) show_message(13);
+
+			fexit << "Pesos asignados" << endl;
+			fexit << "Makespan weight: " << pbm.getMakespanWeight(solver.pid()) << endl;
+			fexit << "WRR weight: " << pbm.getWRRWeight(solver.pid()) << endl;
+
+			fexit.close();
 		}
 	}
 	else {
@@ -121,9 +137,9 @@ int main(int argc, char** argv) {
 		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
 		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
 
-		double weight_mks, weight_wrr;
+		double weight_mks = 0.0, weight_wrr = 0.0;
 		double min_fitness = INFINITY;
-		for (unsigned int i = 0; i < pesos.size() - 1; i++) {
+		for (unsigned int i = 0; i < pesos.size() - 1; i=i+2) {
 			double aux_fitness;
 			aux_fitness = pesos[i]*(Solution::getMakespan_reference()+solver.global_best_solution().makespan())/Solution::getMakespan_reference()
 			+ pesos[i+1]*(Solution::getWRR_reference()+solver.global_best_solution().accumulatedWeightedResponseRatio())/Solution::getWRR_reference();
@@ -140,6 +156,7 @@ int main(int argc, char** argv) {
 		ofstream fexit(solution_file.data());
 		if(!fexit) show_message(13);
 		fexit << solver.userstatistics();
+		fexit.close();
 
 		cout << endl << endl << " :( ---------------------- THE END --------------- :) " << endl;
 	}

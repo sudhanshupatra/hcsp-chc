@@ -1354,6 +1354,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
 
 		initializeStaticMCT();
+//		initializeMinMin();
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
@@ -1364,12 +1365,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 //			cout << ", WRR: " << accumulatedWeightedResponseRatio();
 //			cout << ", Makespan: " << makespan() << endl << endl;
 		} else {
-			if (DEBUG) {
+//			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
 				cout << "MCT reference fitness: " << fitness();
 				cout << ", WRR: " << accumulatedWeightedResponseRatio();
 				cout << ", Makespan: " << makespan() << endl;
-			}
+//			}
 		}
 		if (DEBUG) {
 			cout << "[DEBUG] Makespan weight: " << _pbm.getMakespanWeight()
@@ -1387,20 +1388,20 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 				// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 				initializeMinMin();
-				if (DEBUG) {
+//				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "Min-Min fitness: " << fitness();
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
-				}
+//				}
 			} else if (solutionIndex == 2) {
 				initializeMinWRR0();
-				if (DEBUG) {
+//				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "MinMinWRR0: " << fitness();
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
-				}
+//				}
 			} else {
 				if (RANDOM_INIT > rand01()) {
 					// Inicialización aleatoria
@@ -1450,22 +1451,22 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 						initializeMinMin();
-						if (DEBUG) {
+//						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
 							cout << "Min-Min fitness: " << fitness();
 							cout << ", WRR: "
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
-						}
+//						}
 					} else if (offset_heuristica_actual == 1) {
 						initializeMinWRR0();
-						if (DEBUG) {
+//						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
 							cout << "MinMinWRR0: " << fitness();
 							cout << ", WRR: "
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
-						}
+//						}
 					} else if (offset_heuristica_actual == 2) {
 						// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 
@@ -1509,13 +1510,13 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Utilizo Sufferage para un único elemento de la población inicial.
 
 						initializeSufferage();
-						if (DEBUG) {
+//						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
 							cout << "Sufferage fitness: " << fitness();
 							cout << ", WRR: "
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
-						}
+//						}
 					} else {
 						if (RANDOM_INIT > rand01()) {
 							// Inicialización aleatoria

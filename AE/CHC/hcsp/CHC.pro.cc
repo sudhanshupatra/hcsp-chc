@@ -465,7 +465,7 @@ void Population::evolution() {
 	// Local search
 	if (rand01() < 0.5) {
 		int individual = rand_int(0, _parents.size() - 1);
-		cout << "Busqueda local en individuo " << individual << endl;
+//		cout << "Busqueda local en individuo " << individual << endl;
 		_parents[individual]->doLocalSearch();
 	}
 
