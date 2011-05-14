@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_17_fp_1
+#PBS -N ae_17_3
 
 # Requerimientos
-#PBS -l nodes=1:ppn=17:class2,walltime=20:00:00
+#PBS -l nodes=17,walltime=70:00:00
 
 # Cola
 #PBS -q publica
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbco
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbco
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbpo/3
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbpo/3
 
 #PBS -V
 
@@ -61,29 +61,41 @@ echo
 
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 
-data[0]="u_c_hihi.0"
-data[1]="u_c_hilo.0"
-data[2]="u_c_lohi.0"
-data[3]="u_c_lolo.0"
-data[4]="u_s_hihi.0"
-data[5]="u_s_hilo.0"
-data[6]="u_s_lohi.0"
-data[7]="u_s_lolo.0"
-data[8]="u_i_hihi.0"
-data[9]="u_i_hilo.0"
-data[10]="u_i_lohi.0"
-data[11]="u_i_lolo.0"
+data[6]="A.u_c_hihi"
+data[7]="A.u_c_lolo"
+data[8]="A.u_i_lohi"
+data[9]="A.u_s_hilo"
+data[10]="B.u_c_hihi"
+data[11]="B.u_c_lolo"
+data[12]="B.u_i_lohi"
+data[13]="B.u_s_hilo"
+data[14]="A.u_c_hilo"
+data[15]="A.u_i_hihi"
+data[16]="A.u_i_lolo"
+data[17]="A.u_s_lohi"
+data[18]="B.u_c_hilo"
+data[19]="B.u_i_hihi"
+data[20]="B.u_i_lolo"
+data[21]="B.u_s_lohi"
+data[22]="A.u_c_lohi"
+data[23]="A.u_i_hilo"
+data[24]="A.u_s_hihi"
+data[25]="A.u_s_lolo"
+data[26]="B.u_c_lohi"
+data[27]="B.u_i_hilo"
+data[28]="B.u_s_hihi"
+data[29]="B.u_s_lolo"
 
-for i in {1..1}
+for i in {6..29}
 do
 	#
 	# Itero entre todas las instancias del problema a resolver.
 	#
 	echo ">>> Procesando ${i} ${data[i]}"
 	
-	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
+	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	
-	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbco/${data[i]}"
+	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/sbpo/3/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
 	
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
@@ -101,7 +113,7 @@ do
 		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_variados_2.txt" >> ${CONFIG_FILE}
+		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
