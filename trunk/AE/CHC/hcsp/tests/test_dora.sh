@@ -1,6 +1,6 @@
 PROJECT_NAME="test"
-ROOT_PATH="/home/siturria/AE/trunk/AE"
-#ROOT_PATH="/home/santiago/eclipse/c-c++-workspace/AE"
+#ROOT_PATH="/home/siturria/AE/trunk/AE"
+ROOT_PATH="/home/santiago/eclipse/c-c++-workspace/AE"
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg"
 PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 ITERACIONES=1
