@@ -29,52 +29,70 @@ ostream& operator<<(ostream& output, const Problem& pbm) {
 istream& operator>>(istream& input, Problem& pbm) {
 	char buffer[MAX_BUFFER];
 
-	input.getline(buffer, MAX_BUFFER, '\n');
-	sscanf(buffer, "%d %d", &pbm._taskCount, &pbm._machineCount);
+	// Inicializo el consumo energético de cada máquina.
+	{
+		pbm._machineConsumptionIdle.reserve(pbm._machineCount);
+		pbm._machineConsumptionMax.reserve(pbm._machineCount);
 
-	//	cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
-	//	cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
+		int energyConsumption;
+		for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
+			input.getline(buffer, MAX_BUFFER, '\n');
+			sscanf(buffer, "%d", &energyConsumption);
+			assert(energyConsumption > 0.0);
+			pbm._machineConsumptionIdle.push_back(energyConsumption);
+
+			input.getline(buffer, MAX_BUFFER, '\n');
+			sscanf(buffer, "%d", &energyConsumption);
+			assert(energyConsumption > 0.0);
+			pbm._machineConsumptionMax.push_back(energyConsumption);
+		}
+	}
 
 	// Inicializo las prioridades de las tareas.
-	pbm._tasksPriorities.reserve(pbm._taskCount);
+	{
+		pbm._tasksPriorities.reserve(pbm._taskCount);
 
-	int taskPriority;
-	for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
-		input.getline(buffer, MAX_BUFFER, '\n');
-		sscanf(buffer, "%d", &taskPriority);
+		int taskPriority;
+		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
+			input.getline(buffer, MAX_BUFFER, '\n');
+			sscanf(buffer, "%d", &taskPriority);
 
-		assert(taskPriority > 0);
+			assert(taskPriority > 0);
 
-		pbm._tasksPriorities.push_back(taskPriority);
+			pbm._tasksPriorities.push_back(taskPriority);
+		}
 	}
 
 	// Inicializo toda la matriz de ETC.
-	pbm._expectedTimeToCompute = new float*[pbm._taskCount];
-	if (pbm._expectedTimeToCompute == NULL) {
-		cout << "[ERROR] no se pudo reservar memoria para la matriz" << endl;
-		show_message(7);
-	}
-
-	// Inicializo cada tarea del problema.
-	for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
-		// Por cada tarea creo una lista de maquinas.
-		pbm._expectedTimeToCompute[taskPos] = new float[pbm._machineCount];
-
-		if (pbm._expectedTimeToCompute[taskPos] == NULL) {
-			cout
-					<< "[ERROR] no se pudo reservar memoria para las máquinas de la tarea "
-					<< taskPos << endl;
+	{
+		pbm._expectedTimeToCompute = new float*[pbm._taskCount];
+		if (pbm._expectedTimeToCompute == NULL) {
+			cout << "[ERROR] no se pudo reservar memoria para la matriz"
+					<< endl;
 			show_message(7);
 		}
 
-		// Cargo el ETC de cada tarea en cada una de las máquinas.
-		for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
-			input.getline(buffer, MAX_BUFFER, '\n');
+		// Inicializo cada tarea del problema.
+		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
+			// Por cada tarea creo una lista de maquinas.
+			pbm._expectedTimeToCompute[taskPos] = new float[pbm._machineCount];
 
-			sscanf(buffer, "%f",
-					&pbm._expectedTimeToCompute[taskPos][machinePos]);
+			if (pbm._expectedTimeToCompute[taskPos] == NULL) {
+				cout
+						<< "[ERROR] no se pudo reservar memoria para las máquinas de la tarea "
+						<< taskPos << endl;
+				show_message(7);
+			}
 
-			assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
+			// Cargo el ETC de cada tarea en cada una de las máquinas.
+			for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
+				input.getline(buffer, MAX_BUFFER, '\n');
+
+				sscanf(buffer, "%f",
+						&pbm._expectedTimeToCompute[taskPos][machinePos]);
+
+				assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
+			}
 		}
 	}
 
@@ -99,8 +117,16 @@ Direction Problem::direction() const {
 	return minimize;
 }
 
+void Problem::setTaskCount(int size) {
+	_taskCount = size;
+}
+
 int Problem::taskCount() const {
 	return _taskCount;
+}
+
+void Problem::setMachineCount(int size) {
+	_machineCount = size;
 }
 
 int Problem::machineCount() const {
@@ -151,11 +177,12 @@ void Problem::setPId(const int pid) {
 
 void Problem::loadWeights(const vector<double> weights) {
 	assert(weights.size() > 0);
-	assert(weights.size() % 2 == 0);
+	assert(weights.size() % 3 == 0);
 
-	for (unsigned int i = 0; i < weights.size(); i = i + 2) {
+	for (unsigned int i = 0; i < weights.size(); i = i + 3) {
 		_makespan_weights.push_back(weights[i]);
 		_wrr_weights.push_back(weights[i + 1]);
+		_energy_weights.push_back(weights[i + 2]);
 	}
 }
 
@@ -167,6 +194,20 @@ double Problem::getWRRWeight() const {
 double Problem::getMakespanWeight() const {
 	assert(_mypid >= 0);
 	return getMakespanWeight(_mypid);
+}
+
+double Problem::getEnergyWeight() const {
+	assert(_mypid >= 0);
+	return getEnergyWeight(_mypid);
+}
+
+double Problem::getEnergyWeight(const int pid) const {
+	if (pid == 0) {
+		return _energy_weights[0];
+	} else {
+		int index = (pid - 1) % _energy_weights.size();
+		return _energy_weights[index];
+	}
 }
 
 double Problem::getWRRWeight(const int pid) const {
@@ -193,8 +234,8 @@ Problem::~Problem() {
 // Solution machine ------------------------------------------------------
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
-	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0), _awrr(
-			0.0), _dirty(true), _pbm(problem) {
+	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0),
+			_awrr(0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
 }
@@ -410,9 +451,14 @@ void SolutionMachine::refresh() {
 
 double Solution::_awrr_reference = 1.0;
 double Solution::_makespan_reference = 1.0;
+double Solution::_energy_reference = 1.0;
 
 double Solution::getWRR_reference() {
 	return Solution::_awrr_reference;
+}
+
+double Solution::getEnergy_reference() {
+	return Solution::_energy_reference;
 }
 
 double Solution::getMakespan_reference() {
@@ -443,7 +489,6 @@ Solution::Solution(const Solution& sol) :
 istream& operator>>(istream& is, Solution& sol) {
 	//for (int i=0;i<sol.pbm().dimension();i++)
 	//	is >> sol._var[i];
-
 	assert(false);
 
 	return is;
@@ -462,8 +507,11 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 			for (int i = 0; i < sol.machines()[machineId].countTasks(); i++) {
 				os << "  taskPos: " << i;
 				os << " taskId: " << sol.machines()[machineId].getTask(i);
-				fprintf(stdout, " ETC: %f ", sol.pbm().expectedTimeToCompute(
-						sol.machines()[machineId].getTask(i), machineId));
+				fprintf(
+						stdout,
+						" ETC: %f ",
+						sol.pbm().expectedTimeToCompute(
+								sol.machines()[machineId].getTask(i), machineId));
 				fprintf(stdout, " WRR: %f ",
 						sol.machines()[machineId].getWeightedResponseRatio(i));
 				os << " priority: " << sol.pbm().taskPriority(
@@ -513,7 +561,6 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 	}
 
 	//	if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
-
 	assert(currentTask == sol.pbm().taskCount());
 	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
 
@@ -563,7 +610,6 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 
 	//	if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
 	//	if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
-
 	assert(sol.machines().size() == sol.pbm().machineCount());
 	assert(currentTask == sol.pbm().taskCount());
 
@@ -1349,28 +1395,30 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 	markAsInitialized();
 
 	if (solutionIndex == 0) {
-		// Inicialización usando una versión determinista de la heurística MCT.
-		// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
-		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
+		//// Inicialización usando una versión determinista de la heurística MCT.
+		//// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
+		//// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
+		// initializeStaticMCT();
 
-		initializeStaticMCT();
-//		initializeMinMin();
+		// Inicializo la solución utilizando MinMin clásico.
+		initializeMinMin();
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
 		Solution::_makespan_reference = makespan();
+		Solution::_energy_reference = energyConsumption();
 
 		if (mypid == 0) {
-//			cout << "MCT reference fitness: " << fitness();
-//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
-//			cout << ", Makespan: " << makespan() << endl << endl;
+			//			cout << "MCT reference fitness: " << fitness();
+			//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+			//			cout << ", Makespan: " << makespan() << endl << endl;
 		} else {
-//			if (DEBUG) {
+			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
 				cout << "MCT reference fitness: " << fitness();
 				cout << ", WRR: " << accumulatedWeightedResponseRatio();
 				cout << ", Makespan: " << makespan() << endl;
-//			}
+			}
 		}
 		if (DEBUG) {
 			cout << "[DEBUG] Makespan weight: " << _pbm.getMakespanWeight()
@@ -1388,20 +1436,20 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 				// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 				initializeMinMin();
-//				if (DEBUG) {
+				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "Min-Min fitness: " << fitness();
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
-//				}
+				}
 			} else if (solutionIndex == 2) {
 				initializeMinWRR0();
-//				if (DEBUG) {
+				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "MinMinWRR0: " << fitness();
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
-//				}
+				}
 			} else {
 				if (RANDOM_INIT > rand01()) {
 					// Inicialización aleatoria
@@ -1430,8 +1478,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			if (proceso_actual == 0) {
 				initializeRandom();
 			} else {
-				int heuristicas_por_proceso = int(ceil(cant_heuristicas
-						/ (cant_procesos - 1)));
+				int heuristicas_por_proceso = int(
+						ceil(cant_heuristicas / (cant_procesos - 1)));
 				if (heuristicas_por_proceso < 1)
 					heuristicas_por_proceso = 1;
 				if (heuristicas_por_proceso > 2)
@@ -1451,22 +1499,22 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 						initializeMinMin();
-//						if (DEBUG) {
+						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
 							cout << "Min-Min fitness: " << fitness();
 							cout << ", WRR: "
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
-//						}
+						}
 					} else if (offset_heuristica_actual == 1) {
 						initializeMinWRR0();
-//						if (DEBUG) {
+						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
 							cout << "MinMinWRR0: " << fitness();
 							cout << ", WRR: "
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
-//						}
+						}
 					} else if (offset_heuristica_actual == 2) {
 						// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 
@@ -1510,13 +1558,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Utilizo Sufferage para un único elemento de la población inicial.
 
 						initializeSufferage();
-//						if (DEBUG) {
-							cout << endl << "[proc " << proceso_actual << "] ";
-							cout << "Sufferage fitness: " << fitness();
-							cout << ", WRR: "
-									<< accumulatedWeightedResponseRatio();
-							cout << ", Makespan: " << makespan() << endl;
-//						}
+						//						if (DEBUG) {
+						cout << endl << "[proc " << proceso_actual << "] ";
+						cout << "Sufferage fitness: " << fitness();
+						cout << ", WRR: " << accumulatedWeightedResponseRatio();
+						cout << ", Makespan: " << makespan() << endl;
+						//						}
 					} else {
 						if (RANDOM_INIT > rand01()) {
 							// Inicialización aleatoria
@@ -1840,8 +1887,8 @@ double Solution::fitness() {
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
 
-//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
-//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
+	//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
+	//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
 
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
@@ -1886,6 +1933,22 @@ double Solution::accumulatedWeightedResponseRatio() {
 	}
 
 	return awrr;
+}
+
+double Solution::energyConsumption() {
+	if (!_initialized) {
+		return infinity();
+	}
+
+	double energy = 0.0;
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		/*awrr = awrr
+		 + _machines[machineId].energyConsumption();*/
+	}
+
+	//	return energy;
+	return 1.0;
 }
 
 int Solution::length() const {
@@ -2096,7 +2159,7 @@ void Solution::doLocalSearch() {
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
 						mejorMovimientoDestinoTaskPos);
-								finBusqMaquina = true;
+				finBusqMaquina = true;
 			}
 		}
 

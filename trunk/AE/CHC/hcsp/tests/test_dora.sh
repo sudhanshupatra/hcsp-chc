@@ -26,7 +26,7 @@ do
 	#
 	echo ">>> Procesando ${i} ${data[i]}"
 	
-	DATA_FILE="${ROOT_PATH}/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
+	DATA_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16_mod/${data[i]}"
 	
 	BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/${PROJECT_NAME}/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
@@ -47,6 +47,8 @@ do
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
 		echo "${PESOS_PATH}" >> ${CONFIG_FILE}
+		echo "512" >> ${CONFIG_FILE}
+		echo "16" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
