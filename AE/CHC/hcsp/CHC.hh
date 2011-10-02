@@ -90,7 +90,9 @@ public:
 	// =================================
 	// Especificos del problema.
 	// =================================
+	void setTaskCount(int size);
 	int taskCount() const;
+	void setMachineCount(int size);
 	int machineCount() const;
 	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
@@ -99,19 +101,26 @@ public:
 	int getBestMachineForTaskId(int taskId) const;
 
 	void setPId(const int pid);
+
 	double getWRRWeight() const;
 	double getWRRWeight(const int pid) const;
 	double getMakespanWeight() const;
 	double getMakespanWeight(const int pid) const;
+	double getEnergyWeight() const;
+	double getEnergyWeight(const int pid) const;
 	void loadWeights(const vector<double> weights);
 private:
 	vector<double> _wrr_weights;
 	vector<double> _makespan_weights;
+	vector<double> _energy_weights;
 
 	int _mypid;
 	int _taskCount;
 	int _machineCount;
+
 	vector<int> _tasksPriorities;
+	vector<float> _machineConsumptionIdle;
+	vector<float> _machineConsumptionMax;
 	float **_expectedTimeToCompute;
 };
 
@@ -184,6 +193,7 @@ public:
 	double fitness();
 	double makespan();
 	double accumulatedWeightedResponseRatio();
+	double energyConsumption();
 	unsigned int size() const;
 
 	int length() const;
@@ -219,12 +229,14 @@ public:
 
 	static double getWRR_reference();
 	static double getMakespan_reference();
+	static double getEnergy_reference();
 private:
 	const Problem& _pbm;
 	bool _initialized;
 
 	static double _awrr_reference;
 	static double _makespan_reference;
+	static double _energy_reference;
 
 	vector<struct SolutionMachine> _machines;
 
