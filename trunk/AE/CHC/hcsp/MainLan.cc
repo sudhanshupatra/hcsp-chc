@@ -105,14 +105,14 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < solver.population().parents().size(); i++) {
 				fexit << solver.population().parents()[i]->makespan()
 						<< " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio()
-						<< " " << solver.population().parents()[i]->energyConsumption()
+						<< " " << solver.population().parents()[i]->energyConsumption(solver.population().parents()[i]->makespan())
 						<< " " << solver.pid() << endl;
 			}
 
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
 				fexit << solver.population().offsprings()[i]->makespan()
 						<< " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio()
-						<< " " << solver.population().parents()[i]->energyConsumption()
+						<< " " << solver.population().parents()[i]->energyConsumption(solver.population().offsprings()[i]->makespan())
 						<< " " << solver.pid() << endl;
 			}
 
@@ -174,7 +174,7 @@ int main(int argc, char** argv) {
 
 		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
 		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
-		cout << "Energy: " << solver.global_best_solution().energyConsumption() << endl;
+		cout << "Energy: " << solver.global_best_solution().energyConsumption(solver.global_best_solution().makespan()) << endl;
 		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
 		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
 		cout << "Energy (reference): " << Solution::getEnergy_reference() << endl;
@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
 			aux_fitness =
 					pesos[i] * (Solution::getMakespan_reference() + solver.global_best_solution().makespan()) / Solution::getMakespan_reference()
 					+ pesos[i+1] * (Solution::getWRR_reference() + solver.global_best_solution().accumulatedWeightedResponseRatio()) / Solution::getWRR_reference()
-					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().energyConsumption()) / Solution::getEnergy_reference();
+					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().energyConsumption(solver.global_best_solution().makespan())) / Solution::getEnergy_reference();
 
 			if (aux_fitness < min_fitness) {
 				min_fitness = aux_fitness;
