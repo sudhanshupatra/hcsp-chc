@@ -165,6 +165,18 @@ float Problem::expectedTimeToCompute(const int& task, const int& machine) const 
 	return _expectedTimeToCompute[task][machine];
 }
 
+float Problem::machineEnergyIdle(const int& machine) const {
+	assert(machine >= 0);
+	assert(machine < _machineCount);
+	return _machineConsumptionIdle[machine];
+}
+
+float Problem::machineEnergyMax(const int& machine) const {
+	assert(machine >= 0);
+	assert(machine < _machineCount);
+	return _machineConsumptionMax[machine];
+}
+
 int Problem::taskPriority(const int& task) const {
 	assert(task >= 0);
 	assert(task < _taskCount);
@@ -363,6 +375,13 @@ void SolutionMachine::emptyTasks() {
 	_dirty = true;
 	_assignedTasks.clear();
 	_tasks.clear();
+}
+
+double SolutionMachine::energyConsumption(double solutionMakespan) {
+	refresh();
+	return (_makespan * _pbm.machineEnergyMax(_machineId) / ETC_TIME)
+			+ ((solutionMakespan - _makespan) * _pbm.machineEnergyIdle(
+					_machineId) / ETC_TIME);
 }
 
 double SolutionMachine::getMakespan() {
@@ -1405,8 +1424,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
-		Solution::_makespan_reference = makespan();
-		Solution::_energy_reference = energyConsumption();
+		double currentMakespan = makespan();
+		Solution::_makespan_reference = currentMakespan;
+		Solution::_energy_reference = energyConsumption(currentMakespan);
 
 		if (mypid == 0) {
 			//			cout << "MCT reference fitness: " << fitness();
@@ -1935,7 +1955,7 @@ double Solution::accumulatedWeightedResponseRatio() {
 	return awrr;
 }
 
-double Solution::energyConsumption() {
+double Solution::energyConsumption(double makespan) {
 	if (!_initialized) {
 		return infinity();
 	}
@@ -1943,12 +1963,10 @@ double Solution::energyConsumption() {
 	double energy = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		/*awrr = awrr
-		 + _machines[machineId].energyConsumption();*/
+		energy = energy + _machines[machineId].energyConsumption(makespan);
 	}
 
-	//	return energy;
-	return 1.0;
+	return energy;
 }
 
 int Solution::length() const {

@@ -21,6 +21,9 @@ using std::set;
 
 skeleton CHC {
 
+// Unidades de cómputo del ETC que equivalen a un segundo.
+#define ETC_TIME 1000.0
+
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.4
 
@@ -94,8 +97,11 @@ public:
 	int taskCount() const;
 	void setMachineCount(int size);
 	int machineCount() const;
+
 	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
+	float machineEnergyIdle(const int& machine) const;
+	float machineEnergyMax(const int& machine) const;
 
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
@@ -153,11 +159,11 @@ public:
 	void emptyTasks();
 
 	bool hasTask(const int taskId) const;
-	//	int getTaskPos(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
 	double getMakespan();
+	double energyConsumption(double solutionMakespan);
 	double getAccumulatedWeightedResponseRatio();
 	double getWeightedResponseRatio(const int taskPos) const;
 
@@ -193,7 +199,7 @@ public:
 	double fitness();
 	double makespan();
 	double accumulatedWeightedResponseRatio();
-	double energyConsumption();
+	double energyConsumption(double makespan);
 	unsigned int size() const;
 
 	int length() const;
