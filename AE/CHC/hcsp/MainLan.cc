@@ -21,10 +21,20 @@ int main(int argc, char** argv) {
 	ifstream skeleton_stream(path);
 	if(!skeleton_stream) show_message(11);
 
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo con la instancia a resolver.
-	string instance_file(path);
-	ifstream instance_stream(path);
-	if(!instance_stream) show_message(12);
+	f.getline(path,MAX_BUFFER,'\n'); // Archivo con el scenario del problema a resolver.
+	string scenario_file(path);
+	ifstream scenario_stream(path);
+	if(!scenario_stream) show_message(12);
+
+	f.getline(path,MAX_BUFFER,'\n'); // Archivo con el workload del problema a resolver.
+	string workload_file(path);
+	ifstream workload_stream(path);
+	if(!workload_stream) show_message(12);
+
+	f.getline(path,MAX_BUFFER,'\n'); // Archivo con las prioridades del problema a resolver.
+	string priorities_file(path);
+	ifstream priorities_stream(path);
+	if(!priorities_stream) show_message(12);
 
 	f.getline(path,MAX_BUFFER,'\n'); // Archivo de salida.
 	string solution_file(path);
@@ -47,7 +57,8 @@ int main(int argc, char** argv) {
 	pbm.setMachineCount(atof(cantidad_maquinas.data()));
 
 	// Cargo la instancia a resolver.
-	instance_stream >> pbm;
+	// instance_stream >> pbm;
+	pbm.load_data(scenario_stream, workload_stream, priorities_stream);
 
 	Operator_Pool pool(pbm);
 	SetUpParams cfg(pool, pbm);
@@ -157,7 +168,9 @@ int main(int argc, char** argv) {
 		cout << "[INFO] Exec: " << argv[0] << endl;
 		cout << "[INFO] Configuration file: " << argv[1] << endl;
 		cout << "[CONFIG] Skeleton file: " << skeleton_file << endl;
-		cout << "[CONFIG] Instancia: " << instance_file << endl;
+		cout << "[CONFIG] Scenario: " << scenario_file << endl;
+		cout << "[CONFIG] Workload: " << workload_file << endl;
+		cout << "[CONFIG] Priorities: " << priorities_file << endl;
 		cout << "[CONFIG] Summary:" << solution_file << endl;
 		cout << "[CONFIG] Archivo de pesos:" << pesos_file << endl << endl;
 		assert(pesos.size() % 3 == 0);
