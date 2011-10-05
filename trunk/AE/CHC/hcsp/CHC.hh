@@ -21,9 +21,6 @@ using std::set;
 
 skeleton CHC {
 
-// Unidades de cómputo del ETC que equivalen a un segundo.
-#define ETC_TIME 1000.0
-
 // Probabilidad de que un individuo de la población sea inicializado aleatoriamente.
 #define RANDOM_INIT 0.4
 
@@ -82,7 +79,8 @@ public:
 	~Problem();
 
 	friend ostream& operator<<(ostream& os, const Problem& pbm);
-	friend istream& operator>>(istream& is, Problem& pbm);
+	//friend istream& operator>>(istream& is, Problem& pbm);
+	void load_data(istream& scenario, istream& workload, istream& priorities);
 
 	Problem& operator=(const Problem& pbm);
 	bool operator==(const Problem& pbm) const;
@@ -100,6 +98,8 @@ public:
 
 	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
+	int machineCoreCount(const int& machine) const;
+	int machineSsjOps(const int& machine) const;
 	float machineEnergyIdle(const int& machine) const;
 	float machineEnergyMax(const int& machine) const;
 
@@ -114,6 +114,7 @@ public:
 	double getMakespanWeight(const int pid) const;
 	double getEnergyWeight() const;
 	double getEnergyWeight(const int pid) const;
+
 	void loadWeights(const vector<double> weights);
 private:
 	vector<double> _wrr_weights;
@@ -125,8 +126,12 @@ private:
 	int _machineCount;
 
 	vector<int> _tasksPriorities;
+
+	vector<int> _machineCoreCount;
+	vector<int> _machineSsjOps;
 	vector<float> _machineConsumptionIdle;
 	vector<float> _machineConsumptionMax;
+
 	float **_expectedTimeToCompute;
 };
 
@@ -135,12 +140,16 @@ private:
 class SolutionMachine {
 private:
 	const Problem& _pbm;
+
 	vector<int> _tasks;
 	map<int, void*> _assignedTasks;
+
 	int _machineId;
 
 	double _makespan;
 	double _awrr;
+	double _energy;
+
 	bool _dirty;
 
 	void refresh();

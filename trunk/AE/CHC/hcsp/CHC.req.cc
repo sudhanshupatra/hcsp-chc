@@ -26,58 +26,68 @@ ostream& operator<<(ostream& output, const Problem& pbm) {
 // ===================================
 // Deserialización del problema.
 // ===================================
-istream& operator>>(istream& input, Problem& pbm) {
+void Problem::load_data(istream& scenario, istream& workload,
+		istream& priorities) {
 	char buffer[MAX_BUFFER];
 
 	// Inicializo el consumo energético de cada máquina.
 	{
-		pbm._machineConsumptionIdle.reserve(pbm._machineCount);
-		pbm._machineConsumptionMax.reserve(pbm._machineCount);
+		_machineCoreCount.reserve(_machineCount);
+		_machineSsjOps.reserve(_machineCount);
+		_machineConsumptionIdle.reserve(_machineCount);
+		_machineConsumptionMax.reserve(_machineCount);
 
-		int energyConsumption;
-		for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
-			input.getline(buffer, MAX_BUFFER, '\n');
-			sscanf(buffer, "%d", &energyConsumption);
-			assert(energyConsumption > 0.0);
-			pbm._machineConsumptionIdle.push_back(energyConsumption);
+		int coreCount, ssjOps;
+		float consumptionIdle, consumptionMax;
 
-			input.getline(buffer, MAX_BUFFER, '\n');
-			sscanf(buffer, "%d", &energyConsumption);
-			assert(energyConsumption > 0.0);
-			pbm._machineConsumptionMax.push_back(energyConsumption);
+		for (int machinePos = 0; machinePos < _machineCount; machinePos++) {
+			scenario.getline(buffer, MAX_BUFFER, '\n');
+			sscanf(buffer, "%d %d %f %f", &coreCount, &ssjOps,
+					&consumptionIdle, &consumptionMax);
+
+			assert(coreCount > 0);
+			_machineCoreCount.push_back(coreCount);
+
+			assert(ssjOps > 0);
+			_machineSsjOps.push_back(ssjOps);
+
+			assert(consumptionIdle > 0.0);
+			_machineConsumptionIdle.push_back(consumptionIdle);
+
+			assert(consumptionMax > 0.0);
+			_machineConsumptionMax.push_back(consumptionMax);
 		}
 	}
 
 	// Inicializo las prioridades de las tareas.
 	{
-		pbm._tasksPriorities.reserve(pbm._taskCount);
+		_tasksPriorities.reserve(_taskCount);
 
 		int taskPriority;
-		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
-			input.getline(buffer, MAX_BUFFER, '\n');
+		for (int taskPos = 0; taskPos < _taskCount; taskPos++) {
+			priorities.getline(buffer, MAX_BUFFER, '\n');
 			sscanf(buffer, "%d", &taskPriority);
 
 			assert(taskPriority > 0);
-
-			pbm._tasksPriorities.push_back(taskPriority);
+			_tasksPriorities.push_back(taskPriority);
 		}
 	}
 
 	// Inicializo toda la matriz de ETC.
 	{
-		pbm._expectedTimeToCompute = new float*[pbm._taskCount];
-		if (pbm._expectedTimeToCompute == NULL) {
+		_expectedTimeToCompute = new float*[_taskCount];
+		if (_expectedTimeToCompute == NULL) {
 			cout << "[ERROR] no se pudo reservar memoria para la matriz"
 					<< endl;
 			show_message(7);
 		}
 
 		// Inicializo cada tarea del problema.
-		for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
+		for (int taskPos = 0; taskPos < _taskCount; taskPos++) {
 			// Por cada tarea creo una lista de maquinas.
-			pbm._expectedTimeToCompute[taskPos] = new float[pbm._machineCount];
+			_expectedTimeToCompute[taskPos] = new float[_machineCount];
 
-			if (pbm._expectedTimeToCompute[taskPos] == NULL) {
+			if (_expectedTimeToCompute[taskPos] == NULL) {
 				cout
 						<< "[ERROR] no se pudo reservar memoria para las máquinas de la tarea "
 						<< taskPos << endl;
@@ -85,18 +95,16 @@ istream& operator>>(istream& input, Problem& pbm) {
 			}
 
 			// Cargo el ETC de cada tarea en cada una de las máquinas.
-			for (int machinePos = 0; machinePos < pbm._machineCount; machinePos++) {
-				input.getline(buffer, MAX_BUFFER, '\n');
+			for (int machinePos = 0; machinePos < _machineCount; machinePos++) {
+				workload.getline(buffer, MAX_BUFFER, '\n');
 
 				sscanf(buffer, "%f",
-						&pbm._expectedTimeToCompute[taskPos][machinePos]);
+						&_expectedTimeToCompute[taskPos][machinePos]);
 
-				assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
+				assert(_expectedTimeToCompute[taskPos][machinePos] >= 0);
 			}
 		}
 	}
-
-	return input;
 }
 
 Problem& Problem::operator=(const Problem& pbm) {
@@ -163,6 +171,18 @@ float Problem::expectedTimeToCompute(const int& task, const int& machine) const 
 	assert(machine >= 0);
 	assert(machine < _machineCount);
 	return _expectedTimeToCompute[task][machine];
+}
+
+int Problem::machineCoreCount(const int& machine) const {
+	assert(machine >= 0);
+	assert(machine < _machineCount);
+	return _machineCoreCount[machine];
+}
+
+int Problem::machineSsjOps(const int& machine) const {
+	assert(machine >= 0);
+	assert(machine < _machineCount);
+	return _machineSsjOps[machine];
 }
 
 float Problem::machineEnergyIdle(const int& machine) const {
@@ -247,7 +267,7 @@ Problem::~Problem() {
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0),
-			_awrr(0.0), _dirty(true), _pbm(problem) {
+			_awrr(0.0), _energy(0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
 }
@@ -259,6 +279,9 @@ SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
 
 	_makespan = 0.0;
+	_energy = 0.0;
+	_awrr = 0.0;
+
 	_dirty = true;
 
 	_tasks.clear();
@@ -379,9 +402,8 @@ void SolutionMachine::emptyTasks() {
 
 double SolutionMachine::energyConsumption(double solutionMakespan) {
 	refresh();
-	return (_makespan * _pbm.machineEnergyMax(_machineId) / ETC_TIME)
-			+ ((solutionMakespan - _makespan) * _pbm.machineEnergyIdle(
-					_machineId) / ETC_TIME);
+	float idle_energy = _pbm.machineEnergyIdle(_machineId);
+	return _energy + ((solutionMakespan - _makespan) * idle_energy);
 }
 
 double SolutionMachine::getMakespan() {
@@ -430,8 +452,20 @@ double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
 void SolutionMachine::refresh() {
 	//_dirty = true;
 	if (_dirty) {
-		double partial_makespan = 0.0;
-		double partial_awrr = 0.0;
+		int cores = _pbm.machineCoreCount(_machineId);
+		int ssp_ops = _pbm.machineSsjOps(_machineId);
+		float max_energy = _pbm.machineEnergyMax(_machineId);
+
+		double total_compute = 0.0;
+		double partial_priority_cost = 0.0;
+
+		vector<double> core_compute;
+		core_compute.reserve(cores);
+		for (int i = 0; i < cores; i++) {
+			core_compute.push_back(0.0);
+		}
+
+		int max_compute_core = 0;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
@@ -445,22 +479,37 @@ void SolutionMachine::refresh() {
 			if (compute_cost == 0.0) {
 				priority_cost = 0.0;
 			} else {
-				if (partial_makespan == 0.0) {
+				if (core_compute[taskPos % cores] == 0.0) {
 					priority_cost = _pbm.taskPriority(taskId);
 				} else {
 					double rr;
-					rr = (partial_makespan + compute_cost) / compute_cost;
+					rr = (core_compute[taskPos % cores] + compute_cost)	/ compute_cost;
 					priority_cost = (_pbm.taskPriority(taskId) * rr);
 				}
 			}
 
-			partial_makespan += compute_cost;
-			partial_awrr += priority_cost;
+			core_compute[taskPos % cores] = core_compute[taskPos % cores] + compute_cost;
 
+			total_compute += compute_cost;
+			partial_priority_cost += priority_cost;
+
+			if ((core_compute[taskPos % cores] > core_compute[max_compute_core])
+					&& (taskPos % cores != max_compute_core)) {
+
+				max_compute_core = taskPos % cores;
+			}
 		}
 
-		_awrr = partial_awrr;
-		_makespan = partial_makespan;
+		double partial_energy = 0.0;
+
+		if (_tasks.size() > cores) {
+			_makespan = total_compute / ssp_ops;
+		} else {
+			_makespan = core_compute[max_compute_core] / (ssp_ops / cores);
+		}
+
+		_energy = _makespan * max_energy;
+		_awrr = partial_priority_cost;
 
 		_dirty = false;
 	}
@@ -1886,6 +1935,7 @@ double Solution::fitness() {
 
 	double maxMakespan = 0.0;
 	double awrr = 0.0;
+	double energy = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
 		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
@@ -1893,6 +1943,10 @@ double Solution::fitness() {
 		if (_machines[machineId].getMakespan() > maxMakespan) {
 			maxMakespan = _machines[machineId].getMakespan();
 		}
+	}
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		energy += _machines[machineId].energyConsumption(maxMakespan);
 	}
 
 	double normalized_awrr;
@@ -1907,11 +1961,13 @@ double Solution::fitness() {
 	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
 
-	//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
-	//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
+	double normalized_energy;
+	normalized_energy = (energy + Solution::_energy_reference)
+			/ Solution::_energy_reference;
 
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
+			+ (_pbm.getEnergyWeight() * normalized_energy)
 			+ (_pbm.getWRRWeight() * normalized_awrr);
 
 	assert(!(fitness == INFINITY));

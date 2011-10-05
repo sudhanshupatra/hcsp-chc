@@ -20,7 +20,8 @@ int main (int argc, char** argv)
 	if (!f2) show_message(12);
 
 	Problem pbm;
-	f2 >> pbm;
+	exit(EXIT_FAILURE);
+	//	f2 >> pbm;
 
 	Operator_Pool pool(pbm);
 	SetUpParams cfg(pool, pbm);
