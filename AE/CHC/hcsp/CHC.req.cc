@@ -780,18 +780,18 @@ void Solution::initializeMCT(int startTask, int direction) {
 		for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 			double makespan;
 			makespan = (machineMakespan[machineId]
-					+ _pbm.expectedTimeToCompute(currentTask, machineId));
-			double auxFitness;
-			auxFitness = _pbm.getMakespanWeight() * makespan;
+					+ (_pbm.expectedTimeToCompute(currentTask, machineId) /
+					(_pbm.machineSsjOps(machineId)/_pbm.machineCoreCount(machineId))));
 
-			if (auxFitness < minFitness) {
-				minFitness = auxFitness;
+			if (makespan < minFitness) {
+				minFitness = makespan;
 				minFitnessMachineId = machineId;
 			}
 		}
 
 		machineMakespan[minFitnessMachineId] += _pbm.expectedTimeToCompute(
-				currentTask, minFitnessMachineId);
+				currentTask, minFitnessMachineId) /
+				(_pbm.machineSsjOps(minFitnessMachineId)/_pbm.machineCoreCount(minFitnessMachineId));
 
 		_machines[minFitnessMachineId].addTask(currentTask);
 	}
@@ -828,10 +828,12 @@ void Solution::initializeMinMin() {
 			if (taskIsUnmapped[taskId]) {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if ((machineMakespan[machineId]
-							+ _pbm.expectedTimeToCompute(taskId, machineId))
+							+ (_pbm.expectedTimeToCompute(taskId, machineId)/
+								(_pbm.machineSsjOps(machineId)/_pbm.machineCoreCount(machineId))))
 							< minCT) {
 						minCT = machineMakespan[machineId]
-								+ _pbm.expectedTimeToCompute(taskId, machineId);
+								+ (_pbm.expectedTimeToCompute(taskId, machineId)/
+									(_pbm.machineSsjOps(machineId)/_pbm.machineCoreCount(machineId)));
 						minCTTaskId = taskId;
 						minCTMachineId = machineId;
 					}
@@ -842,8 +844,8 @@ void Solution::initializeMinMin() {
 		unmappedTasksCount--;
 		taskIsUnmapped[minCTTaskId] = false;
 
-		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
-				minCTTaskId, minCTMachineId);
+		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(minCTTaskId, minCTMachineId) /
+				(_pbm.machineSsjOps(minCTMachineId)/_pbm.machineCoreCount(minCTMachineId));
 		_machines[minCTMachineId].addTask(minCTTaskId);
 	}
 }
@@ -1491,6 +1493,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			//			cout << "MCT reference fitness: " << fitness();
 			//			cout << ", WRR: " << accumulatedWeightedResponseRatio();
 			//			cout << ", Makespan: " << makespan() << endl << endl;
+			cout << *this;
 		} else {
 			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
@@ -1521,14 +1524,14 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
 				}
-			} else if (solutionIndex == 2) {
+			/*} else if (solutionIndex == 2) {
 				initializeMinWRR0();
 				if (DEBUG) {
 					cout << endl << "[proc " << proceso_actual << "] ";
 					cout << "MinMinWRR0: " << fitness();
 					cout << ", WRR: " << accumulatedWeightedResponseRatio();
 					cout << ", Makespan: " << makespan() << endl;
-				}
+				}*/
 			} else {
 				if (RANDOM_INIT > rand01()) {
 					// Inicialización aleatoria
@@ -1585,7 +1588,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 									<< accumulatedWeightedResponseRatio();
 							cout << ", Makespan: " << makespan() << endl;
 						}
-					} else if (offset_heuristica_actual == 1) {
+					/*} else if (offset_heuristica_actual == 1) {
 						initializeMinWRR0();
 						if (DEBUG) {
 							cout << endl << "[proc " << proceso_actual << "] ";
@@ -1642,7 +1645,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						cout << "Sufferage fitness: " << fitness();
 						cout << ", WRR: " << accumulatedWeightedResponseRatio();
 						cout << ", Makespan: " << makespan() << endl;
-						//						}
+						//						}*/
 					} else {
 						if (RANDOM_INIT > rand01()) {
 							// Inicialización aleatoria
