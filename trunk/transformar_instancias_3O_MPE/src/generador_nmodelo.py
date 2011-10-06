@@ -13,7 +13,7 @@ TO_min = 60        # 1 minuto.
 TO_max = 20*60*60  # 20 horas.
 
 # Intel Xeon E5440: cores=4, ssj_ops=150,979, E_IDLE=76.9, E_MAX=131.8
-TO_default_ssj = int(150979 / 4)
+TO_default_ssj = int(150.979 / 4)
 TO_min_ssj = float(TO_default_ssj) * float(TO_min)
 TO_max_ssj = float(TO_default_ssj) * float(TO_max) 
 
