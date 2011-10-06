@@ -577,9 +577,19 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 				os << " taskId: " << sol.machines()[machineId].getTask(i);
 				fprintf(
 						stdout,
-						" ETC: %f ",
+						" t_ssj: %f ",
 						sol.pbm().expectedTimeToCompute(
 								sol.machines()[machineId].getTask(i), machineId));
+
+				float time_to_execute;
+				time_to_execute = sol.pbm().expectedTimeToCompute(
+						sol.machines()[machineId].getTask(i), machineId) /
+						(sol.pbm().machineSsjOps(machineId) /
+								sol.pbm().machineCoreCount(machineId));
+
+				fprintf(stdout, " t_ssj/(m_ssj/cores): %f ", time_to_execute);
+				fprintf(stdout,	" minutos: %f ", time_to_execute / 60);
+
 				fprintf(stdout, " WRR: %f ",
 						sol.machines()[machineId].getWeightedResponseRatio(i));
 				os << " priority: " << sol.pbm().taskPriority(
