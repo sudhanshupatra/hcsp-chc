@@ -8,9 +8,9 @@ Created on Oct 3, 2011
 import sys
 import random
 
-lo = (5,1)
-med = (5,3)
-hi = (5,5)
+lo = (10,1)
+med = (10,2)
+hi = (10,4)
 
 if __name__ == '__main__':
     argc = len(sys.argv)
