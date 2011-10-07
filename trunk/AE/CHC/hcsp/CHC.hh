@@ -183,8 +183,6 @@ public:
 	Solution(const Solution& sol);
 	~Solution();
 
-	friend ostream& operator<<(ostream& os, const Solution& sol);
-	friend istream& operator>>(istream& is, Solution& sol);
 	friend NetStream& operator <<(NetStream& ns, const Solution& sol);
 	friend NetStream& operator >>(NetStream& ns, Solution& sol);
 
@@ -236,7 +234,8 @@ public:
 	int getMinWRRMachine();
 
 	bool validate() const;
-	void showCustomStatics();
+	void show(ostream& os);
+	void showCustomStatics(ostream& os);
 
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo
