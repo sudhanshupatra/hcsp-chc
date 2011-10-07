@@ -387,8 +387,10 @@ ostream& operator<<(ostream& os, const Population& population) {
 			<< endl;
 	os << "                           PRESENT POPULATION                    "
 			<< endl << endl;
-	for (int i = 0; i < population._parents.size(); i++)
-		os << *population._parents[i] << endl;
+	for (int i = 0; i < population._parents.size(); i++) {
+		//os << *population._parents[i] << endl;
+		population._parents[i]->show(os);
+	}
 	os << endl
 			<< "---------------------------------------------------------------"
 			<< endl;
@@ -2403,7 +2405,8 @@ void Solver::show_state() const {
 	cout << endl << "Trial best found: " << trial_best_found();
 	cout << endl << "Iteration best found: " << iteration_best_found();
 	cout << endl << "Time best found: " << time_best_found();
-	cout << endl << endl << "Best Solution: " << endl << global_best_solution();
+	cout << endl << endl << "Best Solution: " << endl;
+	global_best_solution().show(cout);
 	cout << endl << endl << "Current time spent (so far): "
 			<< current_time_spent() << endl;
 	//}

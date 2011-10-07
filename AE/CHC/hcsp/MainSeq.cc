@@ -38,11 +38,12 @@ int main (int argc, char** argv)
 	if (solver.pid()==0)
 	{
 		solver.show_state();
-		cout << "Solution" << solver.global_best_solution() << endl;
-		cout << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
+		cout << "Solution";
+		solver.global_best_solution().show(cout);
+		cout << endl << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
 		cout << "WRR: " << solver.global_best_solution().getWRR() << endl;
 		cout << "Fitness: " << solver.global_best_solution().getFitness() << endl;
-		solver.global_best_solution().showCustomStatics();
+		solver.global_best_solution().showCustomStatics(cout);
 
 		cout << "\n\n :( ---------------------- THE END --------------- :) ";
 
