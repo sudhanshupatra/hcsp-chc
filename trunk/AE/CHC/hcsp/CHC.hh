@@ -92,30 +92,30 @@ public:
 	// Especificos del problema.
 	// =================================
 	void setTaskCount(int size);
-	int taskCount() const;
+	int getTaskCount() const;
 	void setMachineCount(int size);
-	int machineCount() const;
+	int getMachineCount() const;
 
-	int taskPriority(const int& task) const;
-	float expectedTimeToCompute(const int& task, const int& machine) const;
-	int machineCoreCount(const int& machine) const;
-	int machineSsjOps(const int& machine) const;
-	float machineEnergyIdle(const int& machine) const;
-	float machineEnergyMax(const int& machine) const;
+	int getTaskPriority(const int& task) const;
+	float getTaskSSJCost(const int& task, const int& machine) const;
+	int getMachineCoreCount(const int& machine) const;
+	int getMachineSSJPerformance(const int& machine) const;
+	float getMachineEnergyWhenIdle(const int& machine) const;
+	float getMachineEnergyWhenMax(const int& machine) const;
 
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
 
-	void setPId(const int pid);
+	void setCurrentProcessId(const int pid);
 
-	double getWRRWeight() const;
+	double getCurrentWRRWeight() const;
 	double getWRRWeight(const int pid) const;
-	double getMakespanWeight() const;
+	double getCurrentMakespanWeight() const;
 	double getMakespanWeight(const int pid) const;
-	double getEnergyWeight() const;
+	double getCurrentEnergyWeight() const;
 	double getEnergyWeight(const int pid) const;
 
-	void loadWeights(const vector<double> weights);
+	void loadWeightData(const vector<double> weights);
 private:
 	vector<double> _wrr_weights;
 	vector<double> _makespan_weights;
@@ -128,11 +128,11 @@ private:
 	vector<int> _tasksPriorities;
 
 	vector<int> _machineCoreCount;
-	vector<int> _machineSsjOps;
+	vector<int> _machineSSJPerformance;
 	vector<float> _machineConsumptionIdle;
 	vector<float> _machineConsumptionMax;
 
-	float **_expectedTimeToCompute;
+	float **_taskSSJComputeCost;
 };
 
 //Solution ----------------------------------------------------------------------------

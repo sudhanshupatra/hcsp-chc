@@ -30,7 +30,7 @@ int main (int argc, char** argv)
 	vector<double> pesos;
 	pesos.push_back(1.0);
 	pesos.push_back(1.0);
-	pbm.loadWeights(pesos);
+	pbm.loadWeightData(pesos);
 
 	Solver_Seq solver(pbm,cfg);
 	solver.run();
