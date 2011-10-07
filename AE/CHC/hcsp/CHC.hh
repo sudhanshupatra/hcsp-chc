@@ -79,8 +79,6 @@ public:
 	~Problem();
 
 	friend ostream& operator<<(ostream& os, const Problem& pbm);
-	//friend istream& operator>>(istream& is, Problem& pbm);
-	void load_data(istream& scenario, istream& workload, istream& priorities);
 
 	Problem& operator=(const Problem& pbm);
 	bool operator==(const Problem& pbm) const;
@@ -88,9 +86,9 @@ public:
 
 	Direction direction() const;
 
-	// =================================
-	// Especificos del problema.
-	// =================================
+	void loadProblemDataFiles(istream& scenario, istream& workload, istream& priorities);
+	void loadWeightData(const vector<double> weights);
+
 	void setTaskCount(int size);
 	int getTaskCount() const;
 	void setMachineCount(int size);
@@ -114,8 +112,6 @@ public:
 	double getMakespanWeight(const int pid) const;
 	double getCurrentEnergyWeight() const;
 	double getEnergyWeight(const int pid) const;
-
-	void loadWeightData(const vector<double> weights);
 private:
 	vector<double> _wrr_weights;
 	vector<double> _makespan_weights;
@@ -146,8 +142,8 @@ private:
 
 	int _machineId;
 
-	double _makespan;
-	double _awrr;
+	double _computeTime;
+	double _wrr;
 	double _energy;
 
 	bool _dirty;
@@ -171,14 +167,14 @@ public:
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
-	double getMakespan();
-	double energyConsumption(double solutionMakespan);
-	double getAccumulatedWeightedResponseRatio();
-	double getWeightedResponseRatio(const int taskPos) const;
+	double getComputeTime();
+	double getEnergyConsumption(double solutionMakespan);
+	double getWRR();
+	double getTaskWRR(const int taskPos) const;
 
-	int machineId() const;
+	int getMachineId() const;
 
-	void showMap() const;
+	void show() const;
 };
 
 requires class Solution {
@@ -205,13 +201,15 @@ public:
 	bool isInitilized() const;
 	void markAsInitialized();
 
-	double fitness();
-	double makespan();
-	double accumulatedWeightedResponseRatio();
-	double energyConsumption(double makespan);
+	double getFitness();
+	double getMakespan();
+	double getWRR();
+	double getEnergy(double makespan);
 	unsigned int size() const;
 
 	int length() const;
+
+	// Función de distancia para calcular el cruzamiento.
 	int distanceTo(const Solution& solution) const;
 
 	void addTask(const int machineId, const int taskId);
@@ -222,8 +220,10 @@ public:
 	void emptyTasks();
 	int countTasks();
 
+	// Función de local search: aplica una búsqueda sobre la solución actual.
 	void doLocalSearch();
-	void mutate();
+	// Función de mutación: muta la solución actual.
+	void doMutate();
 
 	int getBestFitnessMachineId();
 	int getMinCostMachineId();
@@ -233,15 +233,15 @@ public:
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 	double getMachineFitness(int machineId);
-	int getMinAWRRMachine();
+	int getMinWRRMachine();
 
 	bool validate() const;
-
 	void showCustomStatics();
 
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo
 
+	// Valores de referencia para calcular el fitness.
 	static double getWRR_reference();
 	static double getMakespan_reference();
 	static double getEnergy_reference();
