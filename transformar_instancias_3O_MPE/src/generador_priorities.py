@@ -8,9 +8,9 @@ Created on Oct 3, 2011
 import sys
 import random
 
-AO_lo = (1,10)
-AO_med = (1,20)
-AO_hi = (1,30)
+lo = (5,1)
+med = (5,3)
+hi = (5,5)
 
 if __name__ == '__main__':
     argc = len(sys.argv)
@@ -26,19 +26,21 @@ if __name__ == '__main__':
     
     # Configuro la heterogeneidad seleccionada.
     if heterogeneidad == 1:
-        AO_hetero = AO_lo
+        (mu, sigma) = lo
     elif heterogeneidad == 2:
-        AO_hetero = AO_med
+        (mu, sigma) = med
     elif heterogeneidad == 3:
-        AO_hetero = AO_hi
+        (mu, sigma) = hi
     else:
-        AO_hetero = (1,1)
+        (mu, sigma) = (5,0)
     
     random.seed(current_seed)
     
     for task in range(cantidad_tareas):
         # Calculo la prioridad asignada a la tarea.
-		prioridad = random.randint(AO_hetero[0], AO_hetero[1]) 
+        prioridad = int(round(random.gauss(mu, sigma))) 
+
+        if prioridad < 1: prioridad = 1
         
-		print prioridad
+        print prioridad
 
