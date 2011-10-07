@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 
 	// Cargo la instancia a resolver.
 	// instance_stream >> pbm;
-	pbm.load_data(scenario_stream, workload_stream, priorities_stream);
+	pbm.loadProblemDataFiles(scenario_stream, workload_stream, priorities_stream);
 
 	Operator_Pool pool(pbm);
 	SetUpParams cfg(pool, pbm);
@@ -109,21 +109,21 @@ int main(int argc, char** argv) {
 			ofstream fexit(makespan_solution_file.data());
 			if(!fexit) show_message(13);
 
-			fexit << solver.best_solution_trial().makespan()
-					<< " " << solver.best_solution_trial().accumulatedWeightedResponseRatio()
+			fexit << solver.best_solution_trial().getMakespan()
+					<< " " << solver.best_solution_trial().getWRR()
 					<< " " << solver.pid() << endl;
 
 			for (int i = 0; i < solver.population().parents().size(); i++) {
-				fexit << solver.population().parents()[i]->makespan()
-						<< " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio()
-						<< " " << solver.population().parents()[i]->energyConsumption(solver.population().parents()[i]->makespan())
+				fexit << solver.population().parents()[i]->getMakespan()
+						<< " " << solver.population().parents()[i]->getWRR()
+						<< " " << solver.population().parents()[i]->getEnergy(solver.population().parents()[i]->getMakespan())
 						<< " " << solver.pid() << endl;
 			}
 
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
-				fexit << solver.population().offsprings()[i]->makespan()
-						<< " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio()
-						<< " " << solver.population().parents()[i]->energyConsumption(solver.population().offsprings()[i]->makespan())
+				fexit << solver.population().offsprings()[i]->getMakespan()
+						<< " " << solver.population().offsprings()[i]->getWRR()
+						<< " " << solver.population().parents()[i]->getEnergy(solver.population().offsprings()[i]->getMakespan())
 						<< " " << solver.pid() << endl;
 			}
 
@@ -135,14 +135,14 @@ int main(int argc, char** argv) {
 			ofstream fexit(fit_solution_file.data());
 			if(!fexit) show_message(13);
 
-			fexit << solver.best_solution_trial().fitness() << " " << solver.pid() << endl;
+			fexit << solver.best_solution_trial().getFitness() << " " << solver.pid() << endl;
 
 			for (int i = 0; i < solver.population().parents().size(); i++) {
-				fexit << solver.population().parents()[i]->fitness() << " " << solver.pid() << endl;
+				fexit << solver.population().parents()[i]->getFitness() << " " << solver.pid() << endl;
 			}
 
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
-				fexit << solver.population().offsprings()[i]->fitness() << " " << solver.pid() << endl;
+				fexit << solver.population().offsprings()[i]->getFitness() << " " << solver.pid() << endl;
 			}
 
 			fexit.close();
@@ -185,9 +185,9 @@ int main(int argc, char** argv) {
 		solver.statistics();
 		solver.show_state();
 
-		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
-		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
-		cout << "Energy: " << solver.global_best_solution().energyConsumption(solver.global_best_solution().makespan()) << endl;
+		cout << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
+		cout << "WRR: " << solver.global_best_solution().getWRR() << endl;
+		cout << "Energy: " << solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan()) << endl;
 		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
 		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
 		cout << "Energy (reference): " << Solution::getEnergy_reference() << endl;
@@ -200,9 +200,9 @@ int main(int argc, char** argv) {
 		for (unsigned int i = 0; i < pesos.size() - 1; i=i+2) {
 			double aux_fitness;
 			aux_fitness =
-					pesos[i] * (Solution::getMakespan_reference() + solver.global_best_solution().makespan()) / Solution::getMakespan_reference()
-					+ pesos[i+1] * (Solution::getWRR_reference() + solver.global_best_solution().accumulatedWeightedResponseRatio()) / Solution::getWRR_reference()
-					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().energyConsumption(solver.global_best_solution().makespan())) / Solution::getEnergy_reference();
+					pesos[i] * (Solution::getMakespan_reference() + solver.global_best_solution().getMakespan()) / Solution::getMakespan_reference()
+					+ pesos[i+1] * (Solution::getWRR_reference() + solver.global_best_solution().getWRR()) / Solution::getWRR_reference()
+					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan())) / Solution::getEnergy_reference();
 
 			if (aux_fitness < min_fitness) {
 				min_fitness = aux_fitness;

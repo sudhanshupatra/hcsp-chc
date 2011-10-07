@@ -39,9 +39,9 @@ int main (int argc, char** argv)
 	{
 		solver.show_state();
 		cout << "Solution" << solver.global_best_solution() << endl;
-		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
-		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
-		cout << "Fitness: " << solver.global_best_solution().fitness() << endl;
+		cout << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
+		cout << "WRR: " << solver.global_best_solution().getWRR() << endl;
+		cout << "Fitness: " << solver.global_best_solution().getFitness() << endl;
 		solver.global_best_solution().showCustomStatics();
 
 		cout << "\n\n :( ---------------------- THE END --------------- :) ";

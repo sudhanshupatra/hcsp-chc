@@ -364,7 +364,7 @@ Population::Population(const Problem& pbm, const SetUpParams& setup) :
 void Population::Evaluate(Solution* sols, struct individual &_f) {
 	if (_f.change) {
 		_f.change = false;
-		_f.fitness = sols->fitness();
+		_f.fitness = sols->getFitness();
 		_evaluations++;
 	}
 }
@@ -684,8 +684,8 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 					if (rand01() <= 0.5) {
 						// Intento mejorar metrica de makespan en la solución
 						if (machineIdSol1 != machineIdSol2) {
-							if (sol1.getMachines()[machineIdSol1].getMakespan()
-									< sol2.getMachines()[machineIdSol2].getMakespan()) {
+							if (sol1.getMachines()[machineIdSol1].getComputeTime()
+									< sol2.getMachines()[machineIdSol2].getComputeTime()) {
 								// Sol1 es mejor que Sol2
 								sol2.getMachines()[machineIdSol2].removeTask(
 										taskPosSol2);
@@ -704,9 +704,9 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 					if ((!modificado) && (rand01() <= 0.5)) {
 						// Intento mejorar metrica de wrr en la solución
-						if (sol1.getMachines()[machineIdSol1].getWeightedResponseRatio(
+						if (sol1.getMachines()[machineIdSol1].getTaskWRR(
 								taskPosSol1)
-								< sol2.getMachines()[machineIdSol2].getWeightedResponseRatio(
+								< sol2.getMachines()[machineIdSol2].getTaskWRR(
 										taskPosSol2)) {
 							// Sol1 es mejor que Sol2
 							sol2.getMachines()[machineIdSol2].removeTask(
@@ -847,7 +847,7 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 	for (int i = 0; i < sols.size(); i++) {
 		//		if (i != bestSolutionIndex) {
 		if (rand01() <= mutationProbability) {
-			sols[i]->mutate();
+			sols[i]->doMutate();
 		}
 		//		}
 
@@ -1076,10 +1076,10 @@ void Migration::execute(Population& pop,
 				_netstream >> *solution_received;
 
 				// remplace policy
-				if ((solution_received->fitness()
-						<= solution_to_remplace->fitness() && direction
-						== minimize) || (solution_received->fitness()
-						>= solution_to_remplace->fitness() && direction
+				if ((solution_received->getFitness()
+						<= solution_to_remplace->getFitness() && direction
+						== minimize) || (solution_received->getFitness()
+						>= solution_to_remplace->getFitness() && direction
 						== maximize)) {
 					need_to_revaluate = true;
 					for (int j = 0; j < pop.parents().size(); j++) {
@@ -1123,10 +1123,10 @@ void Migration::execute(Population& pop,
 				_netstream >> *solution_received;
 
 				// remplace policy
-				if ((solution_received->fitness()
-						<= solution_to_remplace->fitness() && direction
-						== minimize) || (solution_received->fitness()
-						>= solution_to_remplace->fitness() && direction
+				if ((solution_received->getFitness()
+						<= solution_to_remplace->getFitness() && direction
+						== minimize) || (solution_received->getFitness()
+						>= solution_to_remplace->getFitness() && direction
 						== maximize)) {
 					need_to_revaluate = true;
 					for (int j = 0; j < pop.parents().size(); j++) {
