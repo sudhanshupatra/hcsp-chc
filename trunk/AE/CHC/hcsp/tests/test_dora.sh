@@ -17,9 +17,9 @@ do
 			#
 			echo ">>> Procesando scenario.${scenario} workload.${workload} priorities.${priorities}"
 			
-			SCENARIO_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/instances/scenario.${scenario}"
-			WORKLOAD_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/instances/workload.${workload}"
-			PRIORITIES_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/instances/priorities.${priorities}"
+			SCENARIO_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16/scenario.${scenario}"
+			WORKLOAD_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16/workload.${workload}"
+			PRIORITIES_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16/priorities.${priorities}"
 			
 			BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/${PROJECT_NAME}/${data[i]}"
 			mkdir -p ${BASE_FOLDER}
