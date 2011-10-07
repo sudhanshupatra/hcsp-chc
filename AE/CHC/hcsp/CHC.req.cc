@@ -10,7 +10,7 @@ skeleton CHC {
 // Problem ---------------------------------------------------------------
 
 Problem::Problem() :
-	_taskCount(0), _machineCount(0), _expectedTimeToCompute(NULL),
+	_taskCount(0), _machineCount(0), _taskSSJComputeCost(NULL),
 			_wrr_weights(), _makespan_weights(), _tasksPriorities(), _mypid(-1) {
 }
 
@@ -33,7 +33,7 @@ void Problem::load_data(istream& scenario, istream& workload,
 	// Inicializo el consumo energético de cada máquina.
 	{
 		_machineCoreCount.reserve(_machineCount);
-		_machineSsjOps.reserve(_machineCount);
+		_machineSSJPerformance.reserve(_machineCount);
 		_machineConsumptionIdle.reserve(_machineCount);
 		_machineConsumptionMax.reserve(_machineCount);
 
@@ -49,7 +49,7 @@ void Problem::load_data(istream& scenario, istream& workload,
 			_machineCoreCount.push_back(coreCount);
 
 			assert(ssjOps > 0);
-			_machineSsjOps.push_back(ssjOps);
+			_machineSSJPerformance.push_back(ssjOps);
 
 			assert(consumptionIdle > 0.0);
 			_machineConsumptionIdle.push_back(consumptionIdle);
@@ -75,8 +75,8 @@ void Problem::load_data(istream& scenario, istream& workload,
 
 	// Inicializo toda la matriz de ETC.
 	{
-		_expectedTimeToCompute = new float*[_taskCount];
-		if (_expectedTimeToCompute == NULL) {
+		_taskSSJComputeCost = new float*[_taskCount];
+		if (_taskSSJComputeCost == NULL) {
 			cout << "[ERROR] no se pudo reservar memoria para la matriz"
 					<< endl;
 			show_message(7);
@@ -85,9 +85,9 @@ void Problem::load_data(istream& scenario, istream& workload,
 		// Inicializo cada tarea del problema.
 		for (int taskPos = 0; taskPos < _taskCount; taskPos++) {
 			// Por cada tarea creo una lista de maquinas.
-			_expectedTimeToCompute[taskPos] = new float[_machineCount];
+			_taskSSJComputeCost[taskPos] = new float[_machineCount];
 
-			if (_expectedTimeToCompute[taskPos] == NULL) {
+			if (_taskSSJComputeCost[taskPos] == NULL) {
 				cout
 						<< "[ERROR] no se pudo reservar memoria para las máquinas de la tarea "
 						<< taskPos << endl;
@@ -99,9 +99,9 @@ void Problem::load_data(istream& scenario, istream& workload,
 				workload.getline(buffer, MAX_BUFFER, '\n');
 
 				sscanf(buffer, "%f",
-						&_expectedTimeToCompute[taskPos][machinePos]);
+						&_taskSSJComputeCost[taskPos][machinePos]);
 
-				assert(_expectedTimeToCompute[taskPos][machinePos] >= 0);
+				assert(_taskSSJComputeCost[taskPos][machinePos] >= 0);
 			}
 		}
 	}
@@ -112,7 +112,7 @@ Problem& Problem::operator=(const Problem& pbm) {
 }
 
 bool Problem::operator==(const Problem& pbm) const {
-	if (taskCount() != pbm.taskCount())
+	if (getTaskCount() != pbm.getTaskCount())
 		return false;
 	return true;
 }
@@ -129,7 +129,7 @@ void Problem::setTaskCount(int size) {
 	_taskCount = size;
 }
 
-int Problem::taskCount() const {
+int Problem::getTaskCount() const {
 	return _taskCount;
 }
 
@@ -137,15 +137,15 @@ void Problem::setMachineCount(int size) {
 	_machineCount = size;
 }
 
-int Problem::machineCount() const {
+int Problem::getMachineCount() const {
 	return _machineCount;
 }
 
 int Problem::getBestTaskIdForMachine(int machineId) const {
 	//TODO: Optimizar!
 	int minTaskId = 0;
-	for (int i = 1; i < taskCount(); i++) {
-		if (expectedTimeToCompute(i, machineId) < expectedTimeToCompute(
+	for (int i = 1; i < getTaskCount(); i++) {
+		if (getTaskSSJCost(i, machineId) < getTaskSSJCost(
 				minTaskId, machineId)) {
 			minTaskId = i;
 		}
@@ -156,8 +156,8 @@ int Problem::getBestTaskIdForMachine(int machineId) const {
 int Problem::getBestMachineForTaskId(int taskId) const {
 	//TODO: Optimizar!
 	int minMachineId = 0;
-	for (int i = 1; i < machineCount(); i++) {
-		if (expectedTimeToCompute(taskId, i) < expectedTimeToCompute(taskId,
+	for (int i = 1; i < getMachineCount(); i++) {
+		if (getTaskSSJCost(taskId, i) < getTaskSSJCost(taskId,
 				minMachineId)) {
 			minMachineId = i;
 		}
@@ -165,49 +165,49 @@ int Problem::getBestMachineForTaskId(int taskId) const {
 	return minMachineId;
 }
 
-float Problem::expectedTimeToCompute(const int& task, const int& machine) const {
+float Problem::getTaskSSJCost(const int& task, const int& machine) const {
 	assert(task >= 0);
 	assert(task < _taskCount);
 	assert(machine >= 0);
 	assert(machine < _machineCount);
-	return _expectedTimeToCompute[task][machine];
+	return _taskSSJComputeCost[task][machine];
 }
 
-int Problem::machineCoreCount(const int& machine) const {
+int Problem::getMachineCoreCount(const int& machine) const {
 	assert(machine >= 0);
 	assert(machine < _machineCount);
 	return _machineCoreCount[machine];
 }
 
-int Problem::machineSsjOps(const int& machine) const {
+int Problem::getMachineSSJPerformance(const int& machine) const {
 	assert(machine >= 0);
 	assert(machine < _machineCount);
-	return _machineSsjOps[machine];
+	return _machineSSJPerformance[machine];
 }
 
-float Problem::machineEnergyIdle(const int& machine) const {
+float Problem::getMachineEnergyWhenIdle(const int& machine) const {
 	assert(machine >= 0);
 	assert(machine < _machineCount);
 	return _machineConsumptionIdle[machine];
 }
 
-float Problem::machineEnergyMax(const int& machine) const {
+float Problem::getMachineEnergyWhenMax(const int& machine) const {
 	assert(machine >= 0);
 	assert(machine < _machineCount);
 	return _machineConsumptionMax[machine];
 }
 
-int Problem::taskPriority(const int& task) const {
+int Problem::getTaskPriority(const int& task) const {
 	assert(task >= 0);
 	assert(task < _taskCount);
 	return _tasksPriorities[task];
 }
 
-void Problem::setPId(const int pid) {
+void Problem::setCurrentProcessId(const int pid) {
 	_mypid = pid;
 }
 
-void Problem::loadWeights(const vector<double> weights) {
+void Problem::loadWeightData(const vector<double> weights) {
 	assert(weights.size() > 0);
 	assert(weights.size() % 3 == 0);
 
@@ -218,17 +218,17 @@ void Problem::loadWeights(const vector<double> weights) {
 	}
 }
 
-double Problem::getWRRWeight() const {
+double Problem::getCurrentWRRWeight() const {
 	assert(_mypid >= 0);
 	return getWRRWeight(_mypid);
 }
 
-double Problem::getMakespanWeight() const {
+double Problem::getCurrentMakespanWeight() const {
 	assert(_mypid >= 0);
 	return getMakespanWeight(_mypid);
 }
 
-double Problem::getEnergyWeight() const {
+double Problem::getCurrentEnergyWeight() const {
 	assert(_mypid >= 0);
 	return getEnergyWeight(_mypid);
 }
@@ -269,7 +269,7 @@ SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0),
 			_awrr(0.0), _energy(0.0), _dirty(true), _pbm(problem) {
 
-	_tasks.reserve(problem.taskCount());
+	_tasks.reserve(problem.getTaskCount());
 }
 
 SolutionMachine::~SolutionMachine() {
@@ -402,7 +402,7 @@ void SolutionMachine::emptyTasks() {
 
 double SolutionMachine::energyConsumption(double solutionMakespan) {
 	refresh();
-	float idle_energy = _pbm.machineEnergyIdle(_machineId);
+	float idle_energy = _pbm.getMachineEnergyWhenIdle(_machineId);
 	return _energy + ((solutionMakespan - _makespan) * idle_energy);
 }
 
@@ -423,26 +423,26 @@ double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
 		int currentTaskId;
 		currentTaskId = getTask(currentTaskPos);
 
-		wait_time += _pbm.expectedTimeToCompute(currentTaskId, machineId());
+		wait_time += _pbm.getTaskSSJCost(currentTaskId, machineId());
 	}
 
 	int taskId;
 	taskId = getTask(taskPos);
 
 	float compute_cost;
-	compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
+	compute_cost = _pbm.getTaskSSJCost(taskId, machineId());
 
 	if (compute_cost == 0.0) {
 		return 0.0;
 	} else {
 		if (wait_time == 0.0) {
-			return (double) _pbm.taskPriority(taskId);
+			return (double) _pbm.getTaskPriority(taskId);
 		} else {
 			float rr;
 			rr = (wait_time + compute_cost) / compute_cost;
 
 			float wrr;
-			wrr = (_pbm.taskPriority(taskId) * rr);
+			wrr = (_pbm.getTaskPriority(taskId) * rr);
 
 			return wrr;
 		}
@@ -452,9 +452,9 @@ double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
 void SolutionMachine::refresh() {
 	//_dirty = true;
 	if (_dirty) {
-		int cores = _pbm.machineCoreCount(_machineId);
-		int ssp_ops = _pbm.machineSsjOps(_machineId);
-		float max_energy = _pbm.machineEnergyMax(_machineId);
+		int cores = _pbm.getMachineCoreCount(_machineId);
+		int ssp_ops = _pbm.getMachineSSJPerformance(_machineId);
+		float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
 
 		double total_compute = 0.0;
 		double partial_priority_cost = 0.0;
@@ -472,7 +472,7 @@ void SolutionMachine::refresh() {
 			taskId = getTask(taskPos);
 
 			double compute_cost;
-			compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
+			compute_cost = _pbm.getTaskSSJCost(taskId, machineId());
 			assert(compute_cost >= 0);
 
 			double priority_cost;
@@ -480,12 +480,12 @@ void SolutionMachine::refresh() {
 				priority_cost = 0.0;
 			} else {
 				if (core_compute[taskPos % cores] == 0.0) {
-					priority_cost = _pbm.taskPriority(taskId);
+					priority_cost = _pbm.getTaskPriority(taskId);
 				} else {
 					double rr;
 					rr = (core_compute[taskPos % cores] + compute_cost)
 							/ compute_cost;
-					priority_cost = (_pbm.taskPriority(taskId) * rr);
+					priority_cost = (_pbm.getTaskPriority(taskId) * rr);
 				}
 			}
 
@@ -537,9 +537,9 @@ double Solution::getMakespan_reference() {
 
 Solution::Solution(const Problem& pbm) :
 	_pbm(pbm), _machines(), _initialized(false) {
-	_machines.reserve(pbm.machineCount());
+	_machines.reserve(pbm.getMachineCount());
 
-	for (int machineId = 0; machineId < pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < pbm.getMachineCount(); machineId++) {
 		_machines.push_back(*(new SolutionMachine(pbm, machineId)));
 	}
 }
@@ -580,20 +580,20 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 				fprintf(
 						stdout,
 						" t_ssj: %f ",
-						sol.pbm().expectedTimeToCompute(
+						sol.pbm().getTaskSSJCost(
 								sol.machines()[machineId].getTask(i), machineId));
 
 				float time_to_execute;
-				time_to_execute = sol.pbm().expectedTimeToCompute(
+				time_to_execute = sol.pbm().getTaskSSJCost(
 						sol.machines()[machineId].getTask(i), machineId)
-						/ (sol.pbm().machineSsjOps(machineId)
-								/ sol.pbm().machineCoreCount(machineId));
+						/ (sol.pbm().getMachineSSJPerformance(machineId)
+								/ sol.pbm().getMachineCoreCount(machineId));
 
 				fprintf(stdout, " t_ssj/(m_ssj/cores): %f ", time_to_execute);
 
 				fprintf(stdout, " WRR: %f ",
 						sol.machines()[machineId].getWeightedResponseRatio(i));
-				os << " priority: " << sol.pbm().taskPriority(
+				os << " priority: " << sol.pbm().getTaskPriority(
 						sol.machines()[machineId].getTask(i));
 				os << endl;
 			}
@@ -625,7 +625,7 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 			taskId = sol.machines()[machineId].getTask(taskPos);
 
 			assert(taskId >= 0);
-			assert(taskId < sol.pbm().taskCount());
+			assert(taskId < sol.pbm().getTaskCount());
 
 			ns << taskId;
 			//			if (DEBUG) cout << "[DEBUG] operator<< " << taskId << endl;
@@ -640,8 +640,8 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 	}
 
 	//	if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
-	assert(currentTask == sol.pbm().taskCount());
-	assert(currentItem == sol.pbm().taskCount() + sol.pbm().machineCount());
+	assert(currentTask == sol.pbm().getTaskCount());
+	assert(currentItem == sol.pbm().getTaskCount() + sol.pbm().getMachineCount());
 
 	return ns;
 }
@@ -664,7 +664,7 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 	//	if (DEBUG) cout << "[DEBUG] operator>> cantidad actual de tasks " << sol.countTasks() << " las voy a vaciar." << endl;
 	sol.emptyTasks();
 
-	for (int pos = 0; pos < sol.pbm().taskCount() + sol.pbm().machineCount(); pos++) {
+	for (int pos = 0; pos < sol.pbm().getTaskCount() + sol.pbm().getMachineCount(); pos++) {
 		int currentValue;
 		ns >> currentValue;
 
@@ -674,13 +674,13 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 		//		if (DEBUG) cout << "[DEBUG] operator>> " << currentValue << endl;
 
 		if (currentValue == machineSeparator) {
-			assert(currentMachine < sol.pbm().machineCount());
+			assert(currentMachine < sol.pbm().getMachineCount());
 			currentMachine++;
 		} else {
 			assert(currentValue >= 0);
-			assert(currentValue < sol.pbm().taskCount());
+			assert(currentValue < sol.pbm().getTaskCount());
 			assert(currentMachine >= 0);
-			assert(currentMachine < sol.pbm().machineCount());
+			assert(currentMachine < sol.pbm().getMachineCount());
 
 			sol.addTask(currentMachine, currentValue);
 			currentTask++;
@@ -689,8 +689,8 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 
 	//	if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
 	//	if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
-	assert(sol.machines().size() == sol.pbm().machineCount());
-	assert(currentTask == sol.pbm().taskCount());
+	assert(sol.machines().size() == sol.pbm().getMachineCount());
+	assert(currentTask == sol.pbm().getTaskCount());
 
 	sol.markAsInitialized();
 	sol.validate();
@@ -748,7 +748,7 @@ void Solution::initializeStaticMCT() {
 void Solution::initializeRandomMCT() {
 	//if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT Aleatoria" << endl;
 
-	int startTask = rand_int(0, _pbm.taskCount() - 1);
+	int startTask = rand_int(0, _pbm.getTaskCount() - 1);
 	int direction = rand_int(0, 1);
 	if (direction == 0)
 		direction = -1;
@@ -760,17 +760,17 @@ void Solution::initializeMCT(int startTask, int direction) {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MCT" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	int currentTask;
-	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+	for (int taskOffset = 0; taskOffset < _pbm.getTaskCount(); taskOffset++) {
 		currentTask = startTask + (direction * taskOffset);
 		if (currentTask < 0)
-			currentTask = _pbm.taskCount() + currentTask;
-		currentTask = currentTask % _pbm.taskCount();
+			currentTask = _pbm.getTaskCount() + currentTask;
+		currentTask = currentTask % _pbm.getTaskCount();
 
 		double minFitness;
 		minFitness = infinity();
@@ -781,9 +781,9 @@ void Solution::initializeMCT(int startTask, int direction) {
 		for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 			double makespan;
 			makespan = (machineMakespan[machineId]
-					+ (_pbm.expectedTimeToCompute(currentTask, machineId)
-							/ (_pbm.machineSsjOps(machineId)
-									/ _pbm.machineCoreCount(machineId))));
+					+ (_pbm.getTaskSSJCost(currentTask, machineId)
+							/ (_pbm.getMachineSSJPerformance(machineId)
+									/ _pbm.getMachineCoreCount(machineId))));
 
 			if (makespan < minFitness) {
 				minFitness = makespan;
@@ -791,9 +791,9 @@ void Solution::initializeMCT(int startTask, int direction) {
 			}
 		}
 
-		machineMakespan[minFitnessMachineId] += _pbm.expectedTimeToCompute(
-				currentTask, minFitnessMachineId) / (_pbm.machineSsjOps(
-				minFitnessMachineId) / _pbm.machineCoreCount(
+		machineMakespan[minFitnessMachineId] += _pbm.getTaskSSJCost(
+				currentTask, minFitnessMachineId) / (_pbm.getMachineSSJPerformance(
+				minFitnessMachineId) / _pbm.getMachineCoreCount(
 				minFitnessMachineId));
 
 		_machines[minFitnessMachineId].addTask(currentTask);
@@ -804,23 +804,23 @@ void Solution::initializeMinMin() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<float> machineAssignedSsjops;
-	machineAssignedSsjops.reserve(_pbm.machineCount() + 1);
+	machineAssignedSsjops.reserve(_pbm.getMachineCount() + 1);
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		machineAssignedSsjops.push_back(0.0);
 		machineMakespan.push_back(0.0);
 	}
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	while (unmappedTasksCount > 0) {
 		double minCT;
@@ -834,15 +834,15 @@ void Solution::initializeMinMin() {
 
 		double newMakespan;
 
-		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+		for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
 			if (taskIsUnmapped[taskId]) {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if (_machines[machineId].countTasks()
-							< _pbm.machineCoreCount(machineId)) {
+							< _pbm.getMachineCoreCount(machineId)) {
 						double taskMachineCost;
-						taskMachineCost = _pbm.expectedTimeToCompute(taskId,
-								machineId) / (_pbm.machineSsjOps(machineId)
-								/ _pbm.machineCoreCount(machineId));
+						taskMachineCost = _pbm.getTaskSSJCost(taskId,
+								machineId) / (_pbm.getMachineSSJPerformance(machineId)
+								/ _pbm.getMachineCoreCount(machineId));
 
 						if (machineMakespan[machineId] > taskMachineCost) {
 							newMakespan = machineMakespan[machineId];
@@ -852,9 +852,9 @@ void Solution::initializeMinMin() {
 					} else {
 						newMakespan
 								= (machineAssignedSsjops[machineId]
-										+ _pbm.expectedTimeToCompute(taskId,
+										+ _pbm.getTaskSSJCost(taskId,
 												machineId))
-										/ _pbm.machineSsjOps(machineId);
+										/ _pbm.getMachineSSJPerformance(machineId);
 					}
 
 					if (newMakespan < minCT) {
@@ -871,7 +871,7 @@ void Solution::initializeMinMin() {
 
 		machineAssignedSsjops[minCTMachineId]
 				= machineAssignedSsjops[minCTMachineId]
-						+ _pbm.expectedTimeToCompute(minCTTaskId,
+						+ _pbm.getTaskSSJCost(minCTTaskId,
 								minCTMachineId);
 		machineMakespan[minCTMachineId] = minCT;
 
@@ -893,18 +893,18 @@ void Solution::initializeMinWRR5() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -920,7 +920,7 @@ void Solution::initializeMinWRR5() {
 		second_best_machineId = -1;
 		second_min = FLT_MAX;
 
-		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+		for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
 			first_min = FLT_MAX;
 			second_aux = FLT_MAX;
 			first_best_machineId = -1;
@@ -928,9 +928,9 @@ void Solution::initializeMinWRR5() {
 			if (taskIsUnmapped[taskId]) {
 				first_aux = 0.0;
 
-				for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+				for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 					first_aux = machineMakespan[machineId]
-							+ _pbm.expectedTimeToCompute(taskId, machineId);
+							+ _pbm.getTaskSSJCost(taskId, machineId);
 
 					if (first_aux <= first_min) {
 						first_min = first_aux;
@@ -939,23 +939,23 @@ void Solution::initializeMinWRR5() {
 				}
 
 				if (machineMakespan[first_best_machineId] > 0) {
-					if (_pbm.expectedTimeToCompute(taskId, first_best_machineId)
+					if (_pbm.getTaskSSJCost(taskId, first_best_machineId)
 							== 0) {
 						second_aux = machineMakespan[first_best_machineId]
-								/ _pbm.taskPriority(taskId);
+								/ _pbm.getTaskPriority(taskId);
 					} else {
 						float rr;
 						rr = (machineMakespan[first_best_machineId]
-								+ _pbm.expectedTimeToCompute(taskId,
+								+ _pbm.getTaskSSJCost(taskId,
 										first_best_machineId))
-								/ _pbm.expectedTimeToCompute(taskId,
+								/ _pbm.getTaskSSJCost(taskId,
 										first_best_machineId);
-						second_aux = rr / _pbm.taskPriority(taskId);
+						second_aux = rr / _pbm.getTaskPriority(taskId);
 					}
 				} else {
 					float aux;
-					aux = _pbm.expectedTimeToCompute(taskId,
-							first_best_machineId) / _pbm.taskPriority(taskId);
+					aux = _pbm.getTaskSSJCost(taskId,
+							first_best_machineId) / _pbm.getTaskPriority(taskId);
 					second_aux = aux / aux + 1;
 				}
 
@@ -970,7 +970,7 @@ void Solution::initializeMinWRR5() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -981,18 +981,18 @@ void Solution::initializeMinWRR60() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -1019,10 +1019,10 @@ void Solution::initializeMinWRR60() {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if (machineMakespan[machineId] > 0) {
 						first_aux = (machineMakespan[machineId]
-								/ _pbm.taskPriority(taskId))
+								/ _pbm.getTaskPriority(taskId))
 								* (_machines[machineId].countTasks() + 1);
 					} else {
-						first_aux = 1 / _pbm.taskPriority(taskId);
+						first_aux = 1 / _pbm.getTaskPriority(taskId);
 					}
 
 					if (first_aux < first_min) {
@@ -1032,8 +1032,8 @@ void Solution::initializeMinWRR60() {
 				}
 
 				second_aux = (machineMakespan[first_best_machineId]
-						+ _pbm.expectedTimeToCompute(taskId,
-								first_best_machineId)) / _pbm.taskPriority(
+						+ _pbm.getTaskSSJCost(taskId,
+								first_best_machineId)) / _pbm.getTaskPriority(
 						taskId);
 
 				if (second_aux <= second_min) {
@@ -1047,7 +1047,7 @@ void Solution::initializeMinWRR60() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -1058,18 +1058,18 @@ void Solution::initializeMinWRR61() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -1094,19 +1094,19 @@ void Solution::initializeMinWRR61() {
 				first_aux = 0.0;
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-					if (_pbm.expectedTimeToCompute(taskId, machineId) == 0) {
+					if (_pbm.getTaskSSJCost(taskId, machineId) == 0) {
 						first_aux = 0.0;
 					} else {
 						if (machineMakespan[machineId] > 0) {
 							float rr;
 							rr = (machineMakespan[machineId]
-									+ _pbm.expectedTimeToCompute(taskId,
+									+ _pbm.getTaskSSJCost(taskId,
 											machineId))
-									/ _pbm.expectedTimeToCompute(taskId,
+									/ _pbm.getTaskSSJCost(taskId,
 											machineId);
-							first_aux = rr / _pbm.taskPriority(taskId);
+							first_aux = rr / _pbm.getTaskPriority(taskId);
 						} else {
-							first_aux = 1 / _pbm.taskPriority(taskId);
+							first_aux = 1 / _pbm.getTaskPriority(taskId);
 						}
 					}
 
@@ -1117,7 +1117,7 @@ void Solution::initializeMinWRR61() {
 				}
 
 				second_aux = machineMakespan[first_best_machineId]
-						/ _pbm.taskPriority(taskId);
+						/ _pbm.getTaskPriority(taskId);
 
 				if (second_aux <= second_min) {
 					second_min = second_aux;
@@ -1130,7 +1130,7 @@ void Solution::initializeMinWRR61() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -1141,18 +1141,18 @@ void Solution::initializeMinWRR62() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -1179,9 +1179,9 @@ void Solution::initializeMinWRR62() {
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					if (machineMakespan[machineId] > 0) {
 						first_aux = machineMakespan[machineId]
-								/ _pbm.taskPriority(taskId);
+								/ _pbm.getTaskPriority(taskId);
 					} else {
-						first_aux = 1 / _pbm.taskPriority(taskId);
+						first_aux = 1 / _pbm.getTaskPriority(taskId);
 					}
 
 					if (first_aux < first_min) {
@@ -1190,8 +1190,8 @@ void Solution::initializeMinWRR62() {
 					}
 				}
 
-				second_aux = _pbm.expectedTimeToCompute(taskId,
-						first_best_machineId) / _pbm.taskPriority(taskId);
+				second_aux = _pbm.getTaskSSJCost(taskId,
+						first_best_machineId) / _pbm.getTaskPriority(taskId);
 
 				if (second_aux <= second_min) {
 					second_min = second_aux;
@@ -1204,7 +1204,7 @@ void Solution::initializeMinWRR62() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -1215,18 +1215,18 @@ void Solution::initializeMinWRR0() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -1252,10 +1252,10 @@ void Solution::initializeMinWRR0() {
 
 				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
 					first_aux = machineMakespan[machineId]
-							+ _pbm.expectedTimeToCompute(taskId, machineId);
+							+ _pbm.getTaskSSJCost(taskId, machineId);
 					if (first_aux > 0) {
 						first_aux += (machineMakespan[machineId]
-								/ (_pbm.taskPriority(taskId)
+								/ (_pbm.getTaskPriority(taskId)
 										* (_machines[machineId].countTasks()
 												+ 1)));
 					}
@@ -1279,7 +1279,7 @@ void Solution::initializeMinWRR0() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -1290,18 +1290,18 @@ void Solution::initializeMinWRR4() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<double> machineMakespan;
-	machineMakespan.reserve(_pbm.machineCount() + 1);
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++)
 		machineMakespan.push_back(0.0);
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
 
-	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
 		taskIsUnmapped.push_back(true);
 
-	int unmappedTasksCount = _pbm.taskCount();
+	int unmappedTasksCount = _pbm.getTaskCount();
 
 	float first_min;
 	float first_aux;
@@ -1330,15 +1330,15 @@ void Solution::initializeMinWRR4() {
 						float rr;
 						rr
 								= (machineMakespan[machineId]
-										+ _pbm.expectedTimeToCompute(taskId,
+										+ _pbm.getTaskSSJCost(taskId,
 												machineId))
-										/ _pbm.expectedTimeToCompute(taskId,
+										/ _pbm.getTaskSSJCost(taskId,
 												machineId);
-						first_aux = rr / _pbm.taskPriority(taskId);
+						first_aux = rr / _pbm.getTaskPriority(taskId);
 					} else {
 						float aux;
-						aux = _pbm.expectedTimeToCompute(taskId, machineId)
-								/ _pbm.taskPriority(taskId);
+						aux = _pbm.getTaskSSJCost(taskId, machineId)
+								/ _pbm.getTaskPriority(taskId);
 						first_aux = aux / aux + 1;
 					}
 
@@ -1349,7 +1349,7 @@ void Solution::initializeMinWRR4() {
 				}
 
 				second_aux = machineMakespan[first_best_machineId]
-						+ _pbm.expectedTimeToCompute(taskId,
+						+ _pbm.getTaskSSJCost(taskId,
 								first_best_machineId);
 
 				if (second_aux <= second_min) {
@@ -1363,7 +1363,7 @@ void Solution::initializeMinWRR4() {
 
 		unmappedTasksCount--;
 		taskIsUnmapped[second_best_taskId] = false;
-		machineMakespan[second_best_machineId] += _pbm.expectedTimeToCompute(
+		machineMakespan[second_best_machineId] += _pbm.getTaskSSJCost(
 				second_best_taskId, second_best_machineId);
 
 		_machines[second_best_machineId].addTask(second_best_taskId);
@@ -1373,20 +1373,20 @@ void Solution::initializeMinWRR4() {
 void Solution::initializeRandom() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización random" << endl;
 
-	int startTask = rand_int(0, _pbm.taskCount() - 1);
+	int startTask = rand_int(0, _pbm.getTaskCount() - 1);
 	int direction = rand_int(0, 1);
 	if (direction == 0)
 		direction = -1;
 
 	int currentTask;
-	for (int taskOffset = 0; taskOffset < _pbm.taskCount(); taskOffset++) {
+	for (int taskOffset = 0; taskOffset < _pbm.getTaskCount(); taskOffset++) {
 		currentTask = startTask + (direction * taskOffset);
 		if (currentTask < 0)
-			currentTask = _pbm.taskCount() + currentTask;
-		currentTask = currentTask % _pbm.taskCount();
+			currentTask = _pbm.getTaskCount() + currentTask;
+		currentTask = currentTask % _pbm.getTaskCount();
 
 		int currentMachine;
-		currentMachine = rand_int(0, _pbm.machineCount() - 1);
+		currentMachine = rand_int(0, _pbm.getMachineCount() - 1);
 
 		_machines[currentMachine].addTask(currentTask);
 	}
@@ -1394,17 +1394,17 @@ void Solution::initializeRandom() {
 
 void Solution::initializeSufferage() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización Sufferage" << endl;
-	int unmappedTasks = _pbm.taskCount();
+	int unmappedTasks = _pbm.getTaskCount();
 
 	vector<bool> taskIsUnmapped;
-	taskIsUnmapped.reserve(_pbm.taskCount());
-	for (int i = 0; i < _pbm.taskCount(); i++) {
+	taskIsUnmapped.reserve(_pbm.getTaskCount());
+	for (int i = 0; i < _pbm.getTaskCount(); i++) {
 		taskIsUnmapped[i] = true;
 	}
 
 	vector<double> machinesMakespan;
-	machinesMakespan.reserve(_pbm.machineCount());
-	for (int i = 0; i < _pbm.machineCount(); i++) {
+	machinesMakespan.reserve(_pbm.getMachineCount());
+	for (int i = 0; i < _pbm.getMachineCount(); i++) {
 		machinesMakespan[i] = 0.0;
 	}
 
@@ -1417,7 +1417,7 @@ void Solution::initializeSufferage() {
 		maxSufferageMachineId = -1;
 		maxSufferageValue = 0.0;
 
-		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+		for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
 			if (taskIsUnmapped[taskId]) {
 				int minMakespanMachineId;
 				minMakespanMachineId = -1;
@@ -1425,25 +1425,25 @@ void Solution::initializeSufferage() {
 				int secondMinMakespanMachineId;
 				secondMinMakespanMachineId = -1;
 
-				assert(_pbm.machineCount() > 2);
+				assert(_pbm.getMachineCount() > 2);
 
-				for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+				for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 					double currentMakespan;
 					double minMakespan;
 					double secondMinMakespan;
 
 					currentMakespan = machinesMakespan[machineId]
-							+ _pbm.expectedTimeToCompute(taskId, machineId);
+							+ _pbm.getTaskSSJCost(taskId, machineId);
 
 					if (minMakespanMachineId != -1) {
 						minMakespan = machinesMakespan[minMakespanMachineId]
-								+ _pbm.expectedTimeToCompute(taskId,
+								+ _pbm.getTaskSSJCost(taskId,
 										minMakespanMachineId);
 					}
 					if (secondMinMakespanMachineId != -1) {
 						secondMinMakespan
 								= machinesMakespan[secondMinMakespanMachineId]
-										+ _pbm.expectedTimeToCompute(taskId,
+										+ _pbm.getTaskSSJCost(taskId,
 												secondMinMakespanMachineId);
 					}
 					if (minMakespanMachineId == -1) {
@@ -1463,12 +1463,12 @@ void Solution::initializeSufferage() {
 				double sufferageValue;
 
 				minMakespan = machinesMakespan[minMakespanMachineId]
-						+ _pbm.expectedTimeToCompute(taskId,
+						+ _pbm.getTaskSSJCost(taskId,
 								minMakespanMachineId);
 
 				secondMinMakespan
 						= machinesMakespan[secondMinMakespanMachineId]
-								+ _pbm.expectedTimeToCompute(taskId,
+								+ _pbm.getTaskSSJCost(taskId,
 										secondMinMakespanMachineId);
 
 				sufferageValue = secondMinMakespan - minMakespan;
@@ -1489,7 +1489,7 @@ void Solution::initializeSufferage() {
 
 		machinesMakespan[maxSufferageMachineId]
 				= machinesMakespan[maxSufferageMachineId]
-						+ _pbm.expectedTimeToCompute(maxSufferageTaskId,
+						+ _pbm.getTaskSSJCost(maxSufferageTaskId,
 								maxSufferageMachineId);
 
 		_machines[maxSufferageMachineId].addTask(maxSufferageTaskId);
@@ -1551,9 +1551,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			}
 		}
 		if (DEBUG) {
-			cout << "[DEBUG] Makespan weight: " << _pbm.getMakespanWeight()
+			cout << "[DEBUG] Makespan weight: " << _pbm.getCurrentMakespanWeight()
 					<< "\n";
-			cout << "[DEBUG] AWRR weight: " << _pbm.getWRRWeight() << "\n";
+			cout << "[DEBUG] AWRR weight: " << _pbm.getCurrentWRRWeight() << "\n";
 		}
 	} else {
 		int cant_heuristicas = 7;
@@ -1858,12 +1858,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 bool Solution::validate() const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
 	if (true) {
-		for (int t = 0; t < _pbm.taskCount(); t++) {
+		for (int t = 0; t < _pbm.getTaskCount(); t++) {
 			int machineId, taskPos;
 			//assert(findTask(t, machineId, taskPos));
 		}
 
-		if (_machines.size() == _pbm.machineCount()) {
+		if (_machines.size() == _pbm.getMachineCount()) {
 			int taskCount = 0;
 
 			for (int machineId = 0; machineId < _machines.size(); machineId++) {
@@ -1876,7 +1876,7 @@ bool Solution::validate() const {
 
 					assert(_machines[machineId].hasTask(taskId));
 
-					if ((taskId < 0) || (taskId >= _pbm.taskCount())) {
+					if ((taskId < 0) || (taskId >= _pbm.getTaskCount())) {
 						if (DEBUG)
 							cout << endl
 									<< "[DEBUG] (taskId < 0) || (taskId >= _pbm.taskCount())"
@@ -1886,12 +1886,12 @@ bool Solution::validate() const {
 				}
 			}
 
-			if (taskCount != _pbm.taskCount()) {
+			if (taskCount != _pbm.getTaskCount()) {
 				if (DEBUG)
 					cout << endl << "[DEBUG] taskCount != _pbm.taskCount()"
 							<< endl;
 				cout << endl << "[DEBUG] taskCount:" << taskCount
-						<< " _pbm.taskCount():" << _pbm.taskCount() << endl;
+						<< " _pbm.taskCount():" << _pbm.getTaskCount() << endl;
 				assert(false);
 			}
 		} else {
@@ -1925,7 +1925,7 @@ void Solution::showCustomStatics() {
 		double rr_sum = 0.0;
 		double rr_worst = 0.0;
 
-		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 			double partial_cost;
 			partial_cost = 0.0;
 
@@ -1933,15 +1933,15 @@ void Solution::showCustomStatics() {
 				int taskId;
 				taskId = _machines[machineId].getTask(taskPos);
 
-				if (_pbm.taskPriority(taskId) == priority) {
+				if (_pbm.getTaskPriority(taskId) == priority) {
 					count++;
 
-					if (_pbm.expectedTimeToCompute(taskId, machineId) == 0.0) {
+					if (_pbm.getTaskSSJCost(taskId, machineId) == 0.0) {
 						rr_aux = 0.0;
 					} else {
-						rr_aux = (partial_cost + _pbm.expectedTimeToCompute(
+						rr_aux = (partial_cost + _pbm.getTaskSSJCost(
 								taskId, machineId))
-								/ _pbm.expectedTimeToCompute(taskId, machineId);
+								/ _pbm.getTaskSSJCost(taskId, machineId);
 					}
 					rr_sum += rr_aux;
 
@@ -1950,7 +1950,7 @@ void Solution::showCustomStatics() {
 					}
 				}
 
-				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
+				partial_cost += _pbm.getTaskSSJCost(taskId, machineId);
 			}
 		}
 
@@ -1980,7 +1980,7 @@ void Solution::showCustomStatics() {
 
 	cout << endl << "[= Statics Makespan ============]" << endl;
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		cout << "Machine " << machineId << ": "
 				<< _machines[machineId].getMakespan() << endl;
 	}
@@ -1998,7 +1998,7 @@ double Solution::fitness() {
 	double awrr = 0.0;
 	double energy = 0.0;
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
 
 		if (_machines[machineId].getMakespan() > maxMakespan) {
@@ -2006,7 +2006,7 @@ double Solution::fitness() {
 		}
 	}
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		energy += _machines[machineId].energyConsumption(maxMakespan);
 	}
 
@@ -2027,9 +2027,9 @@ double Solution::fitness() {
 			/ Solution::_energy_reference;
 
 	double fitness;
-	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
-			+ (_pbm.getEnergyWeight() * normalized_energy)
-			+ (_pbm.getWRRWeight() * normalized_awrr);
+	fitness = (_pbm.getCurrentMakespanWeight() * normalized_makespan)
+			+ (_pbm.getCurrentEnergyWeight() * normalized_energy)
+			+ (_pbm.getCurrentWRRWeight() * normalized_awrr);
 
 	assert(!(fitness == INFINITY));
 	assert(!(fitness == NAN));
@@ -2044,7 +2044,7 @@ double Solution::makespan() {
 
 	double maxMakespan = 0.0;
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		if (_machines[machineId].getMakespan() > maxMakespan) {
 			maxMakespan = _machines[machineId].getMakespan();
 		}
@@ -2060,7 +2060,7 @@ double Solution::accumulatedWeightedResponseRatio() {
 
 	double awrr = 0.0;
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		awrr = awrr
 				+ _machines[machineId].getAccumulatedWeightedResponseRatio();
 
@@ -2079,7 +2079,7 @@ double Solution::energyConsumption(double makespan) {
 
 	double energy = 0.0;
 
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
 		energy = energy + _machines[machineId].energyConsumption(makespan);
 	}
 
@@ -2087,11 +2087,11 @@ double Solution::energyConsumption(double makespan) {
 }
 
 int Solution::length() const {
-	return _pbm.taskCount();
+	return _pbm.getTaskCount();
 }
 
 unsigned int Solution::size() const {
-	return (_pbm.taskCount() * sizeof(int)) + (_pbm.machineCount()
+	return (_pbm.getTaskCount() * sizeof(int)) + (_pbm.getMachineCount()
 			* sizeof(int)) + sizeof(int);
 }
 
@@ -2148,7 +2148,7 @@ double Solution::getMachineFitness(int machineId) {
 			+ Solution::_awrr_reference) / Solution::_awrr_reference;
 	double makespan_ratio = (makespan() + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
-	return (_pbm.getWRRWeight() * awrr_ratio) + (_pbm.getMakespanWeight()
+	return (_pbm.getCurrentWRRWeight() * awrr_ratio) + (_pbm.getCurrentMakespanWeight()
 			* makespan_ratio);
 }
 
@@ -2227,14 +2227,14 @@ void Solution::doLocalSearch() {
 				// Itero en las tareas de las otras máquinas.
 				int startSwapTaskOffset, countSwapTaskOffset;
 
-				if ((this->pbm().taskCount() - 1) > PALS_TOP_T) {
+				if ((this->pbm().getTaskCount() - 1) > PALS_TOP_T) {
 					// Si la cantidad de las tareas del problema menos la tarea que estoy
 					// intentando mover es mayor que PALS_TOP_T.
 					double rand;
 					rand = rand01();
 
 					double aux;
-					aux = rand * this->pbm().taskCount();
+					aux = rand * this->pbm().getTaskCount();
 
 					startSwapTaskOffset = (int) aux;
 					countSwapTaskOffset = PALS_TOP_T;
@@ -2242,7 +2242,7 @@ void Solution::doLocalSearch() {
 					// Si hay menos o igual cantidad de tareas en el problema que el número
 					// PALS_TOP_T las recorro todas menos la que estoy intentando mover.
 					startSwapTaskOffset = 0;
-					countSwapTaskOffset = this->pbm().taskCount() - 1;
+					countSwapTaskOffset = this->pbm().getTaskCount() - 1;
 				}
 
 				double movimientoFitness;
@@ -2253,10 +2253,10 @@ void Solution::doLocalSearch() {
 
 				for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
 						> 0; swapTaskOffset++) {
-					assert(swapTaskOffset < (2*this->pbm().taskCount()));
+					assert(swapTaskOffset < (2*this->pbm().getTaskCount()));
 
 					int swapTaskId;
-					swapTaskId = swapTaskOffset % this->pbm().taskCount();
+					swapTaskId = swapTaskOffset % this->pbm().getTaskCount();
 
 					//					if (DEBUG) cout << endl << "[DEBUG] Intento swapear taskId=" << taskId
 					//							<< "con taskId=" << swapTaskId << endl;
@@ -2427,14 +2427,14 @@ void Solution::mutate() {
 								taskId = _machines[machineId].getTask(taskPos);
 
 								int taskPriority;
-								taskPriority = _pbm.taskPriority(taskId);
+								taskPriority = _pbm.getTaskPriority(taskId);
 
 								int anteriorTaskId;
 								anteriorTaskId = _machines[machineId].getTask(
 										taskPos - 1);
 
 								int anteriorTaskPriority;
-								anteriorTaskPriority = _pbm.taskPriority(
+								anteriorTaskPriority = _pbm.getTaskPriority(
 										anteriorTaskId);
 
 								if (taskPriority > anteriorTaskPriority) {
@@ -2467,7 +2467,7 @@ void Solution::mutate() {
 													taskPos);
 
 									int taskPriority;
-									taskPriority = _pbm.taskPriority(taskId);
+									taskPriority = _pbm.getTaskPriority(taskId);
 
 									int anteriorTaskId;
 									anteriorTaskId
@@ -2475,7 +2475,7 @@ void Solution::mutate() {
 													taskPos - 1);
 
 									int anteriorTaskPriority;
-									anteriorTaskPriority = _pbm.taskPriority(
+									anteriorTaskPriority = _pbm.getTaskPriority(
 											anteriorTaskId);
 
 									if (taskPriority > anteriorTaskPriority) {
@@ -2483,9 +2483,9 @@ void Solution::mutate() {
 												taskPos, taskPos - 1);
 									}
 									if (taskPriority == anteriorTaskPriority) {
-										if (_pbm.expectedTimeToCompute(taskId,
+										if (_pbm.getTaskSSJCost(taskId,
 												minAWRRMachineId)
-												< _pbm.expectedTimeToCompute(
+												< _pbm.getTaskSSJCost(
 														anteriorTaskId,
 														minAWRRMachineId)) {
 											_machines[minAWRRMachineId].swapTasks(
@@ -2609,7 +2609,7 @@ void Solution::to_Solution(char *_string_) {
 	int currentTask = 0;
 	int currentMachine = 0;
 
-	for (int pos = 0; pos < (_pbm.taskCount() + _pbm.machineCount() + 1)
+	for (int pos = 0; pos < (_pbm.getTaskCount() + _pbm.getMachineCount() + 1)
 			&& !endFound; pos++) {
 
 		int currentValue;
@@ -2618,21 +2618,21 @@ void Solution::to_Solution(char *_string_) {
 		if (currentValue == endMark) {
 			endFound = true;
 		} else if (currentValue == machineSeparator) {
-			assert(currentMachine < _pbm.machineCount());
+			assert(currentMachine < _pbm.getMachineCount());
 
 			currentMachine++;
 		} else {
 			assert(currentValue >= 0);
-			assert(currentValue < _pbm.taskCount());
-			assert(currentMachine < _pbm.machineCount());
+			assert(currentValue < _pbm.getTaskCount());
+			assert(currentMachine < _pbm.getMachineCount());
 
 			_machines[currentMachine].addTask(currentValue);
 			currentTask++;
 		}
 	}
 
-	assert(_machines.size() == _pbm.machineCount());
-	assert(currentTask == _pbm.taskCount());
+	assert(_machines.size() == _pbm.getMachineCount());
+	assert(currentTask == _pbm.getTaskCount());
 	assert(endFound);
 
 	markAsInitialized();
@@ -2731,12 +2731,12 @@ int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
 
 	if (machines()[machineId].countTasks() > 0) {
 		int highestPriorityTaskPos = 0;
-		int highestPriorityTaskValue = _pbm.taskPriority(
+		int highestPriorityTaskValue = _pbm.getTaskPriority(
 				machines()[machineId].getTask(0));
 
 		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 			int currentTaskPriority;
-			currentTaskPriority = _pbm.taskPriority(
+			currentTaskPriority = _pbm.getTaskPriority(
 					machines()[machineId].getTask(taskPos));
 
 			if (highestPriorityTaskValue > currentTaskPriority) {
@@ -2756,12 +2756,12 @@ int Solution::getMinCostTaskPosByMachine(int machineId) const {
 	assert(machines()[machineId].countTasks() > 0);
 
 	int minCostTaskPos = 0;
-	double minCostTaskValue = _pbm.expectedTimeToCompute(
+	double minCostTaskValue = _pbm.getTaskSSJCost(
 			machines()[machineId].getTask(0), machineId);
 
 	for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 		double currentTaskCost;
-		currentTaskCost = _pbm.expectedTimeToCompute(
+		currentTaskCost = _pbm.getTaskSSJCost(
 				machines()[machineId].getTask(taskPos), machineId);
 
 		if (minCostTaskValue > currentTaskCost) {
@@ -2782,12 +2782,12 @@ int Solution::getMinDestinationCostTaskPosByMachine(int machineId,
 	// if (DEBUG) cout << endl << "[DEBUG] Solution::getMinDestinationCostTaskPosByMachine" << endl;
 	if (machines()[machineId].countTasks() > 0) {
 		int minCostTaskPos = 0;
-		double minCostTaskValue = _pbm.expectedTimeToCompute(
+		double minCostTaskValue = _pbm.getTaskSSJCost(
 				machines()[machineId].getTask(0), destinationMachineId);
 
 		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
 			double currentTaskCost;
-			currentTaskCost = _pbm.expectedTimeToCompute(
+			currentTaskCost = _pbm.getTaskSSJCost(
 					machines()[machineId].getTask(taskPos),
 					destinationMachineId);
 

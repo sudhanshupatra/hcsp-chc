@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 
 		pesos_stream.close();
 
-		pbm.loadWeights(pesos);
+		pbm.loadWeightData(pesos);
 	}
 
 	// ==================================================================

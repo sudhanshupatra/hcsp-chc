@@ -2545,7 +2545,7 @@ Solver_Lan::Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
 
 	NetStream::init(argc, argv);
 	mypid = _netstream.my_pid();
-	pbm.setPId(mypid);
+	pbm.setCurrentProcessId(mypid);
 
 	if (setup.seed() > 0) {
 		if (DEBUG)
