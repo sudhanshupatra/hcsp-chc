@@ -14,13 +14,15 @@ StopCondition::~StopCondition() {
 // SetUpParams -----------------------------------------------------------
 
 SetUpParams::SetUpParams(Operator_Pool& pool, Problem& pbm) :
-	_seed(0), _timeout(60.0), _pbm(pbm), _independent_runs(0),
-			_nb_evolution_steps(0), _population_size(0),
-			_select_parents(6), // Selection of parents: Select all individuals. (fixed)
-			_select_offsprings(7), // Selection of offspring : Select the best individuals. (fixed)
+	_seed(0), _timeout(60.0), _pbm(pbm),
+			_independent_runs(0),
+			_nb_evolution_steps(0),
+			_population_size(0),
+			_select_parents(6), 	// Selection of parents: Select all individuals. (fixed)
+			_select_offsprings(7),	// Selection of offspring: Select the best individuals. (fixed)
 			_inter_operators(), _intra_operators(), _refresh_global_state(1),
-			_synchronized(0), _check_asynchronous(1), _display_state(0), _pool(
-					pool) {
+			_synchronized(0), _check_asynchronous(1), _display_state(0),
+			_pool(pool) {
 }
 
 Operator_Pool& SetUpParams::pool() const {
@@ -128,7 +130,7 @@ ostream& operator<<(ostream& os, const SetUpParams& setup) {
 			<< endl << "\t" << "Selection parents    -> "
 			<< setup.pool().selector(setup.select_parents()) << endl << "\t"
 			<< "Selection offsprings -> " << setup.pool().selector(
-			setup.select_offsprings()) << endl << "\t" << "Intra_Operators: "
+			setup.select_offsprings()) << endl << endl << "\t" << "Intra_Operators: "
 			<< endl << "\t" << "-----------" << endl << endl;
 
 	for (uint i = 0; i < setup.intra_operators_size(); i++)
@@ -348,9 +350,10 @@ Statistics::~Statistics() {
 
 Population::Population(const Problem& pbm, const SetUpParams& setup) :
 	_parents(setup.population_size()),
-			_fitness_values(setup.population_size()), _new_parents(
-					setup.population_size()), _offsprings(
-					setup.population_size()), _setup(setup), _evaluations(0) {
+			_fitness_values(setup.population_size()),
+			_new_parents(setup.population_size()),
+			_offsprings(setup.population_size()), _setup(setup),
+			_evaluations(0) {
 	for (int i = 0; i < _parents.size(); i++) {
 		_parents[i] = new Solution(pbm);
 		_new_parents[i] = new Solution(pbm);
@@ -439,8 +442,8 @@ void Population::evaluate_parents() {
 void Population::evaluate_offsprings() {
 	int i = 0;
 
-	_fitness_aux = Rarray<struct individual> (_parents.size()
-			+ _offsprings.size());
+	_fitness_aux = Rarray<struct individual> (
+			_parents.size() + _offsprings.size());
 	for (i = 0; i < _parents.size(); i++) {
 		Evaluate(_parents[_fitness_values[i].index], _fitness_values[i]);
 		_fitness_aux[i] = _fitness_values[i];
@@ -467,7 +470,7 @@ void Population::evolution() {
 	// Local search
 	if (rand01() < 0.5) {
 		int individual = rand_int(0, _parents.size() - 1);
-//		cout << "Busqueda local en individuo " << individual << endl;
+		//		cout << "Busqueda local en individuo " << individual << endl;
 		_parents[individual]->doLocalSearch();
 	}
 
@@ -777,8 +780,9 @@ Crossover::~Crossover() {
 
 RouletteWheel::RouletteWheel(const vector<double> values,
 		bool maximizeDirection) :
-	_values(), _minSelectionValues(), _maxSelectionValues(), _size(
-			values.size()), _maximize(maximizeDirection), _overallValue(0) {
+	_values(), _minSelectionValues(), _maxSelectionValues(),
+			_size(values.size()), _maximize(maximizeDirection),
+			_overallValue(0) {
 
 	//	if (DEBUG) cout << endl << "[DEBUG] RouletteWheel::RouletteWheel start" << endl;
 
@@ -857,23 +861,23 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		//			sols[i]->doLocalSearch();
 		//		}
 		/*if (i == bestSolutionIndex) {
-			if (_retryCount < 5) {
-				double current_fitness = sols[i]->fitness();
+		 if (_retryCount < 5) {
+		 double current_fitness = sols[i]->fitness();
 
-				sols[i]->doLocalSearch();
+		 sols[i]->doLocalSearch();
 
-				if (sols[i]->fitness() < current_fitness) {
-					_retryCount = 0;
-				} else {
-					_retryCount++;
-				}
-			} else {
-				cout << "[DEBUG] Se mutó la mejor solución!" << endl;
+		 if (sols[i]->fitness() < current_fitness) {
+		 _retryCount = 0;
+		 } else {
+		 _retryCount++;
+		 }
+		 } else {
+		 cout << "[DEBUG] Se mutó la mejor solución!" << endl;
 
-				_retryCount = 0;
-				sols[i]->mutate();
-			}
-		}*/
+		 _retryCount = 0;
+		 sols[i]->mutate();
+		 }
+		 }*/
 	}
 }
 
@@ -914,8 +918,8 @@ Diverge::~Diverge() {
 Inter_Operator::Inter_Operator(const unsigned int _number_op,
 		const Direction dir) :
 	_number_operator(_number_op), direction(dir), migration_rate(1),
-			migration_size(1), migration_selection_1(0), migration_selection_2(
-					0), migration_selection_conf_1(0),
+			migration_size(1), migration_selection_1(0),
+			migration_selection_2(0), migration_selection_conf_1(0),
 			migration_selection_conf_2(0) {
 }
 
@@ -1150,13 +1154,25 @@ void Migration::execute(Population& pop,
 
 ostream& operator<<(ostream& os, const Migration& migration) {
 	os << "Migration." << endl << "\t" << " Rate: " << migration.migration_rate
-			<< endl << "\t" << " Size: " << migration.migration_size << endl
-			<< "\t" << " Selection 1: " << migration.migration_selection_1
-			<< endl << "\t" << " Selection 1 Parameter: "
-			<< migration.migration_selection_conf_1 << endl << "\t"
-			<< " Selection 2: " << migration.migration_selection_2 << endl
-			<< "\t" << " Selection 2 Parameter: "
-			<< migration.migration_selection_conf_2;
+			<< endl << "\t" << " Size: " << migration.migration_size << endl;
+
+	os << "\t" << " Selection 1: (" << migration.migration_selection_1 << ") ";
+	if (migration.migration_selection_1 == 0) os << "random";
+	if (migration.migration_selection_1 == 1) os << "tournament";
+	if (migration.migration_selection_1 == 2) os << "roulette wheel";
+	if (migration.migration_selection_1 == 3) os << "rank";
+	if (migration.migration_selection_1 == 4) os << "best";
+	if (migration.migration_selection_1 == 5) os << "worst";
+	os << endl << "\t" << " Selection 1 Parameter: " << migration.migration_selection_conf_1 << endl;
+
+	os << "\t" << " Selection 2: (" << migration.migration_selection_2 << ") ";
+	if (migration.migration_selection_2 == 0) os << "random";
+	if (migration.migration_selection_2 == 1) os << "tournament";
+	if (migration.migration_selection_2 == 2) os << "roulette wheel";
+	if (migration.migration_selection_2 == 3) os << "rank";
+	if (migration.migration_selection_2 == 4) os << "best";
+	if (migration.migration_selection_2 == 5) os << "worst";
+	os << endl << "\t" << " Selection 2 Parameter: " << migration.migration_selection_conf_2;
 	return os;
 }
 
@@ -1408,8 +1424,8 @@ struct individual Selection_Rank::select_one(
 	if (portion == 0 || portion > 100)
 		new_portion = 100;
 
-	return fitness_values[rand_int(0, ((fitness_values.size() * new_portion)
-			/ 100) - 1)];
+	return fitness_values[rand_int(0,
+			((fitness_values.size() * new_portion) / 100) - 1)];
 }
 
 ostream& operator<<(ostream& os, const Selection_Rank& sel) {
@@ -1703,47 +1719,58 @@ Operator_Pool::~Operator_Pool() {
 // Solver (superclasse)---------------------------------------------------
 
 Solver::Solver(const Problem& pbm, const SetUpParams& setup) :
-	problem(pbm), params(setup), _stat(), _userstat(), _sc(),
-			current_population(pbm, setup), best_cost((-1) * pbm.direction()
-					* infinity()), worst_cost((-1) * best_cost), best_solution(
-					problem), average_cost(0.0), standard_deviation(0.0),
-			time_spent_in_trial(0.0), total_time_spent(0.0), start_trial(0.0),
-			start_global(0.0), _current_trial("_current_trial", _sc),
+			problem(pbm),
+			params(setup),
+			_stat(),
+			_userstat(),
+			_sc(),
+			current_population(pbm, setup),
+			best_cost((-1) * pbm.direction() * infinity()),
+			worst_cost((-1) * best_cost),
+			best_solution(problem),
+			average_cost(0.0),
+			standard_deviation(0.0),
+			time_spent_in_trial(0.0),
+			total_time_spent(0.0),
+			start_trial(0.0),
+			start_global(0.0),
+			_current_trial("_current_trial", _sc),
 			_current_iteration("_current_iteration", _sc),
 			_current_evaluations("_current_evaluations", _sc),
 			_current_best_solution("_current_best_solution", _sc),
-			_current_best_cost("_current_best_cost", _sc), _current_worst_cost(
-					"_current_worst_cost", _sc), _current_average_cost(
-					"_current_average_cost", _sc), _current_standard_deviation(
-					"_current_standard_deviation", _sc), _current_time_spent(
-					"_current_time_spent", _sc), _best_solution_trial(
-					"_best_sol_trial", _sc), _best_cost_trial(
-					"_best_cost_trial", _sc), _worst_cost_trial(
-					"_worst_cost_trial", _sc), _iteration_best_found_in_trial(
-					"_iteration_best_found_in_trial", _sc),
+			_current_best_cost("_current_best_cost", _sc),
+			_current_worst_cost("_current_worst_cost", _sc),
+			_current_average_cost("_current_average_cost", _sc),
+			_current_standard_deviation("_current_standard_deviation", _sc),
+			_current_time_spent("_current_time_spent", _sc),
+			_best_solution_trial("_best_sol_trial", _sc),
+			_best_cost_trial("_best_cost_trial", _sc),
+			_worst_cost_trial("_worst_cost_trial", _sc),
+			_iteration_best_found_in_trial("_iteration_best_found_in_trial",
+					_sc),
 			_evaluations_best_found_in_trial(
 					"_evaluations_best_found_in_trial", _sc),
 			_time_best_found_trial("_time_best_found_trial", _sc),
-			_time_spent_trial("_time_spent_trial", _sc), _trial_best_found(
-					"_trial_best_found", _sc), _iteration_best_found(
-					"_iteration_best_found", _sc), _evaluations_best_found(
-					"_evaluations_best_found", _sc), _global_best_solution(
-					"_global_best_solution", _sc), _global_best_cost(
-					"_global_best_cost", _sc), _global_worst_cost(
-					"_global_worst_cost", _sc), _time_best_found(
-					"_time_best_found", _sc), _crossover_probability(
-					"_crossover_probability", _sc), _diverge_probability(
-					"_diverge_probability", _sc), _migration_rate(
-					"_migration_rate", _sc), _migration_size("_migration_size",
-					_sc),
+			_time_spent_trial("_time_spent_trial", _sc),
+			_trial_best_found("_trial_best_found", _sc),
+			_iteration_best_found("_iteration_best_found", _sc),
+			_evaluations_best_found("_evaluations_best_found", _sc),
+			_global_best_solution("_global_best_solution", _sc),
+			_global_best_cost("_global_best_cost", _sc),
+			_global_worst_cost("_global_worst_cost", _sc),
+			_time_best_found("_time_best_found", _sc),
+			_crossover_probability("_crossover_probability", _sc),
+			_diverge_probability("_diverge_probability", _sc),
+			_migration_rate("_migration_rate", _sc),
+			_migration_size("_migration_size", _sc),
 			_migration_selection_1("_migration_selection_1", _sc),
 			_migration_selection_2("_migration_selection_2", _sc),
 			_migration_selection_conf_1("_migration_selection_conf_1", _sc),
 			_migration_selection_conf_2("_migration_selection_conf_2", _sc),
-			_select_parents("_select_parents", _sc), _select_offsprings(
-					"_select_offsprings", _sc), _parameter_select_new_pop(
-					"_parameter_select_new_pop", _sc), _display_state(
-					"_display_state", _sc) {
+			_select_parents("_select_parents", _sc),
+			_select_offsprings("_select_offsprings", _sc),
+			_parameter_select_new_pop("_parameter_select_new_pop", _sc),
+			_display_state("_display_state", _sc) {
 	current_trial(0);
 	current_iteration(0);
 	current_evaluations(0);
@@ -2727,8 +2754,8 @@ void Solver_Lan::check_for_refresh_global_state() // Executed in process with pi
 		current_iteration(_iteration_best_found_in_trial);
 		current_evaluations(_evaluations_best_found_in_trial);
 		KeepHistory(_best_solution_trial, _best_cost_trial, _worst_cost_trial,
-				_time_best_found_in_trial, start_global
-						+ _time_best_found_in_trial);
+				_time_best_found_in_trial,
+				start_global + _time_best_found_in_trial);
 
 		// the process that has send data has finished the current trial
 		if (received_pid == -1) {
@@ -2771,8 +2798,8 @@ void Solver_Lan::check_for_refresh_global_state() // Executed in process with pi
 	// Actualización de las estadísticas
 	// Termination phase //
 	iteration_best_found_in_trial(acum_iterations / (_netstream.pnumber() - 1));
-	evaluations_best_found_in_trial(acum_evaluations / (_netstream.pnumber()
-			- 1));
+	evaluations_best_found_in_trial(
+			acum_evaluations / (_netstream.pnumber() - 1));
 
 	bool betterG = false;
 	double best_cost = best_cost_trial();
@@ -3036,8 +3063,8 @@ void Solver_Wan::check_for_refresh_global_state() // Executed in process with pi
 		current_iteration(_iteration_best_found_in_trial);
 		current_evaluations(_evaluations_best_found_in_trial);
 		KeepHistory(_best_solution_trial, _best_cost_trial, _worst_cost_trial,
-				_time_best_found_in_trial, start_global
-						+ _time_best_found_in_trial);
+				_time_best_found_in_trial,
+				start_global + _time_best_found_in_trial);
 		// the process that has send data has finished the current trial
 		if (received_pid == -1) {
 			// Termination phase //
@@ -3077,8 +3104,8 @@ void Solver_Wan::check_for_refresh_global_state() // Executed in process with pi
 
 	// Update Stats // Termination phase //
 	iteration_best_found_in_trial(acum_iterations / (_netstream.pnumber() - 1));
-	evaluations_best_found_in_trial(acum_evaluations / (_netstream.pnumber()
-			- 1));
+	evaluations_best_found_in_trial(
+			acum_evaluations / (_netstream.pnumber() - 1));
 
 	bool betterG = false;
 	double best_cost = best_cost_trial();

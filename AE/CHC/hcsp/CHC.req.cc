@@ -557,9 +557,9 @@ void Solution::show(ostream& os) {
 		double makespan;
 		makespan = this->getMakespan();
 
-		os << "Makespan	: " << makespan << "\n";
-		os << "WRR		: " << this->getWRR() << "\n";
-		os << "Energy		: " << this->getEnergy(makespan) << "\n";
+		os << "Makespan : " << makespan << "\n";
+		os << "WRR      : " << this->getWRR() << "\n";
+		os << "Energy   : " << this->getEnergy(makespan) << "\n";
 
 		os
 				<< "[MACHINE INFO]================================================\n";
@@ -598,6 +598,7 @@ void Solution::show(ostream& os) {
 				os << endl;
 			}
 		}
+		os << endl;
 	} else {
 		os << "> solution not inialized." << endl;
 	}
