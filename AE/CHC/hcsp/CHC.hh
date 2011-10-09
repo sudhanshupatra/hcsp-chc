@@ -86,7 +86,8 @@ public:
 
 	Direction direction() const;
 
-	void loadProblemDataFiles(istream& scenario, istream& workload, istream& priorities);
+	void loadProblemDataFiles(istream& scenario, istream& workload,
+			istream& priorities);
 	void loadWeightData(const vector<double> weights);
 
 	void setTaskCount(int size);
@@ -642,8 +643,8 @@ public:
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int dummy, const bool remplace) const;
 	unsigned int number_selection() const;
 
@@ -669,8 +670,8 @@ public:
 			const bool remplace); // const;
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int param, const bool remplace) const;
 };
 
@@ -694,8 +695,8 @@ public:
 			const bool remplace); // const;
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int param, const bool remplace) const;
 
 	virtual void setup(char line[MAX_BUFFER]);
@@ -713,8 +714,8 @@ public:
 	friend ostream& operator<<(ostream& os, const Selection_Tournament& sel);
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int tourment_size, const bool remplace) const;
 };
 
@@ -731,8 +732,8 @@ public:
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int dummy, const bool remplace) const;
 };
 
@@ -751,8 +752,8 @@ public:
 	virtual void reset();
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int portion, const bool remplace) const;
 };
 
@@ -770,8 +771,8 @@ public:
 
 	virtual void reset();
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int position, const bool remplace) const;
 };
 
@@ -789,8 +790,8 @@ public:
 
 	virtual void reset();
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int position, const bool remplace) const;
 };
 
@@ -1048,8 +1049,7 @@ private:
 	int acum_iterations;
 
 public:
-	Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
-			char **argv);
+	Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc, char **argv);
 	virtual ~Solver_Lan();
 	virtual int pid() const;
 	NetStream& netstream();

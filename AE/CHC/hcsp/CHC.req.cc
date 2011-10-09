@@ -1517,7 +1517,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		Solution::_energy_reference = getEnergy(currentMakespan);
 
 		if (mypid == 0) {
-			this->show(cout);
+			//this->show(cout);
 		} else {
 			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
