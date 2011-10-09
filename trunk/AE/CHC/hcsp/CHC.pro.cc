@@ -18,8 +18,8 @@ SetUpParams::SetUpParams(Operator_Pool& pool, Problem& pbm) :
 			_independent_runs(0),
 			_nb_evolution_steps(0),
 			_population_size(0),
-			_select_parents(6), 	// Selection of parents: Select all individuals. (fixed)
-			_select_offsprings(7),	// Selection of offspring: Select the best individuals. (fixed)
+			_select_parents(6), // Selection of parents: Select all individuals. (fixed)
+			_select_offsprings(7), // Selection of offspring: Select the best individuals. (fixed)
 			_inter_operators(), _intra_operators(), _refresh_global_state(1),
 			_synchronized(0), _check_asynchronous(1), _display_state(0),
 			_pool(pool) {
@@ -130,8 +130,9 @@ ostream& operator<<(ostream& os, const SetUpParams& setup) {
 			<< endl << "\t" << "Selection parents    -> "
 			<< setup.pool().selector(setup.select_parents()) << endl << "\t"
 			<< "Selection offsprings -> " << setup.pool().selector(
-			setup.select_offsprings()) << endl << endl << "\t" << "Intra_Operators: "
-			<< endl << "\t" << "-----------" << endl << endl;
+			setup.select_offsprings()) << endl << endl << "\t"
+			<< "Intra_Operators: " << endl << "\t" << "-----------" << endl
+			<< endl;
 
 	for (uint i = 0; i < setup.intra_operators_size(); i++)
 		os << "\t" << (setup.pool().intra_operator(
@@ -1003,6 +1004,181 @@ Inter_Operator::~Inter_Operator() {
 
 // Migration ------------------------------------------------------------
 
+//Migration::Migration(const Direction dir) :
+//	Inter_Operator(0, dir) {
+//}
+//
+//void Migration::execute(Population& pop,
+//		const unsigned long current_generation, NetStream& _netstream,
+//		const bool synchronized, const unsigned int check_asynchronous) const {
+//
+//	Solution* solution_to_send;
+//	Solution* solution_received;
+//	Solution* solution_to_remplace;
+//	bool need_to_revaluate = false;
+//
+//	int nb_proc = _netstream.pnumber(); // Get the number of processes running
+//	int mypid = _netstream.my_pid();
+//
+//	int to = (mypid + 1) % nb_proc; // Source (from) and Target (to) of processes
+//	int from = (nb_proc + mypid - 1) % nb_proc;
+//
+//	// process number 0 is only to store the global state
+//	if (to == 0)
+//		to = 1;
+//	if (from == 0)
+//		from = nb_proc - 1;
+//
+//	_netstream << set_target(to) << set_source(from) << get_target(&to)
+//			<< get_source(&from);
+//
+//	if ((current_generation % migration_rate) == 0 && (current_generation
+//			!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
+//	{
+//		pop.setup().pool().selector(migration_selection_1).prepare(
+//				pop.fitness_values(), false);
+//
+//		_netstream << pack_begin;
+//		for (int i = 0; i < migration_size; i++) {
+//			// select individual to send
+//			solution_to_send = pop.parents()[pop.setup().pool().selector(
+//					migration_selection_1).select_one(pop.parents(),
+//					pop.offsprings(), pop.fitness_values(),
+//					migration_selection_conf_1, false).index];
+//
+//			_netstream << *solution_to_send;
+//		}
+//		_netstream << pack_end;
+//
+//		if (synchronized) // synchronous mode: blocked until data are received
+//		{
+//			pop.setup().pool().selector(migration_selection_2).prepare(
+//					pop.fitness_values(), true);
+//
+//			/* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
+//			_netstream << set_source(MPI_ANY_SOURCE);
+//
+//			int tipo = 0;
+//			_netstream._wait2(any, tipo);
+//
+//			if (tipo == 1) {
+//				return;
+//			}
+//			/* Fin Ruso */
+//
+//			_netstream << wait(packed);
+//			_netstream << pack_begin;
+//
+//			for (uint i = 0; i < migration_size; i++) {
+//				// select individual to be remplaced
+//				struct individual ind;
+//				ind
+//						= pop.setup().pool().selector(migration_selection_2).select_one(
+//								pop.parents(), pop.offsprings(),
+//								pop.fitness_values(),
+//								migration_selection_conf_2, true);
+//				solution_to_remplace = pop.parents()[ind.index];
+//				solution_received = new Solution(solution_to_remplace->pbm());
+//				_netstream >> *solution_received;
+//
+//				// remplace policy
+//				if ((solution_received->getFitness()
+//						<= solution_to_remplace->getFitness() && direction
+//						== minimize) || (solution_received->getFitness()
+//						>= solution_to_remplace->getFitness() && direction
+//						== maximize)) {
+//					need_to_revaluate = true;
+//					for (int j = 0; j < pop.parents().size(); j++) {
+//						if (pop.fitness_values()[j].index == ind.index) {
+//							pop.fitness_values()[j].change = true;
+//							*pop.parents()[ind.index] = *solution_received;
+//						}
+//					}
+//				}
+//				delete (solution_received);
+//			}
+//			_netstream << pack_end;
+//
+//		}
+//	} // end if
+//
+//	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
+//		// but, if there are data, i have to receive it
+//		int pending = false;
+//		_netstream._probe(packed, pending);
+//		if (pending) {
+//			pop.setup().pool().selector(migration_selection_2).prepare(
+//					pop.fitness_values(), true);
+//
+//			_netstream << pack_begin;
+//			for (int i = 0; i < migration_size; i++) {
+//				pending = false;
+//				_netstream._probe(regular, pending);
+//				if (!pending)
+//					break;
+//
+//				// select individual to be remplaced
+//				struct individual ind;
+//				ind
+//						= pop.setup().pool().selector(migration_selection_2).select_one(
+//								pop.parents(), pop.offsprings(),
+//								pop.fitness_values(),
+//								migration_selection_conf_2, true);
+//				solution_to_remplace = pop.parents()[ind.index];
+//				solution_received = new Solution(solution_to_remplace->pbm());
+//				_netstream >> *solution_received;
+//
+//				// remplace policy
+//				if ((solution_received->getFitness()
+//						<= solution_to_remplace->getFitness() && direction
+//						== minimize) || (solution_received->getFitness()
+//						>= solution_to_remplace->getFitness() && direction
+//						== maximize)) {
+//					need_to_revaluate = true;
+//					for (int j = 0; j < pop.parents().size(); j++) {
+//						if (pop.fitness_values()[j].index == ind.index) {
+//							pop.fitness_values()[j].change = true;
+//							*pop.parents()[ind.index] = *solution_received;
+//						}
+//					}
+//				}
+//				delete (solution_received);
+//			} // end for
+//			_netstream << pack_begin;
+//		} // end if
+//	}
+//
+//	if (need_to_revaluate)
+//		pop.evaluate_parents();
+//}
+//
+//ostream& operator<<(ostream& os, const Migration& migration) {
+//	os << "Migration." << endl << "\t" << " Rate: " << migration.migration_rate
+//			<< endl << "\t" << " Size: " << migration.migration_size << endl;
+//
+//	os << "\t" << " Selection 1: (" << migration.migration_selection_1 << ") ";
+//	if (migration.migration_selection_1 == 0) os << "random";
+//	if (migration.migration_selection_1 == 1) os << "tournament";
+//	if (migration.migration_selection_1 == 2) os << "roulette wheel";
+//	if (migration.migration_selection_1 == 3) os << "rank";
+//	if (migration.migration_selection_1 == 4) os << "best";
+//	if (migration.migration_selection_1 == 5) os << "worst";
+//	os << endl << "\t" << " Selection 1 Parameter: " << migration.migration_selection_conf_1 << endl;
+//
+//	os << "\t" << " Selection 2: (" << migration.migration_selection_2 << ") ";
+//	if (migration.migration_selection_2 == 0) os << "random";
+//	if (migration.migration_selection_2 == 1) os << "tournament";
+//	if (migration.migration_selection_2 == 2) os << "roulette wheel";
+//	if (migration.migration_selection_2 == 3) os << "rank";
+//	if (migration.migration_selection_2 == 4) os << "best";
+//	if (migration.migration_selection_2 == 5) os << "worst";
+//	os << endl << "\t" << " Selection 2 Parameter: " << migration.migration_selection_conf_2;
+//	return os;
+//}
+//
+//Migration::~Migration() {
+//}
+
 Migration::Migration(const Direction dir) :
 	Inter_Operator(0, dir) {
 }
@@ -1015,98 +1191,102 @@ void Migration::execute(Population& pop,
 	Solution* solution_received;
 	Solution* solution_to_remplace;
 	bool need_to_revaluate = false;
-	int mypid;
 
 	int nb_proc = _netstream.pnumber(); // Get the number of processes running
+	int mypid = _netstream.my_pid();
 
-	mypid = _netstream.my_pid();
-
-	int to = (mypid + 1) % nb_proc; // Source (from) and Target (to) of processes
+	// Source (from) and Target (to) of processes
+	//int to = (mypid + 1) % nb_proc;
 	int from = (nb_proc + mypid - 1) % nb_proc;
-
-	// process number 0 is only to store the global state
-	if (to == 0)
-		to = 1;
 	if (from == 0)
 		from = nb_proc - 1;
 
-	_netstream << set_target(to) << set_source(from) << get_target(&to)
-			<< get_source(&from);
+	for (int to = 1; to < nb_proc; to++) {
+		// process number 0 is only to store the global state
+		//		if (to == 0)
+		//			to = 1;
 
-	if ((current_generation % migration_rate) == 0 && (current_generation
-			!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
-	{
-		pop.setup().pool().selector(migration_selection_1).prepare(
-				pop.fitness_values(), false);
+		_netstream << set_target(to) << set_source(from) << get_target(&to)
+				<< get_source(&from);
 
-		_netstream << pack_begin;
-		for (int i = 0; i < migration_size; i++) {
-			// select individual to send
-			solution_to_send = pop.parents()[pop.setup().pool().selector(
-					migration_selection_1).select_one(pop.parents(),
-					pop.offsprings(), pop.fitness_values(),
-					migration_selection_conf_1, false).index];
-
-			_netstream << *solution_to_send;
-		}
-		_netstream << pack_end;
-
-		if (synchronized) // synchronous mode: blocked until data are received
+		if ((current_generation % migration_rate) == 0 && (current_generation
+				!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
 		{
-			pop.setup().pool().selector(migration_selection_2).prepare(
-					pop.fitness_values(), true);
+			pop.setup().pool().selector(migration_selection_1).prepare(
+					pop.fitness_values(), false);
 
-			/* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
-			_netstream << set_source(MPI_ANY_SOURCE);
-			int tipo = 0;
-			_netstream._wait2(any, tipo);
-
-			if (tipo == 1) {
-				return;
-			}
-			/* Fin Ruso */
-
-			_netstream << wait(packed);
 			_netstream << pack_begin;
+			for (int i = 0; i < migration_size; i++) {
+				// select individual to send
+				solution_to_send = pop.parents()[pop.setup().pool().selector(
+						migration_selection_1).select_one(pop.parents(),
+						pop.offsprings(), pop.fitness_values(),
+						migration_selection_conf_1, false).index];
 
-			for (uint i = 0; i < migration_size; i++) {
-				// select individual to be remplaced
-				struct individual ind;
-				ind
-						= pop.setup().pool().selector(migration_selection_2).select_one(
-								pop.parents(), pop.offsprings(),
-								pop.fitness_values(),
-								migration_selection_conf_2, true);
-				solution_to_remplace = pop.parents()[ind.index];
-				solution_received = new Solution(solution_to_remplace->pbm());
-				_netstream >> *solution_received;
-
-				// remplace policy
-				if ((solution_received->getFitness()
-						<= solution_to_remplace->getFitness() && direction
-						== minimize) || (solution_received->getFitness()
-						>= solution_to_remplace->getFitness() && direction
-						== maximize)) {
-					need_to_revaluate = true;
-					for (int j = 0; j < pop.parents().size(); j++) {
-						if (pop.fitness_values()[j].index == ind.index) {
-							pop.fitness_values()[j].change = true;
-							*pop.parents()[ind.index] = *solution_received;
-						}
-					}
-				}
-				delete (solution_received);
+				_netstream << *solution_to_send;
 			}
 			_netstream << pack_end;
 
-		}
-	} // end if
+			if (synchronized) // synchronous mode: blocked until data are received
+			{
+				pop.setup().pool().selector(migration_selection_2).prepare(
+						pop.fitness_values(), true);
+
+				/* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
+				_netstream << set_source(MPI_ANY_SOURCE);
+
+				int tipo = 0;
+				_netstream._wait2(any, tipo);
+
+				if (tipo == 1) {
+					return;
+				}
+				/* Fin Ruso */
+
+				_netstream << wait(packed);
+				_netstream << pack_begin;
+
+				for (uint i = 0; i < migration_size; i++) {
+					// select individual to be remplaced
+					struct individual ind;
+					ind
+							= pop.setup().pool().selector(migration_selection_2).select_one(
+									pop.parents(), pop.offsprings(),
+									pop.fitness_values(),
+									migration_selection_conf_2, true);
+					solution_to_remplace = pop.parents()[ind.index];
+					solution_received = new Solution(
+							solution_to_remplace->pbm());
+					_netstream >> *solution_received;
+
+					// remplace policy
+					if ((solution_received->getFitness()
+							<= solution_to_remplace->getFitness() && direction
+							== minimize) || (solution_received->getFitness()
+							>= solution_to_remplace->getFitness() && direction
+							== maximize)) {
+						need_to_revaluate = true;
+						for (int j = 0; j < pop.parents().size(); j++) {
+							if (pop.fitness_values()[j].index == ind.index) {
+								pop.fitness_values()[j].change = true;
+								*pop.parents()[ind.index] = *solution_received;
+							}
+						}
+					}
+					delete (solution_received);
+				}
+				_netstream << pack_end;
+
+			}
+		} // end if
+	}
 
 	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
 		// but, if there are data, i have to receive it
 		int pending = false;
 		_netstream._probe(packed, pending);
-		if (pending) {
+
+		while (pending) {
 			pop.setup().pool().selector(migration_selection_2).prepare(
 					pop.fitness_values(), true);
 
@@ -1145,7 +1325,9 @@ void Migration::execute(Population& pop,
 				delete (solution_received);
 			} // end for
 			_netstream << pack_begin;
-		} // end if
+
+			_netstream._probe(packed, pending);
+		} // end while
 	}
 
 	if (need_to_revaluate)
@@ -1157,22 +1339,36 @@ ostream& operator<<(ostream& os, const Migration& migration) {
 			<< endl << "\t" << " Size: " << migration.migration_size << endl;
 
 	os << "\t" << " Selection 1: (" << migration.migration_selection_1 << ") ";
-	if (migration.migration_selection_1 == 0) os << "random";
-	if (migration.migration_selection_1 == 1) os << "tournament";
-	if (migration.migration_selection_1 == 2) os << "roulette wheel";
-	if (migration.migration_selection_1 == 3) os << "rank";
-	if (migration.migration_selection_1 == 4) os << "best";
-	if (migration.migration_selection_1 == 5) os << "worst";
-	os << endl << "\t" << " Selection 1 Parameter: " << migration.migration_selection_conf_1 << endl;
+	if (migration.migration_selection_1 == 0)
+		os << "random";
+	if (migration.migration_selection_1 == 1)
+		os << "tournament";
+	if (migration.migration_selection_1 == 2)
+		os << "roulette wheel";
+	if (migration.migration_selection_1 == 3)
+		os << "rank";
+	if (migration.migration_selection_1 == 4)
+		os << "best";
+	if (migration.migration_selection_1 == 5)
+		os << "worst";
+	os << endl << "\t" << " Selection 1 Parameter: "
+			<< migration.migration_selection_conf_1 << endl;
 
 	os << "\t" << " Selection 2: (" << migration.migration_selection_2 << ") ";
-	if (migration.migration_selection_2 == 0) os << "random";
-	if (migration.migration_selection_2 == 1) os << "tournament";
-	if (migration.migration_selection_2 == 2) os << "roulette wheel";
-	if (migration.migration_selection_2 == 3) os << "rank";
-	if (migration.migration_selection_2 == 4) os << "best";
-	if (migration.migration_selection_2 == 5) os << "worst";
-	os << endl << "\t" << " Selection 2 Parameter: " << migration.migration_selection_conf_2;
+	if (migration.migration_selection_2 == 0)
+		os << "random";
+	if (migration.migration_selection_2 == 1)
+		os << "tournament";
+	if (migration.migration_selection_2 == 2)
+		os << "roulette wheel";
+	if (migration.migration_selection_2 == 3)
+		os << "rank";
+	if (migration.migration_selection_2 == 4)
+		os << "best";
+	if (migration.migration_selection_2 == 5)
+		os << "worst";
+	os << endl << "\t" << " Selection 2 Parameter: "
+			<< migration.migration_selection_conf_2;
 	return os;
 }
 
