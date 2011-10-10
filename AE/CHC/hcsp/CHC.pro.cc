@@ -1248,16 +1248,12 @@ void Migration::execute(Population& pop,
 
 			/* RUSO: modifico para que procesos no queden bloqueados en migracion al final */
 			int tipo = 0;
-			cout << "[" << mypid << "] _wait2" << endl;
 			_netstream._wait2(any, tipo);
 
 			if (tipo == 1) {
-				cout << "[" << mypid << "] FIN!!!!" << endl;
 				return;
 			}
 			/* Fin Ruso */
-
-			cout << "[" << mypid << "] wait" << endl;
 
 			_netstream << wait(packed);
 			_netstream << pack_begin;
@@ -1292,8 +1288,6 @@ void Migration::execute(Population& pop,
 				}
 				delete (solution_received);
 			}
-
-			cout << "[" << mypid << "] recibido!" << endl;
 
 			_netstream << pack_end;
 			_netstream._probe(packed, pending);
