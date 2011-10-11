@@ -414,6 +414,8 @@ double SolutionMachine::getWRR() {
 }
 
 double SolutionMachine::getTaskWRR(const int taskPos) const {
+	//cout << "[INI] getTaskWRR" << endl;
+
 	int cores = _pbm.getMachineCoreCount(_machineId);
 	int ssp_ops = _pbm.getMachineSSJPerformance(_machineId);
 
@@ -423,24 +425,24 @@ double SolutionMachine::getTaskWRR(const int taskPos) const {
 		core_compute.push_back(0.0);
 	}
 
-	int posicion = -1;
-	for (int currentTaskPos = countTasks()-1; currentTaskPos > taskPos; currentTaskPos--) {
-		posicion++;
-
-		int currentTaskId;
-		currentTaskId = getTask(currentTaskPos);
-
-		core_compute[posicion % cores] += _pbm.getTaskSSJCost(currentTaskId, getMachineId());
-	}
-
 	float wait_time = 0.0;
-	if (posicion >= 0) wait_time = core_compute[posicion % cores];
+
+	if (taskPos > 0) {
+		for (int currentTaskPos = 0; currentTaskPos < taskPos; currentTaskPos++) {
+			int currentTaskId;
+			currentTaskId = getTask(currentTaskPos);
+
+			core_compute[currentTaskPos % cores] += (_pbm.getTaskSSJCost(currentTaskId, getMachineId())  / (ssp_ops / cores));
+		}
+
+		wait_time = core_compute[taskPos % cores];
+	}
 
 	int taskId;
 	taskId = getTask(taskPos);
 
 	float compute_cost;
-	compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId());
+	compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId()) / (ssp_ops / cores);
 
 	if (compute_cost == 0.0) {
 		return 0.0;
@@ -457,6 +459,8 @@ double SolutionMachine::getTaskWRR(const int taskPos) const {
 			return wrr;
 		}
 	}
+
+	//cout << "[FIN] getTaskWRR" << endl;
 }
 
 void SolutionMachine::refresh() {
@@ -490,34 +494,30 @@ void SolutionMachine::refresh() {
 			core_compute.push_back(0.0);
 		}
 
-		int posicion = 0;
-		for (int taskPos = countTasks()-1; taskPos >= 0; taskPos--) {
-			//cout << "TaskPos: " << taskPos << endl;
-
+		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
 			taskId = getTask(taskPos);
 
 			double compute_cost;
-			compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId());
+			compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId()) / (ssp_ops / cores);
 			assert(compute_cost >= 0);
 
 			double priority_cost;
 			if (compute_cost == 0.0) {
 				priority_cost = 0.0;
 			} else {
-				if (core_compute[posicion % cores] == 0.0) {
+				if (core_compute[taskPos % cores] == 0.0) {
 					priority_cost = _pbm.getTaskPriority(taskId);
 				} else {
 					double rr;
-					rr = (core_compute[posicion % cores] + compute_cost)
+					rr = (core_compute[taskPos % cores] + compute_cost)
 							/ compute_cost;
 					priority_cost = (_pbm.getTaskPriority(taskId) * rr);
 				}
 			}
 
-			core_compute[posicion % cores] += priority_cost;
+			core_compute[taskPos % cores] += compute_cost;
 			partial_priority_cost += priority_cost;
-			posicion++;
 		}
 
 		if (_tasks.size() > cores) {
