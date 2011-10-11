@@ -414,14 +414,27 @@ double SolutionMachine::getWRR() {
 }
 
 double SolutionMachine::getTaskWRR(const int taskPos) const {
-	float wait_time = 0.0;
+	int cores = _pbm.getMachineCoreCount(_machineId);
+	int ssp_ops = _pbm.getMachineSSJPerformance(_machineId);
 
-	for (int currentTaskPos = 0; currentTaskPos < taskPos; currentTaskPos++) {
+	vector<double> core_compute;
+	core_compute.reserve(cores);
+	for (int i = 0; i < cores; i++) {
+		core_compute.push_back(0.0);
+	}
+
+	int posicion = -1;
+	for (int currentTaskPos = countTasks()-1; currentTaskPos > taskPos; currentTaskPos--) {
+		posicion++;
+
 		int currentTaskId;
 		currentTaskId = getTask(currentTaskPos);
 
-		wait_time += _pbm.getTaskSSJCost(currentTaskId, getMachineId());
+		core_compute[posicion % cores] += _pbm.getTaskSSJCost(currentTaskId, getMachineId());
 	}
+
+	float wait_time = 0.0;
+	if (posicion >= 0) wait_time = core_compute[posicion % cores];
 
 	int taskId;
 	taskId = getTask(taskPos);
@@ -449,6 +462,8 @@ double SolutionMachine::getTaskWRR(const int taskPos) const {
 void SolutionMachine::refresh() {
 	//_dirty = true;
 	if (_dirty) {
+		//cout << "refresh" << endl;
+
 		int cores = _pbm.getMachineCoreCount(_machineId);
 		int ssp_ops = _pbm.getMachineSSJPerformance(_machineId);
 		float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
@@ -456,15 +471,29 @@ void SolutionMachine::refresh() {
 		double total_compute = 0.0;
 		double partial_priority_cost = 0.0;
 
+		if (countTasks() > cores) {
+			for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
+				total_compute += _pbm.getTaskSSJCost(getTask(taskPos), getMachineId());
+			}
+		} else {
+			total_compute = _pbm.getTaskSSJCost(getTask(0), getMachineId());
+			for (int taskPos = 1; taskPos < countTasks(); taskPos++) {
+				if (_pbm.getTaskSSJCost(getTask(taskPos), getMachineId()) > total_compute) {
+					total_compute = _pbm.getTaskSSJCost(getTask(taskPos), getMachineId());	
+				}
+			}
+		}
+
 		vector<double> core_compute;
 		core_compute.reserve(cores);
 		for (int i = 0; i < cores; i++) {
 			core_compute.push_back(0.0);
 		}
 
-		int max_compute_core = 0;
+		int posicion = 0;
+		for (int taskPos = countTasks()-1; taskPos >= 0; taskPos--) {
+			//cout << "TaskPos: " << taskPos << endl;
 
-		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
 			taskId = getTask(taskPos);
 
@@ -476,35 +505,25 @@ void SolutionMachine::refresh() {
 			if (compute_cost == 0.0) {
 				priority_cost = 0.0;
 			} else {
-				if (core_compute[taskPos % cores] == 0.0) {
+				if (core_compute[posicion % cores] == 0.0) {
 					priority_cost = _pbm.getTaskPriority(taskId);
 				} else {
 					double rr;
-					rr = (core_compute[taskPos % cores] + compute_cost)
+					rr = (core_compute[posicion % cores] + compute_cost)
 							/ compute_cost;
 					priority_cost = (_pbm.getTaskPriority(taskId) * rr);
 				}
 			}
 
-			core_compute[taskPos % cores] = core_compute[taskPos % cores]
-					+ compute_cost;
-
-			total_compute += compute_cost;
+			core_compute[posicion % cores] += priority_cost;
 			partial_priority_cost += priority_cost;
-
-			if ((core_compute[taskPos % cores] > core_compute[max_compute_core])
-					&& (taskPos % cores != max_compute_core)) {
-
-				max_compute_core = taskPos % cores;
-			}
+			posicion++;
 		}
-
-		double partial_energy = 0.0;
 
 		if (_tasks.size() > cores) {
 			_computeTime = total_compute / ssp_ops;
 		} else {
-			_computeTime = core_compute[max_compute_core] / (ssp_ops / cores);
+			_computeTime = total_compute / (ssp_ops / cores);
 		}
 
 		_energy = _computeTime * max_energy;
@@ -568,10 +587,32 @@ void Solution::show(ostream& os) {
 					<< _machines[machineId].countTasks();
 			os << " compute_time: "
 					<< _machines[machineId].getComputeTime();
+
+			float aux1;
+			aux1 = 0.0;
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				aux1 += _pbm.getTaskSSJCost(_machines[machineId].getTask(taskPos), machineId);
+			}
+			os << " sum_compute: " << aux1;
+			os << " ssjops: " << _pbm.getMachineSSJPerformance(machineId);
+			//os << " result: " << aux1 / _pbm.getMachineSSJPerformance(machineId);
+		
 			os << " energy: "
 					<< _machines[machineId].getEnergyConsumption(
 							makespan);
 			os << " wrr: " << _machines[machineId].getWRR() << "\n";
+		}
+
+		os << "[CSV Solution]===================================================\n";
+		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
+			os << machineId << "|" << _pbm.getMachineCoreCount(machineId)
+				<< "|" << _pbm.getMachineSSJPerformance(machineId);
+
+			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+				os << "|" << _pbm.getTaskSSJCost(_machines[machineId].getTask(taskPos), machineId);
+			}
+
+			os << endl;
 		}
 
 		os
@@ -799,7 +840,8 @@ void Solution::initializeMCT(int startTask, int direction) {
 }
 
 void Solution::initializeMinMin() {
-	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+	//if (DEBUG) 
+	//cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
 
 	vector<float> machineAssignedSsjops;
 	machineAssignedSsjops.reserve(_pbm.getMachineCount() + 1);
