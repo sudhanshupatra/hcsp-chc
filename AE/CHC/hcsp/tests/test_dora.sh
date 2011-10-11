@@ -6,7 +6,7 @@ PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 ITERACIONES=1
 EXEC="mpirun -n 4 ${ROOT_PATH}/CHC/hcsp/MainLan"
 
-for scenario in {0..4}
+for scenario in {0..0}
 do
 	for workload in {0..0}
 	do

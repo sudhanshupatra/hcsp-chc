@@ -875,17 +875,104 @@ void Solution::initializeMinMin() {
 
 		_machines[minCTMachineId].addTask(minCTTaskId);
 	}
-
-	//	for (int i = 0; i < _pbm.machineCount(); i++) {
-	//		cout << "Machine ID " << i << ": "
-	//				<< machineMakespan[i] << " : "
-	//				<< _machines[i].getMakespan() << " : "
-	//				<< machineAssignedSsjops[i] << " : "
-	//				<< _pbm.machineSsjOps(i) << " : "
-	//				<< machineAssignedSsjops[i] / _pbm.machineSsjOps(i) << " : "
-	//				<< endl;
-	//	}
 }
+
+//void Solution::initializeMinMin() {
+//	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
+//
+//	vector<unsigned int> machineOffset;
+//	machineOffset.reserve(_pbm.getMachineCount() + 1);
+//
+//	int countedCores = 0;
+//	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
+//		machineOffset.push_back(countedCores);
+//		countedCores += _pbm.getMachineCoreCount(machineId);
+//	}
+//
+//	vector<float> machineCoreAssignedSsjOps;
+//	machineCoreAssignedSsjOps.reserve(countedCores + 1);
+//
+//	for (int coreId = 0; coreId < countedCores; coreId++) {
+//		machineCoreAssignedSsjOps.push_back(0.0);
+//	}
+//
+//	vector<bool> taskIsUnmapped;
+//	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
+//
+//	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
+//		taskIsUnmapped.push_back(true);
+//
+//	int unmappedTasksCount = _pbm.getTaskCount();
+//
+//	while (unmappedTasksCount > 0) {
+//		double minCT;
+//		minCT = infinity();
+//
+//		int minCTTaskId;
+//		minCTTaskId = -1;
+//
+//		int minCTMachineId;
+//		minCTMachineId = -1;
+//
+//		int minCTCoreId;
+//		minCTCoreId = -1;
+//
+//		for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
+//			if (taskIsUnmapped[taskId]) {
+//				for (unsigned int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
+//					int maxCoreId = 0;
+//					int minCoreId = 0;
+//
+//					for (unsigned int coreId = 1; coreId < _pbm.getMachineCoreCount(machineId); coreId++) {
+//						if (machineCoreAssignedSsjOps[machineOffset[machineId]+coreId] < machineCoreAssignedSsjOps[machineOffset[machineId]+minCoreId]) {
+//							minCoreId = coreId;
+//						} else if (machineCoreAssignedSsjOps[machineOffset[machineId]+coreId] > machineCoreAssignedSsjOps[machineOffset[machineId]+maxCoreId]) {
+//							maxCoreId = coreId;
+//						}
+//					}
+//
+//					double minCoreSsjOps;
+//					minCoreSsjOps = machineCoreAssignedSsjOps[machineOffset[machineId]+minCoreId] + _pbm.getTaskSSJCost(taskId, machineId);
+//
+//					double maxCoreSsjOps;
+//					maxCoreSsjOps = machineCoreAssignedSsjOps[machineOffset[machineId]+maxCoreId];
+//
+//					double coreComputeCost;
+//
+//					if (minCoreSsjOps >= maxCoreSsjOps) {
+//						coreComputeCost
+//								= minCoreSsjOps
+//										/ (_pbm.getMachineSSJPerformance(
+//												machineId)
+//												/ _pbm.getMachineCoreCount(
+//														machineId));
+//					} else {
+//						coreComputeCost
+//								= maxCoreSsjOps
+//										/ (_pbm.getMachineSSJPerformance(
+//												machineId)
+//												/ _pbm.getMachineCoreCount(
+//														machineId));
+//					}
+//
+//					if (coreComputeCost < minCT) {
+//						minCT = coreComputeCost;
+//						minCTTaskId = taskId;
+//						minCTMachineId = machineId;
+//						minCTCoreId = minCoreId;
+//					}
+//				}
+//			}
+//		}
+//
+//		unmappedTasksCount--;
+//		taskIsUnmapped[minCTTaskId] = false;
+//
+//		machineCoreAssignedSsjOps[machineOffset[minCTMachineId]+minCTCoreId] += _pbm.getTaskSSJCost(minCTTaskId, minCTMachineId);
+//
+//		_machines[minCTMachineId].addTask(minCTTaskId);
+//	}
+//}
 
 void Solution::initializeMinWRR5() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización MIN-MIN" << endl;
