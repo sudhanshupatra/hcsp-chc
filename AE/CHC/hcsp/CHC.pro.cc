@@ -685,18 +685,18 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
-				bool modificado;
+				//bool modificado;
 				int taskPosSol1, machineIdSol1;
 				int taskPosSol2, machineIdSol2;
 
-				modificado = false;
+				//modificado = false;
 
 				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
 				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
 
 				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
 						!= taskPosSol2)) {
-					if (rand01() <= 0.5) {
+					/*if (rand01() <= 0.5) {
 						// Intento mejorar metrica de makespan en la solución
 						if (machineIdSol1 != machineIdSol2) {
 							if (sol1.getMachines()[machineIdSol1].getComputeTime()
@@ -715,8 +715,9 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 							modificado = true;
 						}
-					}
+					}*/
 
+					/*
 					if ((!modificado) && (rand01() <= 0.5)) {
 						// Intento mejorar metrica de wrr en la solución
 						if (sol1.getMachines()[machineIdSol1].getTaskWRR(
@@ -737,8 +738,9 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 						modificado = true;
 					}
+					*/
 
-					if (!modificado) {
+					//if (!modificado) {
 						if (rand01() <= 0.5) {
 							sol2.getMachines()[machineIdSol2].removeTask(
 									taskPosSol2);
@@ -750,7 +752,7 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 							sol1.getMachines()[machineIdSol2].safeInsertTask(
 									taskId, taskPosSol2);
 						}
-					}
+					//}
 				}
 			}
 		}

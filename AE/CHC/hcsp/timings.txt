@@ -37,3 +37,10 @@ Current evaluations: 77703
 Makespan: 140.387
 WRR: 6079.21
 Energy: 296425
+
+------------------------------------------------------------
+
+Hacer una multi-estructura para agilizar el cross 
+				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
+				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
+				
