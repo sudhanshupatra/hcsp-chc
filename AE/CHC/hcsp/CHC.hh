@@ -169,7 +169,8 @@ public:
 	int countTasks() const;
 
 	double getComputeTime();
-	double getEnergyConsumption(double solutionMakespan);
+	double getActiveEnergyConsumption();
+	double getIdleEnergyConsumption(double solutionMakespan);
 	double getWRR();
 	double getTaskWRR(const int taskPos) const;
 
