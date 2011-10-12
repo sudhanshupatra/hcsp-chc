@@ -23,6 +23,13 @@
 #define as
 
 #define DEBUG false
+#define TIMING true
+
+#define TIMING_MIGRATION 0
+#define TIMING_MUTATE 1
+#define TIMING_LS 2
+#define TIMING_INIT 3
+#define TIMING_CROSS 4
 
 struct individual // index of a individual in the population and its fitness
 {

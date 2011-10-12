@@ -469,11 +469,11 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	if (rand01() < 0.5) {
+	/*if (rand01() < 0.5) {
 		int individual = rand_int(0, _parents.size() - 1);
-		//		cout << "Busqueda local en individuo " << individual << endl;
+		cout << "Busqueda local en individuo " << individual << endl;
 		_parents[individual]->doLocalSearch();
-	}
+	}*/
 
 	evaluate_parents(); // calculates fitness of new individuals
 }
@@ -662,6 +662,13 @@ Crossover::Crossover() :
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
 	//if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
+
+	timespec ts;
+
+	if (TIMING) {
+		clock_gettime(CLOCK_REALTIME, &ts);
+	}
+
 	int cant_tasks = sol1.length();
 
 	float distancia_minima;
@@ -674,6 +681,8 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 	int distancia = sol1.distanceTo(sol2);
 
 	if (distancia > distancia_minima) {
+		Solver::global_calls[TIMING_CROSS]++;
+
 		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
 				bool modificado;
@@ -745,6 +754,15 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				}
 			}
 		}
+	}
+
+	if (TIMING) {
+		timespec ts_end;
+		clock_gettime(CLOCK_REALTIME, &ts_end);
+
+		double elapsed;
+		elapsed = ((ts_end.tv_sec-ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec-ts.tv_nsec) / 1000.0);
+		Solver::global_timing[TIMING_CROSS] += elapsed;
 	}
 }
 
@@ -848,38 +866,20 @@ Diverge::Diverge() :
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		float mutationProbability) {
 
-	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
-	//			<< mutationProbability << ")"<< endl;
+	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		//		if (i != bestSolutionIndex) {
-		if (rand01() <= mutationProbability) {
-			sols[i]->doMutate();
+		if (i != bestSolutionIndex) {
+			if (rand01() <= mutationProbability) {
+				sols[i]->doMutate();
+			}
 		}
-		//		}
-
-		//		if (i == bestSolutionIndex) {
-		//			sols[i]->doLocalSearch();
-		//		}
-		/*if (i == bestSolutionIndex) {
-		 if (_retryCount < 5) {
-		 double current_fitness = sols[i]->fitness();
-
-		 sols[i]->doLocalSearch();
-
-		 if (sols[i]->fitness() < current_fitness) {
-		 _retryCount = 0;
-		 } else {
-		 _retryCount++;
-		 }
-		 } else {
-		 cout << "[DEBUG] Se mutó la mejor solución!" << endl;
-
-		 _retryCount = 0;
-		 sols[i]->mutate();
-		 }
-		 }*/
 	}
+
+	int individual = rand_int(0, sols.size() - 1);
+	sols[individual]->doLocalSearch();
+
+	// if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge <END>" << endl;
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {
@@ -1188,6 +1188,14 @@ void Migration::execute(Population& pop,
 		const unsigned long current_generation, NetStream& _netstream,
 		const bool synchronized, const unsigned int check_asynchronous) const {
 
+	timespec ts;
+
+	if (TIMING) {
+		clock_gettime(CLOCK_REALTIME, &ts);
+	}
+
+	Solver::global_calls[TIMING_MIGRATION]++;
+
 	Solution* solution_to_send;
 	Solution* solution_received;
 	Solution* solution_to_remplace;
@@ -1294,6 +1302,15 @@ void Migration::execute(Population& pop,
 
 	if (need_to_revaluate)
 		pop.evaluate_parents();
+
+	if (TIMING) {
+		timespec ts_end;
+		clock_gettime(CLOCK_REALTIME, &ts_end);
+
+		double elapsed;
+		elapsed = ((ts_end.tv_sec-ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec-ts.tv_nsec) / 1000.0);
+		Solver::global_timing[TIMING_MIGRATION] += elapsed;
+	}
 }
 
 ostream& operator<<(ostream& os, const Migration& migration) {
@@ -1875,6 +1892,9 @@ Operator_Pool::~Operator_Pool() {
 }
 
 // Solver (superclasse)---------------------------------------------------
+
+double Solver::global_timing[5] = {0.0, 0.0, 0.0, 0.0, 0.0};
+int Solver::global_calls[5] = {0, 0, 0, 0, 0};
 
 Solver::Solver(const Problem& pbm, const SetUpParams& setup) :
 			problem(pbm),
@@ -3000,11 +3020,23 @@ void Solver_Lan::run() {
 
 void Solver_Lan::run(const unsigned long int nb_generations) {
 	StartUp();
+
 	if (mypid != 0) {
 		while (!final_phase && (current_iteration() < nb_generations)
 				&& !(terminateQ(problem, *this, params)))
+
 			DoStep();
+
 		send_local_state_to(-1);
+
+		/* MUESTRO LOS TIEMPOS RECOLECTADOS */
+		if (TIMING) {
+			cout << "[TIMING_INIT]      (1)" << Solver::global_timing[TIMING_INIT] << endl;
+			cout << "[TIMING_CROSS]     (" << Solver::global_calls[TIMING_CROSS] << ")" << Solver::global_timing[TIMING_CROSS] << endl;
+			cout << "[TIMING_MUTATE]    (" << Solver::global_calls[TIMING_MUTATE] << ")" << Solver::global_timing[TIMING_MUTATE] << endl;
+			cout << "[TIMING_LS]        (" << Solver::global_calls[TIMING_LS] << ")" << Solver::global_timing[TIMING_LS] << endl;
+			cout << "[TIMING_MIGRATION] (" << Solver::global_calls[TIMING_MIGRATION] << ")" << Solver::global_timing[TIMING_MIGRATION] << endl;
+		}
 	} else {
 		check_for_refresh_global_state();
 	}

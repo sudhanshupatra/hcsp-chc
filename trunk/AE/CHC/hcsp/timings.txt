@@ -1,0 +1,39 @@
+>> First swap ---------------------------------
+
+[TIMING_INIT]      (1)113899
+[TIMING_CROSS]     (6616)8.40948e+06
+[TIMING_MUTATE]    (918)1.99431e+06
+[TIMING_LS]        (102)30767.3
+[TIMING_MIGRATION] (6635)208148
+[TIMING_INIT]      (1)247752
+[TIMING_CROSS]     (9299)8.80677e+06
+[TIMING_MUTATE]    (1296)2.0591e+06
+[TIMING_LS]        (144)41643.4
+[TIMING_MIGRATION] (9301)167777
+
+Current iteration: 9301
+Current evaluations: 94510
+
+Makespan: 141.522
+WRR: 6322.2
+Energy: 297397
+
+>> Best swap for first machine ---------------------------------
+
+[TIMING_INIT]      (1)145102
+[TIMING_CROSS]     (5898)7.99417e+06
+[TIMING_MUTATE]    (828)1.80094e+06
+[TIMING_LS]        (92)4.86295e+06
+[TIMING_MIGRATION] (5966)209971
+[TIMING_INIT]      (1)262877
+[TIMING_CROSS]     (7683)8.16205e+06
+[TIMING_MUTATE]    (1062)1.90166e+06
+[TIMING_LS]        (118)4.91948e+06
+[TIMING_MIGRATION] (7647)137312
+
+Current iteration: 7647
+Current evaluations: 77703
+
+Makespan: 140.387
+WRR: 6079.21
+Energy: 296425
