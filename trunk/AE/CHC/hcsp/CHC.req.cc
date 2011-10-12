@@ -397,10 +397,15 @@ void SolutionMachine::emptyTasks() {
 	_tasks.clear();
 }
 
-double SolutionMachine::getEnergyConsumption(double solutionMakespan) {
+double SolutionMachine::getActiveEnergyConsumption() {
+	refresh();
+	return _energy;
+}
+
+double SolutionMachine::getIdleEnergyConsumption(double solutionMakespan) {
 	refresh();
 	float idle_energy = _pbm.getMachineEnergyWhenIdle(_machineId);
-	return _energy + ((solutionMakespan - _computeTime) * idle_energy);
+	return (solutionMakespan - _computeTime) * idle_energy;
 }
 
 double SolutionMachine::getComputeTime() {
@@ -597,8 +602,10 @@ void Solution::show(ostream& os) {
 			os << " ssjops: " << _pbm.getMachineSSJPerformance(machineId);
 			//os << " result: " << aux1 / _pbm.getMachineSSJPerformance(machineId);
 		
-			os << " energy: "
-					<< _machines[machineId].getEnergyConsumption(
+			os << " energy active: "
+					<< _machines[machineId].getActiveEnergyConsumption();
+			os << " energy idle: "
+					<< _machines[machineId].getIdleEnergyConsumption(
 							makespan);
 			os << " wrr: " << _machines[machineId].getWRR() << "\n";
 		}
@@ -2109,7 +2116,7 @@ double Solution::getFitness() {
 	}
 
 	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		energy += _machines[machineId].getEnergyConsumption(maxMakespan);
+		energy += _machines[machineId].getActiveEnergyConsumption() + _machines[machineId].getIdleEnergyConsumption(maxMakespan);
 	}
 
 	double normalized_awrr;
@@ -2181,7 +2188,8 @@ double Solution::getEnergy(double makespan) {
 	double energy = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		energy = energy + _machines[machineId].getEnergyConsumption(makespan);
+		energy = energy + _machines[machineId].getActiveEnergyConsumption()
+				+ _machines[machineId].getIdleEnergyConsumption(makespan);
 	}
 
 	return energy;
