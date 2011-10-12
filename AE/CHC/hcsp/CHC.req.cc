@@ -437,7 +437,8 @@ double SolutionMachine::getTaskWRR(const int taskPos) const {
 			int currentTaskId;
 			currentTaskId = getTask(currentTaskPos);
 
-			core_compute[currentTaskPos % cores] += (_pbm.getTaskSSJCost(currentTaskId, getMachineId())  / (ssp_ops / cores));
+			core_compute[currentTaskPos % cores] += (_pbm.getTaskSSJCost(
+					currentTaskId, getMachineId()) / (ssp_ops / cores));
 		}
 
 		wait_time = core_compute[taskPos % cores];
@@ -447,7 +448,8 @@ double SolutionMachine::getTaskWRR(const int taskPos) const {
 	taskId = getTask(taskPos);
 
 	float compute_cost;
-	compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId()) / (ssp_ops / cores);
+	compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId()) / (ssp_ops
+			/ cores);
 
 	if (compute_cost == 0.0) {
 		return 0.0;
@@ -482,13 +484,16 @@ void SolutionMachine::refresh() {
 
 		if (countTasks() > cores) {
 			for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
-				total_compute += _pbm.getTaskSSJCost(getTask(taskPos), getMachineId());
+				total_compute += _pbm.getTaskSSJCost(getTask(taskPos),
+						getMachineId());
 			}
 		} else {
 			total_compute = _pbm.getTaskSSJCost(getTask(0), getMachineId());
 			for (int taskPos = 1; taskPos < countTasks(); taskPos++) {
-				if (_pbm.getTaskSSJCost(getTask(taskPos), getMachineId()) > total_compute) {
-					total_compute = _pbm.getTaskSSJCost(getTask(taskPos), getMachineId());	
+				if (_pbm.getTaskSSJCost(getTask(taskPos), getMachineId())
+						> total_compute) {
+					total_compute = _pbm.getTaskSSJCost(getTask(taskPos),
+							getMachineId());
 				}
 			}
 		}
@@ -504,7 +509,8 @@ void SolutionMachine::refresh() {
 			taskId = getTask(taskPos);
 
 			double compute_cost;
-			compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId()) / (ssp_ops / cores);
+			compute_cost = _pbm.getTaskSSJCost(taskId, getMachineId())
+					/ (ssp_ops / cores);
 			assert(compute_cost >= 0);
 
 			double priority_cost;
@@ -590,33 +596,34 @@ void Solution::show(ostream& os) {
 		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
 			os << "m_id: " << machineId << " #tasks: "
 					<< _machines[machineId].countTasks();
-			os << " compute_time: "
-					<< _machines[machineId].getComputeTime();
+			os << " compute_time: " << _machines[machineId].getComputeTime();
 
 			float aux1;
 			aux1 = 0.0;
 			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				aux1 += _pbm.getTaskSSJCost(_machines[machineId].getTask(taskPos), machineId);
+				aux1 += _pbm.getTaskSSJCost(
+						_machines[machineId].getTask(taskPos), machineId);
 			}
 			os << " sum_compute: " << aux1;
 			os << " ssjops: " << _pbm.getMachineSSJPerformance(machineId);
 			//os << " result: " << aux1 / _pbm.getMachineSSJPerformance(machineId);
-		
+
 			os << " energy active: "
 					<< _machines[machineId].getActiveEnergyConsumption();
 			os << " energy idle: "
-					<< _machines[machineId].getIdleEnergyConsumption(
-							makespan);
+					<< _machines[machineId].getIdleEnergyConsumption(makespan);
 			os << " wrr: " << _machines[machineId].getWRR() << "\n";
 		}
 
-		os << "[CSV Solution]===================================================\n";
+		os
+				<< "[CSV Solution]===================================================\n";
 		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
 			os << machineId << "|" << _pbm.getMachineCoreCount(machineId)
-				<< "|" << _pbm.getMachineSSJPerformance(machineId);
+					<< "|" << _pbm.getMachineSSJPerformance(machineId);
 
 			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				os << "|" << _pbm.getTaskSSJCost(_machines[machineId].getTask(taskPos), machineId);
+				os << "|" << _pbm.getTaskSSJCost(
+						_machines[machineId].getTask(taskPos), machineId);
 			}
 
 			os << endl;
@@ -1654,7 +1661,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 
 		if (mypid == 0) {
 			cout << ">> Solución MinMin:" << endl;
-			this->show(cout);
+			// this->show(cout);
 		} else {
 			if (DEBUG) {
 				cout << endl << "[proc " << mypid << "] ";
@@ -2116,7 +2123,8 @@ double Solution::getFitness() {
 	}
 
 	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		energy += _machines[machineId].getActiveEnergyConsumption() + _machines[machineId].getIdleEnergyConsumption(maxMakespan);
+		energy += _machines[machineId].getActiveEnergyConsumption()
+				+ _machines[machineId].getIdleEnergyConsumption(maxMakespan);
 	}
 
 	double normalized_awrr;
@@ -2255,10 +2263,15 @@ bool Solution::findTask(const int taskId, int& foundMachineId,
 double Solution::getMachineFitness(int machineId) {
 	double awrr_ratio = (getWRR() + Solution::_awrr_reference)
 			/ Solution::_awrr_reference;
-	double makespan_ratio = (getMakespan() + Solution::_makespan_reference)
+	double makespan = getMakespan();
+	double makespan_ratio = (makespan + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
+	double energy_ratio = (getEnergy(makespan) + Solution::_energy_reference)
+			/ Solution::_energy_reference;
+
 	return (_pbm.getCurrentWRRWeight() * awrr_ratio)
-			+ (_pbm.getCurrentMakespanWeight() * makespan_ratio);
+			+ (_pbm.getCurrentMakespanWeight() * makespan_ratio)
+			+ (_pbm.getCurrentEnergyWeight() * energy_ratio);
 }
 
 void Solution::doLocalSearch() {
@@ -2417,7 +2430,8 @@ void Solution::doMutate() {
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (rand01() <= MUT_MAQ) {
-			if (_machines[machineId].countTasks() == 0) {
+			if (_machines[machineId].countTasks() < _pbm.getMachineCoreCount(
+					machineId)) {
 				// Cada máquina sin tareas se le asigna la tarea que
 				// mejor puede ejecutar.
 				{
@@ -2428,33 +2442,37 @@ void Solution::doMutate() {
 					int origenMachineId, origenTaskPos;
 					assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
 
-					if (_machines[origenMachineId].countTasks() > 1) {
-						if (_pbm.getBestTaskIdForMachine(origenMachineId)
-								!= bestTaskIdForMachine) {
-							_machines[origenMachineId].removeTask(origenTaskPos);
-							_machines[machineId].addTask(bestTaskIdForMachine);
-						}
+					//if (_machines[origenMachineId].countTasks() > _pbm.getMachineCoreCount(origenMachineId)) {
+					if (_pbm.getBestTaskIdForMachine(origenMachineId)
+							!= bestTaskIdForMachine) {
+
+						_machines[origenMachineId].removeTask(origenTaskPos);
+						_machines[machineId].addTask(bestTaskIdForMachine);
 					}
+					//}
 				}
 
-				if (_machines[machineId].countTasks() == 0) {
-					int mostLoadedMachineId = getMaxCostMachineId();
+				/*
+				 if (_machines[machineId].countTasks() == 0) {
+				 int mostLoadedMachineId = getMaxCostMachineId();
 
-					int bestTaskPosForMachine;
-					bestTaskPosForMachine
-							= getMinDestinationCostTaskPosByMachine(
-									mostLoadedMachineId, machineId);
+				 int bestTaskPosForMachine;
+				 bestTaskPosForMachine
+				 = getMinDestinationCostTaskPosByMachine(
+				 mostLoadedMachineId, machineId);
 
-					int bestTaskIdForMachine;
-					bestTaskIdForMachine
-							= _machines[mostLoadedMachineId].getTask(
-									bestTaskPosForMachine);
+				 int bestTaskIdForMachine;
+				 bestTaskIdForMachine
+				 = _machines[mostLoadedMachineId].getTask(
+				 bestTaskPosForMachine);
 
-					_machines[mostLoadedMachineId].removeTask(
-							bestTaskPosForMachine);
-					_machines[machineId].addTask(bestTaskIdForMachine);
-				}
-			} else if (_machines[machineId].countTasks() > 0) {
+				 _machines[mostLoadedMachineId].removeTask(
+				 bestTaskPosForMachine);
+				 _machines[machineId].addTask(bestTaskIdForMachine);
+				 }
+				 */
+			} else if (_machines[machineId].countTasks()
+					> _pbm.getMachineCoreCount(machineId)) {
 				for (int selectedTaskPos = 0; selectedTaskPos
 						< _machines[machineId].countTasks(); selectedTaskPos++) {
 
@@ -2476,7 +2494,9 @@ void Solution::doMutate() {
 									selectedTaskId);
 
 							if (bestMachineId != machineId) {
-								if (_machines[bestMachineId].countTasks() > 0) {
+								if (_machines[bestMachineId].countTasks()
+										>= _pbm.getMachineCoreCount(
+												bestMachineId)) {
 									// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 									// con menor costo de ejecución en la máquina sorteada.
 									int minCostTaskPosOnMachine;
@@ -2509,7 +2529,9 @@ void Solution::doMutate() {
 							selectedTaskId = _machines[machineId].getTask(
 									selectedTaskPos);
 
-							if (_machines[minCostMachineId].countTasks() > 0) {
+							if (_machines[minCostMachineId].countTasks()
+									>= _pbm.getMachineCoreCount(
+											minCostMachineId)) {
 								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 								// con menor costo de ejecución en la máquina sorteada.
 								int minCostTaskPosOnMachine;
@@ -2531,24 +2553,33 @@ void Solution::doMutate() {
 						if (neighbourhood == 2) {
 							// Se adelanta la posición en la cola de la tarea siempre y cuando la tarea
 							// que le preceda tenga menor prioridad.
-							for (int taskPos = selectedTaskPos; taskPos >= 1; taskPos--) {
+							//for (int taskPos = selectedTaskPos; taskPos >= 1; taskPos--) {
+
+							if (selectedTaskPos > 0) {
 								int taskId;
-								taskId = _machines[machineId].getTask(taskPos);
+								taskId = _machines[machineId].getTask(
+										selectedTaskPos);
 
 								int taskPriority;
 								taskPriority = _pbm.getTaskPriority(taskId);
 
 								int anteriorTaskId;
 								anteriorTaskId = _machines[machineId].getTask(
-										taskPos - 1);
+										selectedTaskPos - 1);
 
 								int anteriorTaskPriority;
 								anteriorTaskPriority = _pbm.getTaskPriority(
 										anteriorTaskId);
 
 								if (taskPriority > anteriorTaskPriority) {
-									_machines[machineId].swapTasks(taskPos,
-											taskPos - 1);
+									int swapDistance = rand_int(1, 3);
+									int destination = selectedTaskPos
+											- swapDistance;
+									if (destination < 0)
+										destination = 0;
+
+									_machines[machineId].swapTasks(
+											selectedTaskPos, destination);
 								}
 							}
 						}
@@ -2565,44 +2596,44 @@ void Solution::doMutate() {
 								_machines[machineId].removeTask(selectedTaskPos);
 
 								// Se selecciona una tarea T según su función de PRIORIDAD y se
-								// adelanta si lugar en la cola de ejecución.
-								for (int
-										taskPos =
-												_machines[minAWRRMachineId].countTasks()
-														- 1; taskPos >= 1; taskPos--) {
-									int taskId;
-									taskId
-											= _machines[minAWRRMachineId].getTask(
-													taskPos);
+								// adelanta su lugar en la cola de ejecución.
+								/*for (int
+								 taskPos =
+								 _machines[minAWRRMachineId].countTasks()
+								 - 1; taskPos >= 1; taskPos--) {
+								 int taskId;
+								 taskId
+								 = _machines[minAWRRMachineId].getTask(
+								 taskPos);
 
-									int taskPriority;
-									taskPriority = _pbm.getTaskPriority(taskId);
+								 int taskPriority;
+								 taskPriority = _pbm.getTaskPriority(taskId);
 
-									int anteriorTaskId;
-									anteriorTaskId
-											= _machines[minAWRRMachineId].getTask(
-													taskPos - 1);
+								 int anteriorTaskId;
+								 anteriorTaskId
+								 = _machines[minAWRRMachineId].getTask(
+								 taskPos - 1);
 
-									int anteriorTaskPriority;
-									anteriorTaskPriority
-											= _pbm.getTaskPriority(
-													anteriorTaskId);
+								 int anteriorTaskPriority;
+								 anteriorTaskPriority
+								 = _pbm.getTaskPriority(
+								 anteriorTaskId);
 
-									if (taskPriority > anteriorTaskPriority) {
-										_machines[minAWRRMachineId].swapTasks(
-												taskPos, taskPos - 1);
-									}
-									if (taskPriority == anteriorTaskPriority) {
-										if (_pbm.getTaskSSJCost(taskId,
-												minAWRRMachineId)
-												< _pbm.getTaskSSJCost(
-														anteriorTaskId,
-														minAWRRMachineId)) {
-											_machines[minAWRRMachineId].swapTasks(
-													taskPos, taskPos - 1);
-										}
-									}
-								}
+								 if (taskPriority > anteriorTaskPriority) {
+								 _machines[minAWRRMachineId].swapTasks(
+								 taskPos, taskPos - 1);
+								 }
+								 if (taskPriority == anteriorTaskPriority) {
+								 if (_pbm.getTaskSSJCost(taskId,
+								 minAWRRMachineId)
+								 < _pbm.getTaskSSJCost(
+								 anteriorTaskId,
+								 minAWRRMachineId)) {
+								 _machines[minAWRRMachineId].swapTasks(
+								 taskPos, taskPos - 1);
+								 }
+								 }
+								 }*/
 							}
 						}
 					}
