@@ -907,6 +907,9 @@ public:
 
 	// Statistics handling ----------------------------------------------------------------------
 
+	static double global_timing[];
+	static int global_calls[];
+
 	Statistics& statistics();
 	UserStatistics& userstatistics();
 	Population& population();

@@ -1643,6 +1643,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 	//		cout << "solutionIndex: " << pnumber << endl;
 	//	}
 
+	timespec ts;
+
+	if (TIMING) {
+		clock_gettime(CLOCK_REALTIME, &ts);
+	}
+
 	markAsInitialized();
 
 	if (solutionIndex == 0) {
@@ -1866,6 +1872,15 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 				}
 			}
 		}
+	}
+
+	if (TIMING) {
+		timespec ts_end;
+		clock_gettime(CLOCK_REALTIME, &ts_end);
+
+		double elapsed;
+		elapsed = ((ts_end.tv_sec-ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec-ts.tv_nsec) / 1000.0);
+		Solver::global_timing[TIMING_INIT] += elapsed;
 	}
 }
 
@@ -2278,6 +2293,14 @@ void Solution::doLocalSearch() {
 	//	if (DEBUG)
 	//		cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
 
+	timespec ts;
+
+	if (TIMING) {
+		clock_gettime(CLOCK_REALTIME, &ts);
+	}
+
+	Solver::global_calls[TIMING_LS]++;
+
 	vector<double> fitnessByMachine;
 
 	for (unsigned int machineId = 0; machineId < this->machines().size(); machineId++) {
@@ -2339,7 +2362,9 @@ void Solution::doLocalSearch() {
 			//			if (DEBUG) cout << endl << "[DEBUG] En la máquina actual hay " << this->machines()[machineId].countTasks()
 			//					<< " tareas, pruebo desde la " << startTaskOffset << " a la " << endTaskOffset << endl;
 
-			for (int taskOffset = startTaskOffset; taskOffset < endTaskOffset; taskOffset++) {
+			for (int taskOffset = startTaskOffset;
+					(taskOffset < endTaskOffset) && (mejorMovimientoTaskPos == -1); taskOffset++) {
+
 				int taskPos;
 				taskPos = taskOffset % this->machines()[machineId].countTasks();
 
@@ -2373,8 +2398,9 @@ void Solution::doLocalSearch() {
 				//				if (DEBUG) cout << endl << "[DEBUG] En el problema hay " << this->pbm().taskCount()
 				//						<< " tareas, pruebo desde la " << startSwapTaskOffset << endl;
 
-				for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
-						> 0; swapTaskOffset++) {
+				for (int swapTaskOffset = startSwapTaskOffset;
+						countSwapTaskOffset > 0; swapTaskOffset++) {
+
 					assert(swapTaskOffset < (2*this->pbm().getTaskCount()));
 
 					int swapTaskId;
@@ -2401,7 +2427,6 @@ void Solution::doLocalSearch() {
 
 						if (movimientoFitness < mejorMovimientoFitness) {
 							//							cout << endl << "Mejora parcial " << movimientoFitness - mejorMovimientoFitness << endl;
-
 							mejorMovimientoFitness = movimientoFitness;
 							mejorMovimientoTaskPos = taskPos;
 							mejorMovimientoDestinoMachineId = swapMachineId;
@@ -2423,10 +2448,27 @@ void Solution::doLocalSearch() {
 		solucionAceptada = (this->getFitness() / fitnessInicial)
 				>= PALS_UMBRAL_MEJORA;
 	}
+
+	if (TIMING) {
+		timespec ts_end;
+		clock_gettime(CLOCK_REALTIME, &ts_end);
+
+		double elapsed;
+		elapsed = ((ts_end.tv_sec-ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec-ts.tv_nsec) / 1000.0);
+		Solver::global_timing[TIMING_LS] += elapsed;
+	}
 }
 
 void Solution::doMutate() {
-	//if (DEBUG)	cout << endl << "[DEBUG] Solution::mutate" << endl;
+	//if (DEBUG) cout << endl << "[DEBUG] Solution::mutate" << endl;
+
+	timespec ts;
+
+	if (TIMING) {
+		clock_gettime(CLOCK_REALTIME, &ts);
+	}
+
+	Solver::global_calls[TIMING_MUTATE]++;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (rand01() <= MUT_MAQ) {
@@ -2471,8 +2513,7 @@ void Solution::doMutate() {
 				 _machines[machineId].addTask(bestTaskIdForMachine);
 				 }
 				 */
-			} else if (_machines[machineId].countTasks()
-					> _pbm.getMachineCoreCount(machineId)) {
+			} else if (_machines[machineId].countTasks() >= _pbm.getMachineCoreCount(machineId)) {
 				for (int selectedTaskPos = 0; selectedTaskPos
 						< _machines[machineId].countTasks(); selectedTaskPos++) {
 
@@ -2640,6 +2681,17 @@ void Solution::doMutate() {
 				}
 			}
 		}
+	}
+
+	//if (DEBUG) cout << endl << "[DEBUG] Solution::mutate <END>" << endl;
+
+	if (TIMING) {
+		timespec ts_end;
+		clock_gettime(CLOCK_REALTIME, &ts_end);
+
+		double elapsed;
+		elapsed = ((ts_end.tv_sec-ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec-ts.tv_nsec) / 1000.0);
+		Solver::global_timing[TIMING_MUTATE] += elapsed;
 	}
 }
 
