@@ -9,44 +9,69 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	using skeleton CHC;
-	char path[MAX_BUFFER] = "";
 
-	// ==================================================================
-	// Leo desde el configuration file
-	ifstream f(argv[1]); // Configuration file.
-	if(!f) show_message(10);
+	string skeleton_file;
+	string scenario_file;
+	string workload_file;
+	string priorities_file;
+	string solution_file;
+	string pesos_file;
+	string cantidad_tareas;
+	string cantidad_maquinas;
 
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo de configuración del skeleton.
-	string skeleton_file(path);
-	ifstream skeleton_stream(path);
+	if (argc > 1) {
+		// ==================================================================
+		// Leo desde el configuration file
+		char path[MAX_BUFFER] = "";
+
+		ifstream f(argv[1]); // Configuration file.
+		if(!f) show_message(10);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo de configuración del skeleton.
+		skeleton_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo con el scenario del problema a resolver.
+		scenario_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo con el workload del problema a resolver.
+		workload_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo con las prioridades del problema a resolver.
+		priorities_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo de salida.
+		solution_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Archivo con pesos para las islas.
+		pesos_file.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Cantidad de tareas.
+		cantidad_tareas.assign(path);
+
+		f.getline(path,MAX_BUFFER,'\n'); // Cantidad de máquinas.
+		cantidad_maquinas.assign(path);
+	} else {
+		skeleton_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg");
+		scenario_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP-3O-MPE/512x16/scenario.0");
+		workload_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP-3O-MPE/512x16/workload.0");
+		priorities_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP-3O-MPE/512x16/priorities.0");
+		solution_file.assign("test.sol");
+		pesos_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt");
+		cantidad_tareas.assign("512");
+		cantidad_maquinas.assign("16");
+	}
+
+	ifstream skeleton_stream(skeleton_file.data());
 	if(!skeleton_stream) show_message(11);
 
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo con el scenario del problema a resolver.
-	string scenario_file(path);
-	ifstream scenario_stream(path);
+	ifstream scenario_stream(scenario_file.data());
 	if(!scenario_stream) show_message(12);
 
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo con el workload del problema a resolver.
-	string workload_file(path);
-	ifstream workload_stream(path);
+	ifstream workload_stream(workload_file.data());
 	if(!workload_stream) show_message(12);
 
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo con las prioridades del problema a resolver.
-	string priorities_file(path);
-	ifstream priorities_stream(path);
+	ifstream priorities_stream(priorities_file.data());
 	if(!priorities_stream) show_message(12);
-
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo de salida.
-	string solution_file(path);
-
-	f.getline(path,MAX_BUFFER,'\n'); // Archivo con pesos para las islas.
-	string pesos_file(path);
-
-	f.getline(path,MAX_BUFFER,'\n'); // Cantidad de tareas.
-	string cantidad_tareas(path);
-
-	f.getline(path,MAX_BUFFER,'\n'); // Cantidad de máquinas.
-	string cantidad_maquinas(path);
 
 	// ==================================================================
 	// Inicializo el problema y el skeleton.

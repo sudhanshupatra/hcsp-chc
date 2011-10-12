@@ -4,7 +4,7 @@ ROOT_PATH="/home/santiago/eclipse/c-c++-workspace/AE"
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg"
 PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 ITERACIONES=1
-EXEC="mpirun -n 4 ${ROOT_PATH}/CHC/hcsp/MainLan"
+EXEC="mpirun -n 3 ${ROOT_PATH}/CHC/hcsp/MainLan"
 
 for scenario in {0..0}
 do
@@ -47,7 +47,7 @@ do
 			
 				OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 				
-				time(${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE})		
+				${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE}		
 			done
 		done
 	done
