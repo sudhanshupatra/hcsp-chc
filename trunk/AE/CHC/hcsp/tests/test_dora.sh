@@ -21,7 +21,7 @@ do
 			WORKLOAD_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16/workload.${workload}"
 			PRIORITIES_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/512x16/priorities.${priorities}"
 			
-			BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/${PROJECT_NAME}/data"
+			BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/${PROJECT_NAME}/s.${scenario}_w.${workload}_p${priorities}"
 			mkdir -p ${BASE_FOLDER}
 			
 			CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
