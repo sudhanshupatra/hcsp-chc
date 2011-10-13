@@ -62,22 +62,22 @@ int main(int argc, char** argv) {
 	}
 
 	cout << "[skeleton] " << skeleton_file << endl;
+	cout << "[scenario] " << scenario_file << endl;
+	cout << "[workload] " << workload_file << endl;
+	cout << "[priorities] " << priorities_file << endl;
+	cout << "[pesos] " << pesos_file << endl;
+
 	ifstream skeleton_stream(skeleton_file.data());
 	if(!skeleton_stream) show_message(11);
 
-	cout << "[scenario] " << scenario_file << endl;
 	ifstream scenario_stream(scenario_file.data());
 	if(!scenario_stream) show_message(12);
 
-	cout << "[workload] " << workload_file << endl;
 	ifstream workload_stream(workload_file.data());
 	if(!workload_stream) show_message(12);
 
-	cout << "[priorities] " << priorities_file << endl;
 	ifstream priorities_stream(priorities_file.data());
 	if(!priorities_stream) show_message(12);
-
-	cout << "[pesos] " << pesos_file << endl;
 
 	// ==================================================================
 	// Inicializo el problema y el skeleton.
@@ -142,6 +142,7 @@ int main(int argc, char** argv) {
 
 			fexit << solver.best_solution_trial().getMakespan()
 					<< " " << solver.best_solution_trial().getWRR()
+					<< " " << solver.best_solution_trial().getEnergy(solver.best_solution_trial().getMakespan())
 					<< " " << solver.pid() << endl;
 
 			for (int i = 0; i < solver.population().parents().size(); i++) {
@@ -195,7 +196,6 @@ int main(int argc, char** argv) {
 	}
 	else {
 		// Si es la isla master...
-
 		cout << "[INFO] Exec: " << argv[0] << endl;
 		cout << "[INFO] Configuration file: " << argv[1] << endl;
 		cout << "[CONFIG] Skeleton file: " << skeleton_file << endl;
