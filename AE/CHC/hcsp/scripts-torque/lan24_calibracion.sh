@@ -84,7 +84,7 @@ do
 				WORKLOAD_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/instances/workload.${workload}"
 				PRIORITIES_FILE="${ROOT_PATH}/ProblemInstances/HCSP-3O-MPE/instances/priorities.${priorities}"
 				
-				BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/calibracion/${PROJECT_NAME}/${data[i]}"
+				BASE_FOLDER="${ROOT_PATH}/CHC/hcsp/ejecuciones/resultados/calibracion/${PROJECT_NAME}/s.${scenario}_w.${workload}_p${priorities}"
 				mkdir -p ${BASE_FOLDER}
 				
 				CONFIG_FILE="${BASE_FOLDER}/config.cfg"
