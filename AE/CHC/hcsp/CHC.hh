@@ -139,7 +139,7 @@ private:
 	const Problem& _pbm;
 
 	vector<int> _tasks;
-	map<int, void*> _assignedTasks;
+	map<int, int> _assignedTasks;
 
 	int _machineId;
 
@@ -165,6 +165,7 @@ public:
 	void emptyTasks();
 
 	bool hasTask(const int taskId) const;
+	int getTaskPosition(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
