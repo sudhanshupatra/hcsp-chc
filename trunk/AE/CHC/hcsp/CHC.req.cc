@@ -291,7 +291,7 @@ SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 		taskId = machine.getTask(taskPos);
 
 		_tasks.push_back(taskId);
-		_assignedTasks[taskId] = NULL;
+		_assignedTasks[taskId] = taskPos;
 	}
 
 	return *this;
@@ -305,7 +305,7 @@ void SolutionMachine::addTask(const int taskId) {
 	_dirty = true;
 
 	_tasks.push_back(taskId);
-	_assignedTasks[taskId] = NULL;
+	_assignedTasks[taskId] = _tasks.size() - 1;
 }
 
 void SolutionMachine::setTask(const int taskId, const int taskPos) {
@@ -316,9 +316,9 @@ void SolutionMachine::setTask(const int taskId, const int taskPos) {
 
 	int removedTaskId = _tasks[taskPos];
 	_assignedTasks.erase(removedTaskId);
-	_assignedTasks[taskId] = NULL;
 
 	_tasks.at(taskPos) = taskId;
+	_assignedTasks[taskId] = taskPos;
 }
 
 void SolutionMachine::swapTasks(const int taskPos1, const int taskPos2) {
@@ -334,7 +334,10 @@ void SolutionMachine::swapTasks(const int taskPos1, const int taskPos2) {
 	int taskId2 = _tasks[taskPos2];
 
 	_tasks[taskPos1] = taskId2;
+	_assignedTasks[taskId2] = taskPos1;
+
 	_tasks[taskPos2] = taskId1;
+	_assignedTasks[taskId1] = taskPos2;
 }
 
 int SolutionMachine::getTask(const int taskPos) const {
@@ -351,8 +354,12 @@ bool SolutionMachine::hasTask(const int taskId) const {
 	return _assignedTasks.count(taskId) == 1;
 }
 
+int SolutionMachine::getTaskPosition(const int taskId) const {
+	return _assignedTasks.find(taskId)->second;
+}
+
 void SolutionMachine::show() const {
-	for (map<int, void*>::const_iterator it = _assignedTasks.begin(); it
+	for (map<int, int>::const_iterator it = _assignedTasks.begin(); it
 			!= _assignedTasks.end(); it++) {
 		cout << (*it).first;
 		cout << endl;
@@ -376,7 +383,11 @@ void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	_dirty = true;
 
 	_tasks.insert(_tasks.begin() + taskPos, taskId);
-	_assignedTasks[taskId] = NULL;
+	_assignedTasks[taskId] = taskPos;
+
+	for (int i = taskPos+1; i < _tasks.size(); i++) {
+		_assignedTasks[_tasks[i]] = i;
+	}
 }
 
 void SolutionMachine::removeTask(const int taskPos) {
@@ -386,9 +397,13 @@ void SolutionMachine::removeTask(const int taskPos) {
 	_dirty = true;
 
 	int removedId = _tasks[taskPos];
-	_assignedTasks.erase(removedId);
 
+	_assignedTasks.erase(removedId);
 	_tasks.erase(_tasks.begin() + taskPos);
+
+	for (int i = taskPos; i < _tasks.size(); i++) {
+		_assignedTasks[_tasks[i]] = i;
+	}
 }
 
 void SolutionMachine::emptyTasks() {
@@ -2256,26 +2271,22 @@ int Solution::distanceTo(const Solution& solution) const {
 
 bool Solution::findTask(const int taskId, int& foundMachineId,
 		int& foundTaskPos) {
+
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask" << endl;
 	foundMachineId = -1;
 	foundTaskPos = -1;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (_machines[machineId].hasTask(taskId)) {
-			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				if (_machines[machineId].getTask(taskPos) == taskId) {
-					foundMachineId = machineId;
-					foundTaskPos = taskPos;
+			foundMachineId = machineId;
+			foundTaskPos = _machines[machineId].getTaskPosition(taskId);
 
-					return true;
-				}
-			}
-
-			assert(false);
+			return true;
 		}
 	}
 
 	assert(false);
+	//return false;
 }
 
 double Solution::getMachineFitness(int machineId) {
