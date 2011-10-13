@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/resultados/calibracion/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/resultados/calibracion/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/resultados/calibracion/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/resultados/calibracion/
 
 #PBS -V
 
@@ -59,14 +59,14 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/CHC/hcsp/MainLan"
 ROOT_PATH="/home/siturria/AE/trunk/AE"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/CHC/hcsp/MainLan"
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/config.cfg"
 ITERACIONES=15
 
 for peso in {0..2}
 do
-	PROJECT_NAME="peso.${peso}"
+	PROJECT_NAME="lan24.peso.${peso}"
 	PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/pesos.${peso}"
 
 	for scenario in {0,5,10}
