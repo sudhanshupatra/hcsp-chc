@@ -61,17 +61,23 @@ int main(int argc, char** argv) {
 		cantidad_maquinas.assign("16");
 	}
 
+	cout << "[skeleton] " << skeleton_file << endl;
 	ifstream skeleton_stream(skeleton_file.data());
 	if(!skeleton_stream) show_message(11);
 
+	cout << "[scenario] " << scenario_file << endl;
 	ifstream scenario_stream(scenario_file.data());
 	if(!scenario_stream) show_message(12);
 
+	cout << "[workload] " << workload_file << endl;
 	ifstream workload_stream(workload_file.data());
 	if(!workload_stream) show_message(12);
 
+	cout << "[priorities] " << priorities_file << endl;
 	ifstream priorities_stream(priorities_file.data());
 	if(!priorities_stream) show_message(12);
+
+	cout << "[pesos] " << pesos_file << endl;
 
 	// ==================================================================
 	// Inicializo el problema y el skeleton.

@@ -4,7 +4,7 @@ ROOT_PATH="/home/siturria/AE/trunk/AE"
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg"
 PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 ITERACIONES=1
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 2 ${ROOT_PATH}/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 8 ${ROOT_PATH}/CHC/hcsp/MainLan"
 
 for scenario in {0..0}
 do
