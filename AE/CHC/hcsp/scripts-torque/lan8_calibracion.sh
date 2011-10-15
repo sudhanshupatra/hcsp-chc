@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan24_cal
+#PBS -N ae_lan8_cal
 
 # Requerimientos
-#PBS -l nodes=1:class2:ppn=24,walltime=20:00:00
+#PBS -l nodes=1:ppn=8,walltime=20:00:00
 
 # Cola
 #PBS -q publica
@@ -62,16 +62,16 @@ echo
 ROOT_PATH="/home/siturria/AE/trunk/AE"
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/CHC/hcsp/MainLan"
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/config.cfg"
-ITERACIONES=15
+ITERACIONES=10
 
 for peso in {2..3}
 do
-	PROJECT_NAME="lan24.peso.${peso}"
+	PROJECT_NAME="lan8.peso.${peso}"
 	PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/pesos.${peso}"
 
-	for scenario in {0,5,10}
+	for scenario in {0,5}
 	do
-		for workload in {0,10,20}
+		for workload in {0,10}
 		do
 			for priorities in {0..0}
 			do
