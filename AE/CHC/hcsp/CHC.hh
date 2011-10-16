@@ -34,7 +34,7 @@ skeleton CHC {
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
 // mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
-#define CROSSOVER_DISTANCE 4
+#define CROSSOVER_DISTANCE 64
 
 // Propiedades del PALS.
 #define PALS_MAQ 5
@@ -42,6 +42,7 @@ skeleton CHC {
 #define PALS_UMBRAL_MEJORA 1.0
 #define PALS_TOP_M 16 //8
 #define PALS_TOP_T 512 //256
+
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
 

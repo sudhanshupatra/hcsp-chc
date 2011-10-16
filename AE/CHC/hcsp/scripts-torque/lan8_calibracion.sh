@@ -64,14 +64,14 @@ EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/
 MALLBA_CONFIG="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/config.cfg"
 ITERACIONES=10
 
-for peso in {2..3}
+for peso in {3}
 do
 	PROJECT_NAME="lan8.peso.${peso}"
 	PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_calibracion/pesos.${peso}"
 
-	for scenario in {0,5}
+	for scenario in {0}
 	do
-		for workload in {0,10}
+		for workload in {0}
 		do
 			for priorities in {0..0}
 			do
