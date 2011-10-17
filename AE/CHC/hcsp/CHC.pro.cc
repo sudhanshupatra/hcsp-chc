@@ -876,10 +876,14 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 				sols[i]->doMutate();
 			}
 		}
+
+		if (rand01() <= 0.25) {
+			sols[i]->doLocalSearch();
+		}
 	}
 
-	int individual = rand_int(0, sols.size() - 1);
-	sols[individual]->doLocalSearch();
+	//int individual = rand_int(0, sols.size() - 1);
+	//sols[individual]->doLocalSearch();
 
 	// if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge <END>" << endl;
 }
