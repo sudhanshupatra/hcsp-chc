@@ -2412,8 +2412,8 @@ void Solution::doLocalSearch() {
 				//				if (DEBUG) cout << endl << "[DEBUG] En el problema hay " << this->pbm().taskCount()
 				//						<< " tareas, pruebo desde la " << startSwapTaskOffset << endl;
 
-				for (int swapTaskOffset = startSwapTaskOffset; countSwapTaskOffset
-						> 0; swapTaskOffset++) {
+				for (int swapTaskOffset = startSwapTaskOffset; (countSwapTaskOffset
+						> 0) && (mejorMovimientoTaskPos == -1); swapTaskOffset++) {
 
 					assert(swapTaskOffset < (2*this->pbm().getTaskCount()));
 
