@@ -877,7 +877,7 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			}
 		}
 
-		if (rand01() <= 0.25) {
+		if (rand01() <= 0.5) {
 			sols[i]->doLocalSearch();
 		}
 	}
