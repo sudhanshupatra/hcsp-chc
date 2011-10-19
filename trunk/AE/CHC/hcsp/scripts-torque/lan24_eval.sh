@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan24_e12
+#PBS -N ae_lan24_eval
 
 # Requerimientos
-#PBS -l nodes=1:class2:ppn=24,walltime=45:00:00
+#PBS -l nodes=1:class2:ppn=24,walltime=36:00:00
 
 # Cola
 #PBS -q publica
@@ -66,12 +66,12 @@ ITERACIONES=20
 
 for peso in {3..3}
 do
-	PROJECT_NAME="lan24.e12"
+	PROJECT_NAME="lan24.eval"
 	PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_evaluacion/pesos.${peso}"
 
-	for scenario in {0..19}
+	for scenario in {0,3,1,8,2,4}
 	do
-		for workload in {33..35}
+		for workload in {0,1,10,11,20,21,31,32}
 		do
 			for priorities in {0..0}
 			do
