@@ -685,67 +685,30 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
-				//bool modificado;
 				int taskPosSol1, machineIdSol1;
 				int taskPosSol2, machineIdSol2;
-
-				//modificado = false;
 
 				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
 				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
 
 				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
 						!= taskPosSol2)) {
-					/*if (rand01() <= 0.5) {
-					 // Intento mejorar metrica de makespan en la solución
-					 if (machineIdSol1 != machineIdSol2) {
-					 if (sol1.getMachines()[machineIdSol1].getComputeTime()
-					 < sol2.getMachines()[machineIdSol2].getComputeTime()) {
-					 // Sol1 es mejor que Sol2
-					 sol2.getMachines()[machineIdSol2].removeTask(
-					 taskPosSol2);
-					 sol2.getMachines()[machineIdSol2].safeInsertTask(
-					 taskId, taskPosSol1);
-					 } else {
-					 sol1.getMachines()[machineIdSol1].removeTask(
-					 taskPosSol1);
-					 sol1.getMachines()[machineIdSol2].safeInsertTask(
-					 taskId, taskPosSol2);
-					 }
 
-					 modificado = true;
-					 }
-					 }*/
-
-					/*
-					 if ((!modificado) && (rand01() <= 0.5)) {
-					 // Intento mejorar metrica de wrr en la solución
-					 if (sol1.getMachines()[machineIdSol1].getTaskWRR(
-					 taskPosSol1)
-					 < sol2.getMachines()[machineIdSol2].getTaskWRR(
-					 taskPosSol2)) {
-					 // Sol1 es mejor que Sol2
-					 sol2.getMachines()[machineIdSol2].removeTask(
-					 taskPosSol2);
-					 sol2.getMachines()[machineIdSol1].safeInsertTask(
-					 taskId, taskPosSol1);
-					 } else {
-					 sol1.getMachines()[machineIdSol1].removeTask(
-					 taskPosSol1);
-					 sol1.getMachines()[machineIdSol2].safeInsertTask(
-					 taskId, taskPosSol2);
-					 }
-
-					 modificado = true;
-					 }
-					 */
-
-					//if (!modificado) {
 					if (rand01() <= 0.5) {
 						sol2.getMachines()[machineIdSol2].removeTask(
 								taskPosSol2);
 						sol2.getMachines()[machineIdSol1].safeInsertTask(
 								taskId, taskPosSol1);
+
+						//						sol1.getMachines()[machineIdSol1].removeTask(
+						//								taskPosSol1);
+						//						sol1.getMachines()[machineIdSol2].safeInsertTask(
+						//								taskId, taskPosSol2);
+					} else {
+						//						sol2.getMachines()[machineIdSol2].removeTask(
+						//								taskPosSol2);
+						//						sol2.getMachines()[machineIdSol1].safeInsertTask(
+						//								taskId, taskPosSol1);
 
 						sol1.getMachines()[machineIdSol1].removeTask(
 								taskPosSol1);
