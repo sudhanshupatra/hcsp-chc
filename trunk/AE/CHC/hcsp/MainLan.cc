@@ -223,27 +223,27 @@ int main(int argc, char** argv) {
 		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
 		cout << "Energy (reference): " << Solution::getEnergy_reference() << endl;
 
-		// Busco la solución "mínima" (¿?)
-		// Revisar esto...
-		double weight_mks = 0.0, weight_wrr = 0.0, weight_energy = 0.0;
-
-		double min_fitness = INFINITY;
-		for (unsigned int i = 0; i < pesos.size() - 1; i=i+2) {
-			double aux_fitness;
-			aux_fitness =
-					pesos[i] * (Solution::getMakespan_reference() + solver.global_best_solution().getMakespan()) / Solution::getMakespan_reference()
-					+ pesos[i+1] * (Solution::getWRR_reference() + solver.global_best_solution().getWRR()) / Solution::getWRR_reference()
-					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan())) / Solution::getEnergy_reference();
-
-			if (aux_fitness < min_fitness) {
-				min_fitness = aux_fitness;
-				weight_mks = pesos[i];
-				weight_wrr = pesos[i+1];
-				weight_energy = pesos[i+2];
-			}
-		}
-
-		cout << "Fitness: " << min_fitness << " (" << weight_mks << ", " << weight_wrr << ", " << weight_energy << ")" << endl;
+//		// Busco la solución "mínima" (¿?)
+//		// Revisar esto...
+//		double weight_mks = 0.0, weight_wrr = 0.0, weight_energy = 0.0;
+//
+//		double min_fitness = INFINITY;
+//		for (unsigned int i = 0; i < pesos.size() - 1; i=i+2) {
+//			double aux_fitness;
+//			aux_fitness =
+//					pesos[i] * (Solution::getMakespan_reference() + solver.global_best_solution().getMakespan()) / Solution::getMakespan_reference()
+//					+ pesos[i+1] * (Solution::getWRR_reference() + solver.global_best_solution().getWRR()) / Solution::getWRR_reference()
+//					+ pesos[i+2] * (Solution::getEnergy_reference() + solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan())) / Solution::getEnergy_reference();
+//
+//			if (aux_fitness < min_fitness) {
+//				min_fitness = aux_fitness;
+//				weight_mks = pesos[i];
+//				weight_wrr = pesos[i+1];
+//				weight_energy = pesos[i+2];
+//			}
+//		}
+//
+//		cout << "Fitness: " << min_fitness << " (" << weight_mks << ", " << weight_wrr << ", " << weight_energy << ")" << endl;
 
 		ofstream fexit(solution_file.data());
 		if(!fexit) show_message(13);
