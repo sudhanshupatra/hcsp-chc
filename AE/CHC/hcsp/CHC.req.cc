@@ -385,7 +385,7 @@ void SolutionMachine::insertTask(const int taskId, const int taskPos) {
 	_tasks.insert(_tasks.begin() + taskPos, taskId);
 	_assignedTasks[taskId] = taskPos;
 
-	for (int i = taskPos+1; i < _tasks.size(); i++) {
+	for (int i = taskPos + 1; i < _tasks.size(); i++) {
 		_assignedTasks[_tasks[i]] = i;
 	}
 }
@@ -1673,8 +1673,9 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		//// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
 		//// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
 
-		// initializeStaticMCT();
-		initializeMinMin();
+		//initializeStaticMCT();
+		initializeRandomMCT();
+		//initializeMinMin();
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = getWRR();
@@ -1779,64 +1780,64 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 							cout << ", WRR: " << getWRR();
 							cout << ", Makespan: " << getMakespan() << endl;
 						}
-						/*} else if (offset_heuristica_actual == 1) {
-						 initializeMinWRR0();
-						 if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "MinMinWRR0: " << fitness();
-						 cout << ", WRR: "
-						 << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 }
-						 } else if (offset_heuristica_actual == 2) {
-						 // Inicialización usando otra heurística "pesada" diferente: Sufferage.
+					} else if (offset_heuristica_actual == 1) {
+						initializeMinWRR0();
+						if (DEBUG) {
+							cout << endl << "[proc " << proceso_actual << "] ";
+							cout << "MinMinWRR0: " << fitness();
+							cout << ", WRR: "
+									<< accumulatedWeightedResponseRatio();
+							cout << ", Makespan: " << makespan() << endl;
+						}
+					} else if (offset_heuristica_actual == 2) {
+						// Inicialización usando otra heurística "pesada" diferente: Sufferage.
 
-						 initializeMinWRR5();
-						 if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "MinMinWRR5: " << fitness();
-						 cout << ", WRR: "
-						 << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 }
-						 } else if (offset_heuristica_actual == 3) {
-						 initializeMinWRR60();
-						 if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "MinMinWRR60: " << fitness();
-						 cout << ", WRR: "
-						 << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 }
-						 } else if (offset_heuristica_actual == 4) {
-						 initializeMinWRR61();
-						 if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "MinMinWRR61: " << fitness();
-						 cout << ", WRR: "
-						 << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 }
-						 } else if (offset_heuristica_actual == 5) {
-						 initializeMinWRR62();
-						 if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "MinMinWRR62: " << fitness();
-						 cout << ", WRR: "
-						 << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 }
-						 } else if (offset_heuristica_actual == 6) {
-						 // Inicialización usando otra heurística "pesada" diferente: Sufferage.
-						 // Utilizo Sufferage para un único elemento de la población inicial.
+						initializeMinWRR5();
+						if (DEBUG) {
+							cout << endl << "[proc " << proceso_actual << "] ";
+							cout << "MinMinWRR5: " << fitness();
+							cout << ", WRR: "
+									<< accumulatedWeightedResponseRatio();
+							cout << ", Makespan: " << makespan() << endl;
+						}
+					} else if (offset_heuristica_actual == 3) {
+						initializeMinWRR60();
+						if (DEBUG) {
+							cout << endl << "[proc " << proceso_actual << "] ";
+							cout << "MinMinWRR60: " << fitness();
+							cout << ", WRR: "
+									<< accumulatedWeightedResponseRatio();
+							cout << ", Makespan: " << makespan() << endl;
+						}
+					} else if (offset_heuristica_actual == 4) {
+						initializeMinWRR61();
+						if (DEBUG) {
+							cout << endl << "[proc " << proceso_actual << "] ";
+							cout << "MinMinWRR61: " << fitness();
+							cout << ", WRR: "
+									<< accumulatedWeightedResponseRatio();
+							cout << ", Makespan: " << makespan() << endl;
+						}
+					} else if (offset_heuristica_actual == 5) {
+						initializeMinWRR62();
+						if (DEBUG) {
+							cout << endl << "[proc " << proceso_actual << "] ";
+							cout << "MinMinWRR62: " << fitness();
+							cout << ", WRR: "
+									<< accumulatedWeightedResponseRatio();
+							cout << ", Makespan: " << makespan() << endl;
+						}
+					} else if (offset_heuristica_actual == 6) {
+						// Inicialización usando otra heurística "pesada" diferente: Sufferage.
+						// Utilizo Sufferage para un único elemento de la población inicial.
 
-						 initializeSufferage();
-						 //						if (DEBUG) {
-						 cout << endl << "[proc " << proceso_actual << "] ";
-						 cout << "Sufferage fitness: " << fitness();
-						 cout << ", WRR: " << accumulatedWeightedResponseRatio();
-						 cout << ", Makespan: " << makespan() << endl;
-						 //						}*/
+						initializeSufferage();
+						//						if (DEBUG) {
+						cout << endl << "[proc " << proceso_actual << "] ";
+						cout << "Sufferage fitness: " << fitness();
+						cout << ", WRR: " << accumulatedWeightedResponseRatio();
+						cout << ", Makespan: " << makespan() << endl;
+						//						}
 					} else {
 						if (RANDOM_INIT > rand01()) {
 							// Inicialización aleatoria
