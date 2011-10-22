@@ -66,7 +66,7 @@ ITERACIONES=20
 
 for peso in {3..4}
 do
-	PROJECT_NAME="lan24.e.382"
+	PROJECT_NAME="lan24.e${peso}.382"
 	PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_evaluacion/pesos.${peso}"
 
 	for scenario in {0..0} #{0,3,1,8,2,4}
