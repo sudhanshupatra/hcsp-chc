@@ -694,15 +694,13 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
 						!= taskPosSol2)) {
 
-					sol2.getMachines()[machineIdSol2].removeTask(
-							taskPosSol2);
-					sol2.getMachines()[machineIdSol1].safeInsertTask(
-							taskId, taskPosSol1);
-
-					sol1.getMachines()[machineIdSol1].removeTask(
+					sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
+					sol2.getMachines()[machineIdSol1].safeInsertTask(taskId,
 							taskPosSol1);
-					sol1.getMachines()[machineIdSol2].safeInsertTask(
-							taskId, taskPosSol2);
+
+					sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
+					sol1.getMachines()[machineIdSol2].safeInsertTask(taskId,
+							taskPosSol2);
 				}
 			}
 		}
@@ -2989,19 +2987,22 @@ void Solver_Lan::run(const unsigned long int nb_generations) {
 
 		/* MUESTRO LOS TIEMPOS RECOLECTADOS */
 		if (TIMING) {
-			cout << "[TIMING_INIT]      (1)"
-					<< Solver::global_timing[TIMING_INIT] << endl;
-			cout << "[TIMING_CROSS]     ("
-					<< Solver::global_calls[TIMING_CROSS] << ")"
-					<< Solver::global_timing[TIMING_CROSS] << endl;
-			cout << "[TIMING_MUTATE]    ("
-					<< Solver::global_calls[TIMING_MUTATE] << ")"
-					<< Solver::global_timing[TIMING_MUTATE] << endl;
-			cout << "[TIMING_LS]        (" << Solver::global_calls[TIMING_LS]
-					<< ")" << Solver::global_timing[TIMING_LS] << endl;
-			cout << "[TIMING_MIGRATION] ("
-					<< Solver::global_calls[TIMING_MIGRATION] << ")"
-					<< Solver::global_timing[TIMING_MIGRATION] << endl;
+			if (mypid == 1) {
+				cout << "[TIMING_INIT]      (1)"
+						<< Solver::global_timing[TIMING_INIT] << endl;
+				cout << "[TIMING_CROSS]     ("
+						<< Solver::global_calls[TIMING_CROSS] << ")"
+						<< Solver::global_timing[TIMING_CROSS] << endl;
+				cout << "[TIMING_MUTATE]    ("
+						<< Solver::global_calls[TIMING_MUTATE] << ")"
+						<< Solver::global_timing[TIMING_MUTATE] << endl;
+				cout << "[TIMING_LS]        ("
+						<< Solver::global_calls[TIMING_LS] << ")"
+						<< Solver::global_timing[TIMING_LS] << endl;
+				cout << "[TIMING_MIGRATION] ("
+						<< Solver::global_calls[TIMING_MIGRATION] << ")"
+						<< Solver::global_timing[TIMING_MIGRATION] << endl;
+			}
 		}
 	} else {
 		check_for_refresh_global_state();
