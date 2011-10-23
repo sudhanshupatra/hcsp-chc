@@ -2317,25 +2317,15 @@ void Solution::doLocalSearch() {
 
 	Solver::global_calls[TIMING_LS]++;
 
-	vector<double> fitnessByMachine;
-
-	for (unsigned int machineId = 0; machineId < this->machines().size(); machineId++) {
-		fitnessByMachine.push_back(getMachineFitness(machineId));
-	}
-
-	RouletteWheel roulette(fitnessByMachine, true);
-
 	vector<int> maquinasSeleccionadas;
 	for (int i = 0; i < PALS_MAQ; i++) {
-		maquinasSeleccionadas.push_back(roulette.drawOneByIndex());
+		maquinasSeleccionadas.push_back(rand_int(0, this->machines().size()-1));
 	}
 
-	double fitnessInicial = this->getFitness();
+	double fitnessActual = this->getFitness();
 	bool solucionAceptada = false;
 
-	for (unsigned int machinePos = 0; (machinePos
-			< maquinasSeleccionadas.size()) && !solucionAceptada; machinePos++) {
-
+	for (unsigned int machinePos = 0; machinePos < maquinasSeleccionadas.size(); machinePos++) {
 		int machineId;
 		machineId = maquinasSeleccionadas[machinePos];
 
@@ -2349,7 +2339,7 @@ void Solution::doLocalSearch() {
 			double mejorMovimientoFitness;
 			int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos,
 					mejorMovimientoDestinoMachineId;
-			mejorMovimientoFitness = fitnessInicial;
+			mejorMovimientoFitness = fitnessActual;
 			mejorMovimientoTaskPos = -1;
 			mejorMovimientoDestinoTaskPos = -1;
 			mejorMovimientoDestinoMachineId = -1;
@@ -2452,7 +2442,7 @@ void Solution::doLocalSearch() {
 				}
 			}
 
-			if (mejorMovimientoFitness < fitnessInicial) {
+			if (mejorMovimientoFitness < fitnessActual) {
 				//				if (DEBUG) cout << endl << "[DEBUG] Se mejoró la solución!" << endl;
 				this->swapTasks(machineId, mejorMovimientoTaskPos,
 						mejorMovimientoDestinoMachineId,
@@ -2461,8 +2451,10 @@ void Solution::doLocalSearch() {
 			}
 		}
 
-		solucionAceptada = (this->getFitness() / fitnessInicial)
+		solucionAceptada = (this->getFitness() / fitnessActual)
 				>= PALS_UMBRAL_MEJORA;
+
+		fitnessActual = this->getFitness();
 	}
 
 	if (TIMING) {
