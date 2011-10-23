@@ -7,7 +7,7 @@
 #PBS -l nodes=1:class2:ppn=24,walltime=08:00:00
 
 # Cola
-#PBS -q publica
+#PBS -q medium_jobs
 
 # Working dir
 #PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/resultados/evaluacion
