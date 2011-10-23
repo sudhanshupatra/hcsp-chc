@@ -26,8 +26,8 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.7
-#define MUT_TASK 0.7
+#define MUT_MAQ 1.0
+#define MUT_TASK 1.0
 
 // CROSS
 #define CROSS_TASK 0.5 // Uniforme
