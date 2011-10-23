@@ -4,7 +4,7 @@
 #PBS -N ae.8_e.396
 
 # Requerimientos
-#PBS -l nodes=1:ppn=8,walltime=40:00:00
+#PBS -l nodes=1:ppn=8,walltime=01:00:00
 
 # Cola
 #PBS -q publica
@@ -74,7 +74,7 @@ do
 	
 		for scenario in {2..2} #{0,3,1,8,2,4}
 		do
-			for workload in {31..2} #{0,1,10,11,20,21,31,32}
+			for workload in {31..31} #{0,1,10,11,20,21,31,32}
 			do
 				for priorities in {0..0}
 				do
