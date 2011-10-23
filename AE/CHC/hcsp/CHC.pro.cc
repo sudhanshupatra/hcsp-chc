@@ -469,11 +469,11 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	/*if (rand01() < 0.5) {
-	 int individual = rand_int(0, _parents.size() - 1);
-	 cout << "Busqueda local en individuo " << individual << endl;
-	 _parents[individual]->doLocalSearch();
-	 }*/
+	if (rand01() < 0.5) {
+		int individual = rand_int(0, _parents.size() - 1);
+//		cout << "Busqueda local en individuo " << individual << endl;
+		_parents[individual]->doLocalSearch();
+	}
 
 	evaluate_parents(); // calculates fitness of new individuals
 }
@@ -820,15 +820,15 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		if (i != bestSolutionIndex) {
-			if (rand01() <= mutationProbability) {
-				sols[i]->doMutate();
-			}
+		//		if (i != bestSolutionIndex) {
+		if (rand01() <= mutationProbability) {
+			sols[i]->doMutate();
 		}
+		//		}
 
-		if (rand01() <= 0.5) {
-			sols[i]->doLocalSearch();
-		}
+		//		if (rand01() <= 0.5) {
+		//			sols[i]->doLocalSearch();
+		//		}
 	}
 
 	//int individual = rand_int(0, sols.size() - 1);
