@@ -694,27 +694,15 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
 						!= taskPosSol2)) {
 
-					if (rand01() <= 0.5) {
-						sol2.getMachines()[machineIdSol2].removeTask(
-								taskPosSol2);
-						sol2.getMachines()[machineIdSol1].safeInsertTask(
-								taskId, taskPosSol1);
+					sol2.getMachines()[machineIdSol2].removeTask(
+							taskPosSol2);
+					sol2.getMachines()[machineIdSol1].safeInsertTask(
+							taskId, taskPosSol1);
 
-						//						sol1.getMachines()[machineIdSol1].removeTask(
-						//								taskPosSol1);
-						//						sol1.getMachines()[machineIdSol2].safeInsertTask(
-						//								taskId, taskPosSol2);
-					} else {
-						//						sol2.getMachines()[machineIdSol2].removeTask(
-						//								taskPosSol2);
-						//						sol2.getMachines()[machineIdSol1].safeInsertTask(
-						//								taskId, taskPosSol1);
-
-						sol1.getMachines()[machineIdSol1].removeTask(
-								taskPosSol1);
-						sol1.getMachines()[machineIdSol2].safeInsertTask(
-								taskId, taskPosSol2);
-					}
+					sol1.getMachines()[machineIdSol1].removeTask(
+							taskPosSol1);
+					sol1.getMachines()[machineIdSol2].safeInsertTask(
+							taskId, taskPosSol2);
 				}
 			}
 		}
