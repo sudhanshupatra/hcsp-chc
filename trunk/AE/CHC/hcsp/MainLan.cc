@@ -61,11 +61,11 @@ int main(int argc, char** argv) {
 		cantidad_maquinas.assign("16");
 	}
 
-	cout << "[skeleton] " << skeleton_file << endl;
-	cout << "[scenario] " << scenario_file << endl;
-	cout << "[workload] " << workload_file << endl;
-	cout << "[priorities] " << priorities_file << endl;
-	cout << "[pesos] " << pesos_file << endl;
+//	cout << "[skeleton] " << skeleton_file << endl;
+//	cout << "[scenario] " << scenario_file << endl;
+//	cout << "[workload] " << workload_file << endl;
+//	cout << "[priorities] " << priorities_file << endl;
+//	cout << "[pesos] " << pesos_file << endl;
 
 	ifstream skeleton_stream(skeleton_file.data());
 	if(!skeleton_stream) show_message(11);
@@ -216,12 +216,12 @@ int main(int argc, char** argv) {
 		solver.statistics();
 		solver.show_state();
 
-		cout << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
-		cout << "WRR: " << solver.global_best_solution().getWRR() << endl;
-		cout << "Energy: " << solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan()) << endl;
-		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
-		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
-		cout << "Energy (reference): " << Solution::getEnergy_reference() << endl;
+//		cout << "Makespan: " << solver.global_best_solution().getMakespan() << endl;
+//		cout << "WRR: " << solver.global_best_solution().getWRR() << endl;
+//		cout << "Energy: " << solver.global_best_solution().getEnergy(solver.global_best_solution().getMakespan()) << endl;
+//		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
+//		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
+//		cout << "Energy (reference): " << Solution::getEnergy_reference() << endl;
 
 //		// Busco la solución "mínima" (¿?)
 //		// Revisar esto...

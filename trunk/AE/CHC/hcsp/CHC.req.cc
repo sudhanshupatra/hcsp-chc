@@ -1684,7 +1684,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		Solution::_energy_reference = getEnergy(currentMakespan);
 
 		if (mypid == 0) {
-			cout << ">> Solución MinMin:" << endl;
+			// cout << ">> Solución MinMin:" << endl;
 			// this->show(cout);
 		} else {
 			if (DEBUG) {
@@ -1774,6 +1774,13 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 						// Utilizo MIN-MIN para un único elemento de la población inicial.
 
 						initializeMinMin();
+
+						if (proceso_actual == 1) {
+							cout << endl << "Min-Min<" << getFitness() << ">("
+								<< getWRR() << "|" << getMakespan() << "|"
+								<< getEnergy(getMakespan()) << ")" << endl;
+						}
+
 						//						if (DEBUG) {
 						//							cout << endl << "[proc " << proceso_actual << "] ";
 						//							cout << "Min-Min fitness: " << getFitness();
@@ -2319,7 +2326,8 @@ void Solution::doLocalSearch() {
 
 	vector<int> maquinasSeleccionadas;
 	for (int i = 0; i < PALS_MAQ; i++) {
-		maquinasSeleccionadas.push_back(rand_int(0, this->machines().size()-1));
+		maquinasSeleccionadas.push_back(
+				rand_int(0, this->machines().size() - 1));
 	}
 
 	double fitnessActual = this->getFitness();
