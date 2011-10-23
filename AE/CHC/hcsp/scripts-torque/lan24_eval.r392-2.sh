@@ -69,7 +69,7 @@ do
 
 	for peso in {3..4}
 	do
-		PROJECT_NAME="lan24.e${peso}.392.2"
+		PROJECT_NAME="lan24_c.${config}_p.${peso}_392.2"
 		PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_evaluacion/pesos.${peso}"
 	
 		for scenario in {0,2} #{0,3,1,8,2,4}
