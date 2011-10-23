@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae.8_e.392
+#PBS -N ae.8_e.396
 
 # Requerimientos
 #PBS -l nodes=1:ppn=8,walltime=40:00:00
@@ -60,7 +60,7 @@ echo $NPROCS
 echo
 
 ROOT_PATH="/home/siturria/AE/trunk/AE"
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/CHC/hcsp/MainLan.r392"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs ${ROOT_PATH}/CHC/hcsp/MainLan.r396"
 ITERACIONES=15
 
 for config in {3..3}
@@ -69,7 +69,7 @@ do
 
 	for peso in {3..3}
 	do
-		PROJECT_NAME="lan8_c.${config}_p.${peso}_392"
+		PROJECT_NAME="lan8_c.${config}_p.${peso}_396"
 		PESOS_PATH="${ROOT_PATH}/CHC/hcsp/ejecuciones/scripts_evaluacion/pesos.${peso}"
 	
 		for scenario in {2} #{0,3,1,8,2,4}
