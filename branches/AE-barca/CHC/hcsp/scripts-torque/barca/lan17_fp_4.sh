@@ -86,7 +86,7 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-for i in {6..29}
+for i in {6..6}
 do
 	#
 	# Itero entre todas las instancias del problema a resolver.
