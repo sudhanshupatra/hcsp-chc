@@ -213,6 +213,7 @@ public:
 	bool validate() const;
 
 	void showCustomStatics();
+	void show(ostream &output);
 
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo

@@ -1731,6 +1731,18 @@ bool Solution::validate() const {
 	return true;
 }
 
+void Solution::show(ostream &output) {
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
+		for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
+			int taskId;
+			taskId = _machines[machineId].getTask(taskPos);
+
+			output << taskId << endl;
+		}
+		output << "-1" << endl;
+	}
+}
+
 void Solution::showCustomStatics() {
 	cout << endl << "[= Statics RR ==================]" << endl;
 

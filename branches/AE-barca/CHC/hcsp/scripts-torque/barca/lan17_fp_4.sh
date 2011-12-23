@@ -4,7 +4,7 @@
 #PBS -N ae_17_fp_4
 
 # Requerimientos
-#PBS -l nodes=17,walltime=30:00:00
+#PBS -l nodes=17,walltime=00:05:00
 
 # Cola
 #PBS -q publica
@@ -103,7 +103,7 @@ do
 	#
 	# Cada instancia la resuelvo 30 veces.
 	#
-	for (( j=0 ; j<30 ; j++))
+	for (( j=0 ; j<10 ; j++))
 	do
 		echo "${j}"
 
@@ -113,7 +113,7 @@ do
 		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos.txt" >> ${CONFIG_FILE}
+		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_variados.txt" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
