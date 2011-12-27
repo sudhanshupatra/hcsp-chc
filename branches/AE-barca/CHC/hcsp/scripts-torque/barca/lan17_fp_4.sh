@@ -4,7 +4,7 @@
 #PBS -N ae_17_fp_4
 
 # Requerimientos
-#PBS -l nodes=1:ppn=17,walltime=20:00:00
+#PBS -l nodes=1:ppn=17,walltime=24:00:00
 
 # Cola
 #PBS -q publica

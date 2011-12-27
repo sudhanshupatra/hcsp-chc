@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec -np 17 /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec -machinefile /home/siturria/machine.list -np 17  /home/siturria/AE/branches/AE-barca/CHC/hcsp/MainLan"
 
 data[6]="A.u_c_hihi"
 data[7]="A.u_c_lolo"
@@ -27,7 +27,7 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-for i in {6..29}
+for i in {6..6}
 do
 	#
 	# Itero entre todas las instancias del problema a resolver.
@@ -36,7 +36,7 @@ do
 	
 	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/${data[i]}"
 	
-	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/4_c/${data[i]}"
+	BASE_FOLDER="/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/4_c/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
 	
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
@@ -44,20 +44,20 @@ do
 	#
 	# Cada instancia la resuelvo 20 veces.
 	#
-	for (( j=0 ; j<20 ; j++))
+	for (( j=0 ; j<1 ; j++))
 	do
 		echo "${j}"
 
 		DEST_FOLDER="${BASE_FOLDER}/${j}"
 		mkdir -p ${DEST_FOLDER} 
 
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca1.cfg" > ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca1.cfg" > ${CONFIG_FILE}
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_variados.txt" >> ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/pesos_variados.txt" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
-		time(${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE})		
+		echo ${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE}
 	done
 done

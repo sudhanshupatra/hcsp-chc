@@ -7,10 +7,10 @@
 #PBS -l nodes=17,walltime=12:00:00
 
 # Cola
-#PBS -q publica
+#PBS -q medium_jobs
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
+#PBS -d /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 ###PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/1
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/1
+#PBS -e /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/1
+#PBS -o /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/1
 
 #PBS -V
 
@@ -59,7 +59,7 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/branches/AE-barca/CHC/hcsp/MainLan"
 
 data[0]="u_c_hihi.0"
 data[1]="u_c_hilo.0"
@@ -83,7 +83,7 @@ do
 	
 	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
 	
-	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/1/${data[i]}"
+	BASE_FOLDER="/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/1/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
 	
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
@@ -98,10 +98,10 @@ do
 		DEST_FOLDER="${BASE_FOLDER}/${j}"
 		mkdir -p ${DEST_FOLDER} 
 
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos.txt" >> ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/pesos_variados.txt" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		

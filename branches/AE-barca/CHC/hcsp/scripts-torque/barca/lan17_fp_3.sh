@@ -4,13 +4,13 @@
 #PBS -N ae_17_fp_3
 
 # Requerimientos
-#PBS -l nodes=17,walltime=30:00:00
+#PBS -l nodes=17,walltime=24:00:00
 
 # Cola
-#PBS -q publica
+#PBS -q medium_jobs
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
+#PBS -d /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/
 
 # Correo electronico
 ###PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/3
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/3
+#PBS -e /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/3
+#PBS -o /home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/3
 
 #PBS -V
 
@@ -59,7 +59,7 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/branches/AE-barca/CHC/hcsp/MainLan"
 
 data[6]="A.u_c_hihi"
 data[7]="A.u_c_lolo"
@@ -95,7 +95,7 @@ do
 	
 	DATA_FILE="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/2048x64.CPrio/${data[i]}"
 	
-	BASE_FOLDER="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/frente_pareto/barca/3/${data[i]}"
+	BASE_FOLDER="/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/frente_pareto/barca/3/${data[i]}"
 	mkdir -p ${BASE_FOLDER}
 	
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
@@ -103,17 +103,17 @@ do
 	#
 	# Cada instancia la resuelvo 30 veces.
 	#
-	for (( j=0 ; j<30 ; j++))
+	for (( j=0 ; j<20 ; j++))
 	do
 		echo "${j}"
 
 		DEST_FOLDER="${BASE_FOLDER}/${j}"
 		mkdir -p ${DEST_FOLDER} 
 
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg" > ${CONFIG_FILE}
 		echo "${DATA_FILE}" >> ${CONFIG_FILE}
 		echo "${DEST_FOLDER}/${j}.sol" >> ${CONFIG_FILE}
-		echo "/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos.txt" >> ${CONFIG_FILE}
+		echo "/home/siturria/AE/branches/AE-barca/CHC/hcsp/ejecuciones/pesos_variados.txt" >> ${CONFIG_FILE}
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
