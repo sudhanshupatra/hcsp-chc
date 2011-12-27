@@ -4,7 +4,7 @@
 #PBS -N ae_17_fp_4
 
 # Requerimientos
-#PBS -l nodes=17,walltime=00:05:00
+#PBS -l nodes=1:ppn=17,walltime=20:00:00
 
 # Cola
 #PBS -q publica
@@ -86,7 +86,7 @@ data[27]="B.u_i_hilo"
 data[28]="B.u_s_hihi"
 data[29]="B.u_s_lolo"
 
-for i in {6..6}
+for i in {6..29}
 do
 	#
 	# Itero entre todas las instancias del problema a resolver.
@@ -101,9 +101,9 @@ do
 	CONFIG_FILE="${BASE_FOLDER}/Config.cfg"
 
 	#
-	# Cada instancia la resuelvo 30 veces.
+	# Cada instancia la resuelvo 20 veces.
 	#
-	for (( j=0 ; j<10 ; j++))
+	for (( j=0 ; j<20 ; j++))
 	do
 		echo "${j}"
 

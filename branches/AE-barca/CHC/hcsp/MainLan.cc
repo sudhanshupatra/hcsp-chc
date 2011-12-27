@@ -83,26 +83,26 @@ int main(int argc, char** argv) {
 			fexit.close();
 		}
 		{
-			string fit_solution_file = solution_file.append("_fit");
-			ofstream fexit(fit_solution_file.data());
-			if(!fexit) show_message(13);
+			//string fit_solution_file = solution_file.append("_fit");
+			//ofstream fexit(fit_solution_file.data());
+			//if(!fexit) show_message(13);
 
 			//fexit << solver.best_solution_trial().fitness() << " " << solver.pid() << endl;
-			solver.best_solution_trial().show(fexit);
+			//solver.best_solution_trial().show(fexit);
 
-			for (int i = 0; i < solver.population().parents().size(); i++) {
+			//for (int i = 0; i < solver.population().parents().size(); i++) {
 				//fexit << solver.population().parents()[i]->fitness() << " " << solver.pid() << endl;
-				fexit << "-2" << endl;
-				solver.population().parents()[i]->show(fexit);
-			}
+				//fexit << "-2" << endl;
+				//solver.population().parents()[i]->show(fexit);
+			//}
 
-			for (int i = 0; i < solver.population().offsprings().size(); i++) {
+			//for (int i = 0; i < solver.population().offsprings().size(); i++) {
 				//fexit << solver.population().offsprings()[i]->fitness() << " " << solver.pid() << endl;
-				fexit << "-2" << endl;
-				solver.population().offsprings()[i]->show(fexit);
-			}
+				//fexit << "-2" << endl;
+				//solver.population().offsprings()[i]->show(fexit);
+			//}
 
-			fexit.close();
+			//fexit.close();
 		}
 
 		{
