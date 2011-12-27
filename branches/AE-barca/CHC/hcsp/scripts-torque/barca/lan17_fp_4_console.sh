@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec -machinefile /home/siturria/machine.list -np 17  /home/siturria/AE/branches/AE-barca/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec -np 17 /home/siturria/AE/branches/AE-barca/CHC/hcsp/MainLan"
 
 data[6]="A.u_c_hihi"
 data[7]="A.u_c_lolo"
