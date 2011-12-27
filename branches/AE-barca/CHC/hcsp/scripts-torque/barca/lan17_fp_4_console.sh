@@ -58,6 +58,6 @@ do
 	
 		OUTPUT_FILE="${DEST_FOLDER}/${j}.log"
 		
-		echo ${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE}
+		${EXEC} ${CONFIG_FILE} > ${OUTPUT_FILE}
 	done
 done
