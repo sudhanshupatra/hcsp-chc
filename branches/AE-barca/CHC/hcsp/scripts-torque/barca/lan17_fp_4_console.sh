@@ -44,7 +44,7 @@ do
 	#
 	# Cada instancia la resuelvo 20 veces.
 	#
-	for (( j=0 ; j<1 ; j++))
+	for (( j=0 ; j<20 ; j++))
 	do
 		echo "${j}"
 
