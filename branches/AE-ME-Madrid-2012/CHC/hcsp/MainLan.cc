@@ -47,13 +47,6 @@ int main(int argc, char** argv) {
 		f.getline(path,MAX_BUFFER,'\n'); // Cantidad de máquinas.
 		cantidad_maquinas.assign(path);
 	} else {
-		/*skeleton_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/ejecuciones/scripts_frente_pareto/barca.cfg");
-		scenario_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP-3O-MPE/512x16/scenario.0");
-		workload_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/ProblemInstances/HCSP-3O-MPE/512x16/workload.0");
-		solution_file.assign("test.sol");
-		pesos_file.assign("/home/santiago/eclipse/c-c++-workspace/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt");
-		cantidad_tareas.assign("512");
-		cantidad_maquinas.assign("16");*/
 		cout << "[ERROR] Cantidad inválida de parámetros." << endl;
 		exit(EXIT_FAILURE);
 	}
@@ -61,7 +54,6 @@ int main(int argc, char** argv) {
 	cout << "[skeleton] " << skeleton_file << endl;
 	cout << "[scenario] " << scenario_file << endl;
 	cout << "[workload] " << workload_file << endl;
-	cout << "[priorities] " << priorities_file << endl;
 	cout << "[pesos] " << pesos_file << endl;
 
 	ifstream skeleton_stream(skeleton_file.data());
