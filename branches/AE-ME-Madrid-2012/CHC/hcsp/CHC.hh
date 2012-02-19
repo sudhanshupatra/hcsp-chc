@@ -33,7 +33,7 @@ skeleton CHC {
 #define CROSS_TASK 0.5
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
-// mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
+// mínima necesaria para permitir el cruzamiento (i.e. converge más lento).
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
@@ -79,7 +79,7 @@ public:
 	~Problem();
 
 	friend ostream& operator<<(ostream& os, const Problem& pbm);
-	friend istream& operator>>(istream& is, Problem& pbm);
+	//friend istream& operator>>(istream& is, Problem& pbm);
 
 	Problem& operator=(const Problem& pbm);
 	bool operator==(const Problem& pbm) const;
@@ -90,28 +90,44 @@ public:
 	// =================================
 	// Especificos del problema.
 	// =================================
-	int taskCount() const;
-	int machineCount() const;
-	int taskPriority(const int& task) const;
-	float expectedTimeToCompute(const int& task, const int& machine) const;
+
+	void loadProblemDataFiles(istream& scenario, istream& workload);
+	void loadWeightData(const vector<double> weights);
+
+	void setTaskCount(int size);
+	int getTaskCount() const;
+	void setMachineCount(int size);
+	int getMachineCount() const;
+
+	float getTaskSSJCost(const int& task, const int& machine) const;
+	int getMachineCoreCount(const int& machine) const;
+	int getMachineSSJPerformance(const int& machine) const;
+	float getExpectedTimeToCompute(const int& task, const int& machine) const;
+	float getMachineEnergyWhenIdle(const int& machine) const;
+	float getMachineEnergyWhenMax(const int& machine) const;
 
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
 
-	void setPId(const int pid);
-	double getWRRWeight() const;
-	double getWRRWeight(const int pid) const;
-	double getMakespanWeight() const;
+	void setCurrentProcessId(const int pid);
+
+	double getCurrentMakespanWeight() const;
 	double getMakespanWeight(const int pid) const;
-	void loadWeights(const vector<double> weights);
+	double getCurrentEnergyWeight() const;
+	double getEnergyWeight(const int pid) const;
 private:
-	vector<double> _wrr_weights;
 	vector<double> _makespan_weights;
+	vector<double> _energy_weights;
 
 	int _mypid;
 	int _taskCount;
 	int _machineCount;
-	vector<int> _tasksPriorities;
+	vector<int> _machineCoreCount;
+	vector<int> _machineSSJPerformance;
+	vector<float> _machineConsumptionIdle;
+	vector<float> _machineConsumptionMax;
+
+	float **_taskSSJComputeCost;
 	float **_expectedTimeToCompute;
 };
 
@@ -120,12 +136,15 @@ private:
 class SolutionMachine {
 private:
 	const Problem& _pbm;
+
 	vector<int> _tasks;
-	map<int, void*> _assignedTasks;
+	map<int, int> _assignedTasks;
+
 	int _machineId;
 
-	double _makespan;
-	double _awrr;
+	double _computeTime;
+	double _energy;
+
 	bool _dirty;
 
 	void refresh();
@@ -144,17 +163,17 @@ public:
 	void emptyTasks();
 
 	bool hasTask(const int taskId) const;
-	//	int getTaskPos(const int taskId) const;
+	int getTaskPosition(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
-	double getMakespan();
-	double getAccumulatedWeightedResponseRatio();
-	double getWeightedResponseRatio(const int taskPos) const;
+	double getComputeTime();
+	double getActiveEnergyConsumption();
+	double getIdleEnergyConsumption(double solutionMakespan);
 
-	int machineId() const;
+	int getMachineId() const;
 
-	void showMap() const;
+	void show() const;
 };
 
 requires class Solution {
@@ -163,8 +182,8 @@ public:
 	Solution(const Solution& sol);
 	~Solution();
 
-	friend ostream& operator<<(ostream& os, const Solution& sol);
-	friend istream& operator>>(istream& is, Solution& sol);
+	//friend ostream& operator<<(ostream& os, const Solution& sol);
+	//friend istream& operator>>(istream& is, Solution& sol);
 	friend NetStream& operator <<(NetStream& ns, const Solution& sol);
 	friend NetStream& operator >>(NetStream& ns, Solution& sol);
 
@@ -181,12 +200,14 @@ public:
 	bool isInitilized() const;
 	void markAsInitialized();
 
-	double fitness();
-	double makespan();
-	double accumulatedWeightedResponseRatio();
+	double getFitness();
+	double getMakespan();
+	double getEnergy(double makespan);
 	unsigned int size() const;
 
 	int length() const;
+
+	// Función de distancia para calcular el cruzamiento.
 	int distanceTo(const Solution& solution) const;
 
 	void addTask(const int machineId, const int taskId);
@@ -197,8 +218,10 @@ public:
 	void emptyTasks();
 	int countTasks();
 
+	// Función de local search: aplica una búsqueda sobre la solución actual.
 	void doLocalSearch();
-	void mutate();
+	// Función de mutación: muta la solución actual.
+	void doMutate();
 
 	int getBestFitnessMachineId();
 	int getMinCostMachineId();
@@ -208,24 +231,23 @@ public:
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 	double getMachineFitness(int machineId);
-	int getMinAWRRMachine();
 
 	bool validate() const;
-
-	void showCustomStatics();
-	void show(ostream &output);
+	void show(ostream& os);
+	void showCustomStatics(ostream& os);
 
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo
 
-	static double getWRR_reference();
+	// Valores de referencia para calcular el fitness.
 	static double getMakespan_reference();
+	static double getEnergy_reference();
 private:
 	const Problem& _pbm;
 	bool _initialized;
 
-	static double _awrr_reference;
 	static double _makespan_reference;
+	static double _energy_reference;
 
 	vector<struct SolutionMachine> _machines;
 
@@ -617,8 +639,8 @@ public:
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int dummy, const bool remplace) const;
 	unsigned int number_selection() const;
 
@@ -644,8 +666,8 @@ public:
 			const bool remplace); // const;
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int param, const bool remplace) const;
 };
 
@@ -669,8 +691,8 @@ public:
 			const bool remplace); // const;
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int param, const bool remplace) const;
 
 	virtual void setup(char line[MAX_BUFFER]);
@@ -688,8 +710,8 @@ public:
 	friend ostream& operator<<(ostream& os, const Selection_Tournament& sel);
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int tourment_size, const bool remplace) const;
 };
 
@@ -706,8 +728,8 @@ public:
 	virtual void prepare(Rarray<struct individual>& fitness_values,
 			const bool remplace); // const;
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int dummy, const bool remplace) const;
 };
 
@@ -726,8 +748,8 @@ public:
 	virtual void reset();
 
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int portion, const bool remplace) const;
 };
 
@@ -745,8 +767,8 @@ public:
 
 	virtual void reset();
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int position, const bool remplace) const;
 };
 
@@ -764,8 +786,8 @@ public:
 
 	virtual void reset();
 	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,
-			const Rarray<Solution*>& to_select_2, const Rarray<
-					struct individual>& fitness_values,
+			const Rarray<Solution*>& to_select_2,
+			const Rarray<struct individual>& fitness_values,
 			const unsigned int position, const bool remplace) const;
 };
 
@@ -879,6 +901,9 @@ public:
 	virtual void DoStep()=0;
 
 	// Statistics handling ----------------------------------------------------------------------
+
+	static double global_timing[];
+	static int global_calls[];
 
 	Statistics& statistics();
 	UserStatistics& userstatistics();
@@ -1023,8 +1048,7 @@ private:
 	int acum_iterations;
 
 public:
-	Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc,
-			char **argv);
+	Solver_Lan(Problem& pbm, const SetUpParams& setup, int argc, char **argv);
 	virtual ~Solver_Lan();
 	virtual int pid() const;
 	NetStream& netstream();
