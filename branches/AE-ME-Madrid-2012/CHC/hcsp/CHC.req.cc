@@ -412,7 +412,8 @@ double Solution::getMakespan_reference() {
 }
 
 Solution::Solution(const Problem& pbm) :
-	_pbm(pbm), _machines(), _initialized(false), _taskAssignment(NULL) {
+	_pbm(pbm), _machines(), _initialized(false), _taskAssignment(NULL),
+	_is_dirty(true), _current_fitness(0.0), _current_makespan(0.0), _current_energy(0.0) {
 
 	_taskAssignment = (int*)malloc(sizeof(int) * pbm.getTaskCount());
 	memset(_taskAssignment, 0, sizeof(int) * pbm.getTaskCount());
@@ -544,6 +545,11 @@ void Solution::emptyTasks() {
 	}
 
 	memset(_taskAssignment, 0, sizeof(int) * pbm().getTaskCount());
+
+	_is_dirty = false;
+	_current_fitness = INFINITY;
+	_current_makespan = INFINITY;
+	_current_energy = INFINITY;
 }
 
 /*int Solution::countTasks() {
@@ -812,36 +818,45 @@ void Solution::showCustomStatics(ostream& os) {
 double Solution::getFitness() {
 	assert(_initialized);
 
-	double maxMakespan = 0.0;
-	double energy = 0.0;
+	if (_is_dirty) {
+		double maxMakespan = 0.0;
+		double energy = 0.0;
 
-	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		if (_machines[machineId].getComputeTime() > maxMakespan) {
-			maxMakespan = _machines[machineId].getComputeTime();
+		for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
+			if (_machines[machineId].getComputeTime() > maxMakespan) {
+				maxMakespan = _machines[machineId].getComputeTime();
+			}
 		}
+
+		_current_makespan = maxMakespan;
+
+		for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
+			energy += _machines[machineId].getActiveEnergyConsumption()
+					+ _machines[machineId].getIdleEnergyConsumption(maxMakespan);
+		}
+
+		_current_energy = energy;
+
+		double normalized_makespan;
+		normalized_makespan = (maxMakespan + Solution::_makespan_reference)
+				/ Solution::_makespan_reference;
+
+		double normalized_energy;
+		normalized_energy = (energy + Solution::_energy_reference)
+				/ Solution::_energy_reference;
+
+		double fitness;
+		fitness = (_pbm.getCurrentMakespanWeight() * normalized_makespan)
+				+ (_pbm.getCurrentEnergyWeight() * normalized_energy);
+
+		assert(!(fitness == INFINITY));
+		assert(!(fitness == NAN));
+
+		_current_fitness = fitness;
+		_is_dirty = false;
 	}
 
-	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		energy += _machines[machineId].getActiveEnergyConsumption()
-				+ _machines[machineId].getIdleEnergyConsumption(maxMakespan);
-	}
-
-	double normalized_makespan;
-	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
-			/ Solution::_makespan_reference;
-
-	double normalized_energy;
-	normalized_energy = (energy + Solution::_energy_reference)
-			/ Solution::_energy_reference;
-
-	double fitness;
-	fitness = (_pbm.getCurrentMakespanWeight() * normalized_makespan)
-			+ (_pbm.getCurrentEnergyWeight() * normalized_energy);
-
-	assert(!(fitness == INFINITY));
-	assert(!(fitness == NAN));
-
-	return fitness;
+	return _current_fitness;
 }
 
 double Solution::getMakespan() {
@@ -849,15 +864,11 @@ double Solution::getMakespan() {
 		return infinity();
 	}
 
-	double maxMakespan = 0.0;
-
-	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		if (_machines[machineId].getComputeTime() > maxMakespan) {
-			maxMakespan = _machines[machineId].getComputeTime();
-		}
+	if (_is_dirty) {
+		getFitness();
 	}
 
-	return maxMakespan;
+	return _current_makespan;
 }
 
 double Solution::getEnergy(double makespan) {
@@ -865,14 +876,11 @@ double Solution::getEnergy(double makespan) {
 		return infinity();
 	}
 
-	double energy = 0.0;
-
-	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
-		energy = energy + _machines[machineId].getActiveEnergyConsumption()
-				+ _machines[machineId].getIdleEnergyConsumption(makespan);
+	if (_is_dirty) {
+		getFitness();
 	}
 
-	return energy;
+	return _current_energy;
 }
 
 int Solution::length() const {
@@ -935,119 +943,108 @@ void Solution::doLocalSearch() {
 
 	Solver::global_calls[TIMING_LS]++;
 
-	double fitnessActual = this->getFitness();
-	bool solucionAceptada = false;
+	int machineId;
+	machineId = rand_int(0, this->machines().size() - 1);
 
-	for (unsigned int machinePos = 0; machinePos < PALS_MAQ; machinePos++) {
-		int machineId;
-		machineId = rand_int(0, this->machines().size() - 1);
+	// PALS aleatorio para HCSP.
+	double mejorMovimientoFitness;
+	int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos, mejorMovimientoDestinoMachineId;
 
-		// PALS aleatorio para HCSP.
+	double fitnessActual = getFitness();
 
-		bool finBusqMaquina;
-		finBusqMaquina = false;
+	mejorMovimientoFitness = fitnessActual;
+	mejorMovimientoTaskPos = -1;
+	mejorMovimientoDestinoTaskPos = -1;
+	mejorMovimientoDestinoMachineId = -1;
 
-		double mejorMovimientoFitness;
-		int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos, mejorMovimientoDestinoMachineId;
+	// Itero en las tareas de la máquina actual.
+	int startTaskOffset, endTaskOffset;
+	if (this->machines()[machineId].countTasks() > PALS_TOP_M) {
+		// Si la cantidad de tareas en la máquina actual es mayor que PALS_TOP_M.
+		double rand;
+		rand = rand01();
 
-		mejorMovimientoFitness = fitnessActual;
-		mejorMovimientoTaskPos = -1;
-		mejorMovimientoDestinoTaskPos = -1;
-		mejorMovimientoDestinoMachineId = -1;
+		double aux;
+		aux = rand * this->machines()[machineId].countTasks();
 
-		// Itero en las tareas de la máquina actual.
-		int startTaskOffset, endTaskOffset;
-		if (this->machines()[machineId].countTasks() > PALS_TOP_M) {
-			// Si la cantidad de tareas en la máquina actual es mayor que PALS_TOP_M.
+		startTaskOffset = (int) aux;
+		endTaskOffset = startTaskOffset + PALS_TOP_M;
+	} else {
+		// Si hay menos o igual cantidad de tareas en la máquina actual que el
+		// tope PALS_TOP_M, las recorro todas.
+		startTaskOffset = 0;
+		endTaskOffset = this->machines()[machineId].countTasks();
+	}
+
+	for (int taskOffset = startTaskOffset; (taskOffset < endTaskOffset)
+			&& (mejorMovimientoTaskPos == -1); taskOffset++) {
+
+		int taskPos;
+		taskPos = taskOffset % this->machines()[machineId].countTasks();
+
+		int taskId;
+		taskId = this->machines()[machineId].getTask(taskPos);
+
+		int machineDstId;
+		machineDstId = rand_int(0, this->machines().size() - 2);
+		if (machineId == machineDstId) machineDstId++;
+
+		// Itero en las tareas de las otras máquinas.
+		int startSwapTaskOffset, endSwapTaskOffset;
+
+		if (this->machines()[machineDstId].countTasks() - 1 > PALS_TOP_T) {
+			// Si la cantidad de las tareas del problema menos la tarea que estoy
+			// intentando mover es mayor que PALS_TOP_T.
 			double rand;
 			rand = rand01();
 
 			double aux;
-			aux = rand * this->machines()[machineId].countTasks();
+			aux = rand * this->machines()[machineDstId].countTasks();
 
-			startTaskOffset = (int) aux;
-			endTaskOffset = startTaskOffset + PALS_TOP_M;
+			startSwapTaskOffset = (int) aux;
+			endSwapTaskOffset = PALS_TOP_T;
 		} else {
-			// Si hay menos o igual cantidad de tareas en la máquina actual que el
-			// tope PALS_TOP_M, las recorro todas.
-			startTaskOffset = 0;
-			endTaskOffset = this->machines()[machineId].countTasks();
+			// Si hay menos o igual cantidad de tareas en el problema que el número
+			// PALS_TOP_T las recorro todas menos la que estoy intentando mover.
+			startSwapTaskOffset = 0;
+			endSwapTaskOffset = this->machines()[machineDstId].countTasks() - 1;
 		}
 
-		for (int taskOffset = startTaskOffset; (taskOffset < endTaskOffset)
-				&& (mejorMovimientoTaskPos == -1); taskOffset++) {
+		double movimientoFitness;
+		movimientoFitness = 0.0;
 
-			int taskPos;
-			taskPos = taskOffset % this->machines()[machineId].countTasks();
+		for (int swapTaskOffset = startSwapTaskOffset; (swapTaskOffset < endSwapTaskOffset)
+			&& (mejorMovimientoTaskPos == -1); swapTaskOffset++) {
 
-			int taskId;
-			taskId = this->machines()[machineId].getTask(taskPos);
+			int swapTaskPos;
+			swapTaskPos = swapTaskOffset % this->machines()[machineDstId].countTasks();
 
-			int machineDstId;
-			machineDstId = rand_int(0, this->machines().size() - 2);
-			if (machineId == machineDstId) machineDstId++;
+			int swapTaskId;
+			swapTaskId = this->machines()[machineDstId].getTask(swapTaskPos);
 
-			// Itero en las tareas de las otras máquinas.
-			int startSwapTaskOffset, endSwapTaskOffset;
+			//==============================================================
+			//TODO: Optimizar!!!
+			//==============================================================
+			this->swapTasks(machineId, taskPos, machineDstId, swapTaskPos);
+			movimientoFitness = this->getFitness();
+			this->swapTasks(machineDstId, swapTaskPos, machineId, taskPos);
+			//==============================================================
 
-			if (this->machines()[machineDstId].countTasks() - 1 > PALS_TOP_T) {
-				// Si la cantidad de las tareas del problema menos la tarea que estoy
-				// intentando mover es mayor que PALS_TOP_T.
-				double rand;
-				rand = rand01();
-
-				double aux;
-				aux = rand * this->machines()[machineDstId].countTasks();
-
-				startSwapTaskOffset = (int) aux;
-				endSwapTaskOffset = PALS_TOP_T;
-			} else {
-				// Si hay menos o igual cantidad de tareas en el problema que el número
-				// PALS_TOP_T las recorro todas menos la que estoy intentando mover.
-				startSwapTaskOffset = 0;
-				endSwapTaskOffset = this->machines()[machineDstId].countTasks() - 1;
-			}
-
-			double movimientoFitness;
-			movimientoFitness = 0.0;
-
-			for (int swapTaskOffset = startSwapTaskOffset; (swapTaskOffset < endSwapTaskOffset)
-				&& (mejorMovimientoTaskPos == -1); swapTaskOffset++) {
-
-				int swapTaskPos;
-				swapTaskPos = swapTaskOffset % this->machines()[machineDstId].countTasks();
-
-				int swapTaskId;
-				swapTaskId = this->machines()[machineDstId].getTask(swapTaskPos);
-
-				//==============================================================
-				//TODO: Optimizar!!!
-				//==============================================================
-				this->swapTasks(machineId, taskPos, machineDstId, swapTaskPos);
-				movimientoFitness = this->getFitness();
-				this->swapTasks(machineDstId, swapTaskPos, machineId, taskPos);
-				//==============================================================
-
-				if (movimientoFitness < mejorMovimientoFitness) {
-					mejorMovimientoFitness = movimientoFitness;
-					mejorMovimientoTaskPos = taskPos;
-					mejorMovimientoDestinoMachineId = machineDstId;
-					mejorMovimientoDestinoTaskPos = swapTaskPos;
-				}
+			if (movimientoFitness < mejorMovimientoFitness) {
+				mejorMovimientoFitness = movimientoFitness;
+				mejorMovimientoTaskPos = taskPos;
+				mejorMovimientoDestinoMachineId = machineDstId;
+				mejorMovimientoDestinoTaskPos = swapTaskPos;
 			}
 		}
+	}
 
-		if (mejorMovimientoFitness < fitnessActual) {
-			this->swapTasks(machineId, mejorMovimientoTaskPos,
-					mejorMovimientoDestinoMachineId,
-					mejorMovimientoDestinoTaskPos);
-			finBusqMaquina = true;
-		}
+	if (mejorMovimientoFitness < fitnessActual) {
+		this->swapTasks(machineId, mejorMovimientoTaskPos,
+				mejorMovimientoDestinoMachineId,
+				mejorMovimientoDestinoTaskPos);
 
-		solucionAceptada = (this->getFitness() / fitnessActual)
-				>= PALS_UMBRAL_MEJORA;
-
-		fitnessActual = this->getFitness();
+		_is_dirty = true;
 	}
 
 	if (TIMING) {
@@ -1149,6 +1146,8 @@ void Solution::doMutate() {
 					}
 				}
 			}
+
+			_is_dirty = true;
 		}
 	}
 
@@ -1166,12 +1165,16 @@ void Solution::doMutate() {
 }
 
 void Solution::addTask(const int machineId, const int taskId) {
+	_is_dirty = true;
+
 	_taskAssignment[taskId] = machineId;
 	_machines[machineId].addTask(taskId);
 }
 
 void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
+
+	_is_dirty = true;
 
 	if (machineId1 != machineId2) {
 		int taskId1 = machines()[machineId1].getTask(taskPos1);
@@ -1186,6 +1189,8 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 }
 
 void Solution::swapTasks(int taskId1, int taskId2) {
+	_is_dirty = true;
+
 	int machineId1 = getTaskAssignment(taskId1);
 	int machineId2 = getTaskAssignment(taskId2);
 
@@ -1201,6 +1206,8 @@ void Solution::swapTasks(int taskId1, int taskId2) {
 }
 
 void Solution::moveTask(const int taskId, const int machineId) {
+	_is_dirty = true;
+
 	int machineIdOld = getTaskAssignment(taskId);
 
 	if (machineId != machineIdOld) {
@@ -1276,6 +1283,7 @@ void Solution::to_Solution(char *_string_) {
 	assert(currentTask == _pbm.getTaskCount());
 	assert(endFound);*/
 
+	_is_dirty = true;
 	markAsInitialized();
 }
 
