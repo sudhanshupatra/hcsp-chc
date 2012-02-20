@@ -34,8 +34,6 @@ skeleton CHC {
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
-#define PALS_MAQ 5
-#define PALS_UMBRAL_MEJORA 1.0
 #define PALS_TOP_M 12
 #define PALS_TOP_T 8
 
@@ -239,6 +237,11 @@ private:
 
 	static double _makespan_reference;
 	static double _energy_reference;
+
+	bool _is_dirty;
+	double _current_fitness;
+	double _current_makespan;
+	double _current_energy;
 
 	vector<struct SolutionMachine> _machines;
 	int *_taskAssignment;
