@@ -1195,11 +1195,11 @@ void Solution::swapTasks(int taskId1, int taskId2) {
 	int machineId2 = getTaskAssignment(taskId2);
 
 	if (machineId1 != machineId2) {
-		_machines[machineId1].removeTask(taskId1);
+		_machines[machineId1].removeTask(_machines[machineId1].getTaskPosition(taskId1));
 		_machines[machineId1].addTask(taskId2);
 		_taskAssignment[taskId2] = machineId1;
 
-		_machines[machineId2].removeTask(taskId2);
+		_machines[machineId2].removeTask(_machines[machineId2].getTaskPosition(taskId2));
 		_machines[machineId2].addTask(taskId1);
 		_taskAssignment[taskId1] = machineId2;
 	}
@@ -1211,7 +1211,7 @@ void Solution::moveTask(const int taskId, const int machineId) {
 	int machineIdOld = getTaskAssignment(taskId);
 
 	if (machineId != machineIdOld) {
-		_machines[machineIdOld].removeTask(taskId);
+		_machines[machineIdOld].removeTask(_machines[machineIdOld].getTaskPosition(taskId));
 
 		_machines[machineId].addTask(taskId);
 		_taskAssignment[taskId] = machineId;
