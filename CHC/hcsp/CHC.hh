@@ -23,8 +23,8 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.8
-#define MUT_TASK 0.8
+#define MUT_MAQ 0.5
+#define MUT_TASK 0.3
 
 // CROSS
 #define CROSS_TASK 0.4
@@ -132,7 +132,7 @@ private:
 
 class SolutionMachine {
 private:
-	const Problem& _pbm;
+	const Solution& _solution;
 
 	vector<int> _tasks;
 	map<int, int> _assignedTasks;
@@ -146,7 +146,7 @@ private:
 
 	void refresh();
 public:
-	SolutionMachine(const Problem& problem, int machineId);
+	SolutionMachine(const Solution& solution, int machineId);
 	~SolutionMachine();
 
 	SolutionMachine& operator=(const SolutionMachine& machine);
@@ -176,8 +176,6 @@ public:
 	Solution(const Solution& sol);
 	~Solution();
 
-	//friend ostream& operator<<(ostream& os, const Solution& sol);
-	//friend istream& operator>>(istream& is, Solution& sol);
 	friend NetStream& operator <<(NetStream& ns, const Solution& sol);
 	friend NetStream& operator >>(NetStream& ns, Solution& sol);
 
@@ -205,12 +203,12 @@ public:
 	int distanceTo(const Solution& solution) const;
 
 	void addTask(const int machineId, const int taskId);
+	void moveTask(const int taskId, const int machineId);
+	void swapTasks(int taskId1, int taskId2);
 	void swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2);
-	void swapTasks(Solution& solution, const int taskId);
-	bool equalTasks(Solution& solution, const int taskId);
+	int getTaskAssignment(const int taskId) const;
 	bool findTask(const int taskId, int& foundMachineId, int& foundTaskPos);
 	void emptyTasks();
-	int countTasks();
 
 	// Función de local search: aplica una búsqueda sobre la solución actual.
 	void doLocalSearch();
@@ -226,12 +224,11 @@ public:
 			int destinationMachineId) const;
 	double getMachineFitness(int machineId);
 
-	bool validate() const;
+	//bool validate() const;
 	void show(ostream& os);
 	void showCustomStatics(ostream& os);
 
 	const vector<struct SolutionMachine>& machines() const;
-	vector<struct SolutionMachine>& getMachines(); //Hack feo
 
 	// Valores de referencia para calcular el fitness.
 	static double getMakespan_reference();
@@ -244,19 +241,13 @@ private:
 	static double _energy_reference;
 
 	vector<struct SolutionMachine> _machines;
+	int *_taskAssignment;
 
-	void initializeSufferage();
 	void initializeRandom();
 	void initializeMinMin();
 	void initializeMCT(int startTask, int direction);
 	void initializeStaticMCT();
 	void initializeRandomMCT();
-	void initializeMinWRR0();
-	void initializeMinWRR4();
-	void initializeMinWRR5();
-	void initializeMinWRR60();
-	void initializeMinWRR61();
-	void initializeMinWRR62();
 };
 
 // UserStatistics ----------------------------------------------------------------------------

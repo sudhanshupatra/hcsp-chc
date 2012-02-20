@@ -1,0 +1,11 @@
+- [LISTO] Operación de migración modificada.
+- [LISTO] Quitar validate al enviar una solución.
+- [MAS O MENOS=falta arreglar el calculo de makespan y energy (cache en la sol)] No mas refresh al pedir el fitness
+- [¿Cambiar por drand48_r? ¡Arreglar MALLBA!] Generador de numeros aleatorios.
+- [LISTO] Ver makespan = (machineMakespan[machineId] + (_pbm.getTaskSSJCost(
+	currentTask, machineId) / (_pbm.getMachineSSJPerformance(
+	machineId) / _pbm.getMachineCoreCount(machineId))));
+- Revisar operación de mutación. No considera buenos movimientos.
+- Arreglar LS para que priorice las máquinas con más makespan.
+- Arreglas cruzamiento para que priorice el mejor schedule.
+- Funcion de distancia!

@@ -246,11 +246,11 @@ Problem::~Problem() {
 
 // Solution machine ------------------------------------------------------
 
-SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
+SolutionMachine::SolutionMachine(const Solution& solution, int machineId) :
 	_tasks(), _assignedTasks(), _machineId(machineId), _computeTime(0.0),
-			_energy(0.0), _dirty(true), _pbm(problem) {
+			_energy(0.0), _dirty(true), _solution(solution) {
 
-	_tasks.reserve(problem.getTaskCount());
+	_tasks.reserve(_solution.pbm().getTaskCount());
 }
 
 SolutionMachine::~SolutionMachine() {
@@ -283,10 +283,10 @@ int SolutionMachine::getMachineId() const {
 }
 
 void SolutionMachine::addTask(const int taskId) {
-	float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
+	float max_energy = _solution.pbm().getMachineEnergyWhenMax(_machineId);
 
-	_computeTime += _pbm.getExpectedTimeToCompute(taskId, getMachineId());
-	_energy += _pbm.getExpectedTimeToCompute(taskId, getMachineId()) * max_energy;
+	_computeTime += _solution.pbm().getExpectedTimeToCompute(taskId, getMachineId());
+	_energy += _solution.pbm().getExpectedTimeToCompute(taskId, getMachineId()) * max_energy;
 
 	_tasks.push_back(taskId);
 	_assignedTasks[taskId] = _tasks.size() - 1;
@@ -296,16 +296,16 @@ void SolutionMachine::setTask(const int taskId, const int taskPos) {
 	assert(taskPos >= 0);
 	assert(taskPos < _tasks.size());
 
-	float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
+	float max_energy = _solution.pbm().getMachineEnergyWhenMax(_machineId);
 
 	int removedTaskId = _tasks[taskPos];
 	_assignedTasks.erase(removedTaskId);
 
-	_computeTime -= _pbm.getExpectedTimeToCompute(removedTaskId, getMachineId());
-	_energy -= _pbm.getExpectedTimeToCompute(removedTaskId, getMachineId()) * max_energy;
+	_computeTime -= _solution.pbm().getExpectedTimeToCompute(removedTaskId, getMachineId());
+	_energy -= _solution.pbm().getExpectedTimeToCompute(removedTaskId, getMachineId()) * max_energy;
 
-	_computeTime += _pbm.getExpectedTimeToCompute(taskId, getMachineId());
-	_energy += _pbm.getExpectedTimeToCompute(taskId, getMachineId()) * max_energy;
+	_computeTime += _solution.pbm().getExpectedTimeToCompute(taskId, getMachineId());
+	_energy += _solution.pbm().getExpectedTimeToCompute(taskId, getMachineId()) * max_energy;
 
 	_tasks.at(taskPos) = taskId;
 	_assignedTasks[taskId] = taskPos;
@@ -341,12 +341,12 @@ void SolutionMachine::removeTask(const int taskPos) {
 	assert(taskPos >= 0);
 	assert(taskPos < _tasks.size());
 
-	float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
+	float max_energy = _solution.pbm().getMachineEnergyWhenMax(_machineId);
 
 	int removedId = _tasks[taskPos];
 
-	_computeTime -= _pbm.getExpectedTimeToCompute(removedId, getMachineId());
-	_energy -= _pbm.getExpectedTimeToCompute(removedId, getMachineId()) * max_energy;
+	_computeTime -= _solution.pbm().getExpectedTimeToCompute(removedId, getMachineId());
+	_energy -= _solution.pbm().getExpectedTimeToCompute(removedId, getMachineId()) * max_energy;
 
 	_assignedTasks.erase(removedId);
 	_tasks.erase(_tasks.begin() + taskPos);
@@ -371,7 +371,7 @@ double SolutionMachine::getActiveEnergyConsumption() {
 
 double SolutionMachine::getIdleEnergyConsumption(double solutionMakespan) {
 	refresh();
-	float idle_energy = _pbm.getMachineEnergyWhenIdle(_machineId);
+	float idle_energy = _solution.pbm().getMachineEnergyWhenIdle(_machineId);
 	return (solutionMakespan - _computeTime) * idle_energy;
 }
 
@@ -382,14 +382,14 @@ double SolutionMachine::getComputeTime() {
 
 void SolutionMachine::refresh() {
 	if (_dirty) {
-		float max_energy = _pbm.getMachineEnergyWhenMax(_machineId);
+		float max_energy = _solution.pbm().getMachineEnergyWhenMax(_machineId);
 		double aux_computeTime = 0.0;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
 			taskId = getTask(taskPos);
 
-			aux_computeTime = aux_computeTime + _pbm.getExpectedTimeToCompute(taskId, getMachineId());
+			aux_computeTime = aux_computeTime + _solution.pbm().getExpectedTimeToCompute(taskId, getMachineId());
 		}
 
 		_computeTime = aux_computeTime;
@@ -412,11 +412,16 @@ double Solution::getMakespan_reference() {
 }
 
 Solution::Solution(const Problem& pbm) :
-	_pbm(pbm), _machines(), _initialized(false) {
-	_machines.reserve(pbm.getMachineCount());
+	_pbm(pbm), _machines(), _initialized(false), _taskAssignment(NULL) {
 
+	_taskAssignment = (int*)malloc(sizeof(int) * pbm.getTaskCount());
+	memset(_taskAssignment, 0, sizeof(int) * pbm.getTaskCount());
+
+	Solution *s = this;
+
+	_machines.reserve(pbm.getMachineCount());
 	for (int machineId = 0; machineId < pbm.getMachineCount(); machineId++) {
-		_machines.push_back(*(new SolutionMachine(pbm, machineId)));
+		_machines.push_back(*(new SolutionMachine(*s, machineId)));
 	}
 }
 
@@ -439,66 +444,6 @@ void Solution::show(ostream& os) {
 		os << "Makespan : " << makespan << "\n";
 		os << "Energy   : " << this->getEnergy(makespan) << "\n";
 
-		/*
-		os
-				<< "[MACHINE INFO]================================================\n";
-		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
-			os << "m_id: " << machineId << " #tasks: "
-					<< _machines[machineId].countTasks();
-			os << " compute_time: " << _machines[machineId].getComputeTime();
-
-			float aux1;
-			aux1 = 0.0;
-			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				aux1 += _pbm.getTaskSSJCost(
-						_machines[machineId].getTask(taskPos), machineId);
-			}
-			os << " sum_compute: " << aux1;
-			os << " ssjops: " << _pbm.getMachineSSJPerformance(machineId);
-			//os << " result: " << aux1 / _pbm.getMachineSSJPerformance(machineId);
-
-			os << " energy active: "
-					<< _machines[machineId].getActiveEnergyConsumption();
-			os << " energy idle: "
-					<< _machines[machineId].getIdleEnergyConsumption(makespan);
-			os << "\n";
-		}
-
-		os
-				<< "[CSV Solution]===================================================\n";
-		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
-			os << machineId << "|" << _pbm.getMachineCoreCount(machineId)
-					<< "|" << _pbm.getMachineSSJPerformance(machineId);
-
-			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				os << "|" << _pbm.getTaskSSJCost(
-						_machines[machineId].getTask(taskPos), machineId);
-			}
-
-			os << endl;
-		}
-
-		os
-				<< "[TASK INFO]===================================================\n";
-		for (int machineId = 0; machineId < this->machines().size(); machineId++) {
-			os << "> machineId: " << machineId << endl;
-
-			for (int i = 0; i < this->machines()[machineId].countTasks(); i++) {
-				os << "(" << i << ")";
-				os << " t_id: " << _machines[machineId].getTask(i);
-				os << " t_ssj: " << _pbm.getTaskSSJCost(
-						_machines[machineId].getTask(i), machineId);
-
-				float time_to_execute;
-				time_to_execute = _pbm.getTaskSSJCost(
-						_machines[machineId].getTask(i), machineId)
-						/ (_pbm.getMachineSSJPerformance(machineId)
-								/ _pbm.getMachineCoreCount(machineId));
-
-				os << " t_ssj/(m_ssj/cores): " << time_to_execute;
-				os << endl;
-			}
-		}*/
 		os << endl;
 	} else {
 		os << "> solution not inialized." << endl;
@@ -509,22 +454,15 @@ void Solution::show(ostream& os) {
 // Serialización de la solución.
 // ===================================
 NetStream& operator <<(NetStream& ns, const Solution& sol) {
-	//	if (DEBUG) cout << endl << "[DEBUG] operator <<(NetStream& ns, Solution& sol)" << endl;
-
 	int currentTask = 0;
 	int currentItem = 0;
 
 	int machineSeparator = -1;
 
-	// assert(sol.validate());
-
 	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
 		for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
 			int taskId;
 			taskId = sol.machines()[machineId].getTask(taskPos);
-
-			// assert(taskId >= 0);
-			// assert(taskId < sol.pbm().getTaskCount());
 
 			ns << taskId;
 
@@ -536,10 +474,6 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 		currentItem++;
 	}
 
-	// if (DEBUG) cout << "[DEBUG] operator<< En total se mandaron " << currentItem << " integers." << endl;
-	// assert(currentTask == sol.pbm().getTaskCount());
-	// assert(currentItem == sol.pbm().getTaskCount() + sol.pbm().getMachineCount());
-
 	return ns;
 }
 
@@ -547,8 +481,6 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 // Deserialización de la solución.
 // ===================================
 NetStream& operator >>(NetStream& ns, Solution& sol) {
-	//	if (DEBUG) cout << endl << "[DEBUG] operator >>(NetStream& ns, Solution& sol)" << endl;
-
 	int machineSeparator = -1;
 
 	int currentTask = 0;
@@ -575,13 +507,7 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 		}
 	}
 
-	// if (DEBUG) cout << "[DEBUG] operator >> sol.pbm().taskCount() = " << sol.pbm().taskCount() << endl;
-	// if (DEBUG) cout << "[DEBUG] operator >> currentTask = " << currentTask << endl;
-	// assert(sol.machines().size() == sol.pbm().getMachineCount());
-	// assert(currentTask == sol.pbm().getTaskCount());
-
 	sol.markAsInitialized();
-	// sol.validate();
 
 	return ns;
 }
@@ -590,6 +516,8 @@ Solution& Solution::operator=(const Solution &sol) {
 	for (int machineId = 0; machineId < sol._machines.size(); machineId++) {
 		_machines[machineId] = sol._machines[machineId];
 	}
+
+	memcpy(_taskAssignment, sol._taskAssignment, sizeof(int) * sol.pbm().getTaskCount());
 
 	_initialized = sol._initialized;
 
@@ -614,15 +542,17 @@ void Solution::emptyTasks() {
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		_machines[machineId].emptyTasks();
 	}
+
+	memset(_taskAssignment, 0, sizeof(int) * pbm().getTaskCount());
 }
 
-int Solution::countTasks() {
+/*int Solution::countTasks() {
 	int count = 0;
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		count += _machines[machineId].countTasks();
 	}
 	return count;
-}
+}*/
 
 // ===================================
 // Inicializo la solución.
@@ -678,7 +608,7 @@ void Solution::initializeMCT(int startTask, int direction) {
 
 		machineMakespan[minFitnessMachineId] += _pbm.getExpectedTimeToCompute(currentTask, minFitnessMachineId);
 
-		_machines[minFitnessMachineId].addTask(currentTask);
+		addTask(minFitnessMachineId,currentTask);
 	}
 }
 
@@ -738,7 +668,7 @@ void Solution::initializeMinMin() {
 				= machineAssignedSsjops[minCTMachineId] + _pbm.getExpectedTimeToCompute(minCTTaskId, minCTMachineId);
 		machineMakespan[minCTMachineId] = minCT;
 
-		_machines[minCTMachineId].addTask(minCTTaskId);
+		addTask(minCTMachineId,minCTTaskId);
 	}
 }
 
@@ -760,7 +690,7 @@ void Solution::initializeRandom() {
 		int currentMachine;
 		currentMachine = rand_int(0, _pbm.getMachineCount() - 1);
 
-		_machines[currentMachine].addTask(currentTask);
+		addTask(currentMachine,currentTask);
 	}
 }
 
@@ -769,13 +699,6 @@ void Solution::markAsInitialized() {
 }
 
 void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
-	//	if (DEBUG) {
-	//		cout << "[DEBUG] Solution::initialize" << endl;
-	//		cout << "pypid: " << mypid << endl;
-	//		cout << "pnumber: " << pnumber << endl;
-	//		cout << "solutionIndex: " << pnumber << endl;
-	//	}
-
 	timespec ts;
 
 	if (TIMING) {
@@ -822,6 +745,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 	}
 }
 
+/*
 bool Solution::validate() const {
 	//	if (DEBUG) cout << endl << "[DEBUG] Solution::validate" << endl;
 	if (true) {
@@ -874,6 +798,7 @@ bool Solution::validate() const {
 
 	return true;
 }
+*/
 
 void Solution::showCustomStatics(ostream& os) {
 	os << endl << "[= Custom Statics ==================]" << endl;
@@ -959,47 +884,35 @@ unsigned int Solution::size() const {
 			* sizeof(int)) + sizeof(int);
 }
 
+int Solution::getTaskAssignment(const int taskId) const {
+	assert(taskId >= 0);
+	assert(taskId < _pbm.getTaskCount());
+
+	return _taskAssignment[taskId];
+}
+
 int Solution::distanceTo(const Solution& solution) const {
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::distanceTo start" << endl;
 	int distance = 0;
 
-	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-			int taskId;
-			taskId = _machines[machineId].getTask(taskPos);
-
-			if (solution._machines[machineId].countTasks() > taskPos) {
-				if (solution._machines[machineId].getTask(taskPos) == taskId) {
-					// La tarea actual es ejecutada en la misma máquina y en la misma
-					// posición en ambas soluciones.
-				} else {
-					distance++;
-				}
-			} else {
-				distance++;
-			}
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
+		if (getTaskAssignment(taskId) != solution.getTaskAssignment(taskId)) {
+			distance++;
 		}
 	}
+
 	return distance;
 }
 
 bool Solution::findTask(const int taskId, int& foundMachineId,
 		int& foundTaskPos) {
 
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::findTask" << endl;
 	foundMachineId = -1;
 	foundTaskPos = -1;
 
-	for (int machineId = 0; machineId < _machines.size(); machineId++) {
-		if (_machines[machineId].hasTask(taskId)) {
-			foundMachineId = machineId;
-			foundTaskPos = _machines[machineId].getTaskPosition(taskId);
+	foundMachineId = getTaskAssignment(taskId);
+	foundTaskPos = _machines[foundMachineId].getTaskPosition(taskId);
 
-			return true;
-		}
-	}
-
-	assert(false);
+	return true;
 }
 
 double Solution::getMachineFitness(int machineId) {
@@ -1014,9 +927,6 @@ double Solution::getMachineFitness(int machineId) {
 }
 
 void Solution::doLocalSearch() {
-	//	if (DEBUG)
-	//		cout << endl << "[DEBUG] Solution::doLocalSearch begin" << endl;
-
 	timespec ts;
 
 	if (TIMING) {
@@ -1152,8 +1062,6 @@ void Solution::doLocalSearch() {
 }
 
 void Solution::doMutate() {
-	//if (DEBUG) cout << endl << "[DEBUG] Solution::mutate" << endl;
-
 	timespec ts;
 
 	if (TIMING) {
@@ -1164,31 +1072,16 @@ void Solution::doMutate() {
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (rand01() <= MUT_MAQ) {
-			if (_machines[machineId].countTasks() < _pbm.getMachineCoreCount(
-					machineId)) {
-				// Cada máquina sin tareas se le asigna la tarea que
-				// mejor puede ejecutar.
+			if (_machines[machineId].countTasks() == 0) {
+				// La máquina no tiene tareas. Se le asigna la tarea que mejor puede ejecutar.
 				{
 					int bestTaskIdForMachine;
-					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(
-							machineId);
+					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(machineId);
 
-					int origenMachineId, origenTaskPos;
-					assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
-
-					//if (_machines[origenMachineId].countTasks() > _pbm.getMachineCoreCount(origenMachineId)) {
-					if (_pbm.getBestTaskIdForMachine(origenMachineId)
-							!= bestTaskIdForMachine) {
-
-						_machines[origenMachineId].removeTask(origenTaskPos);
-						_machines[machineId].addTask(bestTaskIdForMachine);
-					}
+					moveTask(bestTaskIdForMachine, machineId);
 				}
-			} else if (_machines[machineId].countTasks()
-					>= _pbm.getMachineCoreCount(machineId)) {
-				for (int selectedTaskPos = 0; selectedTaskPos
-						< _machines[machineId].countTasks(); selectedTaskPos++) {
-
+			} else {
+				for (int selectedTaskPos = 0; selectedTaskPos < _machines[machineId].countTasks(); selectedTaskPos++) {
 					if (rand01() < MUT_TASK) {
 						int neighbourhood;
 						neighbourhood = rand_int(0, 1);
@@ -1207,9 +1100,7 @@ void Solution::doMutate() {
 									selectedTaskId);
 
 							if (bestMachineId != machineId) {
-								if (_machines[bestMachineId].countTasks()
-										>= _pbm.getMachineCoreCount(
-												bestMachineId)) {
+								if (_machines[bestMachineId].countTasks() > 0) {
 									// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 									// con menor costo de ejecución en la máquina sorteada.
 									int minCostTaskPosOnMachine;
@@ -1222,10 +1113,7 @@ void Solution::doMutate() {
 											bestMachineId,
 											minCostTaskPosOnMachine);
 								} else {
-									_machines[bestMachineId].addTask(
-											selectedTaskId);
-									_machines[machineId].removeTask(
-											selectedTaskPos);
+									moveTask(selectedTaskId, bestMachineId);
 								}
 							}
 						}
@@ -1242,9 +1130,7 @@ void Solution::doMutate() {
 							selectedTaskId = _machines[machineId].getTask(
 									selectedTaskPos);
 
-							if (_machines[minCostMachineId].countTasks()
-									>= _pbm.getMachineCoreCount(
-											minCostMachineId)) {
+							if (_machines[minCostMachineId].countTasks() > 0) {
 								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
 								// con menor costo de ejecución en la máquina sorteada.
 								int minCostTaskPosOnMachine;
@@ -1257,9 +1143,7 @@ void Solution::doMutate() {
 										minCostMachineId,
 										minCostTaskPosOnMachine);
 							} else {
-								_machines[minCostMachineId].addTask(
-										selectedTaskId);
-								_machines[machineId].removeTask(selectedTaskPos);
+								moveTask(selectedTaskId, minCostMachineId);
 							}
 						}
 					}
@@ -1282,6 +1166,7 @@ void Solution::doMutate() {
 }
 
 void Solution::addTask(const int machineId, const int taskId) {
+	_taskAssignment[taskId] = machineId;
 	_machines[machineId].addTask(taskId);
 }
 
@@ -1292,48 +1177,38 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskId1 = machines()[machineId1].getTask(taskPos1);
 		int taskId2 = machines()[machineId2].getTask(taskPos2);
 
-		if (taskId1 != taskId2) {
-			_machines[machineId1].setTask(taskId2, taskPos1);
-			_machines[machineId2].setTask(taskId1, taskPos2);
-		}
+		_machines[machineId1].setTask(taskId2, taskPos1);
+		_taskAssignment[taskId2] = machineId1;
+
+		_machines[machineId2].setTask(taskId1, taskPos2);
+		_taskAssignment[taskId1] = machineId2;
 	}
 }
 
-void Solution::swapTasks(Solution& solution, const int taskId) {
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::swapTasks" << endl;
+void Solution::swapTasks(int taskId1, int taskId2) {
+	int machineId1 = getTaskAssignment(taskId1);
+	int machineId2 = getTaskAssignment(taskId2);
 
-	Solution& sol1 = *this;
-	Solution& sol2 = solution;
-	int machine1, machine2, taskPos1, taskPos2;
+	if (machineId1 != machineId2) {
+		_machines[machineId1].removeTask(taskId1);
+		_machines[machineId1].addTask(taskId2);
+		_taskAssignment[taskId2] = machineId1;
 
-	assert(sol1.findTask(taskId, machine1, taskPos1));
-	assert(sol2.findTask(taskId, machine2, taskPos2));
-
-	if ((machine1 != machine2) || (taskPos1 != taskPos2)) {
-		// Modifico la solución 1.
-		// Borro la tarea de la ubicación original.
-		sol1._machines[machine1].removeTask(taskPos1);
-
-		// Inserto la tarea en la nueva ubicación.
-		sol1._machines[machine2].addTask(taskId);
-
-		// Modifico la solución 2.
-		// Borro la tarea de la ubicación original.
-		sol2._machines[machine2].removeTask(taskPos2);
-
-		// Inserto la tarea en la nueva ubicación.
-		sol2._machines[machine1].addTask(taskId);
+		_machines[machineId2].removeTask(taskId2);
+		_machines[machineId2].addTask(taskId1);
+		_taskAssignment[taskId1] = machineId2;
 	}
 }
 
-bool Solution::equalTasks(Solution& solution, const int taskId) {
-	// if (DEBUG) cout << endl << "[DEBUG] Solution::equalTasks" << endl;
-	int machine1, machine2, taskPos1, taskPos2;
+void Solution::moveTask(const int taskId, const int machineId) {
+	int machineIdOld = getTaskAssignment(taskId);
 
-	assert(findTask(taskId, machine1, taskPos1));
-	assert(solution.findTask(taskId, machine2, taskPos2));
+	if (machineId != machineIdOld) {
+		_machines[machineIdOld].removeTask(taskId);
 
-	return (machine1 == machine2) && (taskPos1 == taskPos2);
+		_machines[machineId].addTask(taskId);
+		_taskAssignment[taskId] = machineId;
+	}
 }
 
 char *Solution::to_String() const {
@@ -1358,8 +1233,6 @@ char *Solution::to_String() const {
 	}
 	raw[rawPos] = endMark;
 	rawPos += 1;
-
-	//	if (DEBUG) cout << endl << "[DEBUG] Solution::to_String end" << endl;
 
 	return rawChar;
 }
@@ -1386,31 +1259,27 @@ void Solution::to_Solution(char *_string_) {
 		if (currentValue == endMark) {
 			endFound = true;
 		} else if (currentValue == machineSeparator) {
-			assert(currentMachine < _pbm.getMachineCount());
+			//assert(currentMachine < _pbm.getMachineCount());
 
 			currentMachine++;
 		} else {
-			assert(currentValue >= 0);
+			/*assert(currentValue >= 0);
 			assert(currentValue < _pbm.getTaskCount());
-			assert(currentMachine < _pbm.getMachineCount());
+			assert(currentMachine < _pbm.getMachineCount());*/
 
-			_machines[currentMachine].addTask(currentValue);
+			addTask(currentMachine, currentValue);
 			currentTask++;
 		}
 	}
 
-	assert(_machines.size() == _pbm.getMachineCount());
+	/*assert(_machines.size() == _pbm.getMachineCount());
 	assert(currentTask == _pbm.getTaskCount());
-	assert(endFound);
+	assert(endFound);*/
 
 	markAsInitialized();
 }
 
 const vector<struct SolutionMachine>& Solution::machines() const {
-	return _machines;
-}
-
-vector<struct SolutionMachine>& Solution::getMachines() {
 	return _machines;
 }
 
