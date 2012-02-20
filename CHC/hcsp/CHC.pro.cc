@@ -2984,15 +2984,18 @@ void Solver_Lan::run(const unsigned long int nb_generations) {
 
 	if (mypid != 0) {
 		while (!final_phase && (current_iteration() < nb_generations)
-				&& !(terminateQ(problem, *this, params)))
+				&& !(terminateQ(problem, *this, params))) {
 
 			DoStep();
+		}
 
 		send_local_state_to(-1);
 
+		cout << "[PID:" << mypid << "] current_iteration: " << current_iteration() << endl;
+		
 		/* MUESTRO LOS TIEMPOS RECOLECTADOS */
-		if (TIMING) {
-			if (mypid == 1) {
+		/*if (TIMING) {*/
+			//if (mypid == 1) {
 				cout << "[TIMING_INIT]      (1)"
 						<< Solver::global_timing[TIMING_INIT] << endl;
 				cout << "[TIMING_CROSS]     ("
@@ -3007,8 +3010,8 @@ void Solver_Lan::run(const unsigned long int nb_generations) {
 				cout << "[TIMING_MIGRATION] ("
 						<< Solver::global_calls[TIMING_MIGRATION] << ")"
 						<< Solver::global_timing[TIMING_MIGRATION] << endl;
-			}
-		}
+			//}
+		//}
 	} else {
 		check_for_refresh_global_state();
 	}
