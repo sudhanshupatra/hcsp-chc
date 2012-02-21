@@ -23,19 +23,19 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.5
-#define MUT_TASK 0.3
+#define MUT_MAQ 0.8
+#define MUT_TASK 0.5
 
 // CROSS
-#define CROSS_TASK 0.4
+#define CROSS_TASK 0.5
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
 // mínima necesaria para permitir el cruzamiento (i.e. converge más lento).
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
-#define PALS_TOP_M 12
-#define PALS_TOP_T 8
+#define PALS_TOP_M 16
+#define PALS_TOP_T 12
 
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
@@ -139,10 +139,6 @@ private:
 
 	double _computeTime;
 	double _energy;
-
-	bool _dirty;
-
-	void refresh();
 public:
 	SolutionMachine(const Solution& solution, int machineId);
 	~SolutionMachine();
@@ -159,9 +155,12 @@ public:
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
-	double getComputeTime();
-	double getActiveEnergyConsumption();
-	double getIdleEnergyConsumption(double solutionMakespan);
+	double getComputeTime() const;
+	double getActiveEnergyConsumption() const;
+	double getIdleEnergyConsumption(double solutionMakespan) const;
+	double getTotalEnergyConsumption(double solutionMakespan) const;
+
+	void refresh();
 
 	int getMachineId() const;
 
