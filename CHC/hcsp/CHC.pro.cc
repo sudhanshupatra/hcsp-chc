@@ -659,7 +659,7 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-	//if (DEBUG) cout << endl << "[DEBUG] Crossover::cross" << endl;
+	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross =========================================" << endl;
 
 	timespec ts;
 
@@ -690,7 +690,7 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				machineIdSol2 = sol2.getTaskAssignment(taskId);
 
 				if (machineIdSol1 != machineIdSol2) {
-					if (rand01() < 0.5) {
+					if (sol1.getFitness() < sol2.getFitness()) {
 						sol2.moveTask(taskId, machineIdSol1);
 					} else {
 						sol1.moveTask(taskId, machineIdSol2);
@@ -813,9 +813,12 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge" << endl;
 
 	for (int i = 0; i < sols.size(); i++) {
-		//		if (i != bestSolutionIndex) {
-		if (rand01() <= mutationProbability) {
-			sols[i]->doMutate();
+		if (i != bestSolutionIndex) {
+			if (rand01() <= mutationProbability) {
+				sols[i]->doMutate();
+			}
+		} else {
+			sols[i]->doLocalSearch();
 		}
 	}
 }
