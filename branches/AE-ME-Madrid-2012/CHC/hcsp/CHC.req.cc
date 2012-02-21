@@ -733,6 +733,102 @@ void Solution::initializeMinMin() {
 	}
 }
 
+void Solution::initializeRandomMinMin() {
+	int minminTasks = rand_int(0,_pbm.getTaskCount());
+	initializeRandomMinMin(minminTasks);
+}
+
+void Solution::initializeRandomMinMin(int minminTasks) {
+	//if (DEBUG)
+	cout << endl << "[DEBUG] Solution::initializeRandomMinMin <start>" << endl;
+	cout << endl << "[DEBUG] Solution::initializeRandomMinMin minminTasks: " << minminTasks << endl;
+
+	vector<float> machineAssignedSsjops;
+	machineAssignedSsjops.reserve(_pbm.getMachineCount() + 1);
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.getMachineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.getMachineCount(); machineId++) {
+		machineAssignedSsjops.push_back(0.0);
+		machineMakespan.push_back(0.0);
+	}
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.getTaskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount = _pbm.getTaskCount() - minminTasks;
+
+	double minCT;
+	int minCTTaskId;
+	int minCTMachineId;
+	double newMakespan;
+
+	while (unmappedTasksCount > 0) {
+		minCT = infinity();
+		minCTTaskId = -1;
+		minCTMachineId = -1;
+
+		for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
+			if (taskIsUnmapped[taskId]) {
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					newMakespan = machineAssignedSsjops[machineId]
+							+ _pbm.getExpectedTimeToCompute(taskId, machineId);
+
+					if (newMakespan < minCT) {
+						minCT = newMakespan;
+						minCTTaskId = taskId;
+						minCTMachineId = machineId;
+					}
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[minCTTaskId] = false;
+
+		machineAssignedSsjops[minCTMachineId]
+				= machineAssignedSsjops[minCTMachineId]
+						+ _pbm.getExpectedTimeToCompute(minCTTaskId,
+								minCTMachineId);
+		machineMakespan[minCTMachineId] = minCT;
+
+		addTask(minCTMachineId, minCTTaskId);
+	}
+
+	for (int taskId = 0; taskId < _pbm.getTaskCount(); taskId++) {
+		if (taskIsUnmapped[taskId]) {
+			minCT = infinity();
+			minCTTaskId = -1;
+			minCTMachineId = -1;
+
+			for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+				newMakespan = machineAssignedSsjops[machineId]
+						+ _pbm.getExpectedTimeToCompute(taskId, machineId);
+
+				if (newMakespan < minCT) {
+					minCT = newMakespan;
+					minCTTaskId = taskId;
+					minCTMachineId = machineId;
+				}
+			}
+
+			taskIsUnmapped[minCTTaskId] = false;
+
+			machineAssignedSsjops[minCTMachineId]
+					= machineAssignedSsjops[minCTMachineId]
+							+ _pbm.getExpectedTimeToCompute(minCTTaskId,
+									minCTMachineId);
+			machineMakespan[minCTMachineId] = minCT;
+
+			addTask(minCTMachineId, minCTTaskId);
+		}
+	}
+}
+
 void Solution::initializeRandom() {
 	//	if (DEBUG) cout << endl << "[DEBUG] Inicialización random" << endl;
 
@@ -773,7 +869,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		// La solución 0 (cero) es idéntica en todos las instancias de ejecución.
 		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
 
-		initializeStaticMCT();
+		//initializeStaticMCT();
+		initializeRandomMinMin((int)floor(pbm().getTaskCount() / 2.0));
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		double currentMakespan = getMakespan();
@@ -792,7 +889,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			}
 		}
 	} else {
-		initializeRandomMCT();
+		//initializeRandomMCT();
+		initializeRandomMinMin();
 	}
 
 	if (TIMING) {
@@ -992,8 +1090,7 @@ double Solution::getMachineFitness(int machineId) {
 }
 
 void Solution::doLocalSearch() {
-	//if (DEBUG)
-	cout << endl
+	if (DEBUG) cout << endl
 			<< "[DEBUG] Solution::doLocalSearch begin <start> ========================================="
 			<< endl;
 
@@ -1006,7 +1103,7 @@ void Solution::doLocalSearch() {
 	//double aux_pre_LS = getFitness();
 	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
 
-	int max_steps = rand_int(3, 10);
+	int max_steps = rand_int(1, 5);
 
 	for (int iterations = 0; iterations < max_steps; iterations++) {
 		int machineId;
