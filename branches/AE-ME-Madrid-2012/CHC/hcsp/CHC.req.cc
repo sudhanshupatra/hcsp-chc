@@ -1003,8 +1003,8 @@ void Solution::doLocalSearch() {
 	}
 	Solver::global_calls[TIMING_LS]++;
 
-	double aux_pre_LS = getFitness();
-	cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
+	//double aux_pre_LS = getFitness();
+	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
 
 	int max_steps = rand_int(3, 10);
 
@@ -1207,10 +1207,12 @@ void Solution::doLocalSearch() {
 		}
 	}
 
+	/*
 	cout << "[DEBUG] Solution::doLocalSearch after fitness: " << getFitness()
 			<< endl;
 	cout << "[DEBUG] Solution::doLocalSearch improvement: " << getFitness()
 			/ aux_pre_LS << endl;
+	 */
 
 	if (TIMING) {
 		timespec ts_end;
