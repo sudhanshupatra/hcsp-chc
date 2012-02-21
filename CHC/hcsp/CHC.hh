@@ -34,8 +34,8 @@ skeleton CHC {
 #define CROSSOVER_DISTANCE 4
 
 // Propiedades del PALS.
-#define PALS_TOP_M 16
-#define PALS_TOP_T 12
+#define PALS_TOP_M 12
+#define PALS_TOP_T 8
 
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
@@ -247,6 +247,8 @@ private:
 
 	void initializeRandom();
 	void initializeMinMin();
+	void initializeRandomMinMin();
+	void initializeRandomMinMin(int minminTasks);
 	void initializeMCT(int startTask, int direction);
 	void initializeStaticMCT();
 	void initializeRandomMCT();
