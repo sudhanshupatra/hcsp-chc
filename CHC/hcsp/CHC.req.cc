@@ -1256,7 +1256,7 @@ void Solution::doMutate() {
 						< _machines[machineId].countTasks(); selectedTaskPos++) {
 					if (rand01() < MUT_TASK) {
 						int neighbourhood;
-						neighbourhood = rand_int(0, 2);
+						neighbourhood = rand_int(0, 1);
 
 						if (neighbourhood == 0) {
 							// Se intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
