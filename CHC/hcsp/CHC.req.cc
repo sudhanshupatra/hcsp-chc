@@ -1103,7 +1103,7 @@ void Solution::doLocalSearch() {
 	//double aux_pre_LS = getFitness();
 	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
 
-	int max_steps = rand_int(1, 5);
+	int max_steps = rand_int(3, 10);
 
 	for (int iterations = 0; iterations < max_steps; iterations++) {
 		int machineId;
@@ -1355,7 +1355,7 @@ void Solution::doMutate() {
 						< _machines[machineId].countTasks(); selectedTaskPos++) {
 					if (rand01() < MUT_TASK) {
 						int neighbourhood;
-						neighbourhood = rand_int(0, 1);
+						neighbourhood = rand_int(0, 2);
 
 						if (neighbourhood == 0) {
 							// Se intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
@@ -1425,7 +1425,7 @@ void Solution::doMutate() {
 
 							int machineDstId = rand_int(0,
 									pbm().getMachineCount() - 2);
-							if (machineId == machineDstId)
+							if (machineId >= machineDstId)
 								machineDstId++;
 
 							moveTask(selectedTaskId, machineDstId);

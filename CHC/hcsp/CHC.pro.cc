@@ -466,7 +466,7 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	if (rand01() < 0.5) {
+	if (rand01() < 0.25) {
 		int individual = rand_int(0, _parents.size() - 1);
 
 		// cout << "Busqueda local en individuo " << individual << endl;
