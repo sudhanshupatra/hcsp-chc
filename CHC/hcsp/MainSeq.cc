@@ -19,7 +19,9 @@ int main (int argc, char** argv)
 	ifstream f2(argv[2]);
 	if (!f2) show_message(12);
 
-	Problem pbm;
+	exit(EXIT_FAILURE);
+
+	Problem pbm(0,0);
 	f2 >> pbm;
 
 	Operator_Pool pool(pbm);
