@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan16_eval1
+#PBS -N ae_24_eval
 
 # Requerimientos
 #PBS -l nodes=1:class2:ppn=24,walltime=20:00:00
@@ -10,7 +10,7 @@
 #PBS -q publica
 
 # Working dir
-#PBS -d /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/
+#PBS -d /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones
 
 # Correo electronico
 #PBS -M siturria@fing.edu.uy
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
+#PBS -e /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan24/
+#PBS -o /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan24/
 
 #PBS -V
 
@@ -59,7 +59,7 @@ NPROCS=`wc -l < $PBS_NODEFILE`
 echo $NPROCS
 echo
 
-EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
+EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/MainLan"
 #EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 cfg[0]="config-0512.cfg"
@@ -67,6 +67,18 @@ cfg[1]="config-1024.cfg"
 cfg[2]="config-2048.cfg"
 cfg[3]="config-4096.cfg"
 cfg[4]="config-8192.cfg"
+
+dim_tasks[0]="512"
+dim_tasks[1]="1024"
+dim_tasks[2]="2048"
+dim_tasks[3]="4096"
+dim_tasks[4]="8192"
+
+dim_machines[0]="16"
+dim_machines[1]="32"
+dim_machines[2]="48"
+dim_machines[3]="64"
+dim_machines[4]="128"
 
 inst_path[0]="/home/siturria/instancias/512.M"
 inst_path[1]="/home/siturria/instancias/1024.M"
@@ -79,7 +91,7 @@ data[1]="A.u_i_lohi"
 data[2]="B.u_i_hihi"
 data[3]="B.u_i_lohi"
 
-BASE_PATH="/home/siturria/AE/trunk/AE/CHC/hcsp"
+BASE_PATH="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 
 for c in {0..4}
 do
@@ -90,7 +102,7 @@ do
     	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
     	DataFile="${inst_path[c]}/${data[i]}"
     	OutputFile="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}"
-    	PesosFile="${BASE_PATH}/ejecuciones/pesos_8.txt"
+    	PesosFile="${BASE_PATH}/ejecuciones/pesos_24.txt"
     	
     	echo "Datos $DataFile"
     	echo "CfgFile $CfgFile"
@@ -100,6 +112,8 @@ do
     	echo "${DataFile}" >> Config_LAN24_eval.cfg
     	echo "${OutputFile}.sol" >> Config_LAN24_eval.cfg
     	echo "${PesosFile}" >> Config_LAN24_eval.cfg
+	echo "${dim_tasks[c]}" >> Config_LAN24_eval.cfg
+        echo "${dim_machines[c]}" >> Config_LAN24_eval.cfg
     	
     	time($EXEC Config_LAN24_eval.cfg > $OutputFile.log) 
     done
