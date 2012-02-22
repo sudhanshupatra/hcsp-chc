@@ -4,8 +4,8 @@ B.u_i_lolo
 
 *
 A.u_i_hihi
-A.u_i_hilo
+A.u_i_lohi
 B.u_i_hihi
-B.u_i_hilo
+B.u_i_lohi
 
 30 ejecuciones

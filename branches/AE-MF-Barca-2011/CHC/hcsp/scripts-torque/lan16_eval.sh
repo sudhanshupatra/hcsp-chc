@@ -4,7 +4,7 @@
 #PBS -N ae_lan16_eval1
 
 # Requerimientos
-#PBS -l nodes=1:class2:ppn=16,walltime=20:00:00
+#PBS -l nodes=1:class2:ppn=24,walltime=20:00:00
 
 # Cola
 #PBS -q publica
@@ -62,34 +62,45 @@ echo
 EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturria/AE/trunk/AE/CHC/hcsp/MainLan"
 #EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
-data[0]="u_c_hihi.0"
-data[1]="u_c_hilo.0"
-data[2]="u_c_lohi.0"
-data[3]="u_c_lolo.0"
-data[4]="u_s_hihi.0"
-data[5]="u_s_hilo.0"
-data[6]="u_s_lohi.0"
-data[7]="u_s_lolo.0"
-data[8]="u_i_hihi.0"
-data[9]="u_i_hilo.0"
-data[10]="u_i_lohi.0"
-data[11]="u_i_lolo.0"
+cfg[0]="config-0512.cfg"
+cfg[1]="config-1024.cfg"
+cfg[2]="config-2048.cfg"
+cfg[3]="config-4096.cfg"
+cfg[4]="config-8192.cfg"
 
-for i in {0..0}
+inst_path[0]="/home/siturria/instancias/512.M"
+inst_path[1]="/home/siturria/instancias/1024.M"
+inst_path[2]="/home/siturria/instancias/2048.M"
+inst_path[3]="/home/siturria/instancias/4096.M"
+inst_path[4]="/home/siturria/instancias/8192.M"
+
+data[0]="A.u_i_hihi"
+data[1]="A.u_i_lohi"
+data[2]="B.u_i_hihi"
+data[3]="B.u_i_lohi"
+
+BASE_PATH="/home/siturria/AE/trunk/AE/CHC/hcsp"
+
+for c in {0..4}
 do
-	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16.cfg"
-	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
-	OutputFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/Braun_et_al/${data[i]}"
-	PesosFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt"
-	
-	echo "Datos $DataFile"
-	echo "CfgFile $CfgFile"
-	cat $CfgFile
-		
-	echo "${CfgFile}" > Config_LAN16_eval1.cfg
-	echo "${DataFile}" >> Config_LAN16_eval1.cfg
-	echo "${OutputFile}.sol" >> Config_LAN16_eval1.cfg
-	echo "${PesosFile}" >> Config_LAN16_eval1.cfg
-	
-	time($EXEC Config_LAN16_eval1.cfg > $OutputFile.log) 
+    mkdir -p ${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}
+
+    for i in {0..3}
+    do
+    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
+    	DataFile="${inst_path[c]}/${data[i]}"
+    	OutputFile="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}"
+    	PesosFile="${BASE_PATH}/ejecuciones/pesos_8.txt"
+    	
+    	echo "Datos $DataFile"
+    	echo "CfgFile $CfgFile"
+    	cat $CfgFile
+    		
+    	echo "${CfgFile}" > Config_LAN24_eval.cfg
+    	echo "${DataFile}" >> Config_LAN24_eval.cfg
+    	echo "${OutputFile}.sol" >> Config_LAN24_eval.cfg
+    	echo "${PesosFile}" >> Config_LAN24_eval.cfg
+    	
+    	time($EXEC Config_LAN24_eval.cfg > $OutputFile.log) 
+    done
 done
