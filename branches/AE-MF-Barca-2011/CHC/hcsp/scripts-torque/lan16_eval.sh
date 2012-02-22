@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_lan4_eval4
+#PBS -N ae_lan16_eval1
 
 # Requerimientos
-#PBS -l nodes=1:cpu8:ppn=4,walltime=15:00:00
+#PBS -l nodes=1:class2:ppn=16,walltime=20:00:00
 
 # Cola
 #PBS -q publica
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
-#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan4/
+#PBS -e /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
+#PBS -o /home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/
 
 #PBS -V
 
@@ -63,50 +63,33 @@ EXEC="/home/siturria/bin/mpich2-1.2.1p1/bin/mpiexec.hydra -rmk pbs /home/siturri
 #EXEC="mpiexec -mpich-p4-no-shmem ../MainLan"
 
 data[0]="u_c_hihi.0"
-data[1]="u_c_lolo.0"
-data[2]="u_s_hihi.0"
-data[3]="u_s_lolo.0"
-data[4]="u_i_hihi.0"
-data[5]="u_i_lolo.0"
+data[1]="u_c_hilo.0"
+data[2]="u_c_lohi.0"
+data[3]="u_c_lolo.0"
+data[4]="u_s_hihi.0"
+data[5]="u_s_hilo.0"
+data[6]="u_s_lohi.0"
+data[7]="u_s_lolo.0"
+data[8]="u_i_hihi.0"
+data[9]="u_i_hilo.0"
+data[10]="u_i_lohi.0"
+data[11]="u_i_lolo.0"
 
-data[6]="A.u_c_hihi"
-data[7]="A.u_c_lolo"
-data[8]="A.u_i_lohi"
-data[9]="A.u_s_hilo"
-data[10]="B.u_c_hihi"
-data[11]="B.u_c_lolo"
-data[12]="B.u_i_lohi"
-data[13]="B.u_s_hilo"
-data[14]="A.u_c_hilo"
-data[15]="A.u_i_hihi"
-data[16]="A.u_i_lolo"
-data[17]="A.u_s_lohi"
-data[18]="B.u_c_hilo"
-data[19]="B.u_i_hihi"
-data[20]="B.u_i_lolo"
-data[21]="B.u_s_lohi"
-data[22]="A.u_c_lohi"
-data[23]="A.u_i_hilo"
-data[24]="A.u_s_hihi"
-data[25]="A.u_s_lolo"
-data[26]="B.u_c_lohi"
-data[27]="B.u_i_hilo"
-data[28]="B.u_s_hihi"
-data[29]="B.u_s_lolo"
-
-for i in {6..29}
+for i in {0..0}
 do
-	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan.cfg"
-	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/4096x128.CPrio/${data[i]}"
-	OutputFile="evaluacion/lan4/4096x128/${data[i]}"
+	CfgFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/scripts_evaluacion/chc_lan16.cfg"
+	DataFile="/home/siturria/AE/trunk/AE/ProblemInstances/HCSP/Braun_et_al.CPrio/${data[i]}"
+	OutputFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/evaluacion/lan16/Braun_et_al/${data[i]}"
+	PesosFile="/home/siturria/AE/trunk/AE/CHC/hcsp/ejecuciones/pesos_fijos.txt"
 	
 	echo "Datos $DataFile"
 	echo "CfgFile $CfgFile"
 	cat $CfgFile
+		
+	echo "${CfgFile}" > Config_LAN16_eval1.cfg
+	echo "${DataFile}" >> Config_LAN16_eval1.cfg
+	echo "${OutputFile}.sol" >> Config_LAN16_eval1.cfg
+	echo "${PesosFile}" >> Config_LAN16_eval1.cfg
 	
-	echo "${CfgFile}" > Config_LAN4_eval4.cfg
-	echo "$DataFile" >> Config_LAN4_eval4.cfg
-	echo "$OutputFile.sol" >> Config_LAN4_eval4.cfg
-	
-	time($EXEC Config_LAN4_eval4.cfg > $OutputFile.log) 
+	time($EXEC Config_LAN16_eval1.cfg > $OutputFile.log) 
 done
