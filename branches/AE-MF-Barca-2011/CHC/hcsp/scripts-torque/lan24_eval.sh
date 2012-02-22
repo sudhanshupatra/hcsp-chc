@@ -7,7 +7,7 @@
 #PBS -l nodes=1:class2:ppn=24,walltime=20:00:00
 
 # Cola
-#PBS -q publica
+#PBS -q medium_jobs
 
 # Working dir
 #PBS -d /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones
@@ -80,11 +80,11 @@ dim_machines[2]="48"
 dim_machines[3]="64"
 dim_machines[4]="128"
 
-inst_path[0]="/home/siturria/instancias/512.M"
-inst_path[1]="/home/siturria/instancias/1024.M"
-inst_path[2]="/home/siturria/instancias/2048.M"
-inst_path[3]="/home/siturria/instancias/4096.M"
-inst_path[4]="/home/siturria/instancias/8192.M"
+inst_path[0]="/home/siturria/instancias/512x16.M"
+inst_path[1]="/home/siturria/instancias/1024x32.M"
+inst_path[2]="/home/siturria/instancias/2048x64.M"
+inst_path[3]="/home/siturria/instancias/4096x128.M"
+inst_path[4]="/home/siturria/instancias/8192x256.M"
 
 data[0]="A.u_i_hihi"
 data[1]="A.u_i_lohi"
@@ -95,26 +95,30 @@ BASE_PATH="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 
 for c in {0..4}
 do
-    mkdir -p ${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}
-
     for i in {0..3}
     do
-    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
-    	DataFile="${inst_path[c]}/${data[i]}"
-    	OutputFile="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}"
-    	PesosFile="${BASE_PATH}/ejecuciones/pesos_24.txt"
+	for (( j=0 ; j<30 ; j++ ))
+	do
+	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
+	    	DataFile="${inst_path[c]}/${data[i]}"
+	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}/${j}"
+	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_24.txt"
     	
-    	echo "Datos $DataFile"
-    	echo "CfgFile $CfgFile"
-    	cat $CfgFile
+	    	mkdir -p ${OutputPath}
+
+		echo "Datos $DataFile"
+	    	echo "CfgFile $CfgFile"
+	    	#cat $CfgFile
     		
-    	echo "${CfgFile}" > Config_LAN24_eval.cfg
-    	echo "${DataFile}" >> Config_LAN24_eval.cfg
-    	echo "${OutputFile}.sol" >> Config_LAN24_eval.cfg
-    	echo "${PesosFile}" >> Config_LAN24_eval.cfg
-	echo "${dim_tasks[c]}" >> Config_LAN24_eval.cfg
-        echo "${dim_machines[c]}" >> Config_LAN24_eval.cfg
+	    	echo "${CfgFile}" > Config_LAN24_eval.cfg
+	    	echo "${DataFile}" >> Config_LAN24_eval.cfg
+	    	echo "${OutputPath}/${j}.sol" >> Config_LAN24_eval.cfg
+	    	echo "${PesosFile}" >> Config_LAN24_eval.cfg
+		echo "${dim_tasks[c]}" >> Config_LAN24_eval.cfg
+        	echo "${dim_machines[c]}" >> Config_LAN24_eval.cfg
     	
-    	time($EXEC Config_LAN24_eval.cfg > $OutputFile.log) 
+	    	time($EXEC Config_LAN24_eval.cfg > ${OutputPath}/${j}.log) 
+	        echo "==============================================="
+	done
     done
 done
