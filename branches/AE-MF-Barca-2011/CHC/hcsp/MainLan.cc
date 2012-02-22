@@ -33,7 +33,13 @@ int main(int argc, char** argv) {
 	ifstream f3(path);
 	if(!f3) show_message(-1);
 
-	Problem pbm;
+	f.getline(path,MAX_BUFFER,'\n'); // tasks
+	string tasks_count(path);
+
+	f.getline(path,MAX_BUFFER,'\n'); // machines
+	string machines_count(path);
+
+	Problem pbm(atoi(tasks_count.data()), atoi(machines_count.data()));
 	f2 >> pbm;
 
 	Operator_Pool pool(pbm);
@@ -70,14 +76,14 @@ int main(int argc, char** argv) {
 			ofstream fexit(solution_file.data());
 			if(!fexit) show_message(13);
 
-			fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			fexit << solver.best_solution_trial().makespan() * 10000.0 << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
 
 			for (int i = 0; i < solver.population().parents().size(); i++) {
-				fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+				fexit << solver.population().parents()[i]->makespan() * 10000.0 << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
 			}
 
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
-				fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+				fexit << solver.population().offsprings()[i]->makespan() * 10000.0 << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
 			}
 
 			fexit.close();
@@ -137,8 +143,8 @@ int main(int argc, char** argv) {
 		solver.statistics();
 		solver.show_state();
 
-		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
-		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() << endl;
+		cout << "Makespan: " << solver.global_best_solution().makespan() * 10000.0 << endl;
+		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() * 10000.0 << endl;
 		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
 		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
 
