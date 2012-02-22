@@ -4,7 +4,7 @@
 #PBS -N ae_8_eval
 
 # Requerimientos
-#PBS -l nodes=1:class0:ppn=6,walltime=02:00:00
+#PBS -l nodes=1:class0:ppn=6,walltime=04:00:00
 
 # Cola
 #PBS -q publica
