@@ -93,6 +93,8 @@ data[3]="B.u_i_lohi"
 
 BASE_PATH="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 
+rm -rf ${BASE_PATH}/ejecuciones/evaluacion/lan24
+
 for c in {0..4}
 do
     for i in {0..3}
