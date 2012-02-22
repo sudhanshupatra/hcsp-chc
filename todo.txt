@@ -1,0 +1,11 @@
+512
+B.u_i_hilo
+B.u_i_lolo
+
+*
+A.u_i_hihi
+A.u_i_hilo
+B.u_i_hihi
+B.u_i_hilo
+
+30 ejecuciones
