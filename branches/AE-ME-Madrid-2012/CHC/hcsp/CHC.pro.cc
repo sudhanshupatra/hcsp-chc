@@ -466,10 +466,10 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	/*if (rand01() < 0.25) {
+	if (rand01() < 0.25) {
 		int individual = rand_int(0, _parents.size() - 1);
 		_parents[individual]->doLocalSearch();
-	}*/
+	}
 
 	evaluate_parents(); // calculates fitness of new individuals
 }
@@ -679,12 +679,13 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 	if (distancia > distancia_minima) {
 		Solver::global_calls[TIMING_CROSS]++;
 
-		int sol = 0;
-		if (rand01() < 0.5) { //(sol1.getFitness() < sol2.getFitness()) {
+		/*int sol = 0;
+		if (rand01() < 0.5) {
+			//(sol1.getFitness() < sol2.getFitness()) {
 			sol = 1;
 		} else {
 			sol = 2;
-		}
+		}*/
 
 		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
@@ -695,11 +696,11 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				machineIdSol2 = sol2.getTaskAssignment(taskId);
 
 				if (machineIdSol1 != machineIdSol2) {
-					if (sol == 1) {
+					//if (sol == 1) {
 						sol2.moveTask(taskId, machineIdSol1);
-					} else {
+					//} else {
 						sol1.moveTask(taskId, machineIdSol2);
-					}
+					//}
 				}
 			}
 		}
