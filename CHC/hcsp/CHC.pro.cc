@@ -466,12 +466,10 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	if (rand01() < 0.25) {
+	/*if (rand01() < 0.25) {
 		int individual = rand_int(0, _parents.size() - 1);
-
-		// cout << "Busqueda local en individuo " << individual << endl;
 		_parents[individual]->doLocalSearch();
-	}
+	}*/
 
 	evaluate_parents(); // calculates fitness of new individuals
 }
@@ -681,6 +679,13 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 	if (distancia > distancia_minima) {
 		Solver::global_calls[TIMING_CROSS]++;
 
+		int sol = 0;
+		if (rand01() < 0.5) { //(sol1.getFitness() < sol2.getFitness()) {
+			sol = 1;
+		} else {
+			sol = 2;
+		}
+
 		for (int taskId = 0; taskId < cant_tasks; taskId++) {
 			if (rand01() <= CROSS_TASK) {
 				int taskPosSol1, machineIdSol1;
@@ -690,7 +695,7 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				machineIdSol2 = sol2.getTaskAssignment(taskId);
 
 				if (machineIdSol1 != machineIdSol2) {
-					if (sol1.getFitness() < sol2.getFitness()) {
+					if (sol == 1) {
 						sol2.moveTask(taskId, machineIdSol1);
 					} else {
 						sol1.moveTask(taskId, machineIdSol2);
@@ -953,14 +958,6 @@ void Migration::execute(Population& pop,
 		const unsigned long current_generation, NetStream& _netstream,
 		const bool synchronized, const unsigned int check_asynchronous) const {
 
-	timespec ts;
-
-	if (TIMING) {
-		clock_gettime(CLOCK_REALTIME, &ts);
-	}
-
-	Solver::global_calls[TIMING_MIGRATION]++;
-
 	Solution* solution_to_send;
 	Solution* solution_received;
 	Solution* solution_to_remplace;
@@ -984,6 +981,14 @@ void Migration::execute(Population& pop,
 	if ((current_generation % migration_rate) == 0 && (current_generation
 			!= pop.setup().nb_evolution_steps())) // in this generation this operator have to be applied
 	{
+		timespec ts;
+
+		if (TIMING) {
+			clock_gettime(CLOCK_REALTIME, &ts);
+		}
+
+		Solver::global_calls[TIMING_MIGRATION]++;
+
 		pop.setup().pool().selector(migration_selection_1).prepare(
 				pop.fitness_values(), false);
 
@@ -1049,6 +1054,16 @@ void Migration::execute(Population& pop,
 			_netstream << pack_end;
 
 		}
+
+		if (TIMING) {
+			timespec ts_end;
+			clock_gettime(CLOCK_REALTIME, &ts_end);
+
+			double elapsed;
+			elapsed = ((ts_end.tv_sec - ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec
+					- ts.tv_nsec) / 1000.0);
+			Solver::global_timing[TIMING_MIGRATION] += elapsed;
+		}
 	} // end if
 
 	if (!synchronized && ((current_generation % check_asynchronous) == 0)) { // asynchronous mode: if there are not data, continue;
@@ -1099,16 +1114,6 @@ void Migration::execute(Population& pop,
 
 	if (need_to_revaluate)
 		pop.evaluate_parents();
-
-	if (TIMING) {
-		timespec ts_end;
-		clock_gettime(CLOCK_REALTIME, &ts_end);
-
-		double elapsed;
-		elapsed = ((ts_end.tv_sec - ts.tv_sec) * 1000000.0) + ((ts_end.tv_nsec
-				- ts.tv_nsec) / 1000.0);
-		Solver::global_timing[TIMING_MIGRATION] += elapsed;
-	}
 }
 
 ostream& operator<<(ostream& os, const Migration& migration) {
