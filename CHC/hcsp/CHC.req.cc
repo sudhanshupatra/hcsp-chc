@@ -1105,11 +1105,11 @@ void Solution::doLocalSearch() {
 	//double aux_pre_LS = getFitness();
 	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
 
-	int max_steps = rand_int(10, 20);
+	int max_steps = rand_int(5, 20);
 
 	for (int iterations = 0; iterations < max_steps; iterations++) {
 		int machineId;
-		if (rand01() <= 0.8) {
+		if (rand01() <= 0.9) {
 			machineId = getMaxCostMachineId();
 		} else {
 			machineId = rand_int(0, this->machines().size() - 1);
@@ -1343,7 +1343,7 @@ void Solution::doMutate() {
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (rand01() <= MUT_MAQ) {
-			if (_machines[machineId].countTasks() == 0) {
+			/*if (_machines[machineId].countTasks() == 0) {
 				// La máquina no tiene tareas. Se le asigna la tarea que mejor puede ejecutar.
 				{
 					int bestTaskIdForMachine;
@@ -1352,11 +1352,11 @@ void Solution::doMutate() {
 
 					moveTask(bestTaskIdForMachine, machineId);
 				}
-			} else {
+			} else {*/
 				for (int selectedTaskPos = 0; selectedTaskPos
 						< _machines[machineId].countTasks(); selectedTaskPos++) {
 					if (rand01() < MUT_TASK) {
-						int neighbourhood;
+						/*int neighbourhood;
 						neighbourhood = rand_int(0, 2);
 
 						if (neighbourhood == 0) {
@@ -1420,7 +1420,7 @@ void Solution::doMutate() {
 							}
 						}
 
-						if (neighbourhood == 2) {
+						if (neighbourhood == 2) {*/
 							int selectedTaskId;
 							selectedTaskId = _machines[machineId].getTask(
 									selectedTaskPos);
@@ -1432,9 +1432,9 @@ void Solution::doMutate() {
 
 							moveTask(selectedTaskId, machineDstId);
 						}
-					}
+					//}
 				}
-			}
+			//}
 		}
 	}
 
