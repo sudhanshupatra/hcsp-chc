@@ -734,14 +734,15 @@ void Solution::initializeMinMin() {
 }
 
 void Solution::initializeRandomMinMin() {
-	int minminTasks = rand_int(0,_pbm.getTaskCount());
+	int minminTasks = rand_int(0, _pbm.getTaskCount());
 	initializeRandomMinMin(minminTasks);
 }
 
 void Solution::initializeRandomMinMin(int minminTasks) {
 	//if (DEBUG)
 	cout << endl << "[DEBUG] Solution::initializeRandomMinMin <start>" << endl;
-	cout << endl << "[DEBUG] Solution::initializeRandomMinMin minminTasks: " << minminTasks << endl;
+	cout << endl << "[DEBUG] Solution::initializeRandomMinMin minminTasks: "
+			<< minminTasks << endl;
 
 	vector<float> machineAssignedSsjops;
 	machineAssignedSsjops.reserve(_pbm.getMachineCount() + 1);
@@ -870,7 +871,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
 
 		//initializeStaticMCT();
-		initializeRandomMinMin((int)floor(pbm().getTaskCount() / 2.0));
+		initializeRandomMinMin((int) floor(pbm().getTaskCount() / 2.0));
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		double currentMakespan = getMakespan();
@@ -1090,9 +1091,10 @@ double Solution::getMachineFitness(int machineId) {
 }
 
 void Solution::doLocalSearch() {
-	if (DEBUG) cout << endl
-			<< "[DEBUG] Solution::doLocalSearch begin <start> ========================================="
-			<< endl;
+	if (DEBUG)
+		cout << endl
+				<< "[DEBUG] Solution::doLocalSearch begin <start> ========================================="
+				<< endl;
 
 	timespec ts;
 	if (TIMING) {
@@ -1103,7 +1105,7 @@ void Solution::doLocalSearch() {
 	//double aux_pre_LS = getFitness();
 	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
 
-	int max_steps = rand_int(3, 10);
+	int max_steps = rand_int(10, 20);
 
 	for (int iterations = 0; iterations < max_steps; iterations++) {
 		int machineId;
@@ -1158,7 +1160,7 @@ void Solution::doLocalSearch() {
 
 					int machineDstId;
 
-					if (rand01() <= 0.8) {
+					if (rand01() <= 0.5) {
 						machineDstId = getMinCostMachineId();
 
 						if (machineId == machineDstId) {
@@ -1240,7 +1242,7 @@ void Solution::doLocalSearch() {
 					// Itero en las otras máquinas.
 					int startMoveMachineOffset, endMoveMachineOffset;
 
-					if (rand01() <= 0.8) {
+					if (rand01() <= 0.5) {
 						startMoveMachineOffset = getMinCostMachineId();
 					} else {
 						startMoveMachineOffset = rand_int(0,
@@ -1305,10 +1307,10 @@ void Solution::doLocalSearch() {
 	}
 
 	/*
-	cout << "[DEBUG] Solution::doLocalSearch after fitness: " << getFitness()
-			<< endl;
-	cout << "[DEBUG] Solution::doLocalSearch improvement: " << getFitness()
-			/ aux_pre_LS << endl;
+	 cout << "[DEBUG] Solution::doLocalSearch after fitness: " << getFitness()
+	 << endl;
+	 cout << "[DEBUG] Solution::doLocalSearch improvement: " << getFitness()
+	 / aux_pre_LS << endl;
 	 */
 
 	if (TIMING) {
@@ -1467,19 +1469,20 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 		int taskPos2) {
 	if (DEBUG)
 		cout << "[DEBUG] Solution::swapTasks" << endl;
+
 	_is_dirty = true;
 
 	/*if (machines()[machineId1].getComputeTime() == getMakespan()
-	 || machines()[machineId2].getComputeTime() == getMakespan()) {
+			|| machines()[machineId2].getComputeTime() == getMakespan()) {
 
-	 _is_dirty = true;
-	 }*/
+		_is_dirty = true;
+	}
 
-	/*double machineEnergy1, machineEnergy2;
-	 machineEnergy1 = machines()[machineId1].getTotalEnergyConsumption(
-	 getMakespan());
-	 machineEnergy2 = machines()[machineId2].getTotalEnergyConsumption(
-	 getMakespan());*/
+	double machineEnergy1, machineEnergy2;
+	machineEnergy1 = machines()[machineId1].getTotalEnergyConsumption(
+			getMakespan());
+	machineEnergy2 = machines()[machineId2].getTotalEnergyConsumption(
+			getMakespan());*/
 
 	if (machineId1 != machineId2) {
 		int taskId1 = machines()[machineId1].getTask(taskPos1);
@@ -1493,32 +1496,32 @@ void Solution::swapTasks(int machineId1, int taskPos1, int machineId2,
 	}
 
 	/*if (machines()[machineId1].getComputeTime() > getMakespan()
-	 || machines()[machineId2].getComputeTime() > getMakespan()) {
+			|| machines()[machineId2].getComputeTime() > getMakespan()) {
 
-	 _is_dirty = true;
-	 }
+		_is_dirty = true;
+	}*/
 
-	 if (!_is_dirty) {
-	 _current_energy = _current_energy - machineEnergy1 - machineEnergy2
-	 + machines()[machineId1].getTotalEnergyConsumption(
-	 getMakespan())
-	 + machines()[machineId2].getTotalEnergyConsumption(
-	 getMakespan());
+	/*if (!_is_dirty) {
+		_current_energy = _current_energy - machineEnergy1 - machineEnergy2
+				+ machines()[machineId1].getTotalEnergyConsumption(
+						getMakespan())
+				+ machines()[machineId2].getTotalEnergyConsumption(
+						getMakespan());
 
-	 double normalized_makespan;
-	 normalized_makespan = (getMakespan() + Solution::_makespan_reference)
-	 / Solution::_makespan_reference;
+		double normalized_makespan;
+		normalized_makespan = (getMakespan() + Solution::_makespan_reference)
+				/ Solution::_makespan_reference;
 
-	 double normalized_energy;
-	 normalized_energy = (_current_energy + Solution::_energy_reference)
-	 / Solution::_energy_reference;
+		double normalized_energy;
+		normalized_energy = (_current_energy + Solution::_energy_reference)
+				/ Solution::_energy_reference;
 
-	 double fitness;
-	 fitness = (_pbm.getCurrentMakespanWeight() * normalized_makespan)
-	 + (_pbm.getCurrentEnergyWeight() * normalized_energy);
+		double fitness;
+		fitness = (_pbm.getCurrentMakespanWeight() * normalized_makespan)
+				+ (_pbm.getCurrentEnergyWeight() * normalized_energy);
 
-	 _current_fitness = fitness;
-	 }*/
+		_current_fitness = fitness;
+	}*/
 }
 
 void Solution::swapTasks(int taskId1, int taskId2) {

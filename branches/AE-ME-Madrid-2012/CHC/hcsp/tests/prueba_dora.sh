@@ -21,5 +21,5 @@ echo "${PesosFile}" >> ${OutputPath}/prueba_dora.cfg
 echo "512" >> ${OutputPath}/prueba_dora.cfg
 echo "16" >> ${OutputPath}/prueba_dora.cfg
 
-time(mpirun -n 4 ${WorkingPath}/MainLan ${OutputPath}/prueba_dora.cfg > ${OutputFile}.log)
+time(mpirun -n 3 ${WorkingPath}/MainLan ${OutputPath}/prueba_dora.cfg > ${OutputFile}.log)
 #mpirun -n 3 ${WorkingPath}/MainLan ${OutputPath}/prueba_dora.cfg 
