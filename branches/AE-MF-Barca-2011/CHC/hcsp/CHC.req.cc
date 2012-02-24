@@ -838,6 +838,106 @@ void Solution::initializeSufferage() {
 	}
 }
 
+void Solution::initializeRandomMinMin() {
+	int minminTasks = rand_int(0, _pbm.taskCount());
+	initializeRandomMinMin(minminTasks);
+}
+
+void Solution::initializeRandomMinMin(int minminTasks) {
+	//if (DEBUG)
+	cout << endl << "[DEBUG] Solution::initializeRandomMinMin <start>" << endl;
+	cout << endl << "[DEBUG] Solution::initializeRandomMinMin minminTasks: "
+			<< minminTasks << endl;
+
+	vector<double> machineMakespan;
+	machineMakespan.reserve(_pbm.machineCount() + 1);
+
+	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++)
+		machineMakespan.push_back(0.0);
+
+	vector<bool> taskIsUnmapped;
+	taskIsUnmapped.reserve(_pbm.taskCount() + 1);
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++)
+		taskIsUnmapped.push_back(true);
+
+	int unmappedTasksCount;
+	if (minminTasks < _pbm.taskCount()) {
+		unmappedTasksCount = minminTasks;
+	} else {
+		unmappedTasksCount = _pbm.taskCount();
+	}
+
+	cout << "unmappedTasksCount: " << unmappedTasksCount << endl;
+
+	double minCT;
+	int minCTTaskId;
+	int minCTMachineId;
+	double newMakespan;
+
+	while (unmappedTasksCount > 0) {
+		minCT = infinity();
+		minCTTaskId = -1;
+		minCTMachineId = -1;
+
+		for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+			if (taskIsUnmapped[taskId]) {
+				for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+					if ((machineMakespan[machineId]
+							+ _pbm.expectedTimeToCompute(taskId, machineId))
+							< minCT) {
+						minCT = machineMakespan[machineId]
+								+ _pbm.expectedTimeToCompute(taskId, machineId);
+						minCTTaskId = taskId;
+						minCTMachineId = machineId;
+					}
+				}
+			}
+		}
+
+		unmappedTasksCount--;
+		taskIsUnmapped[minCTTaskId] = false;
+
+		machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+				minCTTaskId, minCTMachineId);
+		_machines[minCTMachineId].addTask(minCTTaskId);
+	}
+
+	int restOfTasks;
+	if (minminTasks < _pbm.taskCount()) {
+		restOfTasks = 0;
+	} else {
+		restOfTasks = minminTasks - _pbm.taskCount();
+	}
+
+	cout << "restOfTasks: " << restOfTasks << endl;
+
+	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
+		if (taskIsUnmapped[taskId]) {
+			minCT = infinity();
+			minCTTaskId = -1;
+			minCTMachineId = -1;
+
+			for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
+				if ((machineMakespan[machineId]
+						+ _pbm.expectedTimeToCompute(taskId, machineId))
+						< minCT) {
+					minCT = machineMakespan[machineId]
+							+ _pbm.expectedTimeToCompute(taskId, machineId);
+					minCTTaskId = taskId;
+					minCTMachineId = machineId;
+				}
+			}
+
+			taskIsUnmapped[minCTTaskId] = false;
+
+			machineMakespan[minCTMachineId] += _pbm.expectedTimeToCompute(
+					minCTTaskId, minCTMachineId);
+			_machines[minCTMachineId].addTask(minCTTaskId);
+		}
+	}
+}
+
 void Solution::markAsInitialized() {
 	_initialized = true;
 }
@@ -858,7 +958,8 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		// Utilizo la solución 0 (cero) como referencia de mejora del algoritmo.
 
 		//initializeStaticMCT();
-		initializeMinMin();
+		//initializeMinMin();
+		initializeRandomMinMin(1024);
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
 		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
@@ -866,15 +967,19 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 
 		if (mypid == 0) {
 			cout << "MCT reference fitness: " << fitness();
-			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+			cout << ", Flowtime: " << accumulatedWeightedResponseRatio();
 			cout << ", Makespan: " << makespan() << endl << endl;
 		}	
 	} else {
-		initializeRandomMCT();
+		if (rand01() < RANDOM_INIT) {
+			initializeRandom();
+		} else {
+			initializeRandomMCT();
+		}
 		if (DEBUG) {
 			cout << endl << "[proc " << mypid << "] ";
 			cout << "Random MCT fitness: " << fitness();
-			cout << ", WRR: " << accumulatedWeightedResponseRatio();
+			cout << ", Flowtime: " << accumulatedWeightedResponseRatio();
 			cout << ", Makespan: " << makespan() << endl;
 		}
 	}
