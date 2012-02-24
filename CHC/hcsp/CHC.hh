@@ -42,7 +42,7 @@ skeleton CHC {
 #define PALS_UMBRAL_MEJORA 1.0
 
 #define PALS_TOP_M 8
-#define PALS_TOP_T 256
+#define PALS_TOP_T 128
 
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
