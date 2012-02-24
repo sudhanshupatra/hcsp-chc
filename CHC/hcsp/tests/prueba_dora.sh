@@ -10,7 +10,7 @@ DataFileC="${scripts_path}/${instance_c}"
 OutputFileC="${working_path}/tests/resultados/c_${data[i]}"
 
 CfgFile="${working_path}/ejecuciones/config-0512.cfg"
-PesosFile="${working_path}/ejecuciones/pesos_8.txt"
+PesosFile="${working_path}/ejecuciones/pesos_3.txt"
 
 echo "${CfgFile}" > ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${DataFileI}" >> ${working_path}/tests/resultados/prueba_lan.cfg
@@ -19,7 +19,7 @@ echo "${PesosFile}" >> ${working_path}/tests/resultados/prueba_lan.cfg
 echo "512" >> ${working_path}/tests/resultados/prueba_lan.cfg
 echo "16" >> ${working_path}/tests/resultados/prueba_lan.cfg
 
-time(mpirun -n 8 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg > ${OutputFileI}.log) 
+time(mpirun -n 3 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg > ${OutputFileI}.log) 
 
 echo "${CfgFile}" > ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${DataFileC}" >> ${working_path}/tests/resultados/prueba_lan.cfg
