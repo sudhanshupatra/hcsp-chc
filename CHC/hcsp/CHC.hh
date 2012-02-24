@@ -26,23 +26,23 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.50
+#define MUT_MAQ 0.80
 #define MUT_TASK 0.80
 
 // CROSS
-#define CROSS_TASK 0.8
+#define CROSS_TASK 0.80
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
 // mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
-#define CROSSOVER_DISTANCE 4
+#define CROSSOVER_DISTANCE 3
 
 // Propiedades del PALS.
 #define PALS_MAQ 5
 #define PALS_MAX_INTENTOS 3
 #define PALS_UMBRAL_MEJORA 1.0
 
-#define PALS_TOP_M 16
-#define PALS_TOP_T 512
+#define PALS_TOP_M 8
+#define PALS_TOP_T 256
 
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
