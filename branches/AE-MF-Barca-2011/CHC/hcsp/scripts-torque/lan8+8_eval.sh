@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_4+4_eval
+#PBS -N ae_8+8_eval
 
 # Requerimientos
-#PBS -l nodes=2:class0:ppn=4,walltime=20:00:00
+#PBS -l nodes=2:class0:ppn=8,walltime=40:00:00
 
 # Cola
 #PBS -q publica
@@ -23,8 +23,8 @@
 # e: mail is sent when the job terminates.
 
 # Output path
-#PBS -e /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan4+4/
-#PBS -o /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan4+4/
+#PBS -e /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan8+8/
+#PBS -o /home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp/ejecuciones/evaluacion/lan8+8/
 
 #PBS -V
 
@@ -97,12 +97,12 @@ for c in {0..4}
 do
     for i in {0..3}
     do
-    	for (( j=0 ; j<5 ; j++ ))
+    	for (( j=0 ; j<30 ; j++ ))
     	do
     	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
     	    	DataFile="${inst_path[c]}/${data[i]}"
-    	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan4+4/${cfg[c]}/${data[i]}/${j}"
-    	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_8.txt"
+    	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan8+8/${cfg[c]}/${data[i]}/${j}"
+    	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_16.txt"
         	
     	    	mkdir -p ${OutputPath}
     
@@ -110,14 +110,14 @@ do
     	    	echo "CfgFile $CfgFile"
     	    	#cat $CfgFile
         		
-    	    	echo "${CfgFile}" > Config_LAN4+4_eval.cfg
-    	    	echo "${DataFile}" >> Config_LAN4+4_eval.cfg
-    	    	echo "${OutputPath}/${j}.sol" >> Config_LAN4+4_eval.cfg
-    	    	echo "${PesosFile}" >> Config_LAN4+4_eval.cfg
-                echo "${dim_tasks[c]}" >> Config_LAN4+4_eval.cfg
-            	echo "${dim_machines[c]}" >> Config_LAN4+4_eval.cfg
+    	    	echo "${CfgFile}" > Config_LAN8+8_eval.cfg
+    	    	echo "${DataFile}" >> Config_LAN8+8_eval.cfg
+    	    	echo "${OutputPath}/${j}.sol" >> Config_LAN8+8_eval.cfg
+    	    	echo "${PesosFile}" >> Config_LAN8+8_eval.cfg
+                echo "${dim_tasks[c]}" >> Config_LAN8+8_eval.cfg
+            	echo "${dim_machines[c]}" >> Config_LAN8+8_eval.cfg
         	
-    	    	time($EXEC Config_LAN4+4_eval.cfg > ${OutputPath}/${j}.log) 
+    	    	time($EXEC Config_LAN8+8_eval.cfg > ${OutputPath}/${j}.log) 
     	        echo "==============================================="
     	done
     done
