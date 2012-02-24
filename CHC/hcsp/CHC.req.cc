@@ -868,7 +868,7 @@ void Solution::initializeRandomMinMin(int minminTasks) {
 		unmappedTasksCount = _pbm.taskCount();
 	}
 
-	cout << "unmappedTasksCount: " << unmappedTasksCount << endl;
+	//cout << "unmappedTasksCount: " << unmappedTasksCount << endl;
 
 	double minCT;
 	int minCTTaskId;
@@ -910,7 +910,7 @@ void Solution::initializeRandomMinMin(int minminTasks) {
 		restOfTasks = _pbm.taskCount() - minminTasks;
 	}
 
-	cout << "restOfTasks: " << restOfTasks << endl;
+	//cout << "restOfTasks: " << restOfTasks << endl;
 
 	for (int taskId = 0; taskId < _pbm.taskCount(); taskId++) {
 		if (taskIsUnmapped[taskId]) {
