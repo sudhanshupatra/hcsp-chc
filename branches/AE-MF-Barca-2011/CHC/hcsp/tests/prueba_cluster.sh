@@ -2,7 +2,7 @@ working_path="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 scripts_path="/home/siturria/instancias/8192x256.M"
 instance="B.u_c_hihi"
 
-CfgFile="${working_path}/ejecuciones/config-0512.cfg"
+CfgFile="${working_path}/ejecuciones/config-8192.cfg"
 DataFile="${scripts_path}/${instance}"
 OutputFile="${working_path}/tests/resultados/prueba_lan_cluster"
 PesosFile="${working_path}/ejecuciones/pesos_8.txt"
@@ -16,7 +16,7 @@ echo "256" >> ${working_path}/tests/resultados/prueba_lan.cfg
 
 cat ${working_path}/tests/resultados/prueba_lan.cfg
 
-time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 3 ${working_path}/MainLan \
+time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 8 ${working_path}/MainLan \
 	${working_path}/tests/resultados/prueba_lan.cfg > $OutputFile.log) 
 #/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 3 ${working_path}/MainLan \
 #	${working_path}/tests/resultados/prueba_lan.cfg
