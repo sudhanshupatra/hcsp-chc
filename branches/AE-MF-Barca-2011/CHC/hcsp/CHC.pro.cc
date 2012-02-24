@@ -463,7 +463,7 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	if (rand01() < 0.8) {
+	if (rand01() < 0.25) {
 		int individual = rand_int(0, _parents.size() - 1);
 		_parents[individual]->doLocalSearch();
 	}

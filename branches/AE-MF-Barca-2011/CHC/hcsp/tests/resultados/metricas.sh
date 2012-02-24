@@ -7,3 +7,9 @@ cat c_.sol_? > metricas_c.log
 cat c_.sol_?? >> metricas_c.log
 ./FP_2obj_3col metricas_c.log
 mv FP.out FP_c.out
+
+#echo "c ================================"
+#cat FP_c.out
+
+#echo "i ================================"
+#cat FP_i.out
