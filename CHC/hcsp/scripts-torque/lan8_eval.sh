@@ -4,7 +4,7 @@
 #PBS -N ae_8_eval
 
 # Requerimientos
-#PBS -l nodes=1:class0:ppn=6,walltime=04:00:00
+#PBS -l nodes=1:class0:ppn=8,walltime=10:00:00
 
 # Cola
 #PBS -q publica
@@ -93,32 +93,32 @@ data[3]="B.u_i_lohi"
 
 BASE_PATH="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 
-for c in {4..4}
+for c in {0..4}
 do
     for i in {0..3}
     do
-	for (( j=0 ; j<2 ; j++ ))
-	do
-	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
-	    	DataFile="${inst_path[c]}/${data[i]}"
-	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan8/${cfg[c]}/${data[i]}/${j}"
-	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_8.txt"
-    	
-	    	mkdir -p ${OutputPath}
-
-		echo "Datos $DataFile"
-	    	echo "CfgFile $CfgFile"
-	    	#cat $CfgFile
-    		
-	    	echo "${CfgFile}" > Config_LAN8_eval.cfg
-	    	echo "${DataFile}" >> Config_LAN8_eval.cfg
-	    	echo "${OutputPath}/${j}.sol" >> Config_LAN8_eval.cfg
-	    	echo "${PesosFile}" >> Config_LAN8_eval.cfg
-		echo "${dim_tasks[c]}" >> Config_LAN8_eval.cfg
-        	echo "${dim_machines[c]}" >> Config_LAN8_eval.cfg
-    	
-	    	time($EXEC Config_LAN8_eval.cfg > ${OutputPath}/${j}.log) 
-	        echo "==============================================="
-	done
+    	for (( j=0 ; j<5 ; j++ ))
+    	do
+    	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
+    	    	DataFile="${inst_path[c]}/${data[i]}"
+    	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan8/${cfg[c]}/${data[i]}/${j}"
+    	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_8.txt"
+        	
+    	    	mkdir -p ${OutputPath}
+    
+                echo "Datos $DataFile"
+    	    	echo "CfgFile $CfgFile"
+    	    	#cat $CfgFile
+        		
+    	    	echo "${CfgFile}" > Config_LAN8_eval.cfg
+    	    	echo "${DataFile}" >> Config_LAN8_eval.cfg
+    	    	echo "${OutputPath}/${j}.sol" >> Config_LAN8_eval.cfg
+    	    	echo "${PesosFile}" >> Config_LAN8_eval.cfg
+                echo "${dim_tasks[c]}" >> Config_LAN8_eval.cfg
+            	echo "${dim_machines[c]}" >> Config_LAN8_eval.cfg
+        	
+    	    	time($EXEC Config_LAN8_eval.cfg > ${OutputPath}/${j}.log) 
+    	        echo "==============================================="
+    	done
     done
 done
