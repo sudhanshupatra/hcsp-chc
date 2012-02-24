@@ -38,7 +38,7 @@ skeleton CHC {
 
 // Propiedades del PALS.
 #define PALS_MAQ 5
-#define PALS_MAX_INTENTOS 3
+#define PALS_MAX_INTENTOS 1
 #define PALS_UMBRAL_MEJORA 1.0
 
 #define PALS_TOP_M 8

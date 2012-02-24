@@ -1309,7 +1309,7 @@ void Solution::doLocalSearch() {
 			double mejorMovimientoFitness;
 			int mejorMovimientoTaskPos, mejorMovimientoDestinoTaskPos,
 					mejorMovimientoDestinoMachineId;
-			mejorMovimientoFitness = fitnessInicial;
+			mejorMovimientoFitness = INFINITY; // fitnessInicial;
 			mejorMovimientoTaskPos = -1;
 			mejorMovimientoDestinoTaskPos = -1;
 			mejorMovimientoDestinoMachineId = -1;
