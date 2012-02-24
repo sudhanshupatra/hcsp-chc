@@ -4,7 +4,7 @@
 #PBS -N ae_24_eval
 
 # Requerimientos
-#PBS -l nodes=1:class2:ppn=24,walltime=20:00:00
+#PBS -l nodes=1:class2:ppn=24,walltime=30:00:00
 
 # Cola
 #PBS -q medium_jobs
@@ -99,28 +99,28 @@ for c in {0..4}
 do
     for i in {0..3}
     do
-	for (( j=0 ; j<30 ; j++ ))
-	do
-	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
-	    	DataFile="${inst_path[c]}/${data[i]}"
-	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}/${j}"
-	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_24.txt"
-    	
-	    	mkdir -p ${OutputPath}
-
-		echo "Datos $DataFile"
-	    	echo "CfgFile $CfgFile"
-	    	#cat $CfgFile
-    		
-	    	echo "${CfgFile}" > Config_LAN24_eval.cfg
-	    	echo "${DataFile}" >> Config_LAN24_eval.cfg
-	    	echo "${OutputPath}/${j}.sol" >> Config_LAN24_eval.cfg
-	    	echo "${PesosFile}" >> Config_LAN24_eval.cfg
-		echo "${dim_tasks[c]}" >> Config_LAN24_eval.cfg
-        	echo "${dim_machines[c]}" >> Config_LAN24_eval.cfg
-    	
-	    	time($EXEC Config_LAN24_eval.cfg > ${OutputPath}/${j}.log) 
-	        echo "==============================================="
-	done
+    	for (( j=0 ; j<30 ; j++ ))
+    	do
+    	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
+    	    	DataFile="${inst_path[c]}/${data[i]}"
+    	    	OutputPath="${BASE_PATH}/ejecuciones/evaluacion/lan24/${cfg[c]}/${data[i]}/${j}"
+    	    	PesosFile="${BASE_PATH}/ejecuciones/pesos_24.txt"
+        	
+    	    	mkdir -p ${OutputPath}
+    
+        		echo "Datos $DataFile"
+    	    	echo "CfgFile $CfgFile"
+    	    	#cat $CfgFile
+        		
+    	    	echo "${CfgFile}" > Config_LAN24_eval.cfg
+    	    	echo "${DataFile}" >> Config_LAN24_eval.cfg
+    	    	echo "${OutputPath}/${j}.sol" >> Config_LAN24_eval.cfg
+    	    	echo "${PesosFile}" >> Config_LAN24_eval.cfg
+                echo "${dim_tasks[c]}" >> Config_LAN24_eval.cfg
+            	echo "${dim_machines[c]}" >> Config_LAN24_eval.cfg
+        	
+    	    	time($EXEC Config_LAN24_eval.cfg > ${OutputPath}/${j}.log) 
+    	        echo "==============================================="
+    	done
     done
 done
