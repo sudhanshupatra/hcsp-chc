@@ -26,11 +26,11 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.8
-#define MUT_TASK 0.3
+#define MUT_MAQ 0.50
+#define MUT_TASK 0.80
 
 // CROSS
-#define CROSS_TASK 0.5
+#define CROSS_TASK 0.8
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
 // mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
@@ -40,8 +40,10 @@ skeleton CHC {
 #define PALS_MAQ 5
 #define PALS_MAX_INTENTOS 3
 #define PALS_UMBRAL_MEJORA 1.0
-#define PALS_TOP_M 8
-#define PALS_TOP_T 256
+
+#define PALS_TOP_M 16
+#define PALS_TOP_T 512
+
 #define MAX_USER_OP 5
 #define MAX_PROB_PER_OP 5
 
@@ -235,12 +237,6 @@ private:
 	void initializeMCT(int startTask, int direction);
 	void initializeStaticMCT();
 	void initializeRandomMCT();
-	void initializeMinWRR0();
-	void initializeMinWRR4();
-	void initializeMinWRR5();
-	void initializeMinWRR60();
-	void initializeMinWRR61();
-	void initializeMinWRR62();
 };
 
 // UserStatistics ----------------------------------------------------------------------------
