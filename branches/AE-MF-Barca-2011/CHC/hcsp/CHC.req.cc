@@ -904,10 +904,10 @@ void Solution::initializeRandomMinMin(int minminTasks) {
 	}
 
 	int restOfTasks;
-	if (minminTasks < _pbm.taskCount()) {
+	if (minminTasks > _pbm.taskCount()) {
 		restOfTasks = 0;
 	} else {
-		restOfTasks = minminTasks - _pbm.taskCount();
+		restOfTasks = _pbm.taskCount() - minminTasks;
 	}
 
 	cout << "restOfTasks: " << restOfTasks << endl;
