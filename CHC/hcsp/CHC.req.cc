@@ -73,6 +73,8 @@ istream& operator>>(istream& input, Problem& pbm) {
 
 			sscanf(buffer, "%f", &aux);
 
+			/*pbm._expectedTimeToCompute[taskPos][machinePos] = aux;
+			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 100.0;*/
 			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 10000.0;
 
 			assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
@@ -1254,15 +1256,13 @@ double Solution::fitness() {
 
 	double normalized_awrr;
 	if (awrr > 0) {
-		normalized_awrr = (awrr + Solution::_awrr_reference)
-				/ Solution::_awrr_reference;
+		normalized_awrr = (awrr + Solution::_awrr_reference) / Solution::_awrr_reference;
 	} else {
 		normalized_awrr = 0;
 	}
 
 	double normalized_makespan;
-	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
-			/ Solution::_makespan_reference;
+	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
 
 	//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
 	//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
@@ -1290,6 +1290,7 @@ double Solution::makespan() {
 		}
 	}
 
+	//return floor(maxMakespan);
 	return maxMakespan;
 }
 
@@ -1309,6 +1310,7 @@ double Solution::accumulatedWeightedResponseRatio() {
 		//		}
 	}
 
+	//return floor(awrr);
 	return awrr;
 }
 
@@ -2140,14 +2142,15 @@ StopCondition_1::StopCondition_1() :
 bool StopCondition_1::EvaluateCondition(const Problem& pbm,
 		const Solver& solver, const SetUpParams& setup) {
 
-	//cout << "solver.time_spent_trial: " << solver.time_spent_trial() << endl;
-	//cout << "setup.timeout() * 1.0e+06: " << setup.timeout() * 1.0e+06 << endl;
-
-	if (solver.time_spent_trial() >= (setup.timeout() * 1.0e+06)) {
+	if (solver.current_iteration() >= setup.timeout()) {
 		return true;
-	} else {
-		return false;
 	}
+
+	/*if (solver.time_spent_trial() >= (setup.timeout() * 1.0e+06)) {
+	 return true;
+	 } else {
+	 return false;
+	 }*/
 
 	return false;
 }

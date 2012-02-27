@@ -73,20 +73,32 @@ int main(int argc, char** argv) {
 
 		{
 			solution_file = solution_file.append("_").append(str_pid);
-			ofstream fexit(solution_file.data());
-			if(!fexit) show_message(13);
 
-			fexit << solver.best_solution_trial().makespan() * 10000.0 << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
+			FILE *fexit = fopen(solution_file.data(), "w");
 
-			for (int i = 0; i < solver.population().parents().size(); i++) {
-				fexit << solver.population().parents()[i]->makespan() * 10000.0 << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
+			/*ofstream fexit(solution_file.data());
+			if(!fexit) show_message(13);*/
+
+			//fexit << solver.best_solution_trial().makespan() << " " << solver.best_solution_trial().accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+
+			/*for (int i = 0; i < solver.population().parents().size(); i++) {
+				fexit << solver.population().parents()[i]->makespan() << " " << solver.population().parents()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 			}
 
 			for (int i = 0; i < solver.population().offsprings().size(); i++) {
-				fexit << solver.population().offsprings()[i]->makespan() * 10000.0 << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() * 10000.0 << " " << solver.pid() << endl;
+				fexit << solver.population().offsprings()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
+			}*/
+
+			for (int i = 0; i < ELITE_POP_SIZE; i++) {
+				fprintf(fexit, "%.10f %.10f %d\n",
+						solver.population().elite()[i]->makespan(),
+						solver.population().elite()[i]->accumulatedWeightedResponseRatio(),
+						solver.pid());
+				//fexit << solver.population().elite()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 			}
 
-			fexit.close();
+			//fexit.close();
+			fclose(fexit);
 		}
 		{
 			//string fit_solution_file = solution_file.append("_fit");
