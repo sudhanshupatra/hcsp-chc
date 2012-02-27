@@ -26,15 +26,17 @@ skeleton CHC {
 
 // DIVERGE
 // Cantidad máxima de máquinas que se mutan durante un Diverge.
-#define MUT_MAQ 0.80
-#define MUT_TASK 0.80
+#define MUT_MAQ 0.25
+#define MUT_TASK 0.25
 
 // CROSS
-#define CROSS_TASK 0.80
+#define CROSS_TASK 0.50
 // Distancia minima para permitir el crossover (1/4).
 // Cuanto más grande CROSSOVER_DISTANCE, más chica es la distancia
 // mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
-#define CROSSOVER_DISTANCE 3
+#define CROSSOVER_DISTANCE 4
+
+#define ELITE_POP_SIZE 3
 
 // Propiedades del PALS.
 #define PALS_MAQ 5
@@ -333,7 +335,7 @@ public:
 
 	void diverge(Solution& s) const;
 	void diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
-			float mutationProbability);
+			float mutationProbability, const Population *pop);
 
 	// applies mutation over all solutions in array sols
 	virtual void execute(Rarray<Solution*>& sols) const;
@@ -494,6 +496,7 @@ private:
 	Rarray<Solution*> _parents; // individuals in population
 	Rarray<Solution*> _offsprings; // offsprings of current population
 	Rarray<Solution*> _new_parents; // individuals of previous population
+	Rarray<Solution*> _elite;
 	Rarray<struct individual> _fitness_values;
 	Rarray<struct individual> _fitness_aux;
 	const SetUpParams& _setup;
@@ -533,6 +536,7 @@ public:
 	// selects individuals for the new population
 	void select_offsprings();
 
+	const Rarray<Solution*>& elite() const;
 	const Rarray<Solution*>& parents() const;
 	const Rarray<Solution*>& offsprings() const;
 	Rarray<struct individual>& fitness_values();
@@ -670,6 +674,11 @@ public:
 			const Rarray<Solution*>& to_select_2, const Rarray<
 					struct individual>& fitness_values,
 			const unsigned int param, const bool remplace) const;
+
+	struct individual select_one_2(const Rarray<Solution*>& to_select_1,
+			const Rarray<Solution*>& to_select_2, const Rarray<
+					struct individual>& fitness_values,
+			const unsigned int param, const bool remplace, const Population *pop) const;
 
 	virtual void setup(char line[MAX_BUFFER]);
 	virtual void RefreshState(const StateCenter& _sc) const;

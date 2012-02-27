@@ -350,15 +350,20 @@ Population::Population(const Problem& pbm, const SetUpParams& setup) :
 	_parents(setup.population_size()),
 			_fitness_values(setup.population_size()), _new_parents(
 					setup.population_size()), _offsprings(
-					setup.population_size()), _setup(setup), _evaluations(0) {
+					setup.population_size()), _elite(ELITE_POP_SIZE), _setup(
+					setup), _evaluations(0) {
 	for (int i = 0; i < _parents.size(); i++) {
 		_parents[i] = new Solution(pbm);
 		_new_parents[i] = new Solution(pbm);
 		_fitness_values[i].index = i;
 		_fitness_values[i].change = true;
 	}
-	for (int i = 0; i < _offsprings.size(); i++)
+	for (int i = 0; i < _offsprings.size(); i++) {
 		_offsprings[i] = new Solution(pbm);
+	}
+	for (int i = 0; i < ELITE_POP_SIZE; i++) {
+		_elite[i] = new Solution(pbm);
+	}
 }
 
 void Population::Evaluate(Solution* sols, struct individual &_f) {
@@ -374,6 +379,9 @@ Population& Population::operator=(const Population& pop) {
 		*_parents[i] = *((pop.parents())[i]);
 		_fitness_values[i] = pop._fitness_values[i];
 		_evaluations = pop._evaluations;
+	}
+	for (int i = 0; i < ELITE_POP_SIZE; i++) {
+		*_elite[i] = *((pop.elite())[i]);
 	}
 	return (*this);
 }
@@ -463,12 +471,73 @@ void Population::evolution() {
 	select_offsprings(); // selects new individuals
 
 	// Local search
-	if (rand01() < 0.30) {
+	if (rand01() < 0.50) {
 		int individual = rand_int(0, _parents.size() - 1);
 		_parents[individual]->doLocalSearch();
 	}
 
 	evaluate_parents(); // calculates fitness of new individuals
+
+	// Actualiza la población elite.
+	for (int i = 0; i < _parents.size(); i++) {
+		int worst_index = -1;
+		bool assigned = false;
+
+		for (int j = 0; (j < ELITE_POP_SIZE) && (!assigned); j++) {
+			if (!_elite[j]->isInitilized()) {
+
+				worst_index = j;
+
+			} else {
+				if ((_parents[i]->makespan() == _elite[j]->makespan()) &&
+						(_parents[i]->accumulatedWeightedResponseRatio() == _elite[j]->accumulatedWeightedResponseRatio())) {
+
+					assigned = true;
+				} else {
+					if ((_parents[i]->makespan() == _elite[j]->makespan()) ||
+							(_parents[i]->accumulatedWeightedResponseRatio() == _elite[j]->accumulatedWeightedResponseRatio())){
+
+						if (_parents[i]->fitness() < _elite[j]->fitness()) {
+
+							*_elite[j] = *((parents())[i]);
+
+							assigned = true;
+						} else {
+							assigned = true;
+						}
+					}
+				}
+
+				if (!assigned) {
+					if (_parents[i]->fitness() < _elite[j]->fitness()) {
+						if (worst_index == -1) {
+
+							worst_index = j;
+						} else {
+							if (_elite[worst_index]->isInitilized()) {
+
+								if (_elite[worst_index]->fitness()
+										< _elite[j]->fitness()) {
+
+									worst_index = j;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if ((!assigned) && (worst_index > -1)) {
+			*_elite[worst_index] = *((parents())[i]);
+		}
+	}
+
+	/*fprintf(stdout, "==============================\n");
+	for (int i = 0; i < ELITE_POP_SIZE; i++) {
+		fprintf(stdout, ">>> %.10f\n", _elite[i]->accumulatedWeightedResponseRatio());
+	}
+	fprintf(stdout, "==============================\n");*/
 }
 
 void Population::interchange(const unsigned long current_generation,
@@ -498,8 +567,9 @@ void Population::select_offsprings() {
 	Rarray<struct individual> aux(ps);
 
 	for (int i = 0; i < ps; i++) {
-		aux[i] = _setup.pool().selector(_setup.select_offsprings()).select_one(
-				_parents, _offsprings, _fitness_aux, 0, false);
+		aux[i] = ((Selection_New_Population&) _setup.pool().selector(
+				_setup.select_offsprings())).select_one_2(_parents,
+				_offsprings, _fitness_aux, 0, false, this);
 		if (aux[i].index < ps) {
 			*_new_parents[i] = *_parents[aux[i].index];
 			aux[i].index = i;
@@ -543,6 +613,10 @@ unsigned int Population::lower_cost() const {
 
 unsigned int Population::evaluations() const {
 	return _evaluations;
+}
+
+const Rarray<Solution*>& Population::elite() const {
+	return _elite;
 }
 
 double Population::best_cost() const {
@@ -654,7 +728,10 @@ Crossover::Crossover() :
 
 void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 {
-	if (DEBUG) cout << endl << "[DEBUG] Crossover::cross =========================================" << endl;
+	if (DEBUG)
+		cout << endl
+				<< "[DEBUG] Crossover::cross ========================================="
+				<< endl;
 
 	int cant_tasks = sol1.length();
 
@@ -676,12 +753,15 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 				sol1.findTask(taskId, machineIdSol1, taskPosSol1);
 				sol2.findTask(taskId, machineIdSol2, taskPosSol2);
 
-				if ((machineIdSol1 != machineIdSol2)||(taskPosSol1 != taskPosSol2)) {
+				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
+						!= taskPosSol2)) {
 					sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
-					sol1.getMachines()[machineIdSol2].safeInsertTask(taskId, taskPosSol2);
+					sol1.getMachines()[machineIdSol2].safeInsertTask(taskId,
+							taskPosSol2);
 
 					sol2.getMachines()[machineIdSol2].removeTask(taskPosSol2);
-					sol2.getMachines()[machineIdSol1].safeInsertTask(taskId, taskPosSol1);
+					sol2.getMachines()[machineIdSol1].safeInsertTask(taskId,
+							taskPosSol1);
 				}
 			}
 		}
@@ -785,19 +865,33 @@ Diverge::Diverge() :
 }
 
 void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
-		float mutationProbability) {
+		float mutationProbability, const Population *pop) {
 
 	//	if (DEBUG) cout << endl << "[DEBUG] Diverge::diverge (mutationProbability: "
 	//			<< mutationProbability << ")"<< endl;
 
+	/*
+	 for (int i = 0; i < sols.size(); i++) {
+	 //if (i != bestSolutionIndex) {
+	 if (rand01() <= mutationProbability) {
+	 sols[i]->mutate();
+	 }
+	 //} else {
+	 //sols[i]->doLocalSearch();
+	 //}
+	 }
+	 */
+
 	for (int i = 0; i < sols.size(); i++) {
-		//if (i != bestSolutionIndex) {
-			if (rand01() <= mutationProbability) {
-				sols[i]->mutate();
+		if (i < ELITE_POP_SIZE) {
+			if (pop->elite()[i]->isInitilized()) {
+				*sols[i] = *(pop->elite()[i]);
 			}
-		/*} else {
-			sols[i]->doLocalSearch();
-		}*/
+		}
+
+		if (rand01() <= mutationProbability) {
+			sols[i]->mutate();
+		}
 	}
 }
 
@@ -1500,6 +1594,16 @@ struct individual Selection_New_Population::select_one(
 		const Rarray<Solution*>& to_select_2,
 		const Rarray<struct individual>& fitness_values,
 		const unsigned int param, const bool remplace) const {
+
+	return select_one_2(to_select_1, to_select_2, fitness_values, param,
+			remplace, NULL);
+}
+
+struct individual Selection_New_Population::select_one_2(
+		const Rarray<Solution*>& to_select_1,
+		const Rarray<Solution*>& to_select_2,
+		const Rarray<struct individual>& fitness_values,
+		const unsigned int param, const bool remplace, const Population *pop) const {
 	bool change = false;
 
 	if (selection_position == 0) {
@@ -1528,7 +1632,7 @@ struct individual Selection_New_Population::select_one(
 	if (selection_position == -2) {
 		assert(diverge != NULL);
 		((Diverge *) diverge)->diverge(to_select_1, fitness_values[0].index,
-				(float) 1.0);
+				(float) 1.0, pop);
 
 		for (int i = 0; i < fitness_values.size(); i++) {
 			//FIX: bug!
