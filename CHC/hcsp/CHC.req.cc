@@ -2142,15 +2142,15 @@ StopCondition_1::StopCondition_1() :
 bool StopCondition_1::EvaluateCondition(const Problem& pbm,
 		const Solver& solver, const SetUpParams& setup) {
 
-	if (solver.current_iteration() >= setup.timeout()) {
-		return true;
-	}
+	//if (solver.current_iteration() >= setup.timeout()) {
+	//	return true;
+	//}
 
-	/*if (solver.time_spent_trial() >= (setup.timeout() * 1.0e+06)) {
-	 return true;
-	 } else {
-	 return false;
-	 }*/
+	if (solver.time_spent_trial() >= (setup.timeout() * 1.0e+06)) {
+		return true;
+	} else {
+		return false;
+	}
 
 	return false;
 }

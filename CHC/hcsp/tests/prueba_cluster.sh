@@ -1,5 +1,5 @@
 working_path="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
-scripts_path="/home/siturria/instancias/8192x256.M"
+scripts_path="/home/siturria/instancias/512x16.M"
 
 instance_i="B.u_i_hihi"
 instance_c="B.u_c_hihi"
@@ -10,15 +10,15 @@ OutputFileI="${working_path}/tests/resultados/i_${data[i]}"
 DataFileC="${scripts_path}/${instance_c}"
 OutputFileC="${working_path}/tests/resultados/c_${data[i]}"
 
-CfgFile="${working_path}/ejecuciones/config-8192.cfg"
-PesosFile="${working_path}/ejecuciones/pesos_8.txt"
+CfgFile="${working_path}/ejecuciones/config-0512-cluster.cfg"
+PesosFile="${working_path}/ejecuciones/pesos_16_2.txt"
 
 echo "${CfgFile}" > ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${DataFileI}" >> ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${OutputFileI}.sol" >> ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${PesosFile}" >> ${working_path}/tests/resultados/prueba_lan.cfg
-echo "8192" >> ${working_path}/tests/resultados/prueba_lan.cfg
-echo "256" >> ${working_path}/tests/resultados/prueba_lan.cfg
+echo "512" >> ${working_path}/tests/resultados/prueba_lan.cfg
+echo "16" >> ${working_path}/tests/resultados/prueba_lan.cfg
 
-time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 8 ${working_path}/MainLan \
-    ${working_path}/tests/resultados/prueba_lan.cfg > $OutputFile.log) 
+time(/home/siturria/bin/mpich2-1.2.1p1/bin/mpirun -n 16 ${working_path}/MainLan \
+    ${working_path}/tests/resultados/prueba_lan.cfg > ${OutputFileI}.log) 
