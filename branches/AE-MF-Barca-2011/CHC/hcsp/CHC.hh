@@ -36,7 +36,7 @@ skeleton CHC {
 // mínima necesaria para permitir el cruzamiento (i.e. es más permisivo).
 #define CROSSOVER_DISTANCE 4
 
-#define ELITE_POP_SIZE 3
+#define ELITE_POP_SIZE 6
 
 // Propiedades del PALS.
 #define PALS_MAQ 5

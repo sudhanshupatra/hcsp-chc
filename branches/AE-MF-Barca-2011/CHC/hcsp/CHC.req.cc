@@ -10,8 +10,9 @@ skeleton CHC {
 // Problem ---------------------------------------------------------------
 
 Problem::Problem(int tasks_count, int machines_count) :
-	_taskCount(tasks_count), _machineCount(machines_count), _expectedTimeToCompute(NULL),
-			_wrr_weights(), _makespan_weights(), _tasksPriorities(), _mypid(-1) {
+	_taskCount(tasks_count), _machineCount(machines_count),
+			_expectedTimeToCompute(NULL), _wrr_weights(), _makespan_weights(),
+			_tasksPriorities(), _mypid(-1) {
 }
 
 // ===================================
@@ -74,7 +75,7 @@ istream& operator>>(istream& input, Problem& pbm) {
 			sscanf(buffer, "%f", &aux);
 
 			/*pbm._expectedTimeToCompute[taskPos][machinePos] = aux;
-			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 100.0;*/
+			 pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 100.0;*/
 			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 10000.0;
 
 			assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
@@ -921,9 +922,8 @@ void Solution::initializeRandomMinMin(int minminTasks) {
 			minCTMachineId = -1;
 
 			for (int machineId = 0; machineId < machineMakespan.size(); machineId++) {
-				if ((machineMakespan[machineId]
-						+ _pbm.expectedTimeToCompute(taskId, machineId))
-						< minCT) {
+				if ((machineMakespan[machineId] + _pbm.expectedTimeToCompute(
+						taskId, machineId)) < minCT) {
 					minCT = machineMakespan[machineId]
 							+ _pbm.expectedTimeToCompute(taskId, machineId);
 					minCTTaskId = taskId;
@@ -971,7 +971,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 			cout << "MCT reference fitness: " << fitness();
 			cout << ", Flowtime: " << accumulatedWeightedResponseRatio();
 			cout << ", Makespan: " << makespan() << endl << endl;
-		}	
+		}
 	} else {
 		if (rand01() < RANDOM_INIT) {
 			initializeRandom();
@@ -1256,13 +1256,15 @@ double Solution::fitness() {
 
 	double normalized_awrr;
 	if (awrr > 0) {
-		normalized_awrr = (awrr + Solution::_awrr_reference) / Solution::_awrr_reference;
+		normalized_awrr = (awrr + Solution::_awrr_reference)
+				/ Solution::_awrr_reference;
 	} else {
 		normalized_awrr = 0;
 	}
 
 	double normalized_makespan;
-	normalized_makespan = (maxMakespan + Solution::_makespan_reference) / Solution::_makespan_reference;
+	normalized_makespan = (maxMakespan + Solution::_makespan_reference)
+			/ Solution::_makespan_reference;
 
 	//	cout << "Norm mks: " << normalized_makespan << ", norm wrr: " << normalized_awrr << endl;
 	//	cout << "Peso mks: " << _pbm.getMakespanWeight() << ", peso wrr: " << _pbm.getWRRWeight() << endl;
@@ -1711,15 +1713,13 @@ void Solution::mutate() {
 							selectedTaskId = _machines[machineId].getTask(
 									selectedTaskPos);
 
-							int machineDstId = rand_int(0,
-									pbm().machineCount() - 2);
+							int machineDstId = rand_int(0, pbm().machineCount()
+									- 2);
 							if (machineId >= machineDstId)
 								machineDstId++;
 
-							_machines[machineDstId].addTask(
-									selectedTaskId);
-							_machines[machineId].removeTask(
-									selectedTaskPos);
+							_machines[machineDstId].addTask(selectedTaskId);
+							_machines[machineId].removeTask(selectedTaskPos);
 						}
 					}
 				}
