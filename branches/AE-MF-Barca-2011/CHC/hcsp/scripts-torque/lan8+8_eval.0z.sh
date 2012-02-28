@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del trabajo
-#PBS -N ae_8+8_1z
+#PBS -N ae_8+8_0z
 
 # Requerimientos
 #PBS -l nodes=2:class0:ppn=8,walltime=5:00:00
