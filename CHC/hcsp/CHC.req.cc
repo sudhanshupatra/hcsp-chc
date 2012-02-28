@@ -74,9 +74,9 @@ istream& operator>>(istream& input, Problem& pbm) {
 
 			sscanf(buffer, "%f", &aux);
 
-			/*pbm._expectedTimeToCompute[taskPos][machinePos] = aux;
-			 pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 100.0;*/
-			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 10000.0;
+			pbm._expectedTimeToCompute[taskPos][machinePos] = aux;
+			/* pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 100.0;
+			pbm._expectedTimeToCompute[taskPos][machinePos] = aux / 10000.0;*/
 
 			assert(pbm._expectedTimeToCompute[taskPos][machinePos] >= 0);
 		}
