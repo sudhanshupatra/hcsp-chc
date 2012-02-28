@@ -10,7 +10,7 @@ clean:
 MainSeq: CHC.req.o CHC.pro.o MainSeq.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
-MainLan2: CHC.req.o CHC.pro.o MainLan2.o
+MainLan: CHC.req.o CHC.pro.o MainLan.o
 	$(CXX) $(LDFLAGS) $^ $(LOADLIBES) $(CPPFLAGS) -o $@
 
 MainWan: CHC.req.o CHC.pro.o MainWan.o
