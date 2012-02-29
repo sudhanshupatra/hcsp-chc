@@ -19,12 +19,10 @@ if __name__ == '__main__':
                     total = total + cant_lineas
                     
                     #print cant_lineas
-                    
-            print "%s avg. FP: %.2f" % (path, float(total) / float(count))
-            
+                              
             f = path + '/FP.out'
             
             if os.path.exists(f):
                 fp_file = open(f)
                 cant_lineas = len(fp_file.readlines())
-                print "%s total FP: %d" % (path, cant_lineas)
+                print "%s %.2f %d" % (path, float(total) / float(count), cant_lineas)
