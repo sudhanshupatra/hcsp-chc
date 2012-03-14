@@ -489,13 +489,15 @@ void Population::evolution() {
 				worst_index = j;
 
 			} else {
-				if ((_parents[i]->makespan() == _elite[j]->makespan()) &&
-						(_parents[i]->accumulatedWeightedResponseRatio() == _elite[j]->accumulatedWeightedResponseRatio())) {
+				if ((_parents[i]->makespan() == _elite[j]->makespan())
+						&& (_parents[i]->flowtime()
+								== _elite[j]->flowtime())) {
 
 					assigned = true;
 				} else {
-					if ((_parents[i]->makespan() == _elite[j]->makespan()) ||
-							(_parents[i]->accumulatedWeightedResponseRatio() == _elite[j]->accumulatedWeightedResponseRatio())){
+					if ((_parents[i]->makespan() == _elite[j]->makespan())
+							|| (_parents[i]->flowtime()
+									== _elite[j]->flowtime())) {
 
 						if (_parents[i]->fitness() < _elite[j]->fitness()) {
 
@@ -534,10 +536,10 @@ void Population::evolution() {
 	}
 
 	/*fprintf(stdout, "==============================\n");
-	for (int i = 0; i < ELITE_POP_SIZE; i++) {
-		fprintf(stdout, ">>> %.10f\n", _elite[i]->accumulatedWeightedResponseRatio());
-	}
-	fprintf(stdout, "==============================\n");*/
+	 for (int i = 0; i < ELITE_POP_SIZE; i++) {
+	 fprintf(stdout, ">>> %.10f\n", _elite[i]->accumulatedWeightedResponseRatio());
+	 }
+	 fprintf(stdout, "==============================\n");*/
 }
 
 void Population::interchange(const unsigned long current_generation,
@@ -755,6 +757,7 @@ void Crossover::cross(Solution& sol1, Solution& sol2) const // dadas dos solucio
 
 				if ((machineIdSol1 != machineIdSol2) || (taskPosSol1
 						!= taskPosSol2)) {
+
 					sol1.getMachines()[machineIdSol1].removeTask(taskPosSol1);
 					sol1.getMachines()[machineIdSol2].safeInsertTask(taskId,
 							taskPosSol2);
@@ -890,7 +893,7 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 		}
 
 		if (rand01() <= mutationProbability) {
-			sols[i]->mutate();
+			sols[i]->doMutate();
 		}
 	}
 }

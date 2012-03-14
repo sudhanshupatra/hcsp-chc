@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < ELITE_POP_SIZE; i++) {
 				fprintf(fexit, "%.10f %.10f %d\n",
 						solver.population().elite()[i]->makespan(),
-						solver.population().elite()[i]->accumulatedWeightedResponseRatio(),
+						solver.population().elite()[i]->flowtime(),
 						solver.pid());
 				//fexit << solver.population().elite()[i]->makespan() << " " << solver.population().offsprings()[i]->accumulatedWeightedResponseRatio() << " " << solver.pid() << endl;
 			}
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 
 			fexit << "Pesos asignados" << endl;
 			fexit << "Makespan weight: " << pbm.getMakespanWeight(solver.pid()) << endl;
-			fexit << "WRR weight: " << pbm.getWRRWeight(solver.pid()) << endl;
+			fexit << "WRR weight: " << pbm.getFlowtimeWeight(solver.pid()) << endl;
 
 			fexit.close();
 		}
@@ -145,7 +145,7 @@ int main(int argc, char** argv) {
 
 		cout << "[CONFIG] Pesos: " << pesos.size() << endl;
 		for (unsigned int i = 0; i < pesos.size() - 1; i = i + 2) {
-			cout << "(Makespan: " << pesos[i] << ", WRR: " << pesos[i+1] << ")" << endl;
+			cout << "(Makespan: " << pesos[i] << ", Flowtime: " << pesos[i+1] << ")" << endl;
 		}
 		assert(pesos.size() % 2 == 0);
 		cout << endl << endl;
@@ -155,26 +155,26 @@ int main(int argc, char** argv) {
 		solver.statistics();
 		solver.show_state();
 
-		cout << "Makespan: " << solver.global_best_solution().makespan() * 10000.0 << endl;
-		cout << "WRR: " << solver.global_best_solution().accumulatedWeightedResponseRatio() * 10000.0 << endl;
+		cout << "Makespan: " << solver.global_best_solution().makespan() << endl;
+		cout << "Flowtime: " << solver.global_best_solution().flowtime() << endl;
 		cout << "Makespan (reference): " << Solution::getMakespan_reference() << endl;
-		cout << "WRR (reference): " << Solution::getWRR_reference() << endl;
+		cout << "Flowtime (reference): " << Solution::getFlowtime_reference() << endl;
 
-		double weight_mks = 0.0, weight_wrr = 0.0;
+		double weight_mks = 0.0, weight_flw = 0.0;
 		double min_fitness = INFINITY;
 		for (unsigned int i = 0; i < pesos.size() - 1; i=i+2) {
 			double aux_fitness;
 			aux_fitness = pesos[i]*(Solution::getMakespan_reference()+solver.global_best_solution().makespan())/Solution::getMakespan_reference()
-			+ pesos[i+1]*(Solution::getWRR_reference()+solver.global_best_solution().accumulatedWeightedResponseRatio())/Solution::getWRR_reference();
+			+ pesos[i+1]*(Solution::getFlowtime_reference()+solver.global_best_solution().flowtime())/Solution::getFlowtime_reference();
 
 			if (aux_fitness < min_fitness) {
 				min_fitness = aux_fitness;
 				weight_mks = pesos[i];
-				weight_wrr = pesos[i+1];
+				weight_flw = pesos[i+1];
 			}
 		}
 
-		cout << "Fitness: " << min_fitness << " (" << weight_mks << ", " << weight_wrr << ")" << endl;
+		cout << "Fitness: " << min_fitness << " (" << weight_mks << ", " << weight_flw << ")" << endl;
 
 		ofstream fexit(solution_file.data());
 		if(!fexit) show_message(13);
