@@ -11,8 +11,7 @@ skeleton CHC {
 
 Problem::Problem(int tasks_count, int machines_count) :
 	_taskCount(tasks_count), _machineCount(machines_count),
-			_expectedTimeToCompute(NULL), _wrr_weights(), _makespan_weights(),
-			_tasksPriorities(), _mypid(-1) {
+			_expectedTimeToCompute(NULL), _flowtime_weights(), _makespan_weights(), _mypid(-1) {
 }
 
 // ===================================
@@ -29,24 +28,6 @@ ostream& operator<<(ostream& output, const Problem& pbm) {
 // ===================================
 istream& operator>>(istream& input, Problem& pbm) {
 	char buffer[MAX_BUFFER];
-
-	//input.getline(buffer, MAX_BUFFER, '\n');
-	//sscanf(buffer, "%d %d", &pbm._taskCount, &pbm._machineCount);
-
-	//	cout << "[INFO] TaskCount: " << pbm._taskCount << endl;
-	//	cout << "[INFO] MachineCount: " << pbm._machineCount << endl;
-
-	// Inicializo las prioridades de las tareas.
-	pbm._tasksPriorities.reserve(pbm._taskCount);
-
-	int taskPriority;
-	for (int taskPos = 0; taskPos < pbm._taskCount; taskPos++) {
-		//input.getline(buffer, MAX_BUFFER, '\n');
-		//sscanf(buffer, "%d", &taskPriority);
-		//assert(taskPriority > 0);
-
-		pbm._tasksPriorities.push_back(1);
-	}
 
 	// Inicializo toda la matriz de ETC.
 	pbm._expectedTimeToCompute = new float*[pbm._taskCount];
@@ -143,12 +124,6 @@ float Problem::expectedTimeToCompute(const int& task, const int& machine) const 
 	return _expectedTimeToCompute[task][machine];
 }
 
-int Problem::taskPriority(const int& task) const {
-	assert(task >= 0);
-	assert(task < _taskCount);
-	return _tasksPriorities[task];
-}
-
 void Problem::setPId(const int pid) {
 	_mypid = pid;
 }
@@ -159,13 +134,13 @@ void Problem::loadWeights(const vector<double> weights) {
 
 	for (unsigned int i = 0; i < weights.size(); i = i + 2) {
 		_makespan_weights.push_back(weights[i]);
-		_wrr_weights.push_back(weights[i + 1]);
+		_flowtime_weights.push_back(weights[i + 1]);
 	}
 }
 
-double Problem::getWRRWeight() const {
+double Problem::getFlowtimeWeight() const {
 	assert(_mypid >= 0);
-	return getWRRWeight(_mypid);
+	return getFlowtimeWeight(_mypid);
 }
 
 double Problem::getMakespanWeight() const {
@@ -173,18 +148,18 @@ double Problem::getMakespanWeight() const {
 	return getMakespanWeight(_mypid);
 }
 
-double Problem::getWRRWeight(const int pid) const {
+double Problem::getFlowtimeWeight(const int pid) const {
 	if (pid == 0) {
-		return _wrr_weights[0];
+		return _flowtime_weights[0];
 	} else {
-		int index = (pid - 1) % _wrr_weights.size();
-		return _wrr_weights[index];
+		int index = (pid - 1) % _flowtime_weights.size();
+		return _flowtime_weights[index];
 	}
 }
 
 double Problem::getMakespanWeight(const int pid) const {
 	if (pid == 0) {
-		_makespan_weights[0];
+		return _makespan_weights[0];
 	} else {
 		int index = (pid - 1) % _makespan_weights.size();
 		return _makespan_weights[index];
@@ -197,7 +172,7 @@ Problem::~Problem() {
 // Solution machine ------------------------------------------------------
 
 SolutionMachine::SolutionMachine(const Problem& problem, int machineId) :
-	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0), _awrr(
+	_tasks(), _assignedTasks(), _machineId(machineId), _makespan(0.0), _flowtime(
 			0.0), _dirty(true), _pbm(problem) {
 
 	_tasks.reserve(problem.taskCount());
@@ -210,6 +185,7 @@ SolutionMachine& SolutionMachine::operator=(const SolutionMachine& machine) {
 	_machineId = machine._machineId;
 
 	_makespan = 0.0;
+	_flowtime = 0.0;
 	_dirty = true;
 
 	_tasks.clear();
@@ -333,41 +309,16 @@ double SolutionMachine::getMakespan() {
 	return _makespan;
 }
 
-double SolutionMachine::getAccumulatedWeightedResponseRatio() {
+double SolutionMachine::getFlowtime() {
 	refresh();
-	return _awrr;
-}
-
-double SolutionMachine::getWeightedResponseRatio(const int taskPos) const {
-	float wait_time = 0.0;
-
-	for (int currentTaskPos = 0; currentTaskPos < taskPos; currentTaskPos++) {
-		int currentTaskId;
-		currentTaskId = getTask(currentTaskPos);
-
-		wait_time += _pbm.expectedTimeToCompute(currentTaskId, machineId());
-	}
-
-	int taskId;
-	taskId = getTask(taskPos);
-
-	float compute_cost;
-	compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
-
-	float rr;
-	rr = wait_time + compute_cost;
-
-	float wrr;
-	wrr = (_pbm.taskPriority(taskId) * rr);
-
-	return wrr;
+	return _flowtime;
 }
 
 void SolutionMachine::refresh() {
 	//_dirty = true;
 	if (_dirty) {
 		double partial_makespan = 0.0;
-		double partial_awrr = 0.0;
+		double partial_flowtime = 0.0;
 
 		for (int taskPos = 0; taskPos < countTasks(); taskPos++) {
 			int taskId;
@@ -377,17 +328,15 @@ void SolutionMachine::refresh() {
 			compute_cost = _pbm.expectedTimeToCompute(taskId, machineId());
 			assert(compute_cost >= 0);
 
-			double priority_cost;
-			double rr;
-			rr = partial_makespan + compute_cost;
-			priority_cost = (_pbm.taskPriority(taskId) * rr);
+			double flowtime;
+			flowtime = partial_makespan + compute_cost;
 
 			partial_makespan += compute_cost;
-			partial_awrr += priority_cost;
+			partial_flowtime += flowtime;
 
 		}
 
-		_awrr = partial_awrr;
+		_flowtime = partial_flowtime;
 		_makespan = partial_makespan;
 
 		_dirty = false;
@@ -396,11 +345,11 @@ void SolutionMachine::refresh() {
 
 // Solution --------------------------------------------------------------
 
-double Solution::_awrr_reference = 1.0;
+double Solution::_flowtime_reference = 1.0;
 double Solution::_makespan_reference = 1.0;
 
-double Solution::getWRR_reference() {
-	return Solution::_awrr_reference;
+double Solution::getFlowtime_reference() {
+	return Solution::_flowtime_reference;
 }
 
 double Solution::getMakespan_reference() {
@@ -461,7 +410,7 @@ ostream& operator<<(ostream& os, const Solution& sol) {
 		 }*/
 		//os << "* overall fitness: " << sol.fitness() << endl;
 	} else {
-		os << "> solution not inialized." << endl;
+		os << "> solution not initialized." << endl;
 	}
 
 	return os;
@@ -478,7 +427,7 @@ NetStream& operator <<(NetStream& ns, const Solution& sol) {
 
 	int machineSeparator = -1;
 
-	assert(sol.validate());
+	//assert(sol.validate());
 
 	for (int machineId = 0; machineId < sol.machines().size(); machineId++) {
 		for (int taskPos = 0; taskPos < sol.machines()[machineId].countTasks(); taskPos++) {
@@ -556,7 +505,7 @@ NetStream& operator >>(NetStream& ns, Solution& sol) {
 	assert(currentTask == sol.pbm().taskCount());
 
 	sol.markAsInitialized();
-	sol.validate();
+	//sol.validate();
 
 	return ns;
 }
@@ -964,12 +913,12 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		initializeRandomMinMin(1024);
 
 		//NOTE: NO EVALUAR FITNESS ANTES DE ESTA ASIGNACIÓN!!!
-		Solution::_awrr_reference = accumulatedWeightedResponseRatio();
+		Solution::_flowtime_reference = flowtime();
 		Solution::_makespan_reference = makespan();
 
 		if (mypid == 0) {
 			cout << "MCT reference fitness: " << fitness();
-			cout << ", Flowtime: " << accumulatedWeightedResponseRatio();
+			cout << ", Flowtime: " << flowtime();
 			cout << ", Makespan: " << makespan() << endl << endl;
 		}
 	} else {
@@ -981,7 +930,7 @@ void Solution::initialize(int mypid, int pnumber, const int solutionIndex) {
 		if (DEBUG) {
 			cout << endl << "[proc " << mypid << "] ";
 			cout << "Random MCT fitness: " << fitness();
-			cout << ", Flowtime: " << accumulatedWeightedResponseRatio();
+			cout << ", Flowtime: " << flowtime();
 			cout << ", Makespan: " << makespan() << endl;
 		}
 	}
@@ -1158,83 +1107,7 @@ void Solution::show(ostream &output) {
 }
 
 void Solution::showCustomStatics() {
-	cout << endl << "[= Statics RR ==================]" << endl;
-
-	// Tiempo de respuesta promedio por prioridad
-	int total_count = 0;
-	double total_rr_sum = 0.0;
-	double total_rr_worst = 0.0;
-
-	cout << " * Avg. response ratio by priority." << endl;
-	for (int priority = 0; priority <= 10; priority++) {
-		cout << "   priority = " << priority;
-
-		int count = 0;
-		double rr_aux = 0.0;
-		double rr_sum = 0.0;
-		double rr_worst = 0.0;
-
-		for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-			double partial_cost;
-			partial_cost = 0.0;
-
-			for (int taskPos = 0; taskPos < _machines[machineId].countTasks(); taskPos++) {
-				int taskId;
-				taskId = _machines[machineId].getTask(taskPos);
-
-				if (_pbm.taskPriority(taskId) == priority) {
-					count++;
-
-					if (_pbm.expectedTimeToCompute(taskId, machineId) == 0.0) {
-						rr_aux = 0.0;
-					} else {
-						rr_aux = (partial_cost + _pbm.expectedTimeToCompute(
-								taskId, machineId))
-								/ _pbm.expectedTimeToCompute(taskId, machineId);
-					}
-					rr_sum += rr_aux;
-
-					if (rr_worst <= rr_aux) {
-						rr_worst = rr_aux;
-					}
-				}
-
-				partial_cost += _pbm.expectedTimeToCompute(taskId, machineId);
-			}
-		}
-
-		total_count += count;
-		total_rr_sum += rr_sum;
-
-		if (total_rr_worst <= rr_worst) {
-			total_rr_worst = rr_worst;
-		}
-
-		if (count > 0) {
-			cout << " (" << count << " tasks)";
-			cout << " >> avg. rr = " << rr_sum / count;
-			cout << ", worst rr = " << rr_worst << endl;
-			rr_sum = 0.0;
-			count = 0;
-		} else {
-			cout << " N/A" << endl;
-		}
-	}
-
-	// Tiempo de respuesta promedio
-	cout << " * Avg. response ratio: " << total_rr_sum / total_count << endl;
-
-	// Peor tiempo de respuesta
-	cout << " * Worst response ratio: " << total_rr_worst << endl;
-
-	cout << endl << "[= Statics Makespan ============]" << endl;
-
-	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		cout << "Machine " << machineId << ": "
-				<< _machines[machineId].getMakespan() << endl;
-	}
-
-	cout << "[===============================]" << endl;
+	//TODO: hacerrrrrrrrrrrrr
 }
 
 // ===================================
@@ -1244,22 +1117,22 @@ double Solution::fitness() {
 	assert(_initialized);
 
 	double maxMakespan = 0.0;
-	double awrr = 0.0;
+	double flowtime = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		awrr += _machines[machineId].getAccumulatedWeightedResponseRatio();
+		flowtime += _machines[machineId].getFlowtime();
 
 		if (_machines[machineId].getMakespan() > maxMakespan) {
 			maxMakespan = _machines[machineId].getMakespan();
 		}
 	}
 
-	double normalized_awrr;
-	if (awrr > 0) {
-		normalized_awrr = (awrr + Solution::_awrr_reference)
-				/ Solution::_awrr_reference;
+	double normalized_flowtime;
+	if (flowtime > 0) {
+		normalized_flowtime = (flowtime + Solution::_flowtime_reference)
+				/ Solution::_flowtime_reference;
 	} else {
-		normalized_awrr = 0;
+		normalized_flowtime = 0;
 	}
 
 	double normalized_makespan;
@@ -1271,7 +1144,7 @@ double Solution::fitness() {
 
 	double fitness;
 	fitness = (_pbm.getMakespanWeight() * normalized_makespan)
-			+ (_pbm.getWRRWeight() * normalized_awrr);
+			+ (_pbm.getFlowtimeWeight() * normalized_flowtime);
 
 	assert(!(fitness == INFINITY));
 	assert(!(fitness == NAN));
@@ -1296,16 +1169,16 @@ double Solution::makespan() {
 	return maxMakespan;
 }
 
-double Solution::accumulatedWeightedResponseRatio() {
+double Solution::flowtime() {
 	if (!_initialized) {
 		return infinity();
 	}
 
-	double awrr = 0.0;
+	double flowtime = 0.0;
 
 	for (int machineId = 0; machineId < _pbm.machineCount(); machineId++) {
-		awrr = awrr
-				+ _machines[machineId].getAccumulatedWeightedResponseRatio();
+		flowtime = flowtime
+				+ _machines[machineId].getFlowtime();
 
 		//		if (DEBUG) {
 		//			cout << "[INFO] machine: " << machineId << " awrr:" << _machines[machineId].getAccumulatedWeightedResponseRatio() << endl;
@@ -1313,7 +1186,7 @@ double Solution::accumulatedWeightedResponseRatio() {
 	}
 
 	//return floor(awrr);
-	return awrr;
+	return flowtime;
 }
 
 int Solution::length() const {
@@ -1334,14 +1207,7 @@ int Solution::distanceTo(const Solution& solution) const {
 			int taskId;
 			taskId = _machines[machineId].getTask(taskPos);
 
-			if (solution._machines[machineId].countTasks() > taskPos) {
-				if (solution._machines[machineId].getTask(taskPos) == taskId) {
-					// La tarea actual es ejecutada en la misma máquina y en la misma
-					// posición en ambas soluciones.
-				} else {
-					distance++;
-				}
-			} else {
+			if (!solution._machines[machineId].hasTask(taskId)) {
 				distance++;
 			}
 		}
@@ -1374,11 +1240,11 @@ bool Solution::findTask(const int taskId, int& foundMachineId,
 }
 
 double Solution::getMachineFitness(int machineId) {
-	double awrr_ratio = (accumulatedWeightedResponseRatio()
-			+ Solution::_awrr_reference) / Solution::_awrr_reference;
+	double flowtime_ratio = (flowtime()
+			+ Solution::_flowtime_reference) / Solution::_flowtime_reference;
 	double makespan_ratio = (makespan() + Solution::_makespan_reference)
 			/ Solution::_makespan_reference;
-	return (_pbm.getWRRWeight() * awrr_ratio) + (_pbm.getMakespanWeight()
+	return (_pbm.getFlowtimeWeight() * flowtime_ratio) + (_pbm.getMakespanWeight()
 			* makespan_ratio);
 }
 
@@ -1533,7 +1399,7 @@ void Solution::doLocalSearch() {
 	}
 }
 
-void Solution::mutate() {
+void Solution::doMutate() {
 	//if (DEBUG)	cout << endl << "[DEBUG] Solution::mutate" << endl;
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
@@ -1581,7 +1447,7 @@ void Solution::mutate() {
 
 					if (rand01() < MUT_TASK) {
 						int neighbourhood;
-						neighbourhood = rand_int(0, 4);
+						neighbourhood = rand_int(0, 3);
 
 						if (neighbourhood == 0) {
 							// Se intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
@@ -1670,7 +1536,7 @@ void Solution::mutate() {
 							}
 						}
 
-						if (neighbourhood == 3) {
+						/*if (neighbourhood == 3) {
 							int minAWRRMachineId = getMinAWRRMachine();
 							if (minAWRRMachineId != machineId) {
 								int selectedTaskId;
@@ -1706,9 +1572,9 @@ void Solution::mutate() {
 									}
 								}
 							}
-						}
+						}*/
 
-						if (neighbourhood == 4) {
+						if (neighbourhood == 3) {
 							int selectedTaskId;
 							selectedTaskId = _machines[machineId].getTask(
 									selectedTaskPos);
@@ -1872,23 +1738,6 @@ vector<struct SolutionMachine>& Solution::getMachines() {
 	return _machines;
 }
 
-int Solution::getMinAWRRMachine() {
-	int minAWRRMachineId = 0;
-	double minAWRRValue = infinity();
-
-	for (int machineId = 1; machineId < _machines.size(); machineId++) {
-		double aux;
-		aux = _machines[machineId].getAccumulatedWeightedResponseRatio();
-
-		if (aux <= minAWRRValue) {
-			minAWRRMachineId = machineId;
-			minAWRRValue = aux;
-		}
-	}
-
-	return minAWRRMachineId;
-}
-
 int Solution::getBestFitnessMachineId() {
 	// if (DEBUG) cout << endl << "[DEBUG] Solution::getBestFitnessMachineId" << endl;
 
@@ -1950,31 +1799,6 @@ int Solution::getMaxCostMachineId() {
 	}
 
 	return maxCostMachineId;
-}
-
-int Solution::getHighestPriorityTaskPosByMachine(int machineId) const {
-	// if (DEBUG) cout << endl << "[DEBUG] Solution::getHighestPriorityTaskPosByMachine" << endl;
-
-	if (machines()[machineId].countTasks() > 0) {
-		int highestPriorityTaskPos = 0;
-		int highestPriorityTaskValue = _pbm.taskPriority(
-				machines()[machineId].getTask(0));
-
-		for (int taskPos = 1; taskPos < machines()[machineId].countTasks(); taskPos++) {
-			int currentTaskPriority;
-			currentTaskPriority = _pbm.taskPriority(
-					machines()[machineId].getTask(taskPos));
-
-			if (highestPriorityTaskValue > currentTaskPriority) {
-				highestPriorityTaskValue = currentTaskPriority;
-				highestPriorityTaskPos = taskPos;
-			}
-		}
-
-		return highestPriorityTaskPos;
-	} else {
-		return -1;
-	}
 }
 
 int Solution::getMinCostTaskPosByMachine(int machineId) const {

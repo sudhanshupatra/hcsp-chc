@@ -96,26 +96,24 @@ public:
 	// =================================
 	int taskCount() const;
 	int machineCount() const;
-	int taskPriority(const int& task) const;
 	float expectedTimeToCompute(const int& task, const int& machine) const;
 
 	int getBestTaskIdForMachine(int machineId) const;
 	int getBestMachineForTaskId(int taskId) const;
 
 	void setPId(const int pid);
-	double getWRRWeight() const;
-	double getWRRWeight(const int pid) const;
+	double getFlowtimeWeight() const;
+	double getFlowtimeWeight(const int pid) const;
 	double getMakespanWeight() const;
 	double getMakespanWeight(const int pid) const;
 	void loadWeights(const vector<double> weights);
 private:
-	vector<double> _wrr_weights;
+	vector<double> _flowtime_weights;
 	vector<double> _makespan_weights;
 
 	int _mypid;
 	int _taskCount;
 	int _machineCount;
-	vector<int> _tasksPriorities;
 	float **_expectedTimeToCompute;
 };
 
@@ -129,7 +127,7 @@ private:
 	int _machineId;
 
 	double _makespan;
-	double _awrr;
+	double _flowtime;
 	bool _dirty;
 
 	void refresh();
@@ -148,13 +146,11 @@ public:
 	void emptyTasks();
 
 	bool hasTask(const int taskId) const;
-	//	int getTaskPos(const int taskId) const;
 	int getTask(const int taskPos) const;
 	int countTasks() const;
 
 	double getMakespan();
-	double getAccumulatedWeightedResponseRatio();
-	double getWeightedResponseRatio(const int taskPos) const;
+	double getFlowtime();
 
 	int machineId() const;
 
@@ -187,7 +183,7 @@ public:
 
 	double fitness();
 	double makespan();
-	double accumulatedWeightedResponseRatio();
+	double flowtime();
 	unsigned int size() const;
 
 	int length() const;
@@ -202,17 +198,15 @@ public:
 	int countTasks();
 
 	void doLocalSearch();
-	void mutate();
+	void doMutate();
 
 	int getBestFitnessMachineId();
 	int getMinCostMachineId();
 	int getMaxCostMachineId();
-	int getHighestPriorityTaskPosByMachine(int machineId) const;
 	int getMinCostTaskPosByMachine(int machineId) const;
 	int getMinDestinationCostTaskPosByMachine(int machineId,
 			int destinationMachineId) const;
 	double getMachineFitness(int machineId);
-	int getMinAWRRMachine();
 
 	bool validate() const;
 
@@ -222,13 +216,13 @@ public:
 	const vector<struct SolutionMachine>& machines() const;
 	vector<struct SolutionMachine>& getMachines(); //Hack feo
 
-	static double getWRR_reference();
+	static double getFlowtime_reference();
 	static double getMakespan_reference();
 private:
 	const Problem& _pbm;
 	bool _initialized;
 
-	static double _awrr_reference;
+	static double _flowtime_reference;
 	static double _makespan_reference;
 
 	vector<struct SolutionMachine> _machines;
