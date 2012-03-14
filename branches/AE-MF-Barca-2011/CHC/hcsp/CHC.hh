@@ -131,6 +131,7 @@ private:
 	bool _dirty;
 
 	void refresh();
+	double get_sorted_flowtime();
 public:
 	SolutionMachine(const Problem& problem, int machineId);
 	~SolutionMachine();
@@ -147,11 +148,11 @@ public:
 
 	bool hasTask(const int taskId) const;
 	int getTask(const int taskPos) const;
+	int getTaskPos(const int taskId) const;
 	int countTasks() const;
 
 	double getMakespan();
 	double getFlowtime();
-
 	int machineId() const;
 
 	void showMap() const;
@@ -192,6 +193,7 @@ public:
 	void addTask(const int machineId, const int taskId);
 	void swapTasks(int machineId1, int taskPos1, int machineId2, int taskPos2);
 	void swapTasks(Solution& solution, const int taskId);
+	void moveTask(const int taskId, const int machineId);
 	bool equalTasks(Solution& solution, const int taskId);
 	bool findTask(const int taskId, int& foundMachineId, int& foundTaskPos);
 	void emptyTasks();
@@ -219,6 +221,8 @@ public:
 	static double getFlowtime_reference();
 	static double getMakespan_reference();
 private:
+	void flowtime_sort();
+
 	const Problem& _pbm;
 	bool _initialized;
 
