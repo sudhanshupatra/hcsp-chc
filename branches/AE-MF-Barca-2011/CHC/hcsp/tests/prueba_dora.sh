@@ -11,7 +11,8 @@ OutputFileC="${working_path}/tests/resultados/c_${data[i]}"
 
 CfgFile="${working_path}/ejecuciones/config-0512-dora2.cfg"
 #PesosFile="${working_path}/ejecuciones/pesos_16.txt"
-PesosFile="${working_path}/ejecuciones/pesos_8.txt"
+#PesosFile="${working_path}/ejecuciones/pesos_8.txt"
+PesosFile="${working_path}/ejecuciones/pesos_2.txt"
 
 echo "${CfgFile}" > ${working_path}/tests/resultados/prueba_lan.cfg
 echo "${DataFileI}" >> ${working_path}/tests/resultados/prueba_lan.cfg
@@ -21,6 +22,7 @@ echo "512" >> ${working_path}/tests/resultados/prueba_lan.cfg
 echo "16" >> ${working_path}/tests/resultados/prueba_lan.cfg
 
 #mpirun -np 3 xterm -e gdb ${working_path}/MainLan
-time(mpirun -n 8 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg)
+time(mpirun -n 3 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg)
+#time(mpirun -n 8 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg)
 #time(mpirun -n 16 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg)
 #time(mpirun -n 16 ${working_path}/MainLan ${working_path}/tests/resultados/prueba_lan.cfg > ${OutputFileI}.log) 
