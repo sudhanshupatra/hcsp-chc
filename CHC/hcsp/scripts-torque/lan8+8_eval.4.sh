@@ -97,11 +97,11 @@ data[7]="B.u_i_lolo"
 
 BASE_PATH="/home/siturria/hcsp-chc/branches/AE-MF-Barca-2011/CHC/hcsp"
 
-for c in {0..4}
+for c in {0..0}
 do
     for i in {0..7}
     do
-    	for (( j=0 ; j<10 ; j++ ))
+    	for (( j=0 ; j<5 ; j++ ))
     	do
     	    	CfgFile="${BASE_PATH}/ejecuciones/${cfg[c]}"
     	    	DataFile="${inst_path[c]}/${data[i]}"

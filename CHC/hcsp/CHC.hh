@@ -102,6 +102,8 @@ public:
 	int getBestMachineForTaskId(int taskId) const;
 
 	void setPId(const int pid);
+	int getPId() const;
+
 	double getFlowtimeWeight() const;
 	double getFlowtimeWeight(const int pid) const;
 	double getMakespanWeight() const;

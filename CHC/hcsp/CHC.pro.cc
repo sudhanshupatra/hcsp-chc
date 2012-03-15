@@ -490,8 +490,7 @@ void Population::evolution() {
 
 			} else {
 				if ((_parents[i]->makespan() == _elite[j]->makespan())
-						&& (_parents[i]->flowtime()
-								== _elite[j]->flowtime())) {
+						&& (_parents[i]->flowtime() == _elite[j]->flowtime())) {
 
 					assigned = true;
 				} else {
@@ -875,15 +874,14 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 
 	/*
 	 for (int i = 0; i < sols.size(); i++) {
-	 //if (i != bestSolutionIndex) {
+	 if (i != bestSolutionIndex) {
 	 if (rand01() <= mutationProbability) {
-	 sols[i]->mutate();
+	 sols[i]->doMutate();
 	 }
-	 //} else {
-	 //sols[i]->doLocalSearch();
-	 //}
+	 } else {
+	 sols[i]->doLocalSearch();
 	 }
-	 */
+	 }*/
 
 	for (int i = 0; i < sols.size(); i++) {
 		if (i < ELITE_POP_SIZE) {
@@ -896,6 +894,24 @@ void Diverge::diverge(const Rarray<Solution*>& sols, int bestSolutionIndex,
 			sols[i]->doMutate();
 		}
 	}
+
+	/*
+	 for (int i = 0; i < sols.size(); i++) {
+	 if (i != bestSolutionIndex) {
+	 if (i < ELITE_POP_SIZE) {
+	 if (pop->elite()[i]->isInitilized()) {
+	 *sols[i] = *(pop->elite()[i]);
+	 }
+	 }
+
+	 if (rand01() <= mutationProbability) {
+	 sols[i]->doMutate();
+	 }
+	 } else {
+	 sols[i]->doLocalSearch();
+	 }
+	 }
+	 */
 }
 
 void Diverge::execute(Rarray<Solution*>& sols) const {

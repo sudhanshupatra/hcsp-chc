@@ -170,6 +170,10 @@ void Problem::setPId(const int pid) {
 	_mypid = pid;
 }
 
+int Problem::getPId() const {
+	return _mypid;
+}
+
 void Problem::loadWeights(const vector<double> weights) {
 	assert(weights.size() > 0);
 	assert(weights.size() % 2 == 0);
@@ -1332,14 +1336,18 @@ void Solution::doLocalSearch() {
 				<< "[DEBUG] Solution::doLocalSearch begin <start> ========================================="
 				<< endl;
 
-	//double aux_pre_LS = getFitness();
-	//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
+	double aux_pre_LS = fitness();
+	/*if (_pbm.getPId() == 1) {
+		//cout << "[DEBUG] Solution::doLocalSearch fitness: " << aux_pre_LS << endl;
+		cout << "[DEBUG] Solution::doLocalSearch pre-makespan: " << makespan()
+				<< endl;
+	}*/
 
 	int max_steps = rand_int(5, 20);
 
 	for (int iterations = 0; iterations < max_steps; iterations++) {
 		int machineId;
-		if (rand01() <= 0.9) {
+		if (rand01() <= 0.5) {
 			machineId = getMaxCostMachineId();
 		} else {
 			machineId = rand_int(0, this->machines().size() - 1);
@@ -1505,15 +1513,21 @@ void Solution::doLocalSearch() {
 							//==============================================================
 							//TODO: Optimizar!!!
 							//==============================================================
-							this->moveTask(taskId, moveMachineId);
+
+							_machines[machineId].removeTask(taskPos);
+							_machines[moveMachineId].safeInsertTask(taskId, 0);
+
 							movimientoFitness = this->fitness();
-							this->moveTask(taskId, machineId);
+
+							_machines[moveMachineId].removeTask(0);
+							_machines[machineId].safeInsertTask(taskId, taskPos);
+
 							//==============================================================
 
 							if (movimientoFitness < mejorMovimientoFitness) {
 								mejorMovimientoTipo = 1; // MOVE
 								mejorMovimientoFitness = movimientoFitness;
-								mejorMovimientoTaskPos = taskPos;
+								mejorMovimientoTaskPos = taskId;
 								mejorMovimientoDestinoMachineId = moveMachineId;
 								mejorMovimientoDestinoTaskPos = -1;
 							}
@@ -1528,8 +1542,7 @@ void Solution::doLocalSearch() {
 							mejorMovimientoDestinoMachineId,
 							mejorMovimientoDestinoTaskPos);
 				} else {
-					this->moveTask(this->machines()[machineId].getTask(
-							mejorMovimientoTaskPos),
+					this->moveTask(mejorMovimientoTaskPos,
 							mejorMovimientoDestinoMachineId);
 				}
 			}
@@ -1556,25 +1569,137 @@ void Solution::flowtime_sort() {
 }
 
 void Solution::doMutate() {
-	if (DEBUG)
-		cout << endl
-				<< "[DEBUG] Solution::doMutate begin <start> ========================================="
-				<< endl;
+	/*if (DEBUG)*/
+	/*cout << endl
+			<< "[DEBUG] Solution::doMutate begin <start> ========================================="
+			<< endl;*/
 
 	for (int machineId = 0; machineId < _machines.size(); machineId++) {
 		if (rand01() <= MUT_MAQ) {
-			for (int selectedTaskPos = 0; selectedTaskPos
-					< _machines[machineId].countTasks(); selectedTaskPos++) {
-				if (rand01() < MUT_TASK) {
-					int selectedTaskId;
-					selectedTaskId = _machines[machineId].getTask(
-							selectedTaskPos);
+			if (_machines[machineId].countTasks() == 0) {
+				// Cada máquina sin tareas se le asigna la tarea que
+				// mejor puede ejecutar.
+				{
+					int bestTaskIdForMachine;
+					bestTaskIdForMachine = _pbm.getBestTaskIdForMachine(
+							machineId);
 
-					int machineDstId = rand_int(0, pbm().machineCount() - 2);
-					if (machineId >= machineDstId)
-						machineDstId++;
+					int origenMachineId, origenTaskPos;
+					assert(findTask(bestTaskIdForMachine, origenMachineId, origenTaskPos));
 
-					moveTask(selectedTaskId, machineDstId);
+					if (_machines[origenMachineId].countTasks() > 1) {
+						if (_pbm.getBestTaskIdForMachine(origenMachineId)
+								!= bestTaskIdForMachine) {
+							_machines[origenMachineId].removeTask(origenTaskPos);
+							_machines[machineId].addTask(bestTaskIdForMachine);
+						}
+					}
+				}
+
+				if (_machines[machineId].countTasks() == 0) {
+					int mostLoadedMachineId = getMaxCostMachineId();
+
+					int bestTaskPosForMachine;
+					bestTaskPosForMachine
+							= getMinDestinationCostTaskPosByMachine(
+									mostLoadedMachineId, machineId);
+
+					int bestTaskIdForMachine;
+					bestTaskIdForMachine
+							= _machines[mostLoadedMachineId].getTask(
+									bestTaskPosForMachine);
+
+					_machines[mostLoadedMachineId].removeTask(
+							bestTaskPosForMachine);
+					_machines[machineId].addTask(bestTaskIdForMachine);
+				}
+			} else if (_machines[machineId].countTasks() > 0) {
+				for (int selectedTaskPos = 0; selectedTaskPos
+						< _machines[machineId].countTasks(); selectedTaskPos++) {
+
+					if (rand01() < MUT_TASK) {
+						int neighbourhood;
+						neighbourhood = rand_int(0, 2);
+
+						if (neighbourhood == 0) {
+							// Se intercambia con la tarea que mejor puede ejecutarse en la máquina actual de
+							// la máquina en la que mejor puede ejecutarse.
+
+							// Obtengo la máquina que que mejor puede ejecutar la tarea.
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(
+									selectedTaskPos);
+
+							int bestMachineId;
+							bestMachineId = _pbm.getBestMachineForTaskId(
+									selectedTaskId);
+
+							if (bestMachineId != machineId) {
+								if (_machines[bestMachineId].countTasks() > 0) {
+									// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+									// con menor costo de ejecución en la máquina sorteada.
+									int minCostTaskPosOnMachine;
+									minCostTaskPosOnMachine
+											= getMinDestinationCostTaskPosByMachine(
+													bestMachineId, machineId);
+
+									// Hago un swap entre las tareas de las máquinas.
+									swapTasks(machineId, selectedTaskPos,
+											bestMachineId,
+											minCostTaskPosOnMachine);
+								} else {
+									_machines[bestMachineId].addTask(
+											selectedTaskId);
+									_machines[machineId].removeTask(
+											selectedTaskPos);
+								}
+							}
+						}
+
+						if (neighbourhood == 1) {
+							// Se intercambia con la tarea de la máquina con menor makespan que puede ejecutarse
+							// más eficientemente en la máquina actual.
+
+							// Obtengo la máquina que aporta un menor costo al total de la solución.
+							int minCostMachineId;
+							minCostMachineId = getMinCostMachineId();
+
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(
+									selectedTaskPos);
+
+							if (_machines[minCostMachineId].countTasks() > 0) {
+								// Si la máquina destino tiene al menos una tarea, obtengo la tarea
+								// con menor costo de ejecución en la máquina sorteada.
+								int minCostTaskPosOnMachine;
+								minCostTaskPosOnMachine
+										= getMinDestinationCostTaskPosByMachine(
+												minCostMachineId, machineId);
+
+								// Hago un swap entre las tareas de las máquinas.
+								swapTasks(machineId, selectedTaskPos,
+										minCostMachineId,
+										minCostTaskPosOnMachine);
+							} else {
+								_machines[minCostMachineId].addTask(
+										selectedTaskId);
+								_machines[machineId].removeTask(selectedTaskPos);
+							}
+						}
+
+						if (neighbourhood == 2) {
+							int selectedTaskId;
+							selectedTaskId = _machines[machineId].getTask(
+									selectedTaskPos);
+
+							int machineDstId = rand_int(0, pbm().machineCount()
+									- 2);
+							if (machineId >= machineDstId)
+								machineDstId++;
+
+							moveTask(selectedTaskId, machineDstId);
+						}
+					}
 				}
 			}
 		}
@@ -1594,15 +1719,15 @@ void Solution::moveTask(const int taskId, const int machineId) {
 
 	int machineIdOld = -1;
 
-	for (int machineId = 0; (machineId < _machines.size()) && (machineIdOld == -1); machineId++) {
-		if (_machines[machineId].hasTask(taskId)) {
-			machineIdOld = machineId;
+	for (int m = 0; (m < _machines.size()) && (machineIdOld == -1); m++) {
+		if (_machines[m].hasTask(taskId)) {
+			machineIdOld = m;
 		}
 	}
 
 	if (machineId != machineIdOld) {
-		_machines[machineIdOld].removeTask(
-				_machines[machineIdOld].getTaskPos(taskId));
+		_machines[machineIdOld].removeTask(_machines[machineIdOld].getTaskPos(
+				taskId));
 
 		_machines[machineId].addTask(taskId);
 	}
