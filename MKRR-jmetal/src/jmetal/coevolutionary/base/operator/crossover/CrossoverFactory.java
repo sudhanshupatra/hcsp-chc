@@ -1,0 +1,55 @@
+/**
+ * This package includes the crossover operators over individuals
+ */
+package jmetal.coevolutionary.base.operator.crossover;
+
+
+import jmetal.base.Configuration;
+import jmetal.coevolutionary.base.Operator;
+import jmetal.util.JMException;
+
+
+/**
+ * Class implementing a crossover factory.
+ * 
+ * @author Juanjo Durillo
+ * @author Juan A. Ca–ero
+ * @version 1.0
+ */
+public class CrossoverFactory {
+
+
+	/**
+	 * Gets a crossover operator through its name.
+	 * @param name Name of the operator
+	 * @return The operator
+	 */
+	public static Operator getCrossoverOperator( String name ) throws JMException {
+
+		if (name.equalsIgnoreCase("SBXCrossover"))
+			return new SBXCrossover(20);
+		else if (name.equalsIgnoreCase("SinglePointCrossover"))
+			return new SinglePointCrossover();
+		else if (name.equalsIgnoreCase("PMXCrossover"))
+			return new PMXCrossover();
+		else if (name.equalsIgnoreCase("TwoPointsCrossover"))
+			return new TwoPointsCrossover();
+		else if (name.equalsIgnoreCase("HUXCrossover"))
+			return new HUXCrossover();
+		else if (name.equalsIgnoreCase("DifferentialEvolutionCrossover"))
+			return new DifferentialEvolutionCrossover();
+		else if ( name.equalsIgnoreCase("OnePointCrossover"))
+			return new OnePointCrossover();
+		else if ( name.equalsIgnoreCase("UniformCrossover"))
+			return new UniformCrossover();
+		else if ( name.equalsIgnoreCase("DPX"))
+			return new UniformCrossover();
+		else {
+			Configuration.logger_.severe("CrossoverFactory.getCrossoverOperator. " +
+					"Operator '" + name + "' not found ");
+			throw new JMException("Exception in " + name + ".getCrossoverOperator()") ;
+		} // else        
+	} // getCrossoverOperator
+
+
+} // CrossoverFactory
