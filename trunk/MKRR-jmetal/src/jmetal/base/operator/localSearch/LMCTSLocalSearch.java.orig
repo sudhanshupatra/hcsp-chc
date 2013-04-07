@@ -1,0 +1,158 @@
+package jmetal.base.operator.localSearch;
+
+
+import jmetal.base.Variable;
+import jmetal.base.variable.Int;
+import jmetal.base.operator.localSearch.LocalSearch;
+import jmetal.base.DecisionVariables;
+import jmetal.base.Solution;
+//RUSO
+//import jmetal.problems.scheduling.MO_Scheduling;
+import jmetal.problems.scheduling.MO_Scheduling_mak_flow;
+import jmetal.coevolutionary.util.Matrix;
+
+import jmetal.util.JMException;
+
+
+/**
+ * This class implements a local search operator based on swapping two jobs, and
+ * applied the pair of jobs that yields the best reduction in the completion
+ * time.
+ * 
+ * <b>IMPORTANT NOTE:</b> This class needs to work only with sliced (naked) solutions.
+ * 
+ * @author Anowar El Amouri
+ * @author Juan A. ero (bug fixes, optimization and new features added)
+ * @version 1.1
+ */
+public class LMCTSLocalSearch extends LocalSearch {
+
+	private static final long serialVersionUID = 7138734592015581051L;
+	
+	private Matrix        M_       = null;
+	private MO_Scheduling_mak_flow problem_ = null;
+
+
+	/**
+	 * Constructor
+	 * Creates a new local search object.
+	 */
+	public LMCTSLocalSearch(){
+
+		super();
+	} // LMCTSLocalSearch
+
+
+	/**
+	 * Executes the local search. 
+	 * @param object Object representing a package with a solution and an islandId
+	 * @return An object containing the new improved solution
+	 * @throws JMException 
+	 */
+	public Object execute( Object object ) throws JMException {
+
+		// Recover the parameters (solution and island)
+		Solution solution = (Solution) object;
+
+		if ( problem_ == null ) problem_ = (MO_Scheduling_mak_flow) getParameter( "Problem" );
+		if ( M_       == null ) M_       = problem_.getMatrix();
+
+// RUSO 
+double m_1 = solution.getObjective(0);
+double f_1 = solution.getObjective(1);
+
+		doLocalSearch( solution );
+
+double m_2 = solution.getObjective(0);
+double f_2 = solution.getObjective(1);
+
+//if ((m_2<m_1) || (f_2<f_1)){
+	System.out.println("++++ Makespan: de "+m_1+" a "+m_2+", Flowtime: de "+f_1+" a "+f_2);
+//}
+// fin Ruso
+
+		// return new Solution(solution);
+		return null;
+	} // execute 
+
+
+	/**
+	 * @param solution
+	 * @param islandId
+	 * @throws JMException
+	 */
+	private void doLocalSearch( Solution solution ) throws JMException {
+		DecisionVariables decisionVariables ;
+		decisionVariables = solution.getDecisionVariables();
+
+		// Recover the solution parameters
+		int task_Number    = M_.getNumberOfTasks()    ;
+		int machine_Number = M_.getNumberOfMachines() ;
+
+		int[]    Schedule  = new int[ task_Number ];       // Contains the solution values
+		int[]    Schedule1 = new int[ task_Number ];       // Contains the solution swapped values
+
+		// Recover ETC Matrix
+		double[][] MatrixETC = M_.getETCmatrix();
+
+		// start and end of the slice. The main loop only works in the specified slice
+		int sliceSz = decisionVariables.size();
+		int start   = sliceSz * 0;
+		int end     = start + sliceSz;
+		// Recover Solution values
+		for( int var=start ; var<end ; ++var )
+			Schedule[var] = (int) decisionVariables.variables_[var].getValue();   
+
+		// Apply LMCTS Local Search in the correct slice
+
+		int j = start + 1;
+		System.arraycopy( Schedule , start , Schedule1 , start , sliceSz );
+		while( j<end ){
+			// 1. Compute partial completion time of the solution
+			double[] completion = problem_.ComputePartialCompletion( MatrixETC , Schedule , task_Number , machine_Number , start , end );
+
+			// 2. Create the tab of the solution with swapped values
+			if ( j>(start+1) )
+				System.arraycopy( Schedule , j-2 , Schedule1 , j-2 , 2 );
+
+			if ( Schedule1[ j-1 ] != Schedule1[ j ] ){
+
+				int temp = Schedule1[ j-1 ];
+				Schedule1[ j-1 ] = Schedule1[ j ];
+				Schedule1[ j   ] = temp;
+
+				// 3. Compute partial completion time of the solution with swapped values
+				double[] completion1 = problem_.ComputePartialCompletion( MatrixETC , Schedule1 , task_Number , machine_Number , start , end );
+
+				// 4. Compare the two solutions and apply the best
+				int m1 = Schedule[j-1];
+				int m2 = Schedule[j];
+				
+				double sum  = completion[  m1 ] + completion[  m2 ];
+				double sum1 = completion1[ m1 ] + completion1[ m2 ];
+
+				if ( sum1<sum )
+					System.arraycopy( Schedule1 , j-1 , Schedule , j-1 , 2 );
+			} // if
+			// 5. Choose another pair of jobs
+			++j;
+		} // while
+
+		// Recover New Solution values
+		Variable[] v = decisionVariables.variables_;
+		for( int var=start ; var<end ; ++var ) {
+			((Int) v[var]).setValue( Schedule[var] );
+		} // for
+
+		solution.setDecisionVariables( decisionVariables );
+		solution.setCrowdingDistance(0.0);
+		solution.setRank(0);
+	} // doLocalSearch
+
+
+	public int getEvaluations() {
+
+		return 0;
+	} // getEvaluations
+
+} // LMCTSLocalSearch
